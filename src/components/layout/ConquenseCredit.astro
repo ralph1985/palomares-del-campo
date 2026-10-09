@@ -1,0 +1,100 @@
+---
+---
+<a
+  class="conquense-credit"
+  href="https://conquense.dev/"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Web realizada por conquense.dev"
+>
+  <span class="conquense-credit-label">Web realizada por</span>
+  <span class="conquense-credit-logo" data-conquense-logo>
+    <img
+      src="/brand/conquense-dev-logo-light.webp"
+      alt="conquense.dev"
+      width="180"
+      height="61"
+      loading="lazy"
+    />
+    <canvas data-conquense-logo-canvas aria-hidden="true"></canvas>
+  </span>
+</a>
+
+<script>
+  import '../../scripts/conquense-logo.ts';
+</script>
+
+<style>
+  .conquense-credit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .conquense-credit-label {
+    color: #a9c3b0;
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .conquense-credit-logo {
+    position: relative;
+    display: block;
+    width: 9rem;
+    height: 3.05rem;
+    perspective: 32rem;
+  }
+
+  .conquense-credit-logo img,
+  .conquense-credit-logo canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .conquense-credit-logo canvas {
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  .conquense-credit-logo.is-ready canvas {
+    opacity: 1;
+  }
+
+  .conquense-credit-logo.is-ready img {
+    opacity: 0;
+  }
+
+  .conquense-credit:hover .conquense-credit-label,
+  .conquense-credit:focus-visible .conquense-credit-label {
+    color: #e5b77e;
+  }
+
+  .conquense-credit:focus-visible {
+    outline: 3px solid #e5b77e;
+    outline-offset: 5px;
+    border-radius: 0.35rem;
+  }
+
+  @media (max-width: 38rem) {
+    .conquense-credit {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .conquense-credit-logo canvas {
+      transition: none;
+    }
+  }
+</style>

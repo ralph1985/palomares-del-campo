@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import ConquenseCredit from '../../components/layout/ConquenseCredit.astro';
 
 export const prerender = true;
 
@@ -69,6 +70,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     <footer class="page-footer">
       <div class="page-footer-inner">
         <p>© {new Date().getFullYear()} Palomares del Campo</p>
+        <ConquenseCredit />
         <a href="/">Inicio</a>
       </div>
     </footer>

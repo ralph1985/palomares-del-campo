@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import NewsCard from '../../components/NewsCard.astro';
+import ConquenseCredit from '../../components/layout/ConquenseCredit.astro';
 
 const posts = (await getCollection('noticias')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -65,6 +66,7 @@ const posts = (await getCollection('noticias')).sort(
     <footer class="page-footer">
       <div class="page-footer-inner">
         <p>© {new Date().getFullYear()} Palomares del Campo</p>
+        <ConquenseCredit />
         <a href="/">Inicio</a>
       </div>
     </footer>
