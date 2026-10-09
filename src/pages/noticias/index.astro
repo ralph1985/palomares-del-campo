@@ -228,9 +228,10 @@ const posts = (await getCollection('noticias')).sort(
   }
 
   .page-footer-inner {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
-    justify-content: space-between;
+    justify-content: initial;
     min-height: 5.25rem;
     gap: 1rem;
     font-size: 0.82rem;
@@ -258,22 +259,34 @@ const posts = (await getCollection('noticias')).sort(
       width: min(100% - 2rem, 72rem);
     }
 
-    .page-header-inner,
-    .page-footer-inner,
-    .archive-heading {
+    .page-header-inner {
       align-items: flex-start;
       flex-direction: column;
-    }
-
-    .page-header-inner {
       justify-content: center;
       min-height: 6.5rem;
     }
 
     .page-footer-inner {
-      justify-content: center;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      justify-content: initial;
       min-height: 6.5rem;
-      padding: 1.25rem 0;
+      padding: 1rem 0;
+    }
+
+    .archive-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .page-footer-inner > a:not(.conquense-credit) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .page-footer-inner > .conquense-credit {
+      grid-column: 2;
+      grid-row: 1 / span 2;
     }
   }
 </style>

@@ -240,6 +240,10 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   }
 
   .page-footer-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    justify-content: initial;
     font-size: 0.82rem;
   }
 
@@ -270,7 +274,22 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     }
 
     .page-footer-inner {
-      justify-content: center;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      justify-content: initial;
+      min-height: 6.5rem;
+      padding: 1rem 0;
+    }
+
+    .page-footer-inner > a:not(.conquense-credit) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .page-footer-inner > .conquense-credit {
+      grid-column: 2;
+      grid-row: 1 / span 2;
     }
   }
 </style>

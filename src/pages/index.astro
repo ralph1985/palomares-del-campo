@@ -443,6 +443,9 @@ const currentYear = new Date().getFullYear();
   }
 
   .footer-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
     min-height: 5.25rem;
     gap: 1rem;
     color: #dfe9df;
@@ -486,11 +489,10 @@ const currentYear = new Date().getFullYear();
     }
 
     .footer-inner {
-      align-items: flex-start;
-      flex-direction: column;
-      justify-content: center;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
       min-height: 6.5rem;
-      padding: 1.25rem 0;
+      padding: 1rem 0;
     }
   }
 </style>
