@@ -17,7 +17,7 @@ const currentYear = new Date().getFullYear();
     <title>Palomares del Campo</title>
   </head>
   <body>
-    <header class="site-header">
+    <header class="site-header" data-auto-hide-header>
       <div class="header-inner">
         <a class="brand" href="/" aria-label="Palomares del Campo, inicio">
           <span class="brand-mark" aria-hidden="true">P</span>
@@ -98,6 +98,7 @@ const currentYear = new Date().getFullYear();
 
 <script>
   import '../scripts/menu.ts';
+  import '../scripts/auto-hide-header.ts';
 </script>
 
 <style>
@@ -124,10 +125,16 @@ const currentYear = new Date().getFullYear();
   }
 
   .site-header {
-    position: relative;
+    position: sticky;
     z-index: 20;
+    top: 0;
     border-bottom: 1px solid rgb(25 52 45 / 12%);
     background: rgb(244 241 233 / 92%);
+    transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .site-header.is-hidden {
+    transform: translateY(-105%);
   }
 
   .header-inner,
@@ -463,7 +470,8 @@ const currentYear = new Date().getFullYear();
 
     .side-menu,
     .menu-backdrop,
-    .menu-toggle-icon span {
+    .menu-toggle-icon span,
+    .site-header {
       transition-duration: 0.01ms;
     }
   }

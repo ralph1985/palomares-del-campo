@@ -20,7 +20,7 @@ const posts = (await getCollection('noticias')).sort(
     <title>Noticias · Palomares del Campo</title>
   </head>
   <body>
-    <header class="page-header">
+    <header class="page-header" data-auto-hide-header>
       <div class="page-header-inner">
         <a class="brand" href="/" aria-label="Palomares del Campo, inicio">
           <span class="brand-mark" aria-hidden="true">P</span>
@@ -73,6 +73,10 @@ const posts = (await getCollection('noticias')).sort(
   </body>
 </html>
 
+<script>
+  import '../../scripts/auto-hide-header.ts';
+</script>
+
 <style>
   :global(*) {
     box-sizing: border-box;
@@ -89,7 +93,16 @@ const posts = (await getCollection('noticias')).sort(
   }
 
   .page-header {
+    position: sticky;
+    z-index: 20;
+    top: 0;
     border-bottom: 1px solid rgb(25 52 45 / 12%);
+    background: rgb(244 241 233 / 92%);
+    transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .page-header.is-hidden {
+    transform: translateY(-105%);
   }
 
   .page-header-inner,
@@ -243,6 +256,12 @@ const posts = (await getCollection('noticias')).sort(
 
   .page-footer a {
     color: #dfe9df;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-header {
+      transition-duration: 0.01ms;
+    }
   }
 
   @media (max-width: 50rem) {
