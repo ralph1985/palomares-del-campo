@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import ConquenseCredit from '../../components/layout/ConquenseCredit.astro';
+import SiteHeader from '../../components/layout/SiteHeader.astro';
 
 export const prerender = true;
 
@@ -32,15 +33,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     <title>{title} · Palomares del Campo</title>
   </head>
   <body>
-    <header class="page-header" data-auto-hide-header>
-      <div class="page-header-inner">
-        <a class="brand" href="/" aria-label="Palomares del Campo, inicio">
-          <span class="brand-mark" aria-hidden="true">P</span>
-          <span>Palomares del Campo</span>
-        </a>
-        <a class="home-link" href="/noticias">Todas las noticias <span aria-hidden="true">↗</span></a>
-      </div>
-    </header>
+    <SiteHeader />
 
     <main class="article-shell">
       <a class="back-link" href="/noticias">← Volver a noticias</a>
@@ -76,10 +69,6 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     </footer>
   </body>
 </html>
-
-<script>
-  import '../../scripts/auto-hide-header.ts';
-</script>
 
 <style>
   :global(*) {
