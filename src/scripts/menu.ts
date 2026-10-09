@@ -52,15 +52,36 @@ const initializeScene = async () => {
     camera.position.z = 6;
 
     const constellation = new THREE.Group();
-    const globe = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(1.18, 2),
-      new THREE.MeshBasicMaterial({
-        color: 0xb7ddc2,
-        transparent: true,
-        opacity: 0.5,
-        wireframe: true,
-      }),
+    const shieldTexture = new THREE.TextureLoader().load('/brand/escudo-palomares-del-campo.svg');
+    shieldTexture.colorSpace = THREE.SRGBColorSpace;
+
+    const shieldGeometry = new THREE.PlaneGeometry(1.42, 2.475, 32, 56);
+    const emblem = new THREE.Group();
+    const reliefMaterial = new THREE.MeshBasicMaterial({
+      map: shieldTexture,
+      color: 0x527b68,
+      transparent: true,
+      opacity: 0.72,
+      side: THREE.DoubleSide,
+    });
+
+    for (let depth = 4; depth > 0; depth -= 1) {
+      const reliefLayer = new THREE.Mesh(shieldGeometry, reliefMaterial);
+      reliefLayer.position.z = -depth * 0.025;
+      emblem.add(reliefLayer);
+    }
+
+    emblem.add(
+      new THREE.Mesh(
+        shieldGeometry,
+        new THREE.MeshBasicMaterial({
+          map: shieldTexture,
+          transparent: true,
+          side: THREE.DoubleSide,
+        }),
+      ),
     );
+
     const ring = new THREE.Mesh(
       new THREE.TorusGeometry(1.55, 0.012, 12, 96),
       new THREE.MeshBasicMaterial({
@@ -70,7 +91,7 @@ const initializeScene = async () => {
       }),
     );
     ring.rotation.set(0.72, 0.16, -0.35);
-    constellation.add(globe, ring);
+    constellation.add(emblem, ring);
 
     const starPositions = new Float32Array(180 * 3);
     for (let index = 0; index < starPositions.length; index += 3) {
