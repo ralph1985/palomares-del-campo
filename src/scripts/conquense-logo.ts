@@ -15,7 +15,8 @@ const initializeCredit = async (credit: HTMLElement) => {
     const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
     camera.position.z = 4.5;
 
-    const texture = new THREE.TextureLoader().load(
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load(
       '/brand/conquense-dev-logo-light.webp',
       () => credit.classList.add('is-ready'),
       undefined,
@@ -23,16 +24,37 @@ const initializeCredit = async (credit: HTMLElement) => {
         canvas.hidden = true;
       },
     );
+    const heightTexture = textureLoader.load('/brand/conquense-dev-logo-height.webp');
     texture.colorSpace = THREE.SRGBColorSpace;
 
-    const logo = new THREE.Mesh(
-      new THREE.PlaneGeometry(3, 1.0175),
+    const geometry = new THREE.PlaneGeometry(3.65, 1.237, 240, 80);
+    const logo = new THREE.Group();
+    const reliefMaterial = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      color: 0x527b68,
+      opacity: 0.82,
+      side: THREE.DoubleSide,
+    });
+
+    for (let depth = 5; depth > 0; depth -= 1) {
+      const layer = new THREE.Mesh(geometry, reliefMaterial);
+      layer.position.z = -depth * 0.018;
+      logo.add(layer);
+    }
+
+    const face = new THREE.Mesh(
+      geometry,
       new THREE.MeshBasicMaterial({
         map: texture,
+        displacementMap: heightTexture,
+        displacementScale: 0.055,
+        displacementBias: -0.018,
         transparent: true,
         side: THREE.DoubleSide,
       }),
     );
+    logo.add(face);
     scene.add(logo);
 
     const resize = () => {
@@ -59,7 +81,7 @@ const initializeCredit = async (credit: HTMLElement) => {
       requestAnimationFrame(animate);
 
       if (isVisible && !reducedMotion) {
-        logo.rotation.y = Math.sin(time * 0.001) * 0.28;
+        logo.rotation.y = time * 0.0008;
         logo.rotation.x = Math.sin(time * 0.0007) * 0.035;
       }
 
