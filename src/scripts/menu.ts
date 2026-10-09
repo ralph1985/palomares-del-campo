@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
 const close = document.querySelector<HTMLButtonElement>('[data-menu-close]');
 const menu = document.querySelector<HTMLElement>('#site-menu');
@@ -39,20 +37,16 @@ if (toggle && close && menu && backdrop) {
   });
 }
 
-if (sceneCanvas && menu) {
-  let renderer: THREE.WebGLRenderer;
+const initializeScene = async () => {
+  if (!sceneCanvas || !menu) return;
 
   try {
-    renderer = new THREE.WebGLRenderer({
+    const THREE = await import('three');
+    const renderer = new THREE.WebGLRenderer({
       canvas: sceneCanvas,
       alpha: true,
       antialias: true,
     });
-  } catch {
-    sceneCanvas.hidden = true;
-  }
-
-  if (renderer) {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
     camera.position.z = 6;
@@ -135,5 +129,9 @@ if (sceneCanvas && menu) {
     };
 
     requestAnimationFrame(animate);
+  } catch {
+    sceneCanvas.hidden = true;
   }
-}
+};
+
+void initializeScene();
