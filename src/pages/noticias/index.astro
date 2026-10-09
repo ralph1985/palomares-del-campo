@@ -1,0 +1,277 @@
+---
+import { getCollection } from 'astro:content';
+import NewsCard from '../../components/NewsCard.astro';
+
+const posts = (await getCollection('noticias')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content="Noticias publicadas sobre Palomares del Campo y su entorno."
+    />
+    <title>Noticias · Palomares del Campo</title>
+  </head>
+  <body>
+    <header class="page-header">
+      <div class="page-header-inner">
+        <a class="brand" href="/" aria-label="Palomares del Campo, inicio">
+          <span class="brand-mark" aria-hidden="true">P</span>
+          <span>Palomares del Campo</span>
+        </a>
+        <a class="home-link" href="/">Volver al inicio <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main>
+      <section class="news-hero" aria-labelledby="page-title">
+        <div class="news-hero-inner">
+          <p class="eyebrow">Palomares del Campo · Actualidad</p>
+          <h1 id="page-title">Noticias</h1>
+          <p>
+            Noticias publicadas sobre el pueblo, sus vecinos y los proyectos que
+            afectan a su entorno.
+          </p>
+        </div>
+      </section>
+
+      <section class="archive" aria-labelledby="archive-title">
+        <div class="archive-inner">
+          <div class="archive-heading">
+            <div>
+              <p class="eyebrow">Archivo editorial</p>
+              <h2 id="archive-title">Todas las noticias</h2>
+            </div>
+            <p>{posts.length} noticias publicadas</p>
+          </div>
+
+          {posts.length > 0 ? (
+            <div class="news-grid">
+              {posts.map(post => <NewsCard post={post} />)}
+            </div>
+          ) : (
+            <p class="empty">Todavía no hay noticias publicadas.</p>
+          )}
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <div class="page-footer-inner">
+        <p>© {new Date().getFullYear()} Palomares del Campo</p>
+        <a href="/">Inicio</a>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(body) {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    color: #19342d;
+    background: #f4f1e9;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+  }
+
+  .page-header {
+    border-bottom: 1px solid rgb(25 52 45 / 12%);
+  }
+
+  .page-header-inner,
+  .page-footer-inner,
+  .news-hero-inner,
+  .archive-inner {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .page-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 5.25rem;
+    gap: 1.5rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #19342d;
+    font-size: 0.95rem;
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    display: grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    place-items: center;
+    border-radius: 0.8rem;
+    color: #f4f1e9;
+    background: #2f6652;
+    font-family: Georgia, serif;
+    font-size: 1.3rem;
+  }
+
+  .home-link,
+  .page-footer a {
+    color: #2f6652;
+    font-size: 0.85rem;
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .home-link:hover,
+  .home-link:focus-visible,
+  .page-footer a:hover,
+  .page-footer a:focus-visible,
+  .brand:focus-visible,
+  .news-card :global(a):focus-visible {
+    color: #a05c32;
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+  }
+
+  .news-hero {
+    padding: clamp(5rem, 13vw, 10rem) 0 clamp(4rem, 9vw, 7rem);
+    background: #19342d;
+  }
+
+  .news-hero-inner {
+    color: #eff5ed;
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: #e5b77e;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h1,
+  h2 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.95;
+  }
+
+  h1 {
+    font-size: clamp(4rem, 11vw, 8rem);
+  }
+
+  .news-hero p:last-child {
+    max-width: 34rem;
+    margin: 2rem 0 0;
+    color: #b7d0bc;
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .archive {
+    padding: clamp(4rem, 9vw, 8rem) 0;
+  }
+
+  .archive-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .archive-heading h2 {
+    font-size: clamp(2.25rem, 5vw, 4rem);
+  }
+
+  .archive-heading > p {
+    margin: 0;
+    color: #527066;
+    font-size: 0.9rem;
+  }
+
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .empty {
+    padding: 2rem;
+    border: 1px dashed rgb(25 52 45 / 22%);
+    color: #527066;
+  }
+
+  .page-footer {
+    color: #dfe9df;
+    background: #19342d;
+  }
+
+  .page-footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 5.25rem;
+    gap: 1rem;
+    font-size: 0.82rem;
+  }
+
+  .page-footer p {
+    margin: 0;
+  }
+
+  .page-footer a {
+    color: #dfe9df;
+  }
+
+  @media (max-width: 50rem) {
+    .news-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .page-header-inner,
+    .page-footer-inner,
+    .news-hero-inner,
+    .archive-inner {
+      width: min(100% - 2rem, 72rem);
+    }
+
+    .page-header-inner,
+    .page-footer-inner,
+    .archive-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .page-header-inner {
+      justify-content: center;
+      min-height: 6.5rem;
+    }
+
+    .page-footer-inner {
+      justify-content: center;
+      min-height: 6.5rem;
+      padding: 1.25rem 0;
+    }
+  }
+</style>

@@ -1,0 +1,120 @@
+---
+import { getCollection } from 'astro:content';
+import NewsCard from './NewsCard.astro';
+
+const posts = (await getCollection('noticias'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+
+<section class="news-section" id="noticias" aria-labelledby="news-section-title">
+  <div class="news-section-inner">
+    <div class="news-section-heading">
+      <div>
+        <p class="news-eyebrow">Actualidad</p>
+        <h2 id="news-section-title">Noticias de Palomares</h2>
+      </div>
+      <p class="news-section-intro">
+        Una selección de noticias publicadas sobre el pueblo y su entorno.
+      </p>
+    </div>
+
+    {posts.length > 0 ? (
+      <div class="news-grid">
+        {posts.map(post => <NewsCard post={post} />)}
+      </div>
+    ) : (
+      <p class="news-empty">Pronto publicaremos las primeras noticias.</p>
+    )}
+
+    <a class="news-archive-link" href="/noticias">
+      Ver todas las noticias <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .news-section {
+    padding: clamp(4rem, 9vw, 8rem) 0;
+    color: #19342d;
+    background: #e9eee7;
+  }
+
+  .news-section-inner {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .news-section-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 25rem);
+    align-items: end;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .news-eyebrow {
+    margin: 0 0 0.8rem;
+    color: #a05c32;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2.5rem, 6vw, 4.8rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.95;
+  }
+
+  .news-section-intro {
+    max-width: 24rem;
+    margin: 0;
+    color: #527066;
+    line-height: 1.6;
+  }
+
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .news-empty {
+    margin: 0;
+    padding: 2rem;
+    border: 1px dashed rgb(25 52 45 / 22%);
+    color: #527066;
+  }
+
+  .news-archive-link {
+    display: inline-flex;
+    gap: 0.55rem;
+    margin-top: 2rem;
+    color: #2f6652;
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .news-archive-link:hover,
+  .news-archive-link:focus-visible {
+    color: #a05c32;
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+  }
+
+  @media (max-width: 50rem) {
+    .news-section-heading {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .news-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

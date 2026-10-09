@@ -1,4 +1,6 @@
 ---
+import NewsSection from '../components/NewsSection.astro';
+
 const currentYear = new Date().getFullYear();
 ---
 
@@ -53,7 +55,8 @@ const currentYear = new Date().getFullYear();
             <ul class="side-nav">
               <li><a href="#inicio"><span>01</span>Inicio</a></li>
               <li><a href="#proyecto"><span>02</span>El proyecto</a></li>
-              <li><a href="#contacto"><span>03</span>Contacto</a></li>
+              <li><a href="/noticias"><span>03</span>Noticias</a></li>
+              <li><a href="#contacto"><span>04</span>Contacto</a></li>
             </ul>
           </nav>
 
@@ -79,6 +82,8 @@ const currentYear = new Date().getFullYear();
           cercana.
         </p>
       </section>
+
+      <NewsSection />
     </main>
 
     <footer class="site-footer" id="contacto">
