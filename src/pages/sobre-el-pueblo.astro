@@ -1,0 +1,215 @@
+---
+import HeritageCard from '../components/about/HeritageCard.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import { aboutPalomares } from '../data/about-palomares';
+import '../styles/pages/sobre-el-pueblo.css';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={aboutPalomares.pageDescription} />
+    <title>{aboutPalomares.pageTitle} · Palomares del Campo</title>
+  </head>
+  <body>
+    <SiteHeader />
+
+    <main>
+      <section class="about-hero" aria-labelledby="page-title">
+        <div class="about-shell about-hero-grid">
+          <div class="about-hero-copy">
+            <p class="eyebrow">{aboutPalomares.landingEyebrow}</p>
+            <h1 id="page-title">{aboutPalomares.landingTitle}</h1>
+            <p class="hero-intro">{aboutPalomares.landingIntro}</p>
+            <a class="hero-link" href="#historia">
+              Descubrir el pueblo <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+
+          <div class="hero-emblem">
+            <div class="hero-emblem-orbit hero-emblem-orbit--one" aria-hidden="true"></div>
+            <div class="hero-emblem-orbit hero-emblem-orbit--two" aria-hidden="true"></div>
+            <figure class="hero-photo">
+              <img
+                src={aboutPalomares.heroImage.src}
+                alt={aboutPalomares.heroImage.alt}
+                width="592"
+                height="890"
+              />
+              <figcaption>
+                <a
+                  href={aboutPalomares.heroImage.sourceHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {aboutPalomares.heroImage.sourceLabel} <span aria-hidden="true">↗</span>
+                </a>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="history-section" id="historia" aria-labelledby="history-title">
+        <div class="about-shell history-grid">
+          <div class="section-intro">
+            <p class="eyebrow">{aboutPalomares.history.eyebrow}</p>
+            <h2 id="history-title">{aboutPalomares.history.title}</h2>
+          </div>
+          <div class="history-copy">
+            {aboutPalomares.history.paragraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+            <a
+              class="source-link"
+              href={aboutPalomares.history.source.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {aboutPalomares.history.source.label} <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="heritage-section" aria-labelledby="heritage-title">
+        <div class="about-shell">
+          <div class="section-heading section-heading--wide">
+            <div>
+              <p class="eyebrow">Patrimonio</p>
+              <h2 id="heritage-title">Piedra, agua y memoria</h2>
+            </div>
+            <p>
+              El patrimonio de Palomares no se agota en un edificio: también está en los lugares que
+              explican cómo se habitó y se recorrió este territorio.
+            </p>
+          </div>
+
+          <div class="heritage-grid">
+            {aboutPalomares.heritage.map((feature, index) => (
+              <HeritageCard {...feature} index={index} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="landscape-section" aria-labelledby="landscape-title">
+        <div class="about-shell landscape-grid">
+          <figure class="landscape-photo">
+            <img
+              src={aboutPalomares.landscape.image.src}
+              alt={aboutPalomares.landscape.image.alt}
+              width="755"
+              height="566"
+              loading="lazy"
+            />
+            <figcaption>
+              <a
+                href={aboutPalomares.landscape.image.sourceHref}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {aboutPalomares.landscape.image.sourceLabel} <span aria-hidden="true">↗</span>
+              </a>
+            </figcaption>
+          </figure>
+          <div class="landscape-copy">
+            <p class="eyebrow">{aboutPalomares.landscape.eyebrow}</p>
+            <h2 id="landscape-title">{aboutPalomares.landscape.title}</h2>
+            <p>{aboutPalomares.landscape.text}</p>
+            <div class="landscape-actions">
+              <a
+                class="button-link"
+                href={aboutPalomares.landscape.directions.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {aboutPalomares.landscape.directions.label} <span aria-hidden="true">↗</span>
+              </a>
+              <a
+                class="source-link"
+                href={aboutPalomares.landscape.source.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {aboutPalomares.landscape.source.label} <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="traditions-section" aria-labelledby="traditions-title">
+        <div class="about-shell traditions-grid">
+          <div>
+            <p class="eyebrow">{aboutPalomares.traditions.eyebrow}</p>
+            <h2 id="traditions-title">{aboutPalomares.traditions.title}</h2>
+            <p class="traditions-description">{aboutPalomares.traditions.description}</p>
+          </div>
+          <div class="traditions-list">
+            {aboutPalomares.traditions.items.map((item, index) => (
+              <article class="tradition-item">
+                <span class="tradition-number">0{index + 1}</span>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </div>
+              </article>
+            ))}
+            <figure class="traditions-photo">
+              <img
+                src={aboutPalomares.traditions.image.src}
+                alt={aboutPalomares.traditions.image.alt}
+                width="687"
+                height="456"
+                loading="lazy"
+              />
+              <figcaption>
+                <a
+                  href={aboutPalomares.traditions.image.sourceHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {aboutPalomares.traditions.image.sourceLabel} <span aria-hidden="true">↗</span>
+                </a>
+              </figcaption>
+            </figure>
+            <a
+              class="source-link"
+              href={aboutPalomares.traditions.source.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {aboutPalomares.traditions.source.label} <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="sources-section" aria-labelledby="sources-title">
+        <div class="about-shell sources-inner">
+          <div>
+            <p class="eyebrow">Para seguir leyendo</p>
+            <h2 id="sources-title">Fuentes consultadas</h2>
+          </div>
+          <nav aria-label="Fuentes de la sección Sobre Palomares del Campo">
+            <ul class="sources-list">
+              {aboutPalomares.sources.map((source) => (
+                <li>
+                  <a href={source.href} target="_blank" rel="noopener noreferrer">
+                    {source.label} <span aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </section>
+    </main>
+
+    <SiteFooter />
+  </body>
+</html>

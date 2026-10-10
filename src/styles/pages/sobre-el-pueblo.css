@@ -1,0 +1,524 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  color: #19342d;
+  background: #f4f1e9;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+}
+
+.about-shell {
+  width: min(100% - 2.5rem, 72rem);
+  margin: 0 auto;
+}
+
+.about-hero {
+  overflow: hidden;
+  color: #eff5ed;
+  background: #19342d;
+}
+
+.about-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+  align-items: center;
+  min-height: min(42rem, calc(100vh - 5.25rem));
+  gap: 3rem;
+  padding-top: clamp(4rem, 9vw, 8rem);
+  padding-bottom: clamp(4rem, 9vw, 8rem);
+}
+
+.eyebrow {
+  margin: 0 0 1.25rem;
+  color: #a05c32;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.about-hero .eyebrow,
+.landscape-section .eyebrow {
+  color: #e5b77e;
+}
+
+h1,
+h2,
+h3,
+p {
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+
+h1 {
+  max-width: 8ch;
+  font-size: clamp(4rem, 9vw, 8.6rem);
+}
+
+h2 {
+  max-width: 12ch;
+  font-size: clamp(3rem, 6vw, 5.8rem);
+}
+
+.hero-intro {
+  max-width: 31rem;
+  margin: 2.25rem 0 0;
+  color: #c7d8cc;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.55;
+}
+
+.hero-link,
+.source-link,
+.button-link {
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.hero-link {
+  display: inline-flex;
+  gap: 0.8rem;
+  align-items: center;
+  margin-top: 2.5rem;
+  color: #e5b77e;
+  font-size: 0.85rem;
+}
+
+.hero-link:hover,
+.hero-link:focus-visible,
+.source-link:hover,
+.source-link:focus-visible,
+.button-link:hover,
+.button-link:focus-visible,
+.sources-list a:hover,
+.sources-list a:focus-visible {
+  color: #a05c32;
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+.hero-link:focus-visible,
+.source-link:focus-visible,
+.button-link:focus-visible,
+.sources-list a:focus-visible {
+  outline: 3px solid #c68455;
+  outline-offset: 4px;
+}
+
+.hero-emblem {
+  position: relative;
+  display: grid;
+  min-height: 25rem;
+  place-items: center;
+  isolation: isolate;
+}
+
+.hero-emblem::before {
+  position: absolute;
+  z-index: -1;
+  width: min(22rem, 85vw);
+  height: min(22rem, 85vw);
+  border: 1px solid rgb(229 183 126 / 48%);
+  border-radius: 50%;
+  content: '';
+}
+
+.hero-photo {
+  position: relative;
+  z-index: 1;
+  width: min(19rem, 78vw);
+  margin: 0;
+  overflow: hidden;
+  border: 0.45rem solid #eff5ed;
+  background: #eff5ed;
+  box-shadow: 0 1.5rem 2.5rem rgb(7 19 16 / 28%);
+  transform: rotate(2deg);
+}
+
+.hero-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  height: auto;
+  object-fit: cover;
+}
+
+.hero-photo figcaption {
+  padding: 0.65rem 0.75rem 0.7rem;
+  background: #eff5ed;
+}
+
+.hero-photo a {
+  color: #2f6652;
+  font-size: 0.68rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.hero-photo a:hover,
+.hero-photo a:focus-visible {
+  color: #a05c32;
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
+.hero-photo a:focus-visible {
+  outline: 3px solid #c68455;
+  outline-offset: 3px;
+}
+
+.hero-emblem-orbit {
+  position: absolute;
+  border: 1px solid rgb(199 216 204 / 25%);
+  border-radius: 50%;
+  transform: rotate(-28deg);
+}
+
+.hero-emblem-orbit--one {
+  width: 18rem;
+  height: 29rem;
+}
+
+.hero-emblem-orbit--two {
+  width: 29rem;
+  height: 18rem;
+  transform: rotate(34deg);
+}
+
+.history-section,
+.heritage-section,
+.traditions-section,
+.sources-section {
+  padding: clamp(5rem, 10vw, 9rem) 0;
+}
+
+.history-section {
+  background: #f4f1e9;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: minmax(13rem, 0.75fr) minmax(0, 1.25fr);
+  gap: clamp(3rem, 8vw, 9rem);
+}
+
+.section-intro h2 {
+  position: sticky;
+  top: 8rem;
+}
+
+.history-copy {
+  max-width: 39rem;
+}
+
+.history-copy p,
+.landscape-copy > p:not(.eyebrow),
+.traditions-description {
+  color: #527066;
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.history-copy p:first-child {
+  margin-top: 0;
+}
+
+.history-copy p:last-of-type {
+  margin-bottom: 2rem;
+}
+
+.source-link {
+  color: #a05c32;
+  font-size: 0.78rem;
+}
+
+.heritage-section {
+  color: #19342d;
+  background: #d8e2d9;
+}
+
+.section-heading--wide {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 3rem;
+  margin-bottom: 3.5rem;
+}
+
+.section-heading--wide > p {
+  max-width: 27rem;
+  margin: 0 0 0.25rem;
+  color: #527066;
+  line-height: 1.7;
+}
+
+.heritage-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.landscape-section {
+  color: #eff5ed;
+  background: #19342d;
+}
+
+.landscape-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: clamp(3rem, 8vw, 8rem);
+}
+
+.landscape-photo,
+.traditions-photo {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgb(229 183 126 / 28%);
+  background: #315f4e;
+}
+
+.landscape-photo img,
+.traditions-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.landscape-photo img {
+  aspect-ratio: 4 / 3;
+}
+
+.landscape-photo figcaption,
+.traditions-photo figcaption {
+  padding: 0.7rem 0.85rem 0.8rem;
+  color: #c7d8cc;
+  background: #19342d;
+}
+
+.landscape-photo a,
+.traditions-photo a {
+  color: #e5b77e;
+  font-size: 0.68rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.landscape-photo a:hover,
+.landscape-photo a:focus-visible,
+.traditions-photo a:hover,
+.traditions-photo a:focus-visible {
+  color: #eff5ed;
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
+.landscape-photo a:focus-visible,
+.traditions-photo a:focus-visible {
+  outline: 3px solid #c68455;
+  outline-offset: 3px;
+}
+
+.landscape-copy h2 {
+  color: #eff5ed;
+}
+
+.landscape-copy > p:not(.eyebrow) {
+  max-width: 34rem;
+  margin: 2rem 0 0;
+  color: #c7d8cc;
+}
+
+.landscape-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  margin-top: 2.5rem;
+}
+
+.button-link {
+  display: inline-flex;
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.9rem 1.15rem;
+  border: 1px solid #e5b77e;
+  color: #e5b77e;
+  font-size: 0.78rem;
+}
+
+.traditions-section {
+  background: #efe6d6;
+}
+
+.traditions-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(3rem, 10vw, 10rem);
+}
+
+.traditions-description {
+  max-width: 25rem;
+  margin-top: 2rem;
+}
+
+.traditions-list {
+  display: grid;
+  gap: 0;
+}
+
+.tradition-item {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1.25rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid rgb(25 52 45 / 20%);
+}
+
+.tradition-item:last-of-type {
+  border-bottom: 1px solid rgb(25 52 45 / 20%);
+}
+
+.tradition-number {
+  padding-top: 0.2rem;
+  color: #a05c32;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+}
+
+.tradition-item h3 {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+}
+
+.tradition-item p {
+  max-width: 31rem;
+  margin: 1rem 0 0;
+  color: #527066;
+  line-height: 1.7;
+}
+
+.traditions-list .source-link {
+  margin-top: 2rem;
+}
+
+.sources-section {
+  padding-top: clamp(3.5rem, 7vw, 6rem);
+  padding-bottom: clamp(3.5rem, 7vw, 6rem);
+  background: #f4f1e9;
+}
+
+.sources-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+  gap: 3rem;
+}
+
+.sources-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sources-list a {
+  color: #2f6652;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media (max-width: 52rem) {
+  .about-hero-grid,
+  .history-grid,
+  .landscape-grid,
+  .traditions-grid,
+  .sources-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .about-hero-grid {
+    min-height: auto;
+  }
+
+  .hero-emblem {
+    min-height: 20rem;
+  }
+
+  .section-intro h2 {
+    position: static;
+  }
+
+  .heritage-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading--wide {
+    display: block;
+  }
+
+  .section-heading--wide > p {
+    margin-top: 2rem;
+  }
+
+  .landscape-photo {
+    min-height: 23rem;
+  }
+}
+
+@media (max-width: 38rem) {
+  .about-shell {
+    width: min(100% - 2rem, 72rem);
+  }
+
+  h1 {
+    font-size: clamp(3.5rem, 17vw, 5.2rem);
+  }
+
+  h2 {
+    font-size: clamp(2.8rem, 14vw, 4.2rem);
+  }
+
+  .hero-emblem-orbit--one {
+    width: 13rem;
+    height: 21rem;
+  }
+
+  .hero-emblem-orbit--two {
+    width: 21rem;
+    height: 13rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

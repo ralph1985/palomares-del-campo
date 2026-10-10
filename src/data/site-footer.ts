@@ -5,6 +5,7 @@ export interface FooterLink {
 
 export const footerExploreLinks: FooterLink[] = [
   { label: 'Inicio', href: '/' },
+  { label: 'Sobre el pueblo', href: '/sobre-el-pueblo/' },
   { label: 'Noticias', href: '/noticias/' },
   { label: 'La bola', href: '/juego/' },
 ];

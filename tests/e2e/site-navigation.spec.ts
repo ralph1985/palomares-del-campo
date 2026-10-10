@@ -19,6 +19,42 @@ test.describe('web navigation', () => {
     ).toHaveAttribute('href', 'https://conquense.dev/');
   });
 
+  test('presents the about page with history, heritage and sources', async ({ page }) => {
+    await page.goto('/sobre-el-pueblo/');
+
+    await expect(page).toHaveTitle(/Sobre Palomares del Campo/);
+    await expect(
+      page.getByRole('heading', { level: 1, name: 'Un pueblo con muchas capas de historia.' }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Una historia ligada al territorio' }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Iglesia de Nuestra Señora de la Asunción' }),
+    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Fiestas y memoria viva' })).toBeVisible();
+    await expect(
+      page.getByRole('img', {
+        name: 'Fachada de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo',
+      }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('img', {
+        name: 'Fuente del Pez y restos del Castillo de San Miguel en el entorno de Palomares del Campo',
+      }),
+    ).toHaveAttribute('loading', 'lazy');
+    await expect(
+      page.getByRole('img', { name: 'Escena de las fiestas de Palomares del Campo' }),
+    ).toHaveAttribute('loading', 'lazy');
+    await expect(page.getByRole('link', { name: 'Historia del portal municipal' })).toHaveAttribute(
+      'href',
+      'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-4',
+    );
+    await expect(
+      page.getByRole('link', { name: 'Sobre el pueblo', exact: true }).last(),
+    ).toHaveAttribute('href', '/sobre-el-pueblo/');
+  });
+
   test('exposes official Palomares municipal services in the footer', async ({ page }) => {
     await page.goto('/');
 
