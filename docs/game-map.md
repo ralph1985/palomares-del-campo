@@ -15,6 +15,8 @@ La ruta `/juego/` es el primer prototipo navegable de la idea de la bola.
 
 No hay cuentas, base de datos, ranking compartido, validación autoritativa ni sincronización entre jugadores. El estado de captura se pierde al recargar y no debe considerarse una partida real.
 
+En desarrollo, la página muestra además un simulador de posición no incluido en producción. Permite elegir cualquiera de los lugares estáticos y probar la validación y la captura sin conceder permisos de ubicación al navegador.
+
 La geolocalización del navegador requiere un contexto seguro: `https://` o `localhost`. Por eso la URL de desarrollo accesible por Tailnet mediante `http://` puede mostrar el mapa, pero no obtener la posición del dispositivo. El despliegue previsto en Vercel usará HTTPS.
 
 ## Fuente de coordenadas

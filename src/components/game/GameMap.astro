@@ -1,4 +1,5 @@
 ---
+import { gameLocations } from '../../data/game-locations';
 ---
 <section class="game-map-section" aria-labelledby="game-map-title">
   <div class="game-map-heading">
@@ -68,6 +69,19 @@
       <p class="game-feedback" data-game-feedback role="status">
         Pulsa «Usar mi ubicación» cuando estés preparado.
       </p>
+
+      {import.meta.env.DEV && (
+        <div class="game-simulator" aria-labelledby="simulator-title">
+          <span class="stat-label" id="simulator-title">Simulador de desarrollo</span>
+          <select data-game-simulator aria-label="Elegir ubicación simulada">
+            <option value="">Elegir un punto del mapa</option>
+            {gameLocations.map(location => <option value={location.id}>{location.shortName}</option>)}
+          </select>
+          <button class="game-button game-button-simulator" type="button" data-game-simulate disabled>
+            Simular posición
+          </button>
+        </div>
+      )}
 
       <div class="future-ranking">
         <div>
@@ -368,6 +382,45 @@
     color: #e5b77e;
     font-size: 0.82rem;
     line-height: 1.5;
+  }
+
+  .game-simulator {
+    display: grid;
+    gap: 0.55rem;
+    margin-top: 0.5rem;
+    padding: 0.9rem;
+    border: 1px dashed rgb(229 183 126 / 48%);
+    border-radius: 0.8rem;
+    background: rgb(229 183 126 / 7%);
+  }
+
+  .game-simulator select {
+    width: 100%;
+    min-height: 2.7rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid rgb(239 245 237 / 22%);
+    border-radius: 0.55rem;
+    color: #eff5ed;
+    background: #214538;
+    font: inherit;
+    font-size: 0.8rem;
+  }
+
+  .game-simulator select:focus-visible {
+    outline: 3px solid #e5b77e;
+    outline-offset: 2px;
+  }
+
+  .game-button-simulator {
+    min-height: 2.6rem;
+    color: #e5b77e;
+    background: transparent;
+    border-color: rgb(229 183 126 / 50%);
+    font-size: 0.78rem;
+  }
+
+  .game-button-simulator:hover:not(:disabled) {
+    background: rgb(229 183 126 / 12%);
   }
 
   .future-ranking {

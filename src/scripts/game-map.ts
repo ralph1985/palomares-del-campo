@@ -23,6 +23,8 @@ const feedbackElement = document.querySelector<HTMLElement>('[data-game-feedback
 const locateButton = document.querySelector<HTMLButtonElement>('[data-game-locate]');
 const checkButton = document.querySelector<HTMLButtonElement>('[data-game-check]');
 const captureButton = document.querySelector<HTMLButtonElement>('[data-game-capture]');
+const simulatorSelect = document.querySelector<HTMLSelectElement>('[data-game-simulator]');
+const simulateButton = document.querySelector<HTMLButtonElement>('[data-game-simulate]');
 
 const map = L.map(mapElement, {
   center: [39.9464, -2.5988],
@@ -157,6 +159,13 @@ const updateUserMarker = (coordinates: Coordinates): void => {
   }
 };
 
+const setUserCoordinates = (coordinates: Coordinates): void => {
+  userCoordinates = coordinates;
+  updateUserMarker(coordinates);
+  map.setView([coordinates.latitude, coordinates.longitude], 17, { animate: true });
+  refreshLocationState();
+};
+
 const requestLocation = (): void => {
   if (!window.isSecureContext) {
     setFeedback(
@@ -176,14 +185,11 @@ const requestLocation = (): void => {
 
   navigator.geolocation.getCurrentPosition(
     position => {
-      userCoordinates = {
+      setUserCoordinates({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
         accuracy: position.coords.accuracy,
-      };
-      updateUserMarker(userCoordinates);
-      map.setView([userCoordinates.latitude, userCoordinates.longitude], 17, { animate: true });
-      refreshLocationState();
+      });
       if (locateButton) locateButton.disabled = false;
       locateButton?.removeAttribute('aria-busy');
     },
@@ -216,6 +222,22 @@ const checkPosition = (): void => {
   }
 };
 
+const simulateLocation = (): void => {
+  const selectedId = simulatorSelect?.value;
+  const location = gameLocations.find(candidate => candidate.id === selectedId);
+  if (!location) {
+    setFeedback('Elige primero un punto del mapa para simular la posición.');
+    return;
+  }
+
+  setUserCoordinates({
+    latitude: location.latitude,
+    longitude: location.longitude,
+    accuracy: 1,
+  });
+  setFeedback(`Posición simulada en ${location.shortName}. Ya puedes comprobarla y capturar.`);
+};
+
 const captureLocally = (): void => {
   if (!userCoordinates || distanceInMeters(userCoordinates, activeLocation()) > activeLocation().radiusMeters) {
     setFeedback('La captura se ha rechazado: estás fuera del radio.');
@@ -239,5 +261,9 @@ refreshPanel();
 locateButton?.addEventListener('click', requestLocation);
 checkButton?.addEventListener('click', checkPosition);
 captureButton?.addEventListener('click', captureLocally);
+simulatorSelect?.addEventListener('change', () => {
+  if (simulateButton) simulateButton.disabled = !simulatorSelect.value;
+});
+simulateButton?.addEventListener('click', simulateLocation);
 
 window.addEventListener('resize', () => map.invalidateSize());
