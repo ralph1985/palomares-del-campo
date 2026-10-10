@@ -43,6 +43,7 @@ const rankingElement = document.querySelector<HTMLOListElement>('[data-game-rank
 const rankingEmptyElement = document.querySelector<HTMLElement>('[data-game-ranking-empty]');
 const rankingStatusElement = document.querySelector<HTMLElement>('[data-game-ranking-status]');
 const gameModeLabel = document.querySelector<HTMLElement>('[data-game-mode-label]');
+const ballVersionElement = document.querySelector<HTMLElement>('[data-game-ball-version]');
 const gameSection = mapElement.closest<HTMLElement>('[data-convex-url]');
 const convexUrl = gameSection?.dataset.convexUrl ?? '';
 
@@ -108,6 +109,13 @@ const renderLeaderboard = (entries: RemoteLeaderboardEntry[]): void => {
       const item = document.createElement('li');
       item.className = 'game-ranking-entry';
 
+      if (
+        entry.nickname === playerIdentity.nickname ||
+        entry.nickname === nicknameInput?.value.trim()
+      ) {
+        item.dataset.current = 'true';
+      }
+
       const position = document.createElement('span');
       position.className = 'game-ranking-position';
       position.textContent = `#${entry.position}`;
@@ -136,6 +144,8 @@ const renderLeaderboard = (entries: RemoteLeaderboardEntry[]): void => {
 
 const applyRemoteState = (state: RemoteGameState): void => {
   remoteBallVersion = state.ball.version;
+  if (ballVersionElement)
+    ballVersionElement.textContent = `Bola activa · versión ${state.ball.version}`;
   gameState = {
     activeLocationId: state.ball.locationId,
     score: gameState.score,

@@ -48,8 +48,8 @@ import SiteHeader from '../../components/layout/SiteHeader.astro';
     min-width: 320px;
     min-height: 100vh;
     margin: 0;
-    color: #19342d;
-    background: #f4f1e9;
+    color: #eff5ed;
+    background: #10231f;
     font-family:
       Inter,
       ui-sans-serif,
@@ -60,14 +60,36 @@ import SiteHeader from '../../components/layout/SiteHeader.astro';
       sans-serif;
   }
 
+  main {
+    overflow: hidden;
+    background: #10231f;
+  }
+
   .game-hero {
-    padding: clamp(5rem, 13vw, 10rem) 0 clamp(4rem, 9vw, 7rem);
+    position: relative;
+    overflow: hidden;
+    padding: clamp(3.5rem, 8vw, 6.5rem) 0 clamp(2.5rem, 6vw, 4.5rem);
     color: #eff5ed;
-    background: #19342d;
+    background:
+      radial-gradient(circle at 85% 30%, rgb(47 102 82 / 28%), transparent 24rem), #19342d;
+  }
+
+  .game-hero::after {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgb(239 245 237 / 4%) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(239 245 237 / 4%) 1px, transparent 1px);
+    background-size: 3rem 3rem;
+    content: '';
+    mask-image: linear-gradient(to right, rgb(0 0 0 / 80%), transparent 75%);
+    pointer-events: none;
   }
 
   .game-hero-inner {
-    width: min(100% - 2.5rem, 72rem);
+    position: relative;
+    z-index: 1;
+    width: min(100% - 2rem, 80rem);
     margin: 0 auto;
   }
 
