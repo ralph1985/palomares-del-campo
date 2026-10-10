@@ -81,14 +81,23 @@ Las noticias externas se mantienen separadas de futuros bandos o comunicados mun
 
 ```text
 src/scripts/
-├── menu.ts                 # abrir, cerrar, foco y teclado
-└── scenes/
-    └── menu-scene.ts      # inicialización y animación Three.js
+├── menu.ts             # abrir, cerrar, foco y teclado
+├── menu-scene.ts       # inicialización y animación Three.js del menú
+└── conquense-logo.ts   # logo 3D diferido y fallback de imagen
 ```
 
-Three.js se carga de forma diferida y con manejo de error. Un fallo de WebGL solo degrada la decoración visual; nunca debe inutilizar la navegación.
+Three.js se carga de forma diferida: la escena del menú solo se solicita al abrirlo y la animación del crédito solo cuando entra en viewport. Los módulos iniciales no deben importar ni inicializar Three.js de forma inmediata. Un fallo de WebGL solo degrada la decoración visual; nunca debe inutilizar la navegación ni ocultar el fallback HTML.
 
 Cuando aparezca otra interacción compleja, se evaluará primero una isla Astro pequeña antes de introducir un framework de UI.
+
+## Límites de responsabilidades y tamaño
+
+- `src/pages/` compone rutas y datos; no contiene la implementación completa de componentes, del shell global ni CSS de otras rutas.
+- `SiteHeader.astro` contiene la cabecera; `SideMenu.astro` contiene el DOM, estilos y accesibilidad del menú lateral.
+- `GameMap.astro` compone el mapa; `GameStatusPanel.astro` contiene estado, controles, simulador y ranking provisional.
+- Por encima de 300 líneas de aplicación se revisa si un archivo mezcla responsabilidades; por encima de 400 se divide o se documenta por qué todavía no compensa.
+- Al dividir un componente se mueven también sus estilos responsive; no dejar CSS duplicado o huérfano en la página consumidora.
+- Toda refactorización estructural conserva o amplía una prueba de comportamiento y vuelve a medir el bundle si cambia la carga de cliente.
 
 ## CSS
 

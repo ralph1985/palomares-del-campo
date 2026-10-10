@@ -19,6 +19,18 @@ test.describe('web navigation', () => {
     ).toHaveAttribute('href', 'https://conquense.dev/');
   });
 
+  test('loads the optional 3D scene only after opening the menu', async ({ page }) => {
+    const threeRequests: string[] = [];
+    page.on('request', (request) => {
+      if (request.url().toLowerCase().includes('three')) threeRequests.push(request.url());
+    });
+
+    await page.goto('/');
+    expect(threeRequests).toHaveLength(0);
+    await page.getByRole('button', { name: 'Explorar' }).click();
+    await expect.poll(() => threeRequests.length).toBeGreaterThan(0);
+  });
+
   test('opens and closes the accessible side menu', async ({ page }) => {
     await page.goto('/');
 

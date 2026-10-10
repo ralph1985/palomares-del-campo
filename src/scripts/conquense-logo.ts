@@ -52,7 +52,7 @@ const initializeCredit = async (credit: HTMLElement) => {
         displacementBias: -0.018,
         transparent: true,
         side: THREE.DoubleSide,
-      }),
+      } as unknown as import('three').MeshBasicMaterialParameters),
     );
     logo.add(face);
     scene.add(logo);
@@ -94,4 +94,21 @@ const initializeCredit = async (credit: HTMLElement) => {
   }
 };
 
-credits.forEach((credit) => void initializeCredit(credit));
+const loadCreditWhenVisible = (credit: HTMLElement) => {
+  if (!('IntersectionObserver' in window)) {
+    void initializeCredit(credit);
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      void initializeCredit(credit);
+    },
+    { rootMargin: '0px' },
+  );
+  observer.observe(credit);
+};
+
+credits.forEach(loadCreditWhenVisible);

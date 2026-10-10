@@ -46,11 +46,20 @@ Cuando se incorpore la infraestructura real, cubrir como mínimo la distancia y 
 - `src/components/ui/`: piezas visuales reutilizables y pequeñas.
 - `src/components/sections/`: secciones de páginas.
 - `src/components/news/`: componentes específicos de noticias.
-- `src/scripts/`: comportamiento cliente; las escenas Three.js deben vivir en `src/scripts/scenes/`.
+- `src/scripts/`: comportamiento cliente; cada módulo debe tener una responsabilidad clara.
 - `src/styles/`: tokens y estilos globales.
 - `src/pages/`: rutas, composición y datos de la página; no convertirlas en almacenes de componentes o CSS global.
 
 Si una carpeta aún no existe, créala solo cuando el primer cambio que la necesita esté justificado.
+
+## Responsabilidades y tamaño de archivos
+
+- `src/pages/` compone rutas y datos; no contiene la implementación completa de componentes, del shell global ni CSS de otras rutas.
+- `SiteHeader.astro` contiene la cabecera; `SideMenu.astro` contiene el DOM, estilos y accesibilidad del menú lateral.
+- `GameMap.astro` compone el mapa; `GameStatusPanel.astro` contiene estado, controles, simulador y ranking provisional.
+- Por encima de 300 líneas de aplicación se revisa si un archivo mezcla responsabilidades; por encima de 400 se divide o se documenta por qué todavía no compensa.
+- Al dividir un componente se mueven también sus estilos responsive; no dejar CSS duplicado o huérfano en la página consumidora.
+- Toda refactorización estructural conserva o amplía una prueba de comportamiento y vuelve a medir el bundle si cambia la carga de cliente.
 
 ## CSS
 
@@ -65,9 +74,11 @@ Si una carpeta aún no existe, créala solo cuando el primer cambio que la neces
 ## Menú y Three.js
 
 - Conservar `data-menu-toggle`, `data-menu-close`, `data-menu-backdrop`, `#site-menu` y `#menu-scene` salvo que se actualicen también las pruebas y el comportamiento accesible.
-- El comportamiento del menú y la inicialización de Three.js son responsabilidades separadas.
+- El comportamiento del menú (`src/scripts/menu.ts`) y la escena visual (`src/scripts/menu-scene.ts`) son responsabilidades separadas.
+- Three.js debe cargarse de forma diferida: la escena del menú solo se solicita al abrirlo y el logo 3D de `conquense.dev` solo se inicializa cuando entra en viewport.
+- Los módulos de carga inicial no deben importar ni inicializar Three.js de forma inmediata.
 - El menú debe mantener apertura, cierre, `Escape`, foco, `aria-expanded`, `aria-hidden` e `inert`.
-- La escena 3D nunca puede impedir que el botón del menú funcione.
+- La escena 3D nunca puede impedir que el botón del menú funcione; si WebGL o Three.js fallan, debe conservarse el fallback HTML o de imagen.
 
 ## Contenido
 
