@@ -24,9 +24,15 @@ test.describe('local ball game', () => {
     await page.locator('[data-game-capture]').click();
 
     await expect(page.locator('[data-game-score]')).toHaveText('10');
+    await expect(page.locator('[data-game-captures]')).toHaveText('1');
     await expect(page.locator('[data-game-location-name]')).toHaveText(
       'Iglesia de Nuestra Señora de la Asunción',
     );
+
+    await page.reload();
+    await expect(page.locator('[data-game-score]')).toHaveText('0');
+    await expect(page.locator('[data-game-captures]')).toHaveText('0');
+    await expect(page.locator('[data-game-location-name]')).toHaveText('Plaza del Coso');
   });
 
   test('keeps capture disabled for an inaccurate simulated position', async ({ page }) => {

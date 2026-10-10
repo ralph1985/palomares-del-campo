@@ -5,7 +5,7 @@ import { gameLocations } from '../../data/game-locations';
 <aside class="game-panel" aria-labelledby="game-status-title">
   <div class="game-panel-topline">
     <span class="status-dot" aria-hidden="true"></span>
-    <span>Partida de prueba</span>
+    <span>Partida local</span>
   </div>
   <h3 id="game-status-title" data-game-location-name>
     Plaza del Coso
@@ -18,6 +18,10 @@ import { gameLocations } from '../../data/game-locations';
     <div>
       <span class="stat-label">Tus puntos</span>
       <strong data-game-score>0</strong>
+    </div>
+    <div>
+      <span class="stat-label">Capturas</span>
+      <strong data-game-captures>0</strong>
     </div>
     <div>
       <span class="stat-label">Radio de captura</span>
@@ -128,7 +132,7 @@ import { gameLocations } from '../../data/game-locations';
 
   .game-stats {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.6rem;
     margin-top: 2rem;
   }
@@ -293,6 +297,16 @@ import { gameLocations } from '../../data/game-locations';
     color: #b7d0bc;
     font-size: 0.76rem;
     line-height: 1.5;
+  }
+
+  @media (max-width: 38rem) {
+    .game-stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .game-stats > div:last-child {
+      grid-column: 1 / -1;
+    }
   }
 
   @media (max-width: 58rem) {

@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { gameLocations, type GameLocation } from '../data/game-locations';
 import { evaluateCapture, offsetPosition, type GeoPosition } from '../game/geo';
-import { nextLocationAfter } from '../game/rules';
+import { captureLocation, createInitialGameState, type LocalGameState } from '../game/session';
 
 type Coordinates = GeoPosition;
 
@@ -14,6 +14,7 @@ if (!mapElement) {
 const locationName = document.querySelector<HTMLElement>('[data-game-location-name]');
 const locationDescription = document.querySelector<HTMLElement>('[data-game-location-description]');
 const scoreElement = document.querySelector<HTMLElement>('[data-game-score]');
+const capturesElement = document.querySelector<HTMLElement>('[data-game-captures]');
 const radiusElement = document.querySelector<HTMLElement>('[data-game-radius]');
 const distanceElement = document.querySelector<HTMLElement>('[data-game-distance]');
 const accuracyElement = document.querySelector<HTMLElement>('[data-game-accuracy]');
@@ -54,14 +55,14 @@ const userIcon = L.divIcon({
 });
 
 const locationMarkers = new Map<string, L.CircleMarker>();
-let activeLocationIndex = 0;
-let score = 0;
+let gameState: LocalGameState = createInitialGameState(gameLocations);
 let userMarker: L.Marker | undefined;
 let userCoordinates: Coordinates | undefined;
 let positionChecked = false;
 let activeMarker: L.Marker | undefined;
 
-const activeLocation = (): GameLocation => gameLocations[activeLocationIndex];
+const activeLocation = (): GameLocation =>
+  gameLocations.find((location) => location.id === gameState.activeLocationId) ?? gameLocations[0];
 
 const formatDistance = (distance: number): string =>
   distance < 1000 ? `${Math.round(distance)} m` : `${(distance / 1000).toFixed(1)} km`;
@@ -74,7 +75,8 @@ const refreshPanel = (): void => {
   const location = activeLocation();
   if (locationName) locationName.textContent = location.name;
   if (locationDescription) locationDescription.textContent = location.description;
-  if (scoreElement) scoreElement.textContent = String(score);
+  if (scoreElement) scoreElement.textContent = String(gameState.score);
+  if (capturesElement) capturesElement.textContent = String(gameState.captures);
   if (radiusElement) radiusElement.textContent = `${location.radiusMeters} m`;
 };
 
@@ -103,13 +105,14 @@ const refreshLocationState = (): void => {
 };
 
 const renderLocations = (): void => {
-  gameLocations.forEach((location, index) => {
+  gameLocations.forEach((location) => {
+    const isActive = location.id === activeLocation().id;
     const marker = L.circleMarker([location.latitude, location.longitude], {
-      radius: index === activeLocationIndex ? 10 : 6,
-      color: index === activeLocationIndex ? '#a05c32' : '#527066',
-      weight: index === activeLocationIndex ? 3 : 2,
-      fillColor: index === activeLocationIndex ? '#e5b77e' : '#b7d0bc',
-      fillOpacity: index === activeLocationIndex ? 0.95 : 0.65,
+      radius: isActive ? 10 : 6,
+      color: isActive ? '#a05c32' : '#527066',
+      weight: isActive ? 3 : 2,
+      fillColor: isActive ? '#e5b77e' : '#b7d0bc',
+      fillOpacity: isActive ? 0.95 : 0.65,
     }).addTo(map);
     marker.bindTooltip(location.shortName, { direction: 'top', offset: [0, -6] });
     locationMarkers.set(location.id, marker);
@@ -271,9 +274,7 @@ const captureLocally = (): void => {
     return;
   }
 
-  score += 10;
-  const nextLocation = nextLocationAfter(gameLocations, activeLocation().id);
-  activeLocationIndex = gameLocations.findIndex((location) => location.id === nextLocation.id);
+  gameState = captureLocation(gameState, gameLocations);
   positionChecked = false;
   renderActiveLocation();
   refreshPanel();
