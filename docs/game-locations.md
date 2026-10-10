@@ -15,13 +15,13 @@ Antes de activar un lugar en una partida pública hay que comprobar:
 
 ## Lugares provisionales
 
-| Lugar | Tipo | Radio actual | Estado |
-| --- | --- | ---: | --- |
-| Plaza del Coso | plaza | 55 m | revisar in situ |
-| Iglesia de Nuestra Señora de la Asunción | patrimonio | 55 m | revisar in situ |
-| Ayuntamiento | servicio público | 50 m | revisar in situ |
-| Ermita | patrimonio | 50 m | revisar in situ |
-| El Jardinillo | parque | 65 m | revisar in situ |
-| Polideportivo | deporte | 60 m | revisar in situ |
+| Lugar                                    | Tipo             | Radio actual | Estado          |
+| ---------------------------------------- | ---------------- | -----------: | --------------- |
+| Plaza del Coso                           | plaza            |         55 m | revisar in situ |
+| Iglesia de Nuestra Señora de la Asunción | patrimonio       |         55 m | revisar in situ |
+| Ayuntamiento                             | servicio público |         50 m | revisar in situ |
+| Ermita                                   | patrimonio       |         50 m | revisar in situ |
+| El Jardinillo                            | parque           |         65 m | revisar in situ |
+| Polideportivo                            | deporte          |         60 m | revisar in situ |
 
 Las coordenadas proceden de OpenStreetMap y se conservan como configuración editable en `src/data/game-locations.ts`. Los radios deben ajustarse después de una comprobación física.

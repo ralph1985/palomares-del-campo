@@ -21,7 +21,9 @@ const posts = (await getCollection('noticias'))
 
     {posts.length > 0 ? (
       <div class="news-grid">
-        {posts.map(post => <NewsCard post={post} />)}
+        {posts.map((post) => (
+          <NewsCard post={post} />
+        ))}
       </div>
     ) : (
       <p class="news-empty">Pronto publicaremos las primeras noticias.</p>
@@ -64,7 +66,7 @@ const posts = (await getCollection('noticias'))
 
   h2 {
     margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: clamp(2.5rem, 6vw, 4.8rem);
     font-weight: 500;
     letter-spacing: -0.06em;

@@ -7,7 +7,7 @@ export const prerender = true;
 
 export async function getStaticPaths() {
   const posts = await getCollection('noticias');
-  return posts.map(post => ({
+  return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
   }));
@@ -15,8 +15,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { title, description, author, date, sourceName, sourceUrl, category } =
-  post.data;
+const { title, description, author, date, sourceName, sourceUrl, category } = post.data;
 const formattedDate = new Intl.DateTimeFormat('es-ES', {
   day: 'numeric',
   month: 'long',
@@ -36,7 +35,9 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     <SiteHeader />
 
     <main class="article-shell">
-      <a class="back-link" href="/noticias">← Volver a noticias</a>
+      <a class="back-link" href="/noticias">
+        ← Volver a noticias
+      </a>
       <article>
         <header class="article-header">
           <p class="eyebrow">{category ?? 'Actualidad'}</p>
@@ -55,7 +56,9 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 
         <footer class="article-source">
           <span>Fuente original:</span>
-          <a href={sourceUrl} target="_blank" rel="noopener noreferrer">{sourceName} ↗</a>
+          <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
+            {sourceName} ↗
+          </a>
         </footer>
       </article>
     </main>
@@ -81,8 +84,14 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     margin: 0;
     color: #19342d;
     background: #f4f1e9;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-      "Segoe UI", sans-serif;
+    font-family:
+      Inter,
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      sans-serif;
   }
 
   .page-header {
@@ -183,7 +192,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   h1 {
     max-width: 18ch;
     margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: clamp(2.8rem, 7vw, 5.7rem);
     font-weight: 500;
     letter-spacing: -0.06em;
@@ -211,7 +220,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   .article-content {
     padding: 3rem 0;
     color: #294a40;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: 1.15rem;
     line-height: 1.75;
   }

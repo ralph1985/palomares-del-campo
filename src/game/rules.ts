@@ -23,15 +23,12 @@ export const pointsAfterDecay = (
   return Math.max(rules.minimumScore, Math.floor(remaining));
 };
 
-export const nextLocationAfter = (
-  locations: GameLocation[],
-  currentId: string,
-): GameLocation => {
+export const nextLocationAfter = (locations: GameLocation[], currentId: string): GameLocation => {
   if (locations.length === 0) {
     throw new Error('No hay ubicaciones de juego configuradas.');
   }
 
-  const currentIndex = locations.findIndex(location => location.id === currentId);
+  const currentIndex = locations.findIndex((location) => location.id === currentId);
   const nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % locations.length;
   return locations[nextIndex];
 };

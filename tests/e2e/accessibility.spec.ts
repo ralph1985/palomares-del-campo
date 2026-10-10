@@ -6,7 +6,9 @@ test.describe('responsive and accessible web shell', () => {
     await page.goto('/juego/');
 
     await expect(page.locator('body')).toBeVisible();
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(375);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+      375,
+    );
   });
 
   test('gives the global controls accessible names', async ({ page }) => {
@@ -14,6 +16,8 @@ test.describe('responsive and accessible web shell', () => {
 
     await expect(page.getByRole('button', { name: 'Explorar' })).toBeVisible();
     await page.getByRole('button', { name: 'Explorar' }).click();
-    await expect(page.locator('#site-menu').getByRole('button', { name: 'Cerrar menú' })).toBeVisible();
+    await expect(
+      page.locator('#site-menu').getByRole('button', { name: 'Cerrar menú' }),
+    ).toBeVisible();
   });
 });

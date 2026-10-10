@@ -11,12 +11,9 @@ const plaza = gameLocations[0];
 
 describe('geolocation rules', () => {
   it('returns zero distance for the same coordinates', () => {
-    expect(
-      distanceInMeters(
-        { latitude: plaza.latitude, longitude: plaza.longitude },
-        plaza,
-      ),
-    ).toBe(0);
+    expect(distanceInMeters({ latitude: plaza.latitude, longitude: plaza.longitude }, plaza)).toBe(
+      0,
+    );
   });
 
   it('accepts a position inside the capture radius', () => {

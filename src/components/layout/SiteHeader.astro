@@ -1,5 +1,6 @@
 ---
 ---
+
 <header class="site-header" data-auto-hide-header>
   <div class="header-inner">
     <a class="brand" href="/" aria-label="Palomares del Campo, inicio">
@@ -25,7 +26,13 @@
   </div>
 </header>
 
-<button class="menu-backdrop" type="button" data-menu-backdrop hidden aria-label="Cerrar menú"></button>
+<button
+  class="menu-backdrop"
+  type="button"
+  data-menu-backdrop
+  hidden
+  aria-label="Cerrar menú"
+></button>
 
 <aside class="side-menu" id="site-menu" aria-label="Menú lateral" aria-hidden="true" inert>
   <div class="side-menu-inner">
@@ -39,11 +46,31 @@
     <div class="side-menu-content">
       <nav aria-label="Secciones del sitio">
         <ul class="side-nav">
-          <li><a href="/#inicio"><span>01</span>Inicio</a></li>
-          <li><a href="/#proyecto"><span>02</span>El proyecto</a></li>
-          <li><a href="/noticias"><span>03</span>Noticias</a></li>
-          <li><a href="/juego/"><span>04</span>La bola</a></li>
-          <li><a href="/#contacto"><span>05</span>Contacto</a></li>
+          <li>
+            <a href="/#inicio">
+              <span>01</span>Inicio
+            </a>
+          </li>
+          <li>
+            <a href="/#proyecto">
+              <span>02</span>El proyecto
+            </a>
+          </li>
+          <li>
+            <a href="/noticias">
+              <span>03</span>Noticias
+            </a>
+          </li>
+          <li>
+            <a href="/juego/">
+              <span>04</span>La bola
+            </a>
+          </li>
+          <li>
+            <a href="/#contacto">
+              <span>05</span>Contacto
+            </a>
+          </li>
         </ul>
       </nav>
 
@@ -291,7 +318,7 @@
     gap: 1rem;
     padding: 0.65rem 0;
     color: #eff5ed;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: clamp(2rem, 6vw, 3.2rem);
     letter-spacing: -0.045em;
     line-height: 1;
@@ -330,7 +357,7 @@
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg, transparent 25%, rgb(13 29 25 / 72%) 100%);
-    content: "";
+    content: '';
     pointer-events: none;
   }
 

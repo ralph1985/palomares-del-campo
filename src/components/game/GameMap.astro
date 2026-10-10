@@ -1,14 +1,15 @@
 ---
 import { gameLocations } from '../../data/game-locations';
 ---
+
 <section class="game-map-section" aria-labelledby="game-map-title">
   <div class="game-map-heading">
     <div>
       <p class="eyebrow">Mapa de juego</p>
       <h2 id="game-map-title">La bola está en el pueblo.</h2>
       <p class="game-map-intro">
-        Acércate a la coordenada activa, comprueba tu posición y prueba la captura.
-        Esta versión funciona solo en tu navegador: todavía no hay jugadores ni ranking real.
+        Acércate a la coordenada activa, comprueba tu posición y prueba la captura. Esta versión
+        funciona solo en tu navegador: todavía no hay jugadores ni ranking real.
       </p>
     </div>
     <span class="prototype-badge">Prototipo local</span>
@@ -23,7 +24,10 @@ import { gameLocations } from '../../data/game-locations';
         aria-label="Mapa interactivo de Palomares del Campo con lugares de juego"
       ></div>
       <div class="map-attribution-note">
-        Mapa © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>
+        Mapa ©{' '}
+        <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">
+          OpenStreetMap
+        </a>
       </div>
     </div>
 
@@ -32,7 +36,9 @@ import { gameLocations } from '../../data/game-locations';
         <span class="status-dot" aria-hidden="true"></span>
         <span>Partida de prueba</span>
       </div>
-      <h3 id="game-status-title" data-game-location-name>Plaza del Coso</h3>
+      <h3 id="game-status-title" data-game-location-name>
+        Plaza del Coso
+      </h3>
       <p class="game-location-description" data-game-location-description>
         El corazón del pueblo para empezar la partida.
       </p>
@@ -72,10 +78,14 @@ import { gameLocations } from '../../data/game-locations';
 
       {import.meta.env.DEV && (
         <div class="game-simulator" aria-labelledby="simulator-title">
-          <span class="stat-label" id="simulator-title">Simulador de desarrollo</span>
+          <span class="stat-label" id="simulator-title">
+            Simulador de desarrollo
+          </span>
           <select data-game-simulator aria-label="Elegir ubicación simulada">
             <option value="">Elegir un punto del mapa</option>
-            {gameLocations.map(location => <option value={location.id}>{location.shortName}</option>)}
+            {gameLocations.map((location) => (
+              <option value={location.id}>{location.shortName}</option>
+            ))}
           </select>
           <select data-game-scenario aria-label="Elegir escenario de posición simulada">
             <option value="exact">Posición exacta</option>
@@ -83,7 +93,12 @@ import { gameLocations } from '../../data/game-locations';
             <option value="outside">Fuera del radio</option>
             <option value="low-accuracy">Precisión insuficiente</option>
           </select>
-          <button class="game-button game-button-simulator" type="button" data-game-simulate disabled>
+          <button
+            class="game-button game-button-simulator"
+            type="button"
+            data-game-simulate
+            disabled
+          >
             Simular posición
           </button>
         </div>
@@ -120,7 +135,9 @@ import { gameLocations } from '../../data/game-locations';
     border: 3px solid #eff5ed;
     border-radius: 50%;
     background: #a05c32;
-    box-shadow: 0 0 0 0.35rem rgb(160 92 50 / 24%), 0 0.3rem 0.8rem rgb(25 52 45 / 35%);
+    box-shadow:
+      0 0 0 0.35rem rgb(160 92 50 / 24%),
+      0 0.3rem 0.8rem rgb(25 52 45 / 35%);
     animation: game-ball-pulse 1.8s ease-in-out infinite;
   }
 
@@ -171,7 +188,7 @@ import { gameLocations } from '../../data/game-locations';
   h2,
   h3 {
     margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-weight: 500;
     letter-spacing: -0.055em;
     line-height: 0.98;
@@ -343,7 +360,10 @@ import { gameLocations } from '../../data/game-locations';
     font: inherit;
     font-size: 0.85rem;
     font-weight: 750;
-    transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+    transition:
+      transform 180ms ease,
+      background 180ms ease,
+      border-color 180ms ease;
   }
 
   .game-button:hover:not(:disabled) {
@@ -436,7 +456,7 @@ import { gameLocations } from '../../data/game-locations';
   }
 
   .future-ranking strong {
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: 1.15rem;
     font-weight: 500;
   }

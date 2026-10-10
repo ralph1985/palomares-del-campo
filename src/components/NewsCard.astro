@@ -6,7 +6,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { title, description, author, date, sourceName, category } = post.data;
+const { title, description, date, sourceName, category } = post.data;
 const formattedDate = new Intl.DateTimeFormat('es-ES', {
   day: 'numeric',
   month: 'long',
@@ -20,11 +20,15 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     <span aria-hidden="true">·</span>
     <span>{sourceName}</span>
   </div>
-  <h3><a href={`/noticias/${post.id}`}>{title}</a></h3>
+  <h3>
+    <a href={`/noticias/${post.id}`}>{title}</a>
+  </h3>
   <p>{description}</p>
   <div class="news-card-footer">
     <span>{category ?? 'Actualidad'}</span>
-    <a class="news-card-link" href={`/noticias/${post.id}`}>Leer noticia <span aria-hidden="true">↗</span></a>
+    <a class="news-card-link" href={`/noticias/${post.id}`}>
+      Leer noticia <span aria-hidden="true">↗</span>
+    </a>
   </div>
 </article>
 
@@ -38,7 +42,9 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     border-radius: 1.15rem;
     background: #fffdf8;
     box-shadow: 0 0.75rem 2rem rgb(25 52 45 / 7%);
-    transition: transform 220ms ease, box-shadow 220ms ease;
+    transition:
+      transform 220ms ease,
+      box-shadow 220ms ease;
   }
 
   .news-card:hover {
@@ -59,7 +65,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 
   .news-card h3 {
     margin: 1.25rem 0 0.8rem;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: clamp(1.35rem, 2.4vw, 1.8rem);
     letter-spacing: -0.035em;
     line-height: 1.05;

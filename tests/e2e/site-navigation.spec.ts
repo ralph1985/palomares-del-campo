@@ -14,10 +14,9 @@ test.describe('web navigation', () => {
       'src',
       '/brand/escudo-palomares-del-campo.svg',
     );
-    await expect(page.getByRole('link', { name: 'Web realizada por conquense.dev' })).toHaveAttribute(
-      'href',
-      'https://conquense.dev/',
-    );
+    await expect(
+      page.getByRole('link', { name: 'Web realizada por conquense.dev' }),
+    ).toHaveAttribute('href', 'https://conquense.dev/');
   });
 
   test('opens and closes the accessible side menu', async ({ page }) => {

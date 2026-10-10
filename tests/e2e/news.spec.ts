@@ -19,6 +19,10 @@ test.describe('editorial news', () => {
     await expect(page.getByRole('heading', { name: title })).toBeVisible();
     await expect(page.locator('article')).toBeVisible();
     await expect(page.getByText('Fuente original:')).toBeVisible();
-    await expect(page.getByRole('link', { name: /Voces de Cuenca|La Cerca|Encastillalamancha|Castilla-La Mancha Media/ })).toBeVisible();
+    await expect(
+      page.getByRole('link', {
+        name: /Voces de Cuenca|La Cerca|Encastillalamancha|Castilla-La Mancha Media/,
+      }),
+    ).toBeVisible();
   });
 });

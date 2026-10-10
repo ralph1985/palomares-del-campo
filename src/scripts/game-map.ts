@@ -1,11 +1,7 @@
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { gameLocations, type GameLocation } from '../data/game-locations';
-import {
-  evaluateCapture,
-  offsetPosition,
-  type GeoPosition,
-} from '../game/geo';
+import { evaluateCapture, offsetPosition, type GeoPosition } from '../game/geo';
 import { nextLocationAfter } from '../game/rules';
 
 type Coordinates = GeoPosition;
@@ -86,7 +82,8 @@ const refreshLocationState = (): void => {
   if (!userCoordinates) return;
 
   const evaluation = evaluateCapture(userCoordinates, activeLocation());
-  if (distanceElement) distanceElement.textContent = `${formatDistance(evaluation.distanceMeters)} de la bola`;
+  if (distanceElement)
+    distanceElement.textContent = `${formatDistance(evaluation.distanceMeters)} de la bola`;
   if (accuracyElement) {
     accuracyElement.textContent = userCoordinates.accuracy
       ? `Precisión aproximada: ${Math.round(userCoordinates.accuracy)} m.`
@@ -179,7 +176,7 @@ const requestLocation = (): void => {
   setFeedback('Buscando tu posición…');
 
   navigator.geolocation.getCurrentPosition(
-    position => {
+    (position) => {
       setUserCoordinates({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -188,7 +185,7 @@ const requestLocation = (): void => {
       if (locateButton) locateButton.disabled = false;
       locateButton?.removeAttribute('aria-busy');
     },
-    error => {
+    (error) => {
       const message =
         error.code === error.PERMISSION_DENIED
           ? 'El navegador no ha permitido acceder a tu ubicación.'
@@ -225,7 +222,7 @@ const checkPosition = (): void => {
 
 const simulateLocation = (): void => {
   const selectedId = simulatorSelect?.value;
-  const location = gameLocations.find(candidate => candidate.id === selectedId);
+  const location = gameLocations.find((candidate) => candidate.id === selectedId);
   if (!location) {
     setFeedback('Elige primero un punto del mapa para simular la posición.');
     return;
@@ -276,13 +273,15 @@ const captureLocally = (): void => {
 
   score += 10;
   const nextLocation = nextLocationAfter(gameLocations, activeLocation().id);
-  activeLocationIndex = gameLocations.findIndex(location => location.id === nextLocation.id);
+  activeLocationIndex = gameLocations.findIndex((location) => location.id === nextLocation.id);
   positionChecked = false;
   renderActiveLocation();
   refreshPanel();
   if (captureButton) captureButton.disabled = true;
   if (checkButton) checkButton.disabled = false;
-  setFeedback(`Captura local registrada. +10 puntos. La bola se ha movido a ${activeLocation().shortName}.`);
+  setFeedback(
+    `Captura local registrada. +10 puntos. La bola se ha movido a ${activeLocation().shortName}.`,
+  );
   map.setView([activeLocation().latitude, activeLocation().longitude], 16, { animate: true });
   refreshLocationState();
 };
