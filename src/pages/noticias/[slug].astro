@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
-import ConquenseCredit from '../../components/layout/ConquenseCredit.astro';
+import SiteFooter from '../../components/layout/SiteFooter.astro';
 import SiteHeader from '../../components/layout/SiteHeader.astro';
 
 export const prerender = true;
@@ -63,13 +63,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
       </article>
     </main>
 
-    <footer class="page-footer">
-      <div class="page-footer-inner">
-        <p>© {new Date().getFullYear()} Palomares del Campo</p>
-        <a href="/">Inicio</a>
-        <ConquenseCredit />
-      </div>
-    </footer>
+    <SiteFooter />
   </body>
 </html>
 
@@ -107,8 +101,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     transform: translateY(-105%);
   }
 
-  .page-header-inner,
-  .page-footer-inner {
+  .page-header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -142,8 +135,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 
   .home-link,
   .back-link,
-  .article-source a,
-  .page-footer a {
+  .article-source a {
     color: #2f6652;
     font-size: 0.85rem;
     font-weight: 750;
@@ -156,8 +148,6 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   .back-link:focus-visible,
   .article-source a:hover,
   .article-source a:focus-visible,
-  .page-footer a:hover,
-  .page-footer a:focus-visible,
   .brand:focus-visible {
     color: #a05c32;
     text-decoration: underline;
@@ -245,27 +235,6 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     font-size: 0.85rem;
   }
 
-  .page-footer {
-    color: #dfe9df;
-    background: #19342d;
-  }
-
-  .page-footer-inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    align-items: center;
-    justify-content: initial;
-    font-size: 0.82rem;
-  }
-
-  .page-footer p {
-    margin: 0;
-  }
-
-  .page-footer a {
-    color: #dfe9df;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .page-header {
       transition-duration: 0.01ms;
@@ -274,39 +243,15 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 
   @media (max-width: 38rem) {
     .page-header-inner,
-    .page-footer-inner,
     .article-shell {
       width: min(100% - 2rem, 72rem);
     }
 
-    .page-header-inner,
-    .page-footer-inner {
-      min-height: 6.5rem;
-    }
-
     .page-header-inner {
+      min-height: 6.5rem;
       align-items: flex-start;
       flex-direction: column;
       justify-content: center;
-    }
-
-    .page-footer-inner {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
-      justify-content: initial;
-      min-height: 6.5rem;
-      padding: 1rem 0;
-    }
-
-    .page-footer-inner > a:not(.conquense-credit) {
-      grid-column: 1;
-      grid-row: 2;
-    }
-
-    .page-footer-inner > .conquense-credit {
-      grid-column: 2;
-      grid-row: 1 / span 2;
     }
   }
 </style>

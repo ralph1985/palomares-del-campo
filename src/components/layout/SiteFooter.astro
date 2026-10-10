@@ -1,0 +1,269 @@
+---
+import ConquenseCredit from './ConquenseCredit.astro';
+import { footerExploreLinks, footerOfficialLinks, municipalContact } from '../../data/site-footer';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer" id="contacto">
+  <div class="footer-inner">
+    <section class="footer-brand" aria-labelledby="footer-brand-title">
+      <a class="footer-brand-link" href="/" aria-label="Palomares del Campo, inicio">
+        <img
+          src="/brand/escudo-palomares-del-campo.svg"
+          alt=""
+          width="44"
+          height="76"
+          loading="lazy"
+        />
+        <span>
+          <span class="footer-eyebrow">Web editorial</span>
+          <strong id="footer-brand-title">Palomares del Campo</strong>
+        </span>
+      </a>
+      <p>Información, historias y lugares para descubrir el pueblo.</p>
+    </section>
+
+    <nav class="footer-group" aria-labelledby="footer-explore-title">
+      <h2 id="footer-explore-title">Explora</h2>
+      <ul>
+        {footerExploreLinks.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav class="footer-group" aria-labelledby="footer-official-title">
+      <h2 id="footer-official-title">Servicios municipales</h2>
+      <ul>
+        {footerOfficialLinks.map((link) => (
+          <li>
+            <a href={link.href} target="_blank" rel="noopener noreferrer">
+              {link.label}
+              <span aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <address class="footer-group footer-contact" aria-labelledby="footer-contact-title">
+      <h2 id="footer-contact-title">Contacto</h2>
+      <p>{municipalContact.name}</p>
+      <p>
+        {municipalContact.address}
+        <br />
+        {municipalContact.locality}
+      </p>
+      <p>{municipalContact.judicialDistrict}</p>
+      <a href={`tel:${municipalContact.phoneHref}`}>{municipalContact.phone}</a>
+      <a href={`mailto:${municipalContact.email}`}>{municipalContact.email}</a>
+    </address>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">
+      <p>© {currentYear} Palomares del Campo</p>
+      <ConquenseCredit />
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    color: #dfe9df;
+    background: #19342d;
+  }
+
+  .footer-inner,
+  .footer-bottom-inner {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .footer-inner {
+    display: grid;
+    grid-template-columns: minmax(15rem, 1.25fr) repeat(3, minmax(0, 1fr));
+    gap: clamp(2rem, 5vw, 5rem);
+    padding: 4.5rem 0 4rem;
+  }
+
+  .footer-brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .footer-brand-link img {
+    display: block;
+    width: 2.75rem;
+    height: 4.75rem;
+    object-fit: contain;
+  }
+
+  .footer-brand-link strong,
+  .footer-eyebrow {
+    display: block;
+  }
+
+  .footer-brand-link strong {
+    max-width: 10rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.45rem;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .footer-eyebrow {
+    margin-bottom: 0.45rem;
+    color: #e5b77e;
+    font-size: 0.65rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .footer-brand p {
+    max-width: 15rem;
+    margin: 1.5rem 0 0;
+    color: #a9c3b0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .footer-group {
+    min-width: 0;
+  }
+
+  .footer-group h2 {
+    margin: 0 0 1rem;
+    color: #f4f1e9;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .footer-group ul {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer-group a {
+    color: #b7d0bc;
+    font-size: 0.87rem;
+    line-height: 1.4;
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .footer-group a span {
+    display: inline-block;
+    margin-left: 0.3rem;
+    color: #e5b77e;
+    font-size: 0.8rem;
+  }
+
+  .footer-group a:hover,
+  .footer-group a:focus-visible {
+    color: #f4d3a5;
+  }
+
+  .footer-group a:focus-visible,
+  .footer-brand-link:focus-visible {
+    outline: 3px solid #e5b77e;
+    outline-offset: 5px;
+    border-radius: 0.2rem;
+  }
+
+  .footer-contact {
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    color: #b7d0bc;
+    font-size: 0.87rem;
+    font-style: normal;
+    line-height: 1.5;
+  }
+
+  .footer-contact h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-contact p {
+    margin: 0;
+  }
+
+  .footer-contact a {
+    width: fit-content;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgb(223 233 223 / 18%);
+  }
+
+  .footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 5.75rem;
+  }
+
+  .footer-bottom-inner > p {
+    margin: 0;
+    color: #a9c3b0;
+    font-size: 0.78rem;
+  }
+
+  .footer-bottom :global(.conquense-credit) {
+    color: #dfe9df;
+  }
+
+  @media (max-width: 60rem) {
+    .footer-inner {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .footer-inner,
+    .footer-bottom-inner {
+      width: min(100% - 2rem, 72rem);
+    }
+
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+      padding: 3.5rem 0;
+    }
+
+    .footer-brand {
+      grid-column: auto;
+    }
+
+    .footer-bottom-inner {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 1.25rem 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-group a {
+      transition-duration: 0.01ms;
+    }
+  }
+</style>

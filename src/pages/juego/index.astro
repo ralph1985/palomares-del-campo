@@ -1,10 +1,8 @@
 ---
-import ConquenseCredit from '../../components/layout/ConquenseCredit.astro';
+import SiteFooter from '../../components/layout/SiteFooter.astro';
 import GameMap from '../../components/game/GameMap.astro';
 import GameRules from '../../components/game/GameRules.astro';
 import SiteHeader from '../../components/layout/SiteHeader.astro';
-
-const currentYear = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -37,13 +35,7 @@ const currentYear = new Date().getFullYear();
       <GameRules />
     </main>
 
-    <footer class="page-footer">
-      <div class="page-footer-inner">
-        <p>© {currentYear} Palomares del Campo</p>
-        <a href="/">Inicio</a>
-        <ConquenseCredit />
-      </div>
-    </footer>
+    <SiteFooter />
   </body>
 </html>
 
@@ -106,59 +98,9 @@ const currentYear = new Date().getFullYear();
     line-height: 1.65;
   }
 
-  .page-footer {
-    color: #dfe9df;
-    background: #19342d;
-  }
-
-  .page-footer-inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    align-items: center;
-    width: min(100% - 2.5rem, 72rem);
-    min-height: 5.25rem;
-    margin: 0 auto;
-    gap: 1rem;
-    font-size: 0.82rem;
-  }
-
-  .page-footer p {
-    margin: 0;
-  }
-
-  .page-footer a {
-    color: #dfe9df;
-    font-weight: 750;
-    text-decoration: none;
-  }
-
-  .page-footer a:hover,
-  .page-footer a:focus-visible {
-    color: #e5b77e;
-    text-decoration: underline;
-    text-underline-offset: 0.25rem;
-  }
-
   @media (max-width: 38rem) {
-    .game-hero-inner,
-    .page-footer-inner {
+    .game-hero-inner {
       width: min(100% - 2rem, 72rem);
-    }
-
-    .page-footer-inner {
-      grid-template-columns: minmax(0, 1fr) auto;
-      min-height: 6.5rem;
-      padding: 1rem 0;
-    }
-
-    .page-footer-inner > a:not(.conquense-credit) {
-      grid-column: 1;
-      grid-row: 2;
-    }
-
-    .page-footer-inner > .conquense-credit {
-      grid-column: 2;
-      grid-row: 1 / span 2;
     }
   }
 </style>

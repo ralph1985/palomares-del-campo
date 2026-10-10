@@ -19,6 +19,28 @@ test.describe('web navigation', () => {
     ).toHaveAttribute('href', 'https://conquense.dev/');
   });
 
+  test('exposes official Palomares municipal services in the footer', async ({ page }) => {
+    await page.goto('/');
+
+    const footer = page.getByRole('contentinfo');
+    await expect(footer.getByRole('link', { name: 'Sede electrónica' })).toHaveAttribute(
+      'href',
+      'https://palomaresdelcampo.sedelectronica.es/info.0',
+    );
+    await expect(footer.getByRole('link', { name: 'Tablón de anuncios' })).toHaveAttribute(
+      'href',
+      'https://palomaresdelcampo.sedelectronica.es/board',
+    );
+    await expect(footer.getByRole('link', { name: 'Portal de transparencia' })).toHaveAttribute(
+      'href',
+      'https://palomaresdelcampo.sedelectronica.es/transparency',
+    );
+    await expect(footer.getByRole('link', { name: 'Buzón electrónico' })).toHaveAttribute(
+      'href',
+      'https://palomaresdelcampo.sedelectronica.es/enotifications',
+    );
+  });
+
   test('loads the optional 3D scene only after opening the menu', async ({ page }) => {
     const threeRequests: string[] = [];
     page.on('request', (request) => {

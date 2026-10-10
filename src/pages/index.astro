@@ -1,9 +1,7 @@
 ---
 import NewsSection from '../components/NewsSection.astro';
-import ConquenseCredit from '../components/layout/ConquenseCredit.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
-
-const currentYear = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -36,12 +34,7 @@ const currentYear = new Date().getFullYear();
       <NewsSection />
     </main>
 
-    <footer class="site-footer" id="contacto">
-      <div class="footer-inner">
-        <p>© {currentYear} Palomares del Campo</p>
-        <ConquenseCredit />
-      </div>
-    </footer>
+    <SiteFooter />
   </body>
 </html>
 
@@ -136,27 +129,6 @@ const currentYear = new Date().getFullYear();
     outline-offset: 5px;
   }
 
-  .site-footer {
-    color: #dfe9df;
-    background: #19342d;
-  }
-
-  .footer-inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    width: min(100% - 2.5rem, 72rem);
-    min-height: 5.25rem;
-    margin: 0 auto;
-    gap: 1rem;
-    color: #dfe9df;
-    font-size: 0.82rem;
-  }
-
-  .footer-inner p {
-    margin: 0;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     :global(html) {
       scroll-behavior: auto;
@@ -176,11 +148,6 @@ const currentYear = new Date().getFullYear();
     .intro {
       min-height: calc(100vh - 10.25rem);
       padding: 4rem 0;
-    }
-
-    .footer-inner {
-      min-height: 6.5rem;
-      padding: 1rem 0;
     }
   }
 </style>

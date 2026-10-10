@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import NewsCard from '../../components/NewsCard.astro';
-import ConquenseCredit from '../../components/layout/ConquenseCredit.astro';
+import SiteFooter from '../../components/layout/SiteFooter.astro';
 import SiteHeader from '../../components/layout/SiteHeader.astro';
 
 const posts = (await getCollection('noticias')).sort(
@@ -58,13 +58,7 @@ const posts = (await getCollection('noticias')).sort(
       </section>
     </main>
 
-    <footer class="page-footer">
-      <div class="page-footer-inner">
-        <p>© {new Date().getFullYear()} Palomares del Campo</p>
-        <a href="/">Inicio</a>
-        <ConquenseCredit />
-      </div>
-    </footer>
+    <SiteFooter />
   </body>
 </html>
 
@@ -103,7 +97,6 @@ const posts = (await getCollection('noticias')).sort(
   }
 
   .page-header-inner,
-  .page-footer-inner,
   .news-hero-inner,
   .archive-inner {
     width: min(100% - 2.5rem, 72rem);
@@ -140,8 +133,7 @@ const posts = (await getCollection('noticias')).sort(
     font-size: 1.3rem;
   }
 
-  .home-link,
-  .page-footer a {
+  .home-link {
     color: #2f6652;
     font-size: 0.85rem;
     font-weight: 750;
@@ -150,8 +142,6 @@ const posts = (await getCollection('noticias')).sort(
 
   .home-link:hover,
   .home-link:focus-visible,
-  .page-footer a:hover,
-  .page-footer a:focus-visible,
   .brand:focus-visible,
   .news-card :global(a):focus-visible {
     color: #a05c32;
@@ -232,29 +222,6 @@ const posts = (await getCollection('noticias')).sort(
     color: #527066;
   }
 
-  .page-footer {
-    color: #dfe9df;
-    background: #19342d;
-  }
-
-  .page-footer-inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    align-items: center;
-    justify-content: initial;
-    min-height: 5.25rem;
-    gap: 1rem;
-    font-size: 0.82rem;
-  }
-
-  .page-footer p {
-    margin: 0;
-  }
-
-  .page-footer a {
-    color: #dfe9df;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .page-header {
       transition-duration: 0.01ms;
@@ -269,7 +236,6 @@ const posts = (await getCollection('noticias')).sort(
 
   @media (max-width: 38rem) {
     .page-header-inner,
-    .page-footer-inner,
     .news-hero-inner,
     .archive-inner {
       width: min(100% - 2rem, 72rem);
@@ -282,27 +248,9 @@ const posts = (await getCollection('noticias')).sort(
       min-height: 6.5rem;
     }
 
-    .page-footer-inner {
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
-      justify-content: initial;
-      min-height: 6.5rem;
-      padding: 1rem 0;
-    }
-
     .archive-heading {
       align-items: flex-start;
       flex-direction: column;
-    }
-
-    .page-footer-inner > a:not(.conquense-credit) {
-      grid-column: 1;
-      grid-row: 2;
-    }
-
-    .page-footer-inner > .conquense-credit {
-      grid-column: 2;
-      grid-row: 1 / span 2;
     }
   }
 </style>
