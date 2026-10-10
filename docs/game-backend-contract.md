@@ -1,6 +1,6 @@
-# Contrato futuro del juego con Convex
+# Contrato del backend del juego con Convex
 
-Este documento define la frontera que deberá conservar la futura integración. No implica que Convex esté desplegado todavía.
+Este documento define la frontera que conserva la integración. Convex ya está desplegado en el proyecto de desarrollo; todavía no hay despliegue de producción ni integración con la interfaz.
 
 ## Estado autoritativo
 
