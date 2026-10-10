@@ -2,7 +2,11 @@
 import GameStatusPanel from './GameStatusPanel.astro';
 ---
 
-<section class="game-map-section" aria-labelledby="game-map-title">
+<section
+  class="game-map-section"
+  aria-labelledby="game-map-title"
+  data-convex-url={import.meta.env.CONVEX_URL ?? ''}
+>
   <div class="game-map-heading">
     <div>
       <p class="eyebrow">Mapa de juego</p>

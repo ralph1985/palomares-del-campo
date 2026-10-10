@@ -14,6 +14,28 @@ import { gameLocations } from '../../data/game-locations';
     El corazón del pueblo para empezar la partida.
   </p>
 
+  <form class="game-player-form" data-game-player-form>
+    <label for="game-nickname">Tu nick</label>
+    <div class="game-player-input-row">
+      <input
+        id="game-nickname"
+        name="nickname"
+        type="text"
+        maxlength="24"
+        autocomplete="nickname"
+        placeholder="Ej. Pájaro Verde"
+        data-game-nickname
+        required
+      />
+      <button class="game-button game-button-secondary" type="submit" data-game-join>
+        Entrar
+      </button>
+    </div>
+    <p class="game-player-feedback" data-game-player-feedback role="status">
+      Elige un nick para entrar en la partida.
+    </p>
+  </form>
+
   <div class="game-stats" aria-label="Estado de la partida">
     <div>
       <span class="stat-label">Tus puntos</span>
@@ -128,6 +150,56 @@ import { gameLocations } from '../../data/game-locations';
     color: #b7d0bc;
     font-size: 0.9rem;
     line-height: 1.6;
+  }
+
+  .game-player-form {
+    margin-top: 1.25rem;
+    padding: 0.9rem;
+    border: 1px solid rgb(239 245 237 / 13%);
+    border-radius: 0.8rem;
+    background: rgb(239 245 237 / 5%);
+  }
+
+  .game-player-form label {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: #b7d0bc;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .game-player-input-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.5rem;
+  }
+
+  .game-player-input-row input {
+    min-width: 0;
+    min-height: 3rem;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid rgb(239 245 237 / 28%);
+    border-radius: 0.7rem;
+    color: #eff5ed;
+    background: rgb(0 0 0 / 14%);
+    font: inherit;
+  }
+
+  .game-player-input-row input:focus-visible {
+    outline: 3px solid #e5b77e;
+    outline-offset: 2px;
+  }
+
+  .game-player-feedback {
+    min-height: 1.2rem;
+    margin: 0.55rem 0 0;
+    color: #b7d0bc;
+    font-size: 0.72rem;
+    line-height: 1.4;
+  }
+
+  .game-player-feedback[data-state='error'] {
+    color: #f0c995;
   }
 
   .game-stats {

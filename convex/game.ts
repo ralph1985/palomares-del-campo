@@ -197,6 +197,24 @@ export const getActiveSeason = query({
   },
 });
 
+export const getPlayerSummary = query({
+  args: {
+    seasonId: v.id('seasons'),
+    deviceId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const player = await ctx.db
+      .query('players')
+      .withIndex('by_season_subject', (query) =>
+        query.eq('seasonId', args.seasonId).eq('subject', args.deviceId),
+      )
+      .unique();
+    return player
+      ? { nickname: player.displayName, score: player.score, captures: player.captures }
+      : null;
+  },
+});
+
 export const captureBall = mutation({
   args: {
     seasonId: v.id('seasons'),

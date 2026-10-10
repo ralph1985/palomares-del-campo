@@ -3,6 +3,14 @@ import L from 'leaflet';
 import { gameLocations, type GameLocation } from '../data/game-locations';
 import { evaluateCapture, offsetPosition, type GeoPosition } from '../game/geo';
 import { captureLocation, createInitialGameState, type LocalGameState } from '../game/session';
+import {
+  connectRemoteGame,
+  loadPlayerIdentity,
+  storePlayerIdentity,
+  type PlayerIdentity,
+  type RemoteGameAdapter,
+  type RemoteGameState,
+} from './convex-game';
 
 type Coordinates = GeoPosition;
 
@@ -25,6 +33,12 @@ const captureButton = document.querySelector<HTMLButtonElement>('[data-game-capt
 const simulatorSelect = document.querySelector<HTMLSelectElement>('[data-game-simulator]');
 const scenarioSelect = document.querySelector<HTMLSelectElement>('[data-game-scenario]');
 const simulateButton = document.querySelector<HTMLButtonElement>('[data-game-simulate]');
+const playerForm = document.querySelector<HTMLFormElement>('[data-game-player-form]');
+const nicknameInput = document.querySelector<HTMLInputElement>('[data-game-nickname]');
+const joinButton = document.querySelector<HTMLButtonElement>('[data-game-join]');
+const playerFeedbackElement = document.querySelector<HTMLElement>('[data-game-player-feedback]');
+const gameSection = mapElement.closest<HTMLElement>('[data-convex-url]');
+const convexUrl = gameSection?.dataset.convexUrl ?? '';
 
 const map = L.map(mapElement, {
   center: [39.9464, -2.5988],
@@ -60,6 +74,9 @@ let userMarker: L.Marker | undefined;
 let userCoordinates: Coordinates | undefined;
 let positionChecked = false;
 let activeMarker: L.Marker | undefined;
+let remoteGame: RemoteGameAdapter | undefined;
+let remoteBallVersion = 0;
+let playerIdentity: PlayerIdentity = loadPlayerIdentity();
 
 const activeLocation = (): GameLocation =>
   gameLocations.find((location) => location.id === gameState.activeLocationId) ?? gameLocations[0];
@@ -69,6 +86,33 @@ const formatDistance = (distance: number): string =>
 
 const setFeedback = (message: string): void => {
   if (feedbackElement) feedbackElement.textContent = message;
+};
+
+const setPlayerFeedback = (message: string, error = false): void => {
+  if (!playerFeedbackElement) return;
+  playerFeedbackElement.textContent = message;
+  if (error) playerFeedbackElement.dataset.state = 'error';
+  else delete playerFeedbackElement.dataset.state;
+};
+
+const applyRemoteState = (state: RemoteGameState): void => {
+  remoteBallVersion = state.ball.version;
+  gameState = {
+    activeLocationId: state.ball.locationId,
+    score: gameState.score,
+    captures: gameState.captures,
+  };
+  renderActiveLocation();
+  refreshPanel();
+  refreshLocationState();
+};
+
+const applyRemotePlayer = (
+  player: { nickname: string; score: number; captures: number } | null,
+): void => {
+  if (!player) return;
+  gameState = { ...gameState, score: player.score, captures: player.captures };
+  refreshPanel();
 };
 
 const refreshPanel = (): void => {
@@ -92,7 +136,10 @@ const refreshLocationState = (): void => {
       : 'Posición obtenida por el dispositivo.';
   }
   if (checkButton) checkButton.disabled = false;
-  if (captureButton) captureButton.disabled = !evaluation.eligible || !positionChecked;
+  if (captureButton) {
+    captureButton.disabled =
+      Boolean(convexUrl && !remoteGame) || !evaluation.eligible || !positionChecked;
+  }
   if (evaluation.reason === 'eligible') {
     setFeedback('Estás dentro del radio. Comprueba la posición para activar la captura.');
   } else if (evaluation.reason === 'low-accuracy') {
@@ -223,6 +270,51 @@ const checkPosition = (): void => {
   }
 };
 
+const connectPlayer = async (): Promise<void> => {
+  const nickname = nicknameInput?.value.trim() ?? '';
+  if (!nickname) {
+    setPlayerFeedback('Escribe un nick para entrar.', true);
+    nicknameInput?.focus();
+    return;
+  }
+  if (!convexUrl) {
+    setPlayerFeedback('El backend de desarrollo no está configurado.', true);
+    return;
+  }
+
+  if (joinButton) joinButton.disabled = true;
+  setPlayerFeedback('Entrando en la partida…');
+  remoteGame?.dispose();
+  remoteGame = undefined;
+  const nextIdentity = { ...playerIdentity, nickname };
+
+  try {
+    remoteGame = await connectRemoteGame(convexUrl, nextIdentity, {
+      onState: applyRemoteState,
+      onPlayer: applyRemotePlayer,
+    });
+    playerIdentity = nextIdentity;
+    storePlayerIdentity(playerIdentity);
+    setPlayerFeedback(
+      remoteGame.identity.nickname === nickname
+        ? `Dentro como ${nickname}.`
+        : 'Dentro de la partida.',
+    );
+    refreshLocationState();
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : 'unknown';
+    const message =
+      reason === 'nickname-taken'
+        ? 'Ese nick ya está ocupado.'
+        : reason === 'no-active-season'
+          ? 'Todavía no hay una temporada activa.'
+          : 'No hemos podido conectar con la partida.';
+    setPlayerFeedback(message, true);
+  } finally {
+    if (joinButton) joinButton.disabled = false;
+  }
+};
+
 const simulateLocation = (): void => {
   const selectedId = simulatorSelect?.value;
   const location = gameLocations.find((candidate) => candidate.id === selectedId);
@@ -253,7 +345,7 @@ const simulateLocation = (): void => {
   setFeedback(`Posición simulada en ${location.shortName}, ${scenarioLabel}.`);
 };
 
-const captureLocally = (): void => {
+const captureLocally = async (): Promise<void> => {
   if (!userCoordinates) {
     setFeedback('Primero necesitamos obtener o simular tu posición.');
     return;
@@ -271,6 +363,33 @@ const captureLocally = (): void => {
         ? 'La captura se ha rechazado: la posición no tiene suficiente precisión.'
         : 'La captura se ha rechazado: estás fuera del radio.',
     );
+    return;
+  }
+
+  if (remoteGame) {
+    if (captureButton) captureButton.disabled = true;
+    try {
+      const result = await remoteGame.capture(userCoordinates, remoteBallVersion);
+      positionChecked = false;
+      if (result.status === 'accepted') {
+        setFeedback(
+          result.duplicate
+            ? 'La captura ya estaba registrada.'
+            : `Captura confirmada. +${result.points ?? 0} puntos.`,
+        );
+      } else if (result.status === 'stale-ball') {
+        setFeedback('Otro jugador se ha adelantado. La bola ha cambiado de lugar.');
+      } else if (result.status === 'low-accuracy') {
+        setFeedback('Convex ha rechazado la captura por falta de precisión.');
+      } else if (result.status === 'outside-radius') {
+        setFeedback('Convex ha rechazado la captura: estás fuera del radio.');
+      } else {
+        setFeedback(`La captura no se ha podido registrar (${result.status}).`);
+      }
+    } catch {
+      setFeedback('No hemos podido registrar la captura en Convex.');
+      if (captureButton) captureButton.disabled = false;
+    }
     return;
   }
 
@@ -297,5 +416,13 @@ simulatorSelect?.addEventListener('change', () => {
   if (simulateButton) simulateButton.disabled = !simulatorSelect.value;
 });
 simulateButton?.addEventListener('click', simulateLocation);
+playerForm?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  void connectPlayer();
+});
+if (nicknameInput) nicknameInput.value = playerIdentity.nickname;
+if (convexUrl && playerIdentity.nickname) void connectPlayer();
+else if (!convexUrl)
+  setPlayerFeedback('Modo local: introduce un nick cuando el backend esté disponible.');
 
 window.addEventListener('resize', () => map.invalidateSize());
