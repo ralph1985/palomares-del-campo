@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+
+set -eu
+
+echo '→ Comprobando formato...'
+pnpm format:check
+
+echo '→ Ejecutando ESLint...'
+pnpm lint
+
+echo '→ Ejecutando tests unitarios...'
+pnpm test
+
+echo '→ Ejecutando tests E2E...'
+CI=1 pnpm test:e2e
+
+echo '→ Construyendo la aplicación...'
+pnpm run build
+
+echo '✓ Validación pre-push completada.'

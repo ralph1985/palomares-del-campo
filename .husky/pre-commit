@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+set -eu
+
+echo '→ Comprobando espacios y errores de whitespace...'
+git diff --cached --check
+
+echo '→ Comprobando formato...'
+pnpm format:check
+
+echo '→ Ejecutando ESLint...'
+pnpm lint
+
+echo '→ Ejecutando tests unitarios...'
+pnpm test
