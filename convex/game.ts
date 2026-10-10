@@ -3,6 +3,7 @@ import { mutation, query, type MutationCtx, type QueryCtx } from './_generated/s
 import type { Id } from './_generated/dataModel';
 import { evaluateServerCapture } from './geo';
 import { normalizeNickname } from './identity';
+import { effectiveScore } from './score';
 
 const locationValidator = v.object({
   locationId: v.string(),
@@ -203,6 +204,7 @@ export const getPlayerSummary = query({
     deviceId: v.string(),
   },
   handler: async (ctx, args) => {
+    const now = Date.now();
     const player = await ctx.db
       .query('players')
       .withIndex('by_season_subject', (query) =>
@@ -210,7 +212,11 @@ export const getPlayerSummary = query({
       )
       .unique();
     return player
-      ? { nickname: player.displayName, score: player.score, captures: player.captures }
+      ? {
+          nickname: player.displayName,
+          score: effectiveScore(player.score, player.lastCaptureAt, now),
+          captures: player.captures,
+        }
       : null;
   },
 });
@@ -226,6 +232,7 @@ export const captureBall = mutation({
     deviceId: v.string(),
   },
   handler: async (ctx, args) => {
+    const now = Date.now();
     const season = await ctx.db.get(args.seasonId);
     if (!season) return { status: 'season-not-found' as const };
 
@@ -236,6 +243,7 @@ export const captureBall = mutation({
       )
       .unique();
     if (!player) return { status: 'player-not-found' as const };
+    const currentScore = effectiveScore(player.score, player.lastCaptureAt, now);
 
     const requestFingerprint = JSON.stringify({
       subject: args.deviceId,
@@ -262,7 +270,7 @@ export const captureBall = mutation({
         status: 'accepted' as const,
         duplicate: true,
         points: previousCapture.points,
-        score: player.score,
+        score: currentScore,
         ballVersion: ball.version,
       };
     }
@@ -295,7 +303,6 @@ export const captureBall = mutation({
       .collect();
     const currentIndex = locations.findIndex((candidate) => candidate._id === location._id);
     const nextLocation = locations[(currentIndex + 1) % locations.length];
-    const now = Date.now();
 
     await ctx.db.insert('captures', {
       seasonId: args.seasonId,
@@ -310,7 +317,7 @@ export const captureBall = mutation({
       createdAt: now,
     });
     await ctx.db.patch(player._id, {
-      score: player.score + season.capturePoints,
+      score: currentScore + season.capturePoints,
       captures: player.captures + 1,
       lastCaptureAt: now,
     });
@@ -324,7 +331,7 @@ export const captureBall = mutation({
       status: 'accepted' as const,
       duplicate: false,
       points: season.capturePoints,
-      score: player.score + season.capturePoints,
+      score: currentScore + season.capturePoints,
       ballVersion: ball.version + 1,
       activeLocationId: nextLocation.locationId,
     };

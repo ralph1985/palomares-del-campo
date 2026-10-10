@@ -12,6 +12,7 @@ import type * as game from "../game.js";
 import type * as geo from "../geo.js";
 import type * as identity from "../identity.js";
 import type * as leaderboard from "../leaderboard.js";
+import type * as score from "../score.js";
 
 import type {
   ApiFromModules,
@@ -24,6 +25,7 @@ declare const fullApi: ApiFromModules<{
   geo: typeof geo;
   identity: typeof identity;
   leaderboard: typeof leaderboard;
+  score: typeof score;
 }>;
 
 /**
