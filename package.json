@@ -17,6 +17,7 @@
   "dependencies": {
     "@types/leaflet": "1.9.20",
     "astro": "7.3.8",
+    "convex": "1.46.0",
     "leaflet": "1.9.4",
     "three": "0.186.1"
   },

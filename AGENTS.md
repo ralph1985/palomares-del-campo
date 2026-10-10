@@ -15,6 +15,9 @@ Estas reglas se aplican a todo el repositorio. La arquitectura explicada está e
 
 - Astro genera la web estática y su despliegue previsto es Vercel.
 - El juego tendrá un backend Convex independiente cuando necesite usuarios, ranking, persistencia o sincronización.
+- La carpeta `convex/` contiene funciones y esquema del backend; `convex/_generated/` se regenera con la CLI y no se edita manualmente.
+- `pnpm exec convex dev` solo apunta al deployment de desarrollo; `pnpm exec convex deploy` requiere autorización explícita y nunca debe ejecutarse por accidente desde una revisión local.
+- Las variables de Convex viven en archivos de entorno ignorados; no imprimirlas ni añadirlas al repositorio.
 - No introducir un servidor dedicado ni Supabase para este proyecto.
 - No añadir backend, base de datos, autenticación o infraestructura remota sin una decisión explícita para la fase correspondiente.
 
@@ -104,4 +107,4 @@ Antes de considerar terminado un cambio:
 4. Revisar que el diff solo contiene los archivos previstos.
 5. No afirmar que algo está publicado o desplegado sin comprobar el estado remoto correspondiente.
 
-No añadir secretos, `.env`, credenciales, artefactos generados, `dist/`, `.astro/` ni `node_modules/` al repositorio.
+No añadir secretos, `.env`, credenciales ni artefactos generados fuera de `convex/_generated/`; tampoco `dist/`, `.astro/` ni `node_modules/` al repositorio.

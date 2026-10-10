@@ -8,6 +8,7 @@ export default tseslint.config(
   {
     ignores: [
       '**/.astro/**',
+      '**/convex/_generated/**',
       '**/dist/**',
       '**/node_modules/**',
       '**/playwright-report/**',

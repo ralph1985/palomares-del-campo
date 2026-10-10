@@ -4,3 +4,5 @@ dist/
 .hermes/
 playwright-report/
 test-results/
+
+.env.local
