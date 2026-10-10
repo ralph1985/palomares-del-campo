@@ -9,6 +9,8 @@ test.describe('local ball game', () => {
     await expect(page.locator('#game-map path.leaflet-interactive')).toHaveCount(6);
     await expect(page.locator('[data-game-simulator]')).toBeVisible();
     await expect(page.locator('[data-game-scenario] option')).toHaveCount(4);
+    await expect(page.getByRole('heading', { name: 'Ranking de la partida' })).toBeVisible();
+    await expect(page.locator('[data-game-ranking]')).toBeVisible();
   });
 
   test('captures the ball after checking an exact simulated position', async ({ page }) => {

@@ -5,7 +5,7 @@ import { gameLocations } from '../../data/game-locations';
 <aside class="game-panel" aria-labelledby="game-status-title">
   <div class="game-panel-topline">
     <span class="status-dot" aria-hidden="true"></span>
-    <span>Partida local</span>
+    <span data-game-mode-label>Partida local</span>
   </div>
   <h3 id="game-status-title" data-game-location-name>
     Plaza del Coso
@@ -96,13 +96,21 @@ import { gameLocations } from '../../data/game-locations';
     </div>
   )}
 
-  <div class="future-ranking">
-    <div>
-      <span class="stat-label">Próximamente</span>
-      <strong>Ranking del pueblo</strong>
+  <section class="game-ranking" aria-labelledby="game-ranking-title">
+    <div class="game-ranking-heading">
+      <div>
+        <span class="stat-label">Puntuación compartida</span>
+        <h4 id="game-ranking-title">Ranking de la partida</h4>
+      </div>
+      <span class="game-ranking-status" data-game-ranking-status role="status">
+        Conectando…
+      </span>
     </div>
-    <p>Convex añadirá jugadores, puntos compartidos y la bola sincronizada para todos.</p>
-  </div>
+    <ol class="game-ranking-list" data-game-ranking aria-live="polite"></ol>
+    <p class="game-ranking-empty" data-game-ranking-empty>
+      Aún no hay jugadores con puntos.
+    </p>
+  </section>
 </aside>
 
 <style>
@@ -352,20 +360,70 @@ import { gameLocations } from '../../data/game-locations';
     background: rgb(229 183 126 / 12%);
   }
 
-  .future-ranking {
+  .game-ranking {
     margin-top: auto;
     padding-top: 1.4rem;
     border-top: 1px solid rgb(239 245 237 / 13%);
   }
 
-  .future-ranking strong {
+  .game-ranking-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .game-ranking h4 {
+    margin: 0.2rem 0 0;
     font-family: Georgia, 'Times New Roman', serif;
     font-size: 1.15rem;
     font-weight: 500;
   }
 
-  .future-ranking p {
-    margin: 0.55rem 0 0;
+  .game-ranking-status {
+    color: #b7d0bc;
+    font-size: 0.72rem;
+  }
+
+  .game-ranking-list {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0.9rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .game-ranking-entry {
+    display: grid;
+    grid-template-columns: 1.8rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0.65rem;
+    border-radius: 0.55rem;
+    background: rgb(239 245 237 / 6%);
+    font-size: 0.82rem;
+  }
+
+  .game-ranking-position {
+    color: #e5b77e;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .game-ranking-nickname {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .game-ranking-score {
+    color: #e5b77e;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+
+  .game-ranking-empty {
+    margin: 0.8rem 0 0;
     color: #b7d0bc;
     font-size: 0.76rem;
     line-height: 1.5;

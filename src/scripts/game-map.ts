@@ -5,11 +5,13 @@ import { evaluateCapture, offsetPosition, type GeoPosition } from '../game/geo';
 import { captureLocation, createInitialGameState, type LocalGameState } from '../game/session';
 import {
   connectRemoteGame,
+  connectRemoteLeaderboard,
   loadPlayerIdentity,
   storePlayerIdentity,
   type PlayerIdentity,
   type RemoteGameAdapter,
   type RemoteGameState,
+  type RemoteLeaderboardEntry,
 } from './convex-game';
 
 type Coordinates = GeoPosition;
@@ -37,6 +39,10 @@ const playerForm = document.querySelector<HTMLFormElement>('[data-game-player-fo
 const nicknameInput = document.querySelector<HTMLInputElement>('[data-game-nickname]');
 const joinButton = document.querySelector<HTMLButtonElement>('[data-game-join]');
 const playerFeedbackElement = document.querySelector<HTMLElement>('[data-game-player-feedback]');
+const rankingElement = document.querySelector<HTMLOListElement>('[data-game-ranking]');
+const rankingEmptyElement = document.querySelector<HTMLElement>('[data-game-ranking-empty]');
+const rankingStatusElement = document.querySelector<HTMLElement>('[data-game-ranking-status]');
+const gameModeLabel = document.querySelector<HTMLElement>('[data-game-mode-label]');
 const gameSection = mapElement.closest<HTMLElement>('[data-convex-url]');
 const convexUrl = gameSection?.dataset.convexUrl ?? '';
 
@@ -93,6 +99,39 @@ const setPlayerFeedback = (message: string, error = false): void => {
   playerFeedbackElement.textContent = message;
   if (error) playerFeedbackElement.dataset.state = 'error';
   else delete playerFeedbackElement.dataset.state;
+};
+
+const renderLeaderboard = (entries: RemoteLeaderboardEntry[]): void => {
+  if (!rankingElement) return;
+  rankingElement.replaceChildren(
+    ...entries.map((entry) => {
+      const item = document.createElement('li');
+      item.className = 'game-ranking-entry';
+
+      const position = document.createElement('span');
+      position.className = 'game-ranking-position';
+      position.textContent = `#${entry.position}`;
+      position.setAttribute('aria-label', `Posición ${entry.position}`);
+
+      const nickname = document.createElement('span');
+      nickname.className = 'game-ranking-nickname';
+      nickname.textContent = entry.nickname;
+
+      const score = document.createElement('strong');
+      score.className = 'game-ranking-score';
+      score.textContent = `${entry.score} pt`;
+      score.setAttribute('aria-label', `${entry.score} puntos, ${entry.captures} capturas`);
+
+      item.append(position, nickname, score);
+      return item;
+    }),
+  );
+  if (rankingEmptyElement) rankingEmptyElement.hidden = entries.length > 0;
+  if (rankingStatusElement) {
+    rankingStatusElement.textContent = entries.length
+      ? `${entries.length} jugador${entries.length === 1 ? '' : 'es'}`
+      : 'Sin puntos';
+  }
 };
 
 const applyRemoteState = (state: RemoteGameState): void => {
@@ -292,9 +331,11 @@ const connectPlayer = async (): Promise<void> => {
     remoteGame = await connectRemoteGame(convexUrl, nextIdentity, {
       onState: applyRemoteState,
       onPlayer: applyRemotePlayer,
+      onLeaderboard: renderLeaderboard,
     });
     playerIdentity = nextIdentity;
     storePlayerIdentity(playerIdentity);
+    if (gameModeLabel) gameModeLabel.textContent = 'Partida compartida';
     setPlayerFeedback(
       remoteGame.identity.nickname === nickname
         ? `Dentro como ${nickname}.`
@@ -421,6 +462,11 @@ playerForm?.addEventListener('submit', (event) => {
   void connectPlayer();
 });
 if (nicknameInput) nicknameInput.value = playerIdentity.nickname;
+if (convexUrl) {
+  void connectRemoteLeaderboard(convexUrl, renderLeaderboard).catch(() => {
+    if (rankingStatusElement) rankingStatusElement.textContent = 'No disponible';
+  });
+}
 if (convexUrl && playerIdentity.nickname) void connectPlayer();
 else if (!convexUrl)
   setPlayerFeedback('Modo local: introduce un nick cuando el backend esté disponible.');

@@ -31,6 +31,10 @@ export type RemotePlayerSummary = {
   captures: number;
 };
 
+export type RemoteLeaderboardEntry = RemotePlayerSummary & {
+  position: number;
+};
+
 export type RemoteCaptureResult = {
   status: string;
   duplicate?: boolean;
@@ -78,6 +82,7 @@ export const storePlayerIdentity = (identity: PlayerIdentity): void => {
 export type RemoteGameCallbacks = {
   onState: (state: RemoteGameState) => void;
   onPlayer: (player: RemotePlayerSummary | null) => void;
+  onLeaderboard: (entries: RemoteLeaderboardEntry[]) => void;
 };
 
 export type RemoteGameAdapter = {
@@ -92,6 +97,32 @@ export type RemoteGameAdapter = {
     expectedBallVersion: number,
   ) => Promise<RemoteCaptureResult>;
   dispose: () => void;
+};
+
+export type RemoteLeaderboardAdapter = {
+  dispose: () => void;
+};
+
+export const connectRemoteLeaderboard = async (
+  url: string,
+  onLeaderboard: (entries: RemoteLeaderboardEntry[]) => void,
+): Promise<RemoteLeaderboardAdapter> => {
+  const client = new ConvexClient(url);
+  const state = await client.query(api.game.getActiveSeason, {});
+  if (!state) throw new Error('no-active-season');
+  const seasonId = state.season.id;
+  onLeaderboard(
+    (await client.query(api.leaderboard.getLeaderboard, { seasonId })) as RemoteLeaderboardEntry[],
+  );
+  const stop = client.onUpdate(api.leaderboard.getLeaderboard, { seasonId }, (entries) =>
+    onLeaderboard(entries as RemoteLeaderboardEntry[]),
+  );
+  return {
+    dispose: () => {
+      stop();
+      client.close();
+    },
+  };
 };
 
 export const connectRemoteGame = async (
@@ -118,6 +149,9 @@ export const connectRemoteGame = async (
       deviceId: identity.deviceId,
     })) as RemotePlayerSummary | null,
   );
+  callbacks.onLeaderboard(
+    (await client.query(api.leaderboard.getLeaderboard, { seasonId })) as RemoteLeaderboardEntry[],
+  );
 
   const stopState = client.onUpdate(api.game.getSeasonState, { seasonId }, (nextState) => {
     if (nextState) callbacks.onState(nextState as RemoteGameState);
@@ -126,6 +160,9 @@ export const connectRemoteGame = async (
     api.game.getPlayerSummary,
     { seasonId, deviceId: identity.deviceId },
     (player) => callbacks.onPlayer(player as RemotePlayerSummary | null),
+  );
+  const stopLeaderboard = client.onUpdate(api.leaderboard.getLeaderboard, { seasonId }, (entries) =>
+    callbacks.onLeaderboard(entries as RemoteLeaderboardEntry[]),
   );
 
   return {
@@ -144,6 +181,7 @@ export const connectRemoteGame = async (
     dispose: () => {
       stopState();
       stopPlayer();
+      stopLeaderboard();
       client.close();
     },
   };
