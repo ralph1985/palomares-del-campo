@@ -1,0 +1,425 @@
+---
+---
+<section class="game-map-section" aria-labelledby="game-map-title">
+  <div class="game-map-heading">
+    <div>
+      <p class="eyebrow">Mapa de juego</p>
+      <h2 id="game-map-title">La bola está en el pueblo.</h2>
+      <p class="game-map-intro">
+        Acércate a la coordenada activa, comprueba tu posición y prueba la captura.
+        Esta versión funciona solo en tu navegador: todavía no hay jugadores ni ranking real.
+      </p>
+    </div>
+    <span class="prototype-badge">Prototipo local</span>
+  </div>
+
+  <div class="game-map-layout">
+    <div class="map-card">
+      <div
+        id="game-map"
+        class="game-map"
+        role="application"
+        aria-label="Mapa interactivo de Palomares del Campo con lugares de juego"
+      ></div>
+      <div class="map-attribution-note">
+        Mapa © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>
+      </div>
+    </div>
+
+    <aside class="game-panel" aria-labelledby="game-status-title">
+      <div class="game-panel-topline">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>Partida de prueba</span>
+      </div>
+      <h3 id="game-status-title" data-game-location-name>Plaza del Coso</h3>
+      <p class="game-location-description" data-game-location-description>
+        El corazón del pueblo para empezar la partida.
+      </p>
+
+      <div class="game-stats" aria-label="Estado de la partida">
+        <div>
+          <span class="stat-label">Tus puntos</span>
+          <strong data-game-score>0</strong>
+        </div>
+        <div>
+          <span class="stat-label">Radio de captura</span>
+          <strong data-game-radius>55 m</strong>
+        </div>
+      </div>
+
+      <div class="location-readout" aria-live="polite">
+        <span class="stat-label">Tu posición</span>
+        <strong data-game-distance>Aún no comprobada</strong>
+        <small data-game-accuracy>La ubicación no se comparte en este prototipo.</small>
+      </div>
+
+      <div class="game-actions">
+        <button class="game-button game-button-primary" type="button" data-game-locate>
+          Usar mi ubicación
+        </button>
+        <button class="game-button game-button-secondary" type="button" data-game-check disabled>
+          Comprobar posición
+        </button>
+        <button class="game-button game-button-capture" type="button" data-game-capture disabled>
+          Capturar bola <span aria-hidden="true">+10</span>
+        </button>
+      </div>
+
+      <p class="game-feedback" data-game-feedback role="status">
+        Pulsa «Usar mi ubicación» cuando estés preparado.
+      </p>
+
+      <div class="future-ranking">
+        <div>
+          <span class="stat-label">Próximamente</span>
+          <strong>Ranking del pueblo</strong>
+        </div>
+        <p>Convex añadirá jugadores, puntos compartidos y la bola sincronizada para todos.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/game-map.ts';
+</script>
+
+<style>
+  :global(.game-ball-icon-wrapper),
+  :global(.game-user-icon-wrapper) {
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: transparent;
+  }
+
+  :global(.game-ball-icon) {
+    display: block;
+    width: 1.35rem;
+    height: 1.35rem;
+    border: 3px solid #eff5ed;
+    border-radius: 50%;
+    background: #a05c32;
+    box-shadow: 0 0 0 0.35rem rgb(160 92 50 / 24%), 0 0.3rem 0.8rem rgb(25 52 45 / 35%);
+    animation: game-ball-pulse 1.8s ease-in-out infinite;
+  }
+
+  :global(.game-user-icon) {
+    display: block;
+    width: 0.9rem;
+    height: 0.9rem;
+    border: 3px solid #eff5ed;
+    border-radius: 50%;
+    background: #2f6652;
+    box-shadow: 0 0 0 0.25rem rgb(47 102 82 / 24%);
+  }
+
+  @keyframes game-ball-pulse {
+    0%,
+    100% {
+      transform: scale(0.92);
+    }
+
+    50% {
+      transform: scale(1.08);
+    }
+  }
+
+  .game-map-section {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+    padding: clamp(4rem, 9vw, 8rem) 0;
+  }
+
+  .game-map-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: #a05c32;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h2,
+  h3 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 500;
+    letter-spacing: -0.055em;
+    line-height: 0.98;
+  }
+
+  h2 {
+    max-width: 11ch;
+    color: #19342d;
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+  }
+
+  .game-map-intro {
+    max-width: 39rem;
+    margin: 1.5rem 0 0;
+    color: #527066;
+    line-height: 1.65;
+  }
+
+  .prototype-badge {
+    flex: none;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid rgb(160 92 50 / 30%);
+    border-radius: 999px;
+    color: #a05c32;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .game-map-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(18rem, 0.75fr);
+    gap: 1rem;
+  }
+
+  .map-card {
+    position: relative;
+    min-height: 35rem;
+    overflow: hidden;
+    border: 1px solid rgb(25 52 45 / 13%);
+    border-radius: 1.5rem;
+    background: #dce8dc;
+    box-shadow: 0 1.5rem 3rem rgb(25 52 45 / 8%);
+  }
+
+  .game-map {
+    width: 100%;
+    height: 100%;
+    min-height: 35rem;
+  }
+
+  .map-attribution-note {
+    position: absolute;
+    z-index: 500;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    padding: 0.25rem 0.45rem;
+    border-radius: 0.35rem;
+    color: #19342d;
+    background: rgb(244 241 233 / 88%);
+    font-size: 0.65rem;
+  }
+
+  .map-attribution-note a {
+    color: inherit;
+  }
+
+  .game-panel {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.4rem, 3vw, 2rem);
+    border-radius: 1.5rem;
+    color: #eff5ed;
+    background: #19342d;
+  }
+
+  .game-panel-topline {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: #b7d0bc;
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #e5b77e;
+    box-shadow: 0 0 0 0.3rem rgb(229 183 126 / 16%);
+  }
+
+  .game-panel h3 {
+    margin-top: 2rem;
+    color: #eff5ed;
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .game-location-description {
+    min-height: 3.2rem;
+    margin: 1rem 0 0;
+    color: #b7d0bc;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .game-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-top: 2rem;
+  }
+
+  .game-stats > div,
+  .location-readout {
+    padding: 0.85rem;
+    border: 1px solid rgb(239 245 237 / 13%);
+    border-radius: 0.8rem;
+    background: rgb(239 245 237 / 5%);
+  }
+
+  .stat-label {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: #8fb49c;
+    font-size: 0.67rem;
+    font-weight: 750;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .game-stats strong {
+    font-size: 1.35rem;
+  }
+
+  .location-readout {
+    margin-top: 0.6rem;
+  }
+
+  .location-readout strong {
+    display: block;
+    font-size: 0.95rem;
+  }
+
+  .location-readout small {
+    display: block;
+    margin-top: 0.45rem;
+    color: #b7d0bc;
+    font-size: 0.72rem;
+    line-height: 1.45;
+  }
+
+  .game-actions {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+
+  .game-button {
+    min-height: 3rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 750;
+    transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+  }
+
+  .game-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+
+  .game-button:focus-visible {
+    outline: 3px solid #e5b77e;
+    outline-offset: 3px;
+  }
+
+  .game-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  .game-button-primary,
+  .game-button-capture {
+    color: #19342d;
+    background: #e5b77e;
+  }
+
+  .game-button-primary:hover:not(:disabled),
+  .game-button-capture:hover:not(:disabled) {
+    background: #f0c995;
+  }
+
+  .game-button-secondary {
+    border-color: rgb(239 245 237 / 28%);
+    color: #eff5ed;
+    background: transparent;
+  }
+
+  .game-button-secondary:hover:not(:disabled) {
+    border-color: #b7d0bc;
+    background: rgb(239 245 237 / 8%);
+  }
+
+  .game-feedback {
+    min-height: 3.2rem;
+    margin: 1rem 0 0;
+    color: #e5b77e;
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+
+  .future-ranking {
+    margin-top: auto;
+    padding-top: 1.4rem;
+    border-top: 1px solid rgb(239 245 237 / 13%);
+  }
+
+  .future-ranking strong {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+  }
+
+  .future-ranking p {
+    margin: 0.55rem 0 0;
+    color: #b7d0bc;
+    font-size: 0.76rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 58rem) {
+    .game-map-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .game-panel {
+      min-height: auto;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .game-map-section {
+      width: min(100% - 2rem, 72rem);
+    }
+
+    .game-map-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .map-card,
+    .game-map {
+      min-height: 27rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .game-button,
+    :global(.game-ball-icon) {
+      transition-duration: 0.01ms;
+      animation: none;
+    }
+  }
+</style>

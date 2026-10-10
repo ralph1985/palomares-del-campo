@@ -1,0 +1,156 @@
+---
+import ConquenseCredit from '../../components/layout/ConquenseCredit.astro';
+import GameMap from '../../components/game/GameMap.astro';
+import SiteHeader from '../../components/layout/SiteHeader.astro';
+
+const currentYear = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content="Prototipo del juego de geoposicionamiento de Palomares del Campo."
+    />
+    <title>La bola · Palomares del Campo</title>
+  </head>
+  <body>
+    <SiteHeader />
+
+    <main>
+      <section class="game-hero" aria-labelledby="page-title">
+        <div class="game-hero-inner">
+          <p class="eyebrow">Una partida que recorre el pueblo</p>
+          <h1 id="page-title">Encuentra la bola.</h1>
+          <p>
+            Ve a la coordenada, demuestra que estás allí y captura la bola antes de que
+            alguien se te adelante.
+          </p>
+        </div>
+      </section>
+
+      <GameMap />
+    </main>
+
+    <footer class="page-footer">
+      <div class="page-footer-inner">
+        <p>© {currentYear} Palomares del Campo</p>
+        <a href="/">Inicio</a>
+        <ConquenseCredit />
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(body) {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    color: #19342d;
+    background: #f4f1e9;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+  }
+
+  .game-hero {
+    padding: clamp(5rem, 13vw, 10rem) 0 clamp(4rem, 9vw, 7rem);
+    color: #eff5ed;
+    background: #19342d;
+  }
+
+  .game-hero-inner {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: #e5b77e;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-width: 8ch;
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(4rem, 11vw, 8rem);
+    font-weight: 500;
+    letter-spacing: -0.065em;
+    line-height: 0.9;
+  }
+
+  .game-hero p:last-child {
+    max-width: 34rem;
+    margin: 2rem 0 0;
+    color: #b7d0bc;
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .page-footer {
+    color: #dfe9df;
+    background: #19342d;
+  }
+
+  .page-footer-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    width: min(100% - 2.5rem, 72rem);
+    min-height: 5.25rem;
+    margin: 0 auto;
+    gap: 1rem;
+    font-size: 0.82rem;
+  }
+
+  .page-footer p {
+    margin: 0;
+  }
+
+  .page-footer a {
+    color: #dfe9df;
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .page-footer a:hover,
+  .page-footer a:focus-visible {
+    color: #e5b77e;
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+  }
+
+  @media (max-width: 38rem) {
+    .game-hero-inner,
+    .page-footer-inner {
+      width: min(100% - 2rem, 72rem);
+    }
+
+    .page-footer-inner {
+      grid-template-columns: minmax(0, 1fr) auto;
+      min-height: 6.5rem;
+      padding: 1rem 0;
+    }
+
+    .page-footer-inner > a:not(.conquense-credit) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .page-footer-inner > .conquense-credit {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+  }
+</style>

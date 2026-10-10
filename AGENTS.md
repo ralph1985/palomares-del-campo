@@ -6,6 +6,7 @@ Estas reglas se aplican a todo el repositorio. La arquitectura explicada está e
 
 - Es una web editorial de Palomares del Campo construida con Astro y TypeScript.
 - Astro genera el sitio estático. No introducir backend, base de datos, CMS, autenticación ni automatización de descubrimiento de noticias sin una decisión explícita.
+- `/juego/` puede contener un prototipo local sin persistencia; Convex queda reservado para la fase posterior de estado compartido, usuarios y ranking real.
 - El contenido editorial vive en `src/content/` mediante Content Collections y sus esquemas en `src/content.config.ts`.
 - Las noticias externas y los futuros comunicados municipales son contenidos distintos y no deben mezclarse.
 - Three.js es una mejora visual opcional. La navegación y la accesibilidad del menú deben funcionar aunque Three.js o WebGL fallen.

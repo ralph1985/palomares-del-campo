@@ -27,6 +27,7 @@ Rutas previstas:
 - `/lugares/` y `/lugares/[slug]/`: lugares de interés.
 - `/patrimonio/` y `/patrimonio/[slug]/`: patrimonio material e inmaterial.
 - `/agenda/`: fiestas, actividades y eventos.
+- `/juego/`: prototipo interactivo de la bola; inicialmente estático y local, con Convex previsto para el estado compartido.
 
 Cada bloque se incorpora solo cuando tiene contenido y una necesidad real.
 
