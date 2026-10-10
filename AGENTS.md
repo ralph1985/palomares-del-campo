@@ -11,6 +11,34 @@ Estas reglas se aplican a todo el repositorio. La arquitectura explicada está e
 - Las noticias externas y los futuros comunicados municipales son contenidos distintos y no deben mezclarse.
 - Three.js es una mejora visual opcional. La navegación y la accesibilidad del menú deben funcionar aunque Three.js o WebGL fallen.
 
+## Infraestructura decidida
+
+- Astro genera la web estática y su despliegue previsto es Vercel.
+- El juego tendrá un backend Convex independiente cuando necesite usuarios, ranking, persistencia o sincronización.
+- No introducir un servidor dedicado ni Supabase para este proyecto.
+- No añadir backend, base de datos, autenticación o infraestructura remota sin una decisión explícita para la fase correspondiente.
+
+## Juego y estado autoritativo
+
+- El prototipo local de `/juego/` puede funcionar sin persistencia; su estado y sus capturas no representan una partida real.
+- La lógica pura de geolocalización y reglas vive en `src/game/`; los adaptadores de Leaflet y del navegador viven fuera de ella.
+- El cliente puede ofrecer feedback provisional, pero nunca decide una captura real.
+- La futura mutation de Convex deberá validar distancia, precisión, temporada, versión de la bola y concurrencia de forma atómica e idempotente.
+- El simulador de posiciones solo se renderiza con `import.meta.env.DEV` y no debe aparecer en producción.
+- La geolocalización real requiere HTTPS o `localhost`; una URL HTTP de Tailnet solo permite revisar el mapa.
+- No almacenar coordenadas exactas de jugadores sin una decisión explícita de privacidad.
+
+## Mapa y datos geográficos
+
+- El mapa del juego usa Leaflet y teselas de OpenStreetMap con atribución visible.
+- Las coordenadas y radios de `src/data/game-locations.ts` son provisionales hasta revisar cada lugar físicamente.
+- Antes de activar un lugar en una temporada hay que revisar acceso público, seguridad, tráfico, precisión GPS y posibles alternativas.
+- No presentar datos de OpenStreetMap como ubicaciones oficiales sin esa revisión.
+
+## Pruebas previstas del juego
+
+Cuando se incorpore la infraestructura real, cubrir como mínimo la distancia y las reglas con tests unitarios, la mutation de captura y sus carreras con tests de integración, y el flujo de dos jugadores con contextos de navegador independientes en E2E.
+
 ## Estructura prevista
 
 - `src/layouts/`: layouts compartidos de página y artículo.
