@@ -1,12 +1,14 @@
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { gameLocations, type GameLocation } from '../data/game-locations';
+import {
+  evaluateCapture,
+  offsetPosition,
+  type GeoPosition,
+} from '../game/geo';
+import { nextLocationAfter } from '../game/rules';
 
-type Coordinates = {
-  latitude: number;
-  longitude: number;
-  accuracy?: number;
-};
+type Coordinates = GeoPosition;
 
 const mapElement = document.querySelector<HTMLElement>('#game-map');
 if (!mapElement) {
@@ -24,6 +26,7 @@ const locateButton = document.querySelector<HTMLButtonElement>('[data-game-locat
 const checkButton = document.querySelector<HTMLButtonElement>('[data-game-check]');
 const captureButton = document.querySelector<HTMLButtonElement>('[data-game-capture]');
 const simulatorSelect = document.querySelector<HTMLSelectElement>('[data-game-simulator]');
+const scenarioSelect = document.querySelector<HTMLSelectElement>('[data-game-scenario]');
 const simulateButton = document.querySelector<HTMLButtonElement>('[data-game-simulate]');
 
 const map = L.map(mapElement, {
@@ -59,22 +62,10 @@ let activeLocationIndex = 0;
 let score = 0;
 let userMarker: L.Marker | undefined;
 let userCoordinates: Coordinates | undefined;
+let positionChecked = false;
 let activeMarker: L.Marker | undefined;
 
 const activeLocation = (): GameLocation => gameLocations[activeLocationIndex];
-
-const distanceInMeters = (from: Coordinates, to: GameLocation): number => {
-  const earthRadius = 6_371_000;
-  const latitudeDelta = ((to.latitude - from.latitude) * Math.PI) / 180;
-  const longitudeDelta = ((to.longitude - from.longitude) * Math.PI) / 180;
-  const latitude1 = (from.latitude * Math.PI) / 180;
-  const latitude2 = (to.latitude * Math.PI) / 180;
-  const haversine =
-    Math.sin(latitudeDelta / 2) ** 2 +
-    Math.cos(latitude1) * Math.cos(latitude2) * Math.sin(longitudeDelta / 2) ** 2;
-
-  return earthRadius * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
-};
 
 const formatDistance = (distance: number): string =>
   distance < 1000 ? `${Math.round(distance)} m` : `${(distance / 1000).toFixed(1)} km`;
@@ -94,21 +85,24 @@ const refreshPanel = (): void => {
 const refreshLocationState = (): void => {
   if (!userCoordinates) return;
 
-  const distance = distanceInMeters(userCoordinates, activeLocation());
-  const withinRadius = distance <= activeLocation().radiusMeters;
-  if (distanceElement) distanceElement.textContent = `${formatDistance(distance)} de la bola`;
+  const evaluation = evaluateCapture(userCoordinates, activeLocation());
+  if (distanceElement) distanceElement.textContent = `${formatDistance(evaluation.distanceMeters)} de la bola`;
   if (accuracyElement) {
     accuracyElement.textContent = userCoordinates.accuracy
       ? `Precisión aproximada: ${Math.round(userCoordinates.accuracy)} m.`
       : 'Posición obtenida por el dispositivo.';
   }
   if (checkButton) checkButton.disabled = false;
-  if (captureButton) captureButton.disabled = !withinRadius;
-  setFeedback(
-    withinRadius
-      ? 'Estás dentro del radio. Comprueba la posición para activar la captura.'
-      : `Aún estás fuera del radio de captura. Te faltan aproximadamente ${formatDistance(Math.max(distance - activeLocation().radiusMeters, 0))}.`,
-  );
+  if (captureButton) captureButton.disabled = !evaluation.eligible || !positionChecked;
+  if (evaluation.reason === 'eligible') {
+    setFeedback('Estás dentro del radio. Comprueba la posición para activar la captura.');
+  } else if (evaluation.reason === 'low-accuracy') {
+    setFeedback('La posición es poco precisa para validar una captura.');
+  } else {
+    setFeedback(
+      `Aún estás fuera del radio de captura. Te faltan aproximadamente ${formatDistance(Math.max(evaluation.distanceMeters - activeLocation().radiusMeters, 0))}.`,
+    );
+  }
 };
 
 const renderLocations = (): void => {
@@ -161,6 +155,7 @@ const updateUserMarker = (coordinates: Coordinates): void => {
 
 const setUserCoordinates = (coordinates: Coordinates): void => {
   userCoordinates = coordinates;
+  positionChecked = false;
   updateUserMarker(coordinates);
   map.setView([coordinates.latitude, coordinates.longitude], 17, { animate: true });
   refreshLocationState();
@@ -212,13 +207,19 @@ const checkPosition = (): void => {
     return;
   }
 
-  const distance = distanceInMeters(userCoordinates, activeLocation());
-  if (distance <= activeLocation().radiusMeters) {
+  const evaluation = evaluateCapture(userCoordinates, activeLocation());
+  if (evaluation.eligible) {
+    positionChecked = true;
     if (captureButton) captureButton.disabled = false;
     setFeedback('Posición válida en este prototipo. La bola está a tu alcance.');
-  } else {
+  } else if (evaluation.reason === 'low-accuracy') {
+    positionChecked = false;
     if (captureButton) captureButton.disabled = true;
-    setFeedback(`Todavía estás a ${formatDistance(distance)} de la bola.`);
+    setFeedback('La posición tiene poca precisión para validar la captura.');
+  } else {
+    positionChecked = false;
+    if (captureButton) captureButton.disabled = true;
+    setFeedback(`Todavía estás a ${formatDistance(evaluation.distanceMeters)} de la bola.`);
   }
 };
 
@@ -230,22 +231,53 @@ const simulateLocation = (): void => {
     return;
   }
 
-  setUserCoordinates({
-    latitude: location.latitude,
-    longitude: location.longitude,
-    accuracy: 1,
-  });
-  setFeedback(`Posición simulada en ${location.shortName}. Ya puedes comprobarla y capturar.`);
+  const scenario = scenarioSelect?.value ?? 'exact';
+  const position =
+    scenario === 'edge'
+      ? offsetPosition(location, Math.max(location.radiusMeters - 3, 0))
+      : scenario === 'outside'
+        ? offsetPosition(location, location.radiusMeters + 60)
+        : scenario === 'low-accuracy'
+          ? offsetPosition(location, 0, 0, 150)
+          : offsetPosition(location, 0, 0, 1);
+
+  setUserCoordinates(position);
+  const scenarioLabel =
+    scenario === 'edge'
+      ? 'cerca del límite'
+      : scenario === 'outside'
+        ? 'fuera del radio'
+        : scenario === 'low-accuracy'
+          ? 'con precisión insuficiente'
+          : 'en el centro del punto';
+  setFeedback(`Posición simulada en ${location.shortName}, ${scenarioLabel}.`);
 };
 
 const captureLocally = (): void => {
-  if (!userCoordinates || distanceInMeters(userCoordinates, activeLocation()) > activeLocation().radiusMeters) {
-    setFeedback('La captura se ha rechazado: estás fuera del radio.');
+  if (!userCoordinates) {
+    setFeedback('Primero necesitamos obtener o simular tu posición.');
+    return;
+  }
+
+  if (!positionChecked) {
+    setFeedback('Comprueba tu posición antes de capturar la bola.');
+    return;
+  }
+
+  const evaluation = evaluateCapture(userCoordinates, activeLocation());
+  if (!evaluation.eligible) {
+    setFeedback(
+      evaluation.reason === 'low-accuracy'
+        ? 'La captura se ha rechazado: la posición no tiene suficiente precisión.'
+        : 'La captura se ha rechazado: estás fuera del radio.',
+    );
     return;
   }
 
   score += 10;
-  activeLocationIndex = (activeLocationIndex + 1) % gameLocations.length;
+  const nextLocation = nextLocationAfter(gameLocations, activeLocation().id);
+  activeLocationIndex = gameLocations.findIndex(location => location.id === nextLocation.id);
+  positionChecked = false;
   renderActiveLocation();
   refreshPanel();
   if (captureButton) captureButton.disabled = true;

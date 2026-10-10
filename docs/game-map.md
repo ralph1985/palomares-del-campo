@@ -10,6 +10,8 @@ La ruta `/juego/` es el primer prototipo navegable de la idea de la bola.
 - geolocalización local del dispositivo;
 - cálculo de distancia en el navegador;
 - captura simulada y cambio de ubicación en la sesión actual.
+- reglas puras de distancia, precisión, captura, puntuación y siguiente ubicación en `src/game/`.
+- escenarios de simulación: exacto, límite del radio, fuera del radio y precisión insuficiente.
 
 ## Qué no incluye todavía
 

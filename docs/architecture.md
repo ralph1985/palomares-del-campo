@@ -29,6 +29,7 @@ Rutas previstas:
 - `/agenda/`: fiestas, actividades y eventos.
 - `/juego/`: prototipo interactivo de la bola; inicialmente estático y local, con Convex previsto para el estado compartido.
 
+El prototipo del juego mantiene la lógica pura de geolocalización y reglas en `src/game/`, separada del adaptador visual Leaflet en `src/scripts/game-map.ts`.
 Cada bloque se incorpora solo cuando tiene contenido y una necesidad real.
 
 ### Layouts

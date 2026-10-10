@@ -77,6 +77,12 @@ import { gameLocations } from '../../data/game-locations';
             <option value="">Elegir un punto del mapa</option>
             {gameLocations.map(location => <option value={location.id}>{location.shortName}</option>)}
           </select>
+          <select data-game-scenario aria-label="Elegir escenario de posición simulada">
+            <option value="exact">Posición exacta</option>
+            <option value="edge">Cerca del límite</option>
+            <option value="outside">Fuera del radio</option>
+            <option value="low-accuracy">Precisión insuficiente</option>
+          </select>
           <button class="game-button game-button-simulator" type="button" data-game-simulate disabled>
             Simular posición
           </button>
