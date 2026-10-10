@@ -2,6 +2,7 @@ import { v } from 'convex/values';
 import { mutation, query, type MutationCtx, type QueryCtx } from './_generated/server';
 import type { Id } from './_generated/dataModel';
 import { evaluateServerCapture } from './geo';
+import { normalizeNickname } from './identity';
 
 const locationValidator = v.object({
   locationId: v.string(),
@@ -125,36 +126,58 @@ export const createSeason = mutation({
 export const joinSeason = mutation({
   args: {
     seasonId: v.id('seasons'),
+    deviceId: v.string(),
     displayName: v.string(),
   },
   handler: async (ctx, args) => {
-    const subject = await getIdentitySubject(ctx);
     const season = await ctx.db.get(args.seasonId);
     if (!season) return { status: 'season-not-found' as const };
     if (season.status !== 'active') return { status: 'game-not-active' as const };
 
+    const nickname = normalizeNickname(args.displayName);
     const existingPlayer = await ctx.db
       .query('players')
       .withIndex('by_season_subject', (query) =>
-        query.eq('seasonId', args.seasonId).eq('subject', subject),
+        query.eq('seasonId', args.seasonId).eq('subject', args.deviceId),
+      )
+      .unique();
+    const existingNickname = await ctx.db
+      .query('players')
+      .withIndex('by_season_nickname', (query) =>
+        query.eq('seasonId', args.seasonId).eq('nicknameKey', nickname.nicknameKey),
       )
       .unique();
 
+    if (existingNickname && existingNickname._id !== existingPlayer?._id) {
+      return { status: 'nickname-taken' as const };
+    }
+
     if (existingPlayer) {
-      await ctx.db.patch(existingPlayer._id, { displayName: args.displayName });
-      return { status: 'joined' as const, playerId: existingPlayer._id, returning: true };
+      const nicknameChanged = existingPlayer.nicknameKey !== nickname.nicknameKey;
+      await ctx.db.patch(existingPlayer._id, {
+        displayName: nickname.displayName,
+        nicknameKey: nickname.nicknameKey,
+        ...(nicknameChanged ? { score: 0, captures: 0, lastCaptureAt: undefined } : {}),
+      });
+      return {
+        status: 'joined' as const,
+        playerId: existingPlayer._id,
+        returning: !nicknameChanged,
+        progressReset: nicknameChanged,
+      };
     }
 
     const playerId = await ctx.db.insert('players', {
       seasonId: args.seasonId,
-      subject,
-      displayName: args.displayName,
+      subject: args.deviceId,
+      displayName: nickname.displayName,
+      nicknameKey: nickname.nicknameKey,
       score: 0,
       captures: 0,
       joinedAt: Date.now(),
     });
 
-    return { status: 'joined' as const, playerId, returning: false };
+    return { status: 'joined' as const, playerId, returning: false, progressReset: false };
   },
 });
 
@@ -182,22 +205,22 @@ export const captureBall = mutation({
     accuracy: v.optional(v.number()),
     expectedBallVersion: v.number(),
     idempotencyKey: v.string(),
+    deviceId: v.string(),
   },
   handler: async (ctx, args) => {
-    const subject = await getIdentitySubject(ctx);
     const season = await ctx.db.get(args.seasonId);
     if (!season) return { status: 'season-not-found' as const };
 
     const player = await ctx.db
       .query('players')
       .withIndex('by_season_subject', (query) =>
-        query.eq('seasonId', args.seasonId).eq('subject', subject),
+        query.eq('seasonId', args.seasonId).eq('subject', args.deviceId),
       )
       .unique();
     if (!player) return { status: 'player-not-found' as const };
 
     const requestFingerprint = JSON.stringify({
-      subject,
+      subject: args.deviceId,
       latitude: args.latitude,
       longitude: args.longitude,
       accuracy: args.accuracy ?? null,

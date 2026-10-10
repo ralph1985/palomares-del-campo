@@ -33,11 +33,14 @@ export default defineSchema({
     seasonId: v.id('seasons'),
     subject: v.string(),
     displayName: v.string(),
+    nicknameKey: v.optional(v.string()),
     score: v.number(),
     captures: v.number(),
     joinedAt: v.number(),
     lastCaptureAt: v.optional(v.number()),
-  }).index('by_season_subject', ['seasonId', 'subject']),
+  })
+    .index('by_season_subject', ['seasonId', 'subject'])
+    .index('by_season_nickname', ['seasonId', 'nicknameKey']),
   captures: defineTable({
     seasonId: v.id('seasons'),
     playerId: v.id('players'),

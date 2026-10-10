@@ -2,6 +2,14 @@
 
 Este documento define la frontera que conserva la integración. Convex ya está desplegado en el proyecto de desarrollo; todavía no hay despliegue de producción ni integración con la interfaz.
 
+## Identidad mínima del jugador
+
+No se almacenan cuentas, nombres reales, correos ni credenciales. El navegador genera un `deviceId` aleatorio y guarda junto a él el nick elegido en `localStorage`.
+
+Convex conserva el `deviceId` anónimo, el nick y el progreso necesario para el ranking. Los nicks se comparan después de recortar espacios y normalizar mayúsculas/minúsculas. Si el jugador cambia de nick, su progreso se reinicia; el ranking solo muestra jugadores con puntos mayores que cero.
+
+Este identificador protege el progreso frente a confusiones casuales entre dispositivos, pero no equivale a autenticación fuerte. La seguridad importante del juego —distancia, precisión, versión de la bola, puntuación e idempotencia— permanece en Convex.
+
 ## Estado autoritativo
 
 Convex será la autoridad para la temporada activa, la bola, las capturas, los jugadores y la puntuación. El navegador solo mostrará estado y solicitará acciones.
@@ -10,7 +18,7 @@ La captura no debe implementarse como una secuencia cliente de leer, comprobar y
 
 ```text
 captureBall({
-  playerId,
+  deviceId,
   latitude,
   longitude,
   accuracy,

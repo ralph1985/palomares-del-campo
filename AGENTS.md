@@ -26,7 +26,8 @@ Estas reglas se aplican a todo el repositorio. La arquitectura explicada está e
 - El prototipo local de `/juego/` puede funcionar sin persistencia; su estado y sus capturas no representan una partida real.
 - La lógica pura de geolocalización y reglas vive en `src/game/`; los adaptadores de Leaflet y del navegador viven fuera de ella.
 - El cliente puede ofrecer feedback provisional, pero nunca decide una captura real.
-- La futura mutation de Convex deberá validar distancia, precisión, temporada, versión de la bola y concurrencia de forma atómica e idempotente.
+- La identidad de jugador usa un `deviceId` aleatorio local y un nick; no introducir cuentas ni datos personales para el MVP. El cambio de nick reinicia el progreso y el ranking excluye puntuaciones cero.
+- La mutation de Convex deberá validar distancia, precisión, temporada, versión de la bola y concurrencia de forma atómica e idempotente.
 - El simulador de posiciones solo se renderiza con `import.meta.env.DEV` y no debe aparecer en producción.
 - La geolocalización real requiere HTTPS o `localhost`; una URL HTTP de Tailnet solo permite revisar el mapa.
 - No almacenar coordenadas exactas de jugadores sin una decisión explícita de privacidad.
