@@ -44,6 +44,8 @@ const rankingEmptyElement = document.querySelector<HTMLElement>('[data-game-rank
 const rankingStatusElement = document.querySelector<HTMLElement>('[data-game-ranking-status]');
 const gameModeLabel = document.querySelector<HTMLElement>('[data-game-mode-label]');
 const ballVersionElement = document.querySelector<HTMLElement>('[data-game-ball-version]');
+const immersiveToggle = document.querySelector<HTMLButtonElement>('[data-game-immersive-toggle]');
+const immersiveLabel = document.querySelector<HTMLElement>('[data-game-immersive-label]');
 const gameSection = mapElement.closest<HTMLElement>('[data-convex-url]');
 const convexUrl = gameSection?.dataset.convexUrl ?? '';
 
@@ -90,6 +92,14 @@ const activeLocation = (): GameLocation =>
 
 const formatDistance = (distance: number): string =>
   distance < 1000 ? `${Math.round(distance)} m` : `${(distance / 1000).toFixed(1)} km`;
+
+const setImmersiveMode = (enabled: boolean): void => {
+  document.body.classList.toggle('game-immersive-mode', enabled);
+  gameSection?.classList.toggle('is-immersive', enabled);
+  immersiveToggle?.setAttribute('aria-pressed', String(enabled));
+  if (immersiveLabel) immersiveLabel.textContent = enabled ? 'Salir' : 'Inmersivo';
+  window.requestAnimationFrame(() => map.invalidateSize());
+};
 
 const setFeedback = (message: string): void => {
   if (feedbackElement) feedbackElement.textContent = message;
@@ -190,7 +200,11 @@ const refreshLocationState = (): void => {
       Boolean(convexUrl && !remoteGame) || !evaluation.eligible || !positionChecked;
   }
   if (evaluation.reason === 'eligible') {
-    setFeedback('Estás dentro del radio. Comprueba la posición para activar la captura.');
+    setFeedback(
+      document.body.classList.contains('game-immersive-mode')
+        ? 'Estás dentro del radio. La captura está disponible.'
+        : 'Estás dentro del radio. Comprueba la posición para activar la captura.',
+    );
   } else if (evaluation.reason === 'low-accuracy') {
     setFeedback('La posición es poco precisa para validar una captura.');
   } else {
@@ -251,7 +265,8 @@ const updateUserMarker = (coordinates: Coordinates): void => {
 
 const setUserCoordinates = (coordinates: Coordinates): void => {
   userCoordinates = coordinates;
-  positionChecked = false;
+  const evaluation = evaluateCapture(coordinates, activeLocation());
+  positionChecked = document.body.classList.contains('game-immersive-mode') && evaluation.eligible;
   updateUserMarker(coordinates);
   map.setView([coordinates.latitude, coordinates.longitude], 17, { animate: true });
   refreshLocationState();
@@ -460,6 +475,14 @@ const captureLocally = async (): Promise<void> => {
 renderLocations();
 renderActiveLocation();
 refreshPanel();
+immersiveToggle?.addEventListener('click', () => {
+  setImmersiveMode(!document.body.classList.contains('game-immersive-mode'));
+});
+window.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && document.body.classList.contains('game-immersive-mode')) {
+    setImmersiveMode(false);
+  }
+});
 locateButton?.addEventListener('click', requestLocation);
 checkButton?.addEventListener('click', checkPosition);
 captureButton?.addEventListener('click', captureLocally);
