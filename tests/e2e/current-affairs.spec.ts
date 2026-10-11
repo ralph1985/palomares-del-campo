@@ -13,6 +13,26 @@ test.describe('current affairs sections', () => {
     );
   });
 
+  test('wraps long URLs in bando cards on narrow screens', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/bandos/');
+
+    const card = page.locator('[data-bando-card]').filter({ hasText: 'Visita Virgen de Lourdes' });
+    await expect(card).toBeVisible();
+    const widths = await card.evaluate((element) => ({
+      card: element.scrollWidth,
+      cardClient: element.clientWidth,
+      paragraphs: [...element.querySelectorAll('p')].map((paragraph) => ({
+        scrollWidth: paragraph.scrollWidth,
+        clientWidth: paragraph.clientWidth,
+      })),
+    }));
+    expect(widths.card).toBeLessThanOrEqual(widths.cardClient);
+    expect(
+      widths.paragraphs.every((paragraph) => paragraph.scrollWidth <= paragraph.clientWidth),
+    ).toBe(true);
+  });
+
   test('wraps long source URLs on narrow bando pages', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto('/bandos/1646075-visita-virgen-de-lourdes-a-nuestro-pueblo');
