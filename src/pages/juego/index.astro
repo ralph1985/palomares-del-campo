@@ -2,6 +2,7 @@
 import ActionLink from '../../components/ui/ActionLink.astro';
 import SiteFooter from '../../components/layout/SiteFooter.astro';
 import GameMap from '../../components/game/GameMap.astro';
+import GamePrivacyNotice from '../../components/game/GamePrivacyNotice.astro';
 import GameRules from '../../components/game/GameRules.astro';
 import SiteHeader from '../../components/layout/SiteHeader.astro';
 const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
@@ -66,6 +67,7 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
 
       <GameMap />
       <GameRules />
+      <GamePrivacyNotice hasRemoteGame={hasRemoteGame} />
     </main>
 
     <SiteFooter />

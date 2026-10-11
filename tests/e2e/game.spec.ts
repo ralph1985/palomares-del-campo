@@ -13,6 +13,13 @@ test.describe('local ball game', () => {
     await expect(page.locator('[data-game-scenario] option')).toHaveCount(4);
     await expect(page.getByRole('heading', { name: 'Ranking de la partida' })).toBeVisible();
     await expect(page.locator('[data-game-ranking]')).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Privacidad y estado del juego' }),
+    ).toBeVisible();
+    await expect(page.getByText(/identificador anónimo del dispositivo/)).toBeVisible();
+    await expect(page.getByText(/El nick se guarda solo en este dispositivo/)).toBeVisible();
+    await expect(page.getByText(/No se conserva un historial de ubicación/)).toBeVisible();
+    await expect(page.getByText(/Las ubicaciones del juego son provisionales/)).toBeVisible();
   });
 
   test('uses shared semantic button variants for game actions', async ({ page }) => {

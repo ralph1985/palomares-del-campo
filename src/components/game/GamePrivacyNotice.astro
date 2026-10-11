@@ -1,0 +1,115 @@
+---
+interface Props {
+  hasRemoteGame: boolean;
+}
+
+const { hasRemoteGame } = Astro.props;
+---
+
+<section class="game-privacy" aria-labelledby="game-privacy-title">
+  <div class="privacy-heading">
+    <p class="eyebrow">Antes de jugar</p>
+    <h2 id="game-privacy-title">Privacidad y estado del juego</h2>
+  </div>
+
+  <div class="privacy-grid">
+    <article>
+      <h3>Identidad local</h3>
+      <p>
+        Usamos un identificador anónimo del dispositivo para distinguir tu sesión. El nick se guarda
+        solo en este dispositivo y puedes cambiarlo.
+      </p>
+    </article>
+    <article>
+      <h3>Ubicación mínima</h3>
+      <p>
+        No se conserva un historial de ubicación. La presencia activa caduca y solo se usa para las
+        comprobaciones necesarias de la partida.
+      </p>
+    </article>
+    <article>
+      <h3>{hasRemoteGame ? 'Partida remota' : 'Modo local'}</h3>
+      <p>
+        {hasRemoteGame
+          ? 'La partida remota comparte únicamente el estado necesario para jugar.'
+          : 'Esta demostración funciona en local y no representa todavía una partida multijugador real.'}
+        Las ubicaciones del juego son provisionales y se revisarán antes de abrir una temporada
+        real.
+      </p>
+    </article>
+  </div>
+</section>
+
+<style>
+  .game-privacy {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+    padding: 0 0 clamp(4rem, 9vw, 8rem);
+  }
+
+  .privacy-heading {
+    margin-bottom: 2rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.8rem;
+    color: #a05c32;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h2,
+  h3 {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 500;
+    letter-spacing: -0.055em;
+    line-height: 0.98;
+  }
+
+  h2 {
+    max-width: 13ch;
+    color: #19342d;
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+  }
+
+  .privacy-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  article {
+    min-width: 0;
+    padding: 1.35rem;
+    border: 1px solid rgb(25 52 45 / 13%);
+    border-radius: 1.25rem;
+    background: rgb(255 255 255 / 28%);
+  }
+
+  h3 {
+    color: #19342d;
+    font-size: 1.7rem;
+  }
+
+  article p {
+    margin: 0.75rem 0 0;
+    color: #527066;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 48rem) {
+    .privacy-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .game-privacy {
+      width: min(100% - 2rem, 72rem);
+    }
+  }
+</style>

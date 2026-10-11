@@ -1,4 +1,5 @@
 ---
+import ActionLink from '../../components/ui/ActionLink.astro';
 import ExternalLink from '../../components/ui/ExternalLink.astro';
 import SiteFooter from '../../components/layout/SiteFooter.astro';
 import SiteHeader from '../../components/layout/SiteHeader.astro';
@@ -114,6 +115,9 @@ const formatDate = (date: string) =>
                   <ExternalLink class="route-context-link" href={route.contextSource.href}>
                     Contexto: {route.contextSource.label} <span aria-hidden="true">↗</span>
                   </ExternalLink>
+                  <ActionLink class="route-game-link" variant="underline" href="/juego/">
+                    Probar La bola <span aria-hidden="true">→</span>
+                  </ActionLink>
                 </div>
                 <p class="route-review">
                   Fuente actualizada el {formatDate(route.sourceUpdatedAt)} · ficha revisada el
