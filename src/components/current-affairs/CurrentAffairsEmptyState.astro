@@ -1,0 +1,99 @@
+---
+interface Props {
+  section: 'agenda' | 'avisos';
+  eyebrow: string;
+  title: string;
+  description: string;
+  emptyMessage: string;
+}
+
+const { section, eyebrow, title, description, emptyMessage } = Astro.props;
+---
+
+<section
+  class="current-affairs-empty"
+  data-current-affairs-empty
+  data-section={section}
+  aria-labelledby={`${section}-title`}
+>
+  <div class="empty-shell">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1 id={`${section}-title`}>{title}</h1>
+    <p class="empty-description">{description}</p>
+    <p class="empty-message">{emptyMessage}</p>
+    <a class="back-link" href="/">
+      Volver al inicio <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .current-affairs-empty {
+    min-height: calc(100vh - 10.5rem);
+    padding: clamp(5rem, 14vw, 10rem) 0;
+    color: #eff5ed;
+    background: #19342d;
+  }
+
+  .empty-shell {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    margin: 0 0 1.2rem;
+    color: #e5b77e;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-width: 10ch;
+    margin: 0;
+    color: #fff;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(4rem, 12vw, 9rem);
+    font-weight: 500;
+    letter-spacing: -0.07em;
+    line-height: 0.9;
+  }
+
+  .empty-description {
+    max-width: 34rem;
+    margin: 2rem 0 0;
+    color: #b7d0bc;
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    line-height: 1.7;
+  }
+
+  .empty-message {
+    width: fit-content;
+    max-width: 100%;
+    margin: 3rem 0 0;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid rgb(229 183 126 / 55%);
+    border-radius: 0.75rem;
+    color: #f4d3a5;
+    font-weight: 700;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 2rem;
+    color: #e5b77e;
+    font-weight: 750;
+    text-underline-offset: 0.25em;
+  }
+
+  @media (max-width: 38rem) {
+    .empty-shell {
+      width: min(100% - 2rem, 72rem);
+    }
+
+    .empty-message {
+      margin-top: 2rem;
+    }
+  }
+</style>

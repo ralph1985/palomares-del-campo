@@ -26,7 +26,11 @@ export const navigationGroups: NavigationGroup[] = [
   },
   {
     label: 'Actualidad',
-    links: [{ label: 'Noticias', href: '/noticias/' }],
+    links: [
+      { label: 'Noticias', href: '/noticias/' },
+      { label: 'Agenda', href: '/agenda/' },
+      { label: 'Avisos', href: '/avisos/' },
+    ],
   },
   {
     label: 'Juego',
