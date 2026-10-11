@@ -113,6 +113,17 @@ export type RemoteLeaderboardAdapter = {
   dispose: () => void;
 };
 
+export type RemoteConvexClient = {
+  query: (reference: unknown, args: Record<string, unknown>) => Promise<unknown>;
+  mutation: (reference: unknown, args: Record<string, unknown>) => Promise<unknown>;
+  onUpdate: (
+    reference: unknown,
+    args: Record<string, unknown>,
+    callback: (value: unknown) => void,
+  ) => () => void;
+  close: () => void;
+};
+
 export const connectRemoteLeaderboard = async (
   url: string,
   onLeaderboard: (entries: RemoteLeaderboardEntry[]) => void,
@@ -135,21 +146,20 @@ export const connectRemoteLeaderboard = async (
   };
 };
 
-export const connectRemoteGame = async (
-  url: string,
+export const createRemoteGameAdapter = async (
+  client: RemoteConvexClient,
   identity: PlayerIdentity,
   callbacks: RemoteGameCallbacks,
 ): Promise<RemoteGameAdapter> => {
-  const client = new ConvexClient(url);
   const state = await client.query(api.game.getActiveSeason, {});
   if (!state) throw new Error('no-active-season');
 
-  const seasonId = state.season.id;
-  const joined = await client.mutation(api.game.joinSeason, {
+  const seasonId = (state as RemoteGameState).season.id;
+  const joined = (await client.mutation(api.game.joinSeason, {
     seasonId,
     deviceId: identity.deviceId,
     displayName: identity.nickname,
-  });
+  })) as { status: string };
   if (joined.status !== 'joined') throw new Error(joined.status);
 
   callbacks.onState(state as RemoteGameState);
@@ -203,3 +213,14 @@ export const connectRemoteGame = async (
     },
   };
 };
+
+export const connectRemoteGame = async (
+  url: string,
+  identity: PlayerIdentity,
+  callbacks: RemoteGameCallbacks,
+): Promise<RemoteGameAdapter> =>
+  createRemoteGameAdapter(
+    new ConvexClient(url) as unknown as RemoteConvexClient,
+    identity,
+    callbacks,
+  );
