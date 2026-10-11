@@ -46,6 +46,7 @@ const gameModeLabel = document.querySelector<HTMLElement>('[data-game-mode-label
 const ballVersionElement = document.querySelector<HTMLElement>('[data-game-ball-version]');
 const immersiveToggle = document.querySelector<HTMLButtonElement>('[data-game-immersive-toggle]');
 const immersiveLabel = document.querySelector<HTMLElement>('[data-game-immersive-label]');
+const headerElement = document.querySelector<HTMLElement>('.site-header');
 const gameSection = mapElement.closest<HTMLElement>('[data-convex-url]');
 const convexUrl = gameSection?.dataset.convexUrl ?? '';
 
@@ -93,12 +94,21 @@ const activeLocation = (): GameLocation =>
 const formatDistance = (distance: number): string =>
   distance < 1000 ? `${Math.round(distance)} m` : `${(distance / 1000).toFixed(1)} km`;
 
+const syncGameViewport = (): void => {
+  const headerHeight = headerElement?.getBoundingClientRect().height ?? 64;
+  document.documentElement.style.setProperty('--game-header-height', `${headerHeight}px`);
+};
+
 const setImmersiveMode = (enabled: boolean): void => {
   document.body.classList.toggle('game-immersive-mode', enabled);
   gameSection?.classList.toggle('is-immersive', enabled);
   immersiveToggle?.setAttribute('aria-pressed', String(enabled));
   if (immersiveLabel) immersiveLabel.textContent = enabled ? 'Salir' : 'Inmersivo';
-  window.requestAnimationFrame(() => map.invalidateSize());
+  syncGameViewport();
+  window.requestAnimationFrame(() => {
+    syncGameViewport();
+    map.invalidateSize();
+  });
 };
 
 const setFeedback = (message: string): void => {
@@ -360,6 +370,7 @@ const connectPlayer = async (): Promise<void> => {
     });
     playerIdentity = nextIdentity;
     storePlayerIdentity(playerIdentity);
+    gameSection?.classList.add('is-connected');
     if (gameModeLabel) gameModeLabel.textContent = 'Partida compartida';
     setPlayerFeedback(
       remoteGame.identity.nickname === nickname
@@ -504,4 +515,7 @@ if (convexUrl && playerIdentity.nickname) void connectPlayer();
 else if (!convexUrl)
   setPlayerFeedback('Modo local: introduce un nick cuando el backend esté disponible.');
 
-window.addEventListener('resize', () => map.invalidateSize());
+window.addEventListener('resize', () => {
+  if (document.body.classList.contains('game-immersive-mode')) syncGameViewport();
+  map.invalidateSize();
+});

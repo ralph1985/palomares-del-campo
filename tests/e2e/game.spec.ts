@@ -23,10 +23,27 @@ test.describe('local ball game', () => {
     await expect(toggle).toHaveAttribute('aria-pressed', 'true');
     await expect(page.locator('body')).toHaveClass(/game-immersive-mode/);
     await expect(page.locator('.game-hero')).toBeHidden();
+    const immersiveGeometry = await page.evaluate(() => {
+      const header = document.querySelector('.site-header')?.getBoundingClientRect();
+      const main = document.querySelector('main')?.getBoundingClientRect();
+      return {
+        headerBottom: header?.bottom ?? 0,
+        mainTop: main?.top ?? 0,
+        mainBottom: main?.bottom ?? 0,
+        viewportHeight: window.innerHeight,
+      };
+    });
+    expect(immersiveGeometry.mainTop).toBeGreaterThanOrEqual(immersiveGeometry.headerBottom - 1);
+    expect(immersiveGeometry.mainBottom).toBeLessThanOrEqual(immersiveGeometry.viewportHeight + 1);
     await expect(page.locator('[data-game-check]')).toBeHidden();
     await expect(page.locator('[data-game-locate]')).toBeVisible();
     await expect(page.locator('[data-game-capture]')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Salir' })).toBeVisible();
+
+    await page.locator('[data-convex-url]').evaluate((element) => {
+      element.classList.add('is-connected');
+    });
+    await expect(page.locator('[data-game-player-form]')).toBeHidden();
 
     await page.getByRole('button', { name: 'Salir' }).click();
     await expect(page.locator('body')).not.toHaveClass(/game-immersive-mode/);

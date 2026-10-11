@@ -295,7 +295,13 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
   }
 
   :global(body.game-immersive-mode main) {
-    height: calc(100svh - 4rem);
+    position: fixed;
+    z-index: 0;
+    top: var(--game-header-height, 4rem);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: auto;
     overflow: hidden;
   }
 
@@ -364,15 +370,32 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
     backdrop-filter: blur(1rem);
   }
 
-  :global(body.game-immersive-mode .game-panel h3) {
-    margin-top: 0.8rem;
-    font-size: 1.65rem;
+  :global(body.game-immersive-mode .game-location-description) {
+    display: none;
   }
 
-  :global(body.game-immersive-mode .game-location-description) {
-    min-height: 0;
-    margin-top: 0.55rem;
-    font-size: 0.76rem;
+  :global(body.game-immersive-mode .game-panel h3) {
+    margin: 0.35rem 0 0;
+    font-size: 1.35rem;
+    line-height: 1.05;
+  }
+
+  :global(body.game-immersive-mode .is-connected .game-player-form) {
+    display: none;
+  }
+
+  :global(body.game-immersive-mode .game-panel-topline) {
+    font-size: 0.62rem;
+  }
+
+  :global(body.game-immersive-mode .game-panel .game-actions) {
+    margin-top: 0.6rem;
+  }
+
+  :global(body.game-immersive-mode .game-panel .game-feedback) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   :global(body.game-immersive-mode .game-player-form) {
