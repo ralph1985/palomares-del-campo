@@ -45,6 +45,19 @@ export const evaluateCapture = (
   return { eligible: true, distanceMeters, reason: 'eligible' };
 };
 
+/** Interpola linealmente una posición entre dos puntos para suavizar el movimiento visual. */
+export const interpolatePosition = (
+  from: GeoPosition,
+  to: GeoPosition,
+  progress: number,
+): GeoPosition => {
+  const clampedProgress = Math.min(Math.max(progress, 0), 1);
+  return {
+    latitude: from.latitude + (to.latitude - from.latitude) * clampedProgress,
+    longitude: from.longitude + (to.longitude - from.longitude) * clampedProgress,
+  };
+};
+
 /** Desplaza un punto en metros, útil para escenarios controlados del simulador. */
 export const offsetPosition = (
   location: GameLocation,

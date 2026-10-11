@@ -4,6 +4,7 @@ import type { Id } from './_generated/dataModel';
 import { evaluateServerCapture } from './geo';
 import { normalizeNickname } from './identity';
 import { effectiveScore } from './score';
+import { isPresenceActive, roundPresenceCoordinate } from './presence';
 
 const locationValidator = v.object({
   locationId: v.string(),
@@ -40,6 +41,21 @@ const readSeasonState = async (ctx: QueryCtx | MutationCtx, seasonId: Id<'season
     .query('players')
     .withIndex('by_season_subject', (query) => query.eq('seasonId', seasonId))
     .collect();
+  const activePlayers = players
+    .filter(
+      (player) =>
+        player.presenceAt !== undefined &&
+        player.presenceLatitude !== undefined &&
+        player.presenceLongitude !== undefined &&
+        isPresenceActive(player.presenceAt, Date.now()),
+    )
+    .map((player) => ({
+      id: player._id,
+      nickname: player.displayName,
+      latitude: player.presenceLatitude as number,
+      longitude: player.presenceLongitude as number,
+      lastSeenAt: player.presenceAt as number,
+    }));
 
   return {
     season: {
@@ -58,6 +74,7 @@ const readSeasonState = async (ctx: QueryCtx | MutationCtx, seasonId: Id<'season
       radiusMeters: location.radiusMeters,
     },
     playerCount: players.length,
+    players: activePlayers,
   };
 };
 
@@ -158,7 +175,16 @@ export const joinSeason = mutation({
       await ctx.db.patch(existingPlayer._id, {
         displayName: nickname.displayName,
         nicknameKey: nickname.nicknameKey,
-        ...(nicknameChanged ? { score: 0, captures: 0, lastCaptureAt: undefined } : {}),
+        ...(nicknameChanged
+          ? {
+              score: 0,
+              captures: 0,
+              lastCaptureAt: undefined,
+              presenceLatitude: undefined,
+              presenceLongitude: undefined,
+              presenceAt: undefined,
+            }
+          : {}),
       });
       return {
         status: 'joined' as const,
@@ -179,6 +205,46 @@ export const joinSeason = mutation({
     });
 
     return { status: 'joined' as const, playerId, returning: false, progressReset: false };
+  },
+});
+
+export const updatePresence = mutation({
+  args: {
+    seasonId: v.id('seasons'),
+    deviceId: v.string(),
+    latitude: v.number(),
+    longitude: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const season = await ctx.db.get(args.seasonId);
+    if (!season) return { status: 'season-not-found' as const };
+    if (season.status !== 'active') return { status: 'game-not-active' as const };
+    if (
+      !Number.isFinite(args.latitude) ||
+      !Number.isFinite(args.longitude) ||
+      args.latitude < -90 ||
+      args.latitude > 90 ||
+      args.longitude < -180 ||
+      args.longitude > 180
+    ) {
+      return { status: 'invalid-position' as const };
+    }
+
+    const player = await ctx.db
+      .query('players')
+      .withIndex('by_season_subject', (query) =>
+        query.eq('seasonId', args.seasonId).eq('subject', args.deviceId),
+      )
+      .unique();
+    if (!player) return { status: 'player-not-found' as const };
+
+    const now = Date.now();
+    await ctx.db.patch(player._id, {
+      presenceLatitude: roundPresenceCoordinate(args.latitude),
+      presenceLongitude: roundPresenceCoordinate(args.longitude),
+      presenceAt: now,
+    });
+    return { status: 'updated' as const, presenceAt: now };
   },
 });
 

@@ -94,6 +94,34 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
     box-shadow: 0 0 0 0.25rem rgb(47 102 82 / 24%);
   }
 
+  :global(.game-player-marker-wrapper) {
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: transparent;
+  }
+
+  :global(.game-player-marker) {
+    display: block;
+    width: 0.75rem;
+    height: 0.75rem;
+    border: 2px solid #eff5ed;
+    border-radius: 50%;
+    background: #c68455;
+    box-shadow: 0 0 0 0.25rem rgb(198 132 85 / 22%);
+  }
+
+  :global(.game-player-tooltip) {
+    padding: 0.22rem 0.42rem;
+    border: 1px solid rgb(25 52 45 / 18%);
+    border-radius: 0.35rem;
+    color: #19342d;
+    background: rgb(244 241 233 / 94%);
+    box-shadow: 0 0.3rem 0.7rem rgb(25 52 45 / 18%);
+    font-size: 0.68rem;
+    font-weight: 800;
+  }
+
   @keyframes game-ball-pulse {
     0%,
     100% {

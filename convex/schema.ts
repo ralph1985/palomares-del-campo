@@ -38,6 +38,9 @@ export default defineSchema({
     captures: v.number(),
     joinedAt: v.number(),
     lastCaptureAt: v.optional(v.number()),
+    presenceLatitude: v.optional(v.number()),
+    presenceLongitude: v.optional(v.number()),
+    presenceAt: v.optional(v.number()),
   })
     .index('by_season_subject', ['seasonId', 'subject'])
     .index('by_season_nickname', ['seasonId', 'nicknameKey']),

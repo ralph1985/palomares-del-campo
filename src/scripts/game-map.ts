@@ -1,7 +1,12 @@
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { gameLocations, type GameLocation } from '../data/game-locations';
-import { evaluateCapture, offsetPosition, type GeoPosition } from '../game/geo';
+import {
+  evaluateCapture,
+  interpolatePosition,
+  offsetPosition,
+  type GeoPosition,
+} from '../game/geo';
 import { captureLocation, createInitialGameState, type LocalGameState } from '../game/session';
 import {
   connectRemoteGame,
@@ -12,7 +17,9 @@ import {
   type RemoteGameAdapter,
   type RemoteGameState,
   type RemoteLeaderboardEntry,
+  type RemotePlayerPresence,
 } from './convex-game';
+import { PRESENCE_HEARTBEAT_MS } from '../../convex/presence';
 
 type Coordinates = GeoPosition;
 
@@ -78,13 +85,24 @@ const userIcon = L.divIcon({
   iconAnchor: [10, 10],
 });
 
+const playerIcon = L.divIcon({
+  className: 'game-player-marker-wrapper',
+  html: '<span class="game-player-marker" aria-hidden="true"></span>',
+  iconSize: [18, 18],
+  iconAnchor: [9, 9],
+});
+
 const locationMarkers = new Map<string, L.CircleMarker>();
+const playerPresenceMarkers = new Map<string, L.Marker>();
+const playerAnimationFrames = new Map<string, number>();
 let gameState: LocalGameState = createInitialGameState(gameLocations);
 let userMarker: L.Marker | undefined;
 let userCoordinates: Coordinates | undefined;
 let positionChecked = false;
 let activeMarker: L.Marker | undefined;
 let remoteGame: RemoteGameAdapter | undefined;
+let presenceInterval: number | undefined;
+let locationWatchId: number | undefined;
 let remoteBallVersion = 0;
 let playerIdentity: PlayerIdentity = loadPlayerIdentity();
 
@@ -162,6 +180,73 @@ const renderLeaderboard = (entries: RemoteLeaderboardEntry[]): void => {
   }
 };
 
+const animatePlayerMarker = (
+  playerId: string,
+  marker: L.Marker,
+  target: RemotePlayerPresence,
+): void => {
+  const current = marker.getLatLng();
+  if (current.lat === target.latitude && current.lng === target.longitude) return;
+
+  const previousFrame = playerAnimationFrames.get(playerId);
+  if (previousFrame !== undefined) window.cancelAnimationFrame(previousFrame);
+
+  const from = { latitude: current.lat, longitude: current.lng };
+  const startedAt = performance.now();
+  const durationMs = 7_000;
+  const animate = (now: number): void => {
+    const progress = Math.min((now - startedAt) / durationMs, 1);
+    const position = interpolatePosition(from, target, progress);
+    marker.setLatLng([position.latitude, position.longitude]);
+    if (progress < 1) {
+      playerAnimationFrames.set(playerId, window.requestAnimationFrame(animate));
+    } else {
+      playerAnimationFrames.delete(playerId);
+    }
+  };
+
+  playerAnimationFrames.set(playerId, window.requestAnimationFrame(animate));
+};
+
+const renderPlayerPresence = (players: RemotePlayerPresence[]): void => {
+  const visiblePlayerIds = new Set<string>();
+
+  players.forEach((player) => {
+    visiblePlayerIds.add(player.id);
+    let marker = playerPresenceMarkers.get(player.id);
+    if (!marker) {
+      marker = L.marker([player.latitude, player.longitude], {
+        icon: playerIcon,
+        keyboard: false,
+        zIndexOffset: 800,
+      }).addTo(map);
+      playerPresenceMarkers.set(player.id, marker);
+    } else {
+      animatePlayerMarker(player.id, marker, player);
+    }
+
+    const label = document.createElement('span');
+    label.textContent = player.nickname;
+    marker.unbindTooltip();
+    marker.bindTooltip(label, {
+      className: 'game-player-tooltip',
+      direction: 'top',
+      offset: [0, -8],
+      permanent: true,
+    });
+  });
+
+  playerPresenceMarkers.forEach((marker, playerId) => {
+    if (!visiblePlayerIds.has(playerId)) {
+      const frame = playerAnimationFrames.get(playerId);
+      if (frame !== undefined) window.cancelAnimationFrame(frame);
+      playerAnimationFrames.delete(playerId);
+      marker.remove();
+      playerPresenceMarkers.delete(playerId);
+    }
+  });
+};
+
 const applyRemoteState = (state: RemoteGameState): void => {
   remoteBallVersion = state.ball.version;
   if (ballVersionElement)
@@ -172,6 +257,7 @@ const applyRemoteState = (state: RemoteGameState): void => {
     captures: gameState.captures,
   };
   renderActiveLocation();
+  renderPlayerPresence(state.players);
   refreshPanel();
   refreshLocationState();
 };
@@ -273,6 +359,18 @@ const updateUserMarker = (coordinates: Coordinates): void => {
   }
 };
 
+const publishPresence = async (): Promise<void> => {
+  if (!remoteGame || !userCoordinates) return;
+  try {
+    await remoteGame.updatePresence({
+      latitude: userCoordinates.latitude,
+      longitude: userCoordinates.longitude,
+    });
+  } catch {
+    // La presencia caducará por sí sola si el backend deja de estar disponible.
+  }
+};
+
 const setUserCoordinates = (coordinates: Coordinates): void => {
   userCoordinates = coordinates;
   const evaluation = evaluateCapture(coordinates, activeLocation());
@@ -280,6 +378,14 @@ const setUserCoordinates = (coordinates: Coordinates): void => {
   updateUserMarker(coordinates);
   map.setView([coordinates.latitude, coordinates.longitude], 17, { animate: true });
   refreshLocationState();
+  void publishPresence();
+};
+
+const stopLocationWatch = (): void => {
+  if (locationWatchId !== undefined && navigator.geolocation) {
+    navigator.geolocation.clearWatch(locationWatchId);
+    locationWatchId = undefined;
+  }
 };
 
 const requestLocation = (): void => {
@@ -299,7 +405,8 @@ const requestLocation = (): void => {
   if (locateButton) locateButton.disabled = true;
   setFeedback('Buscando tu posición…');
 
-  navigator.geolocation.getCurrentPosition(
+  stopLocationWatch();
+  locationWatchId = navigator.geolocation.watchPosition(
     (position) => {
       setUserCoordinates({
         latitude: position.coords.latitude,
@@ -314,6 +421,7 @@ const requestLocation = (): void => {
         error.code === error.PERMISSION_DENIED
           ? 'El navegador no ha permitido acceder a tu ubicación.'
           : 'No hemos podido obtener una posición precisa. Inténtalo de nuevo.';
+      stopLocationWatch();
       setFeedback(message);
       if (locateButton) locateButton.disabled = false;
       locateButton?.removeAttribute('aria-busy');
@@ -344,6 +452,19 @@ const checkPosition = (): void => {
   }
 };
 
+const stopPresenceHeartbeat = (): void => {
+  if (presenceInterval !== undefined) {
+    window.clearInterval(presenceInterval);
+    presenceInterval = undefined;
+  }
+};
+
+const startPresenceHeartbeat = (): void => {
+  stopPresenceHeartbeat();
+  void publishPresence();
+  presenceInterval = window.setInterval(() => void publishPresence(), PRESENCE_HEARTBEAT_MS);
+};
+
 const connectPlayer = async (): Promise<void> => {
   const nickname = nicknameInput?.value.trim() ?? '';
   if (!nickname) {
@@ -358,6 +479,7 @@ const connectPlayer = async (): Promise<void> => {
 
   if (joinButton) joinButton.disabled = true;
   setPlayerFeedback('Entrando en la partida…');
+  stopPresenceHeartbeat();
   remoteGame?.dispose();
   remoteGame = undefined;
   const nextIdentity = { ...playerIdentity, nickname };
@@ -371,6 +493,7 @@ const connectPlayer = async (): Promise<void> => {
     playerIdentity = nextIdentity;
     storePlayerIdentity(playerIdentity);
     gameSection?.classList.add('is-connected');
+    startPresenceHeartbeat();
     if (gameModeLabel) gameModeLabel.textContent = 'Partida compartida';
     setPlayerFeedback(
       remoteGame.identity.nickname === nickname
@@ -379,6 +502,8 @@ const connectPlayer = async (): Promise<void> => {
     );
     refreshLocationState();
   } catch (error) {
+    remoteGame = undefined;
+    gameSection?.classList.remove('is-connected');
     const reason = error instanceof Error ? error.message : 'unknown';
     const message =
       reason === 'nickname-taken'
@@ -518,4 +643,10 @@ else if (!convexUrl)
 window.addEventListener('resize', () => {
   if (document.body.classList.contains('game-immersive-mode')) syncGameViewport();
   map.invalidateSize();
+});
+window.addEventListener('pagehide', () => {
+  stopPresenceHeartbeat();
+  stopLocationWatch();
+  remoteGame?.dispose();
+  remoteGame = undefined;
 });

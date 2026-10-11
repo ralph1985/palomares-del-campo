@@ -3,6 +3,7 @@ import { gameLocations } from '../../src/data/game-locations';
 import {
   distanceInMeters,
   evaluateCapture,
+  interpolatePosition,
   MIN_GPS_ACCURACY_METERS,
   offsetPosition,
 } from '../../src/game/geo';
@@ -47,5 +48,11 @@ describe('geolocation rules', () => {
     const position = offsetPosition(plaza, 0, 0, MIN_GPS_ACCURACY_METERS);
 
     expect(evaluateCapture(position, plaza).eligible).toBe(true);
+  });
+
+  it('interpolates a player position along a route', () => {
+    expect(
+      interpolatePosition({ latitude: 39, longitude: -3 }, { latitude: 40, longitude: -2 }, 0.25),
+    ).toEqual({ latitude: 39.25, longitude: -2.75 });
   });
 });

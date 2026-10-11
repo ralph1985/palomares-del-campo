@@ -23,6 +23,15 @@ export type RemoteGameState = {
     radiusMeters: number;
   };
   playerCount: number;
+  players: RemotePlayerPresence[];
+};
+
+export type RemotePlayerPresence = {
+  id: string;
+  nickname: string;
+  latitude: number;
+  longitude: number;
+  lastSeenAt: number;
 };
 
 export type RemotePlayerSummary = {
@@ -96,6 +105,7 @@ export type RemoteGameAdapter = {
     },
     expectedBallVersion: number,
   ) => Promise<RemoteCaptureResult>;
+  updatePresence: (position: { latitude: number; longitude: number }) => Promise<unknown>;
   dispose: () => void;
 };
 
@@ -178,6 +188,13 @@ export const connectRemoteGame = async (
         expectedBallVersion,
         idempotencyKey: createRandomId(),
       }) as Promise<RemoteCaptureResult>,
+    updatePresence: (position) =>
+      client.mutation(api.game.updatePresence, {
+        seasonId,
+        deviceId: identity.deviceId,
+        latitude: position.latitude,
+        longitude: position.longitude,
+      }),
     dispose: () => {
       stopState();
       stopPlayer();
