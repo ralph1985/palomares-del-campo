@@ -8,6 +8,10 @@ import {
   municipalInfoReviewedAt,
   municipalPhoneHref,
 } from '../data/municipal-info';
+
+const transportPublishedAt = new Date(
+  `${municipalInfo.transport.publishedAt}T00:00:00`,
+).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 
 <!doctype html>
@@ -99,13 +103,39 @@ import {
       <section class="transport-section" aria-labelledby="transport-title">
         <div class="practical-shell transport-grid">
           <div>
-            <p class="eyebrow">Información pendiente de fuente</p>
+            <p class="eyebrow">Fuente oficial · Publicado el {transportPublishedAt}</p>
             <h2 id="transport-title">{municipalInfo.transport.title}</h2>
           </div>
           <div>
             <p>{municipalInfo.transport.description}</p>
+            <div class="transport-routes">
+              {municipalInfo.transport.routes.map((route) => (
+                <section class="transport-route" aria-labelledby={`route-${route.title}`}>
+                  <h3 id={`route-${route.title}`}>{route.title}</h3>
+                  <table aria-label={`Horarios ${route.title.replace(' → ', ' a ')}`}>
+                    <thead>
+                      <tr>
+                        <th scope="col">Día</th>
+                        <th scope="col">Hora</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {route.entries.map((entry) => (
+                        <tr>
+                          <th scope="row">{entry.day}</th>
+                          <td>{entry.time}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </section>
+              ))}
+            </div>
+            <p class="transport-note">
+              Horarios publicados en el bando citado; comprueba posibles cambios antes de viajar.
+            </p>
             <ExternalLink class="source-link" href={municipalInfo.transport.source.href}>
-              Consultar el portal municipal <span aria-hidden="true">↗</span>
+              Ver bando original <span aria-hidden="true">↗</span>
             </ExternalLink>
           </div>
         </div>
@@ -321,6 +351,63 @@ import {
   .transport-section p:not(.eyebrow) {
     margin-top: 0;
     color: #c3d9c7;
+  }
+
+  .transport-routes {
+    display: grid;
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .transport-route {
+    padding: 1rem 1.15rem;
+    border: 1px solid rgb(239 245 237 / 18%);
+    border-radius: 1rem;
+    background: rgb(255 255 255 / 4%);
+  }
+
+  .transport-route h3 {
+    margin: 0 0 0.75rem;
+    color: #fff;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  .transport-route table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #eff5ed;
+    font-size: 0.95rem;
+  }
+
+  .transport-route th,
+  .transport-route td {
+    padding: 0.55rem 0;
+    border-top: 1px solid rgb(239 245 237 / 14%);
+    text-align: left;
+  }
+
+  .transport-route thead th {
+    color: #e5b77e;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .transport-route tbody th {
+    font-weight: 500;
+  }
+
+  .transport-route td {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .transport-note {
+    margin-bottom: 1rem !important;
+    color: #b7d0bc !important;
+    font-size: 0.85rem;
   }
 
   .review-section {

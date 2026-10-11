@@ -34,11 +34,19 @@ test.describe('practical municipal information', () => {
     await expect(
       page.getByRole('heading', { name: 'Transporte y servicios locales' }),
     ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Palomares del Campo → Cuenca' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Cuenca → Palomares del Campo' })).toBeVisible();
     await expect(
-      page.getByText(
-        'Los horarios de transporte se incorporarán cuando exista una fuente institucional vigente.',
-      ),
-    ).toBeVisible();
+      page.getByRole('table', { name: 'Horarios Palomares del Campo a Cuenca' }),
+    ).toContainText('07:45');
+    await expect(
+      page.getByRole('table', { name: 'Horarios Cuenca a Palomares del Campo' }),
+    ).toContainText('15:15');
+    await expect(page.getByText(/Publicado el 9 de octubre de 2026/)).toBeVisible();
+    await expect(page.getByRole('link', { name: /Ver bando original/ })).toHaveAttribute(
+      'href',
+      'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1659178',
+    );
     await expect(page.getByText(/Revisado el 11 de octubre de 2026/)).toBeVisible();
 
     await page.goto('/');
@@ -46,5 +54,13 @@ test.describe('practical municipal information', () => {
     await expect(
       page.locator('#site-menu').getByRole('link', { name: /Información práctica/ }),
     ).toHaveAttribute('href', '/informacion-practica/');
+
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/informacion-practica/');
+    const widths = await page.evaluate(() => ({
+      document: document.documentElement.scrollWidth,
+      viewport: document.documentElement.clientWidth,
+    }));
+    expect(widths.document).toBeLessThanOrEqual(widths.viewport);
   });
 });
