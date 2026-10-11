@@ -13,6 +13,26 @@ test.describe('current affairs sections', () => {
     );
   });
 
+  test('wraps long source URLs on narrow bando pages', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/bandos/1646075-visita-virgen-de-lourdes-a-nuestro-pueblo');
+
+    await expect(page.locator('.article-content a')).toBeVisible();
+    const widths = await page.evaluate(() => {
+      const article = document.querySelector<HTMLElement>('.article-shell');
+      const link = document.querySelector<HTMLElement>('.article-content a');
+      const articleRect = article?.getBoundingClientRect();
+      const linkRect = link?.getBoundingClientRect();
+      return {
+        article: article?.scrollWidth ?? 0,
+        articleClient: article?.clientWidth ?? 0,
+        linkRight: linkRect?.right ?? 0,
+        articleRight: articleRect?.right ?? 0,
+      };
+    });
+    expect(widths.article).toBeLessThanOrEqual(widths.articleClient);
+  });
+
   test('shows sourced municipal bandos and keeps the old path compatible', async ({ page }) => {
     await page.goto('/bandos/');
 

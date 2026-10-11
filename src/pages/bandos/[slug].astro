@@ -69,6 +69,10 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     box-sizing: border-box;
   }
 
+  :global(html) {
+    overflow-x: hidden;
+  }
+
   :global(body) {
     min-width: 320px;
     min-height: 100vh;
@@ -140,6 +144,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   .article-description {
     max-width: 42rem;
     margin: 2rem 0 1.5rem;
+    overflow-wrap: anywhere;
     color: #527066;
     font-size: 1.15rem;
     line-height: 1.65;
@@ -165,6 +170,12 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 
   .article-content :global(p) {
     margin: 0 0 1.5rem;
+    overflow-wrap: anywhere;
+  }
+
+  .article-content :global(a) {
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .article-source {
