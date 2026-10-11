@@ -22,6 +22,7 @@ export const navigationGroups: NavigationGroup[] = [
     links: [
       { label: 'Sobre el pueblo', href: '/sobre-el-pueblo/' },
       { label: 'Paisaje y patrimonio', href: '/sobre-el-pueblo/#patrimonio' },
+      { label: 'Rutas', href: '/rutas/' },
     ],
   },
   {

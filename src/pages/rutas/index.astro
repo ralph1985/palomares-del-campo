@@ -1,0 +1,382 @@
+---
+import ExternalLink from '../../components/ui/ExternalLink.astro';
+import SiteFooter from '../../components/layout/SiteFooter.astro';
+import SiteHeader from '../../components/layout/SiteHeader.astro';
+import { localRoutes } from '../../data/routes';
+
+const formatDistance = (distanceKm: number) =>
+  distanceKm.toLocaleString('es-ES', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+const formatDuration = (minutes: number) => {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  return `${hours} h ${remainingMinutes.toString().padStart(2, '0')} min`;
+};
+
+const formatDate = (date: string) =>
+  new Date(`${date}T00:00:00`).toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content="Rutas y paseos relacionados con Palomares del Campo, con fuentes visibles y estado de verificación."
+    />
+    <title>Rutas del pueblo · Palomares del Campo</title>
+  </head>
+  <body>
+    <SiteHeader />
+
+    <main>
+      <section class="routes-hero" aria-labelledby="page-title">
+        <div class="routes-shell">
+          <p class="eyebrow">Palomares del Campo · Visita</p>
+          <h1 id="page-title">Rutas del pueblo</h1>
+          <p>
+            Una primera selección de recorridos encontrados en fuentes externas. La etiqueta de cada
+            ficha indica qué está verificado y qué todavía requiere revisión local.
+          </p>
+        </div>
+      </section>
+
+      <section class="routes-section" aria-labelledby="routes-title">
+        <div class="routes-shell">
+          <div class="routes-heading">
+            <div>
+              <p class="eyebrow">Primer recorrido</p>
+              <h2 id="routes-title">Pasear también necesita contexto.</h2>
+            </div>
+            <p>
+              El entorno de Palomares ofrece caminos rurales para senderismo ligero según Turismo de
+              Castilla-La Mancha. El trazado de esta ficha procede de una plataforma externa.
+            </p>
+          </div>
+
+          <div class="route-list">
+            {localRoutes.map((route) => (
+              <article class="route-card">
+                <div class="route-card-header">
+                  <p class="route-status">{route.statusLabel}</p>
+                  <h3>{route.title}</h3>
+                  <p class="route-summary">{route.summary}</p>
+                </div>
+
+                <dl class="route-facts">
+                  <div>
+                    <dt>Distancia</dt>
+                    <dd>{formatDistance(route.distanceKm)} km</dd>
+                  </div>
+                  <div>
+                    <dt>Duración</dt>
+                    <dd>{formatDuration(route.durationMinutes)}</dd>
+                  </div>
+                  <div>
+                    <dt>Dificultad</dt>
+                    <dd>{route.difficulty}</dd>
+                  </div>
+                  <div>
+                    <dt>Desnivel positivo</dt>
+                    <dd>{route.elevationGainMetres} m</dd>
+                  </div>
+                </dl>
+
+                <p class="route-accessibility">
+                  <strong>Accesibilidad:</strong> {route.accessibilityNote}
+                </p>
+
+                <div class="route-disclaimer">
+                  <strong>No es una ruta municipal señalizada.</strong>
+                  <span>
+                    Consulta el trazado, el estado del camino y las condiciones antes de salir.
+                  </span>
+                </div>
+
+                <div class="route-links">
+                  <ExternalLink class="route-primary-link" href={route.routeSource.href}>
+                    {route.routeSource.label} <span aria-hidden="true">↗</span>
+                  </ExternalLink>
+                  <ExternalLink class="route-context-link" href={route.contextSource.href}>
+                    Contexto: {route.contextSource.label} <span aria-hidden="true">↗</span>
+                  </ExternalLink>
+                </div>
+                <p class="route-review">
+                  Fuente actualizada el {formatDate(route.sourceUpdatedAt)} · ficha revisada el
+                  {` ${formatDate(route.reviewedAt)}`}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="routes-note" aria-label="Criterio editorial de las rutas">
+        <div class="routes-shell">
+          <p>
+            Las próximas rutas solo pasarán a presentarse como recorridos propios cuando podamos
+            comprobar sus puntos, distancias, accesibilidad y condiciones sobre el terreno.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <SiteFooter />
+  </body>
+</html>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(body) {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    color: #19342d;
+    background: #f4f1e9;
+    font-family:
+      Inter,
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      sans-serif;
+  }
+
+  .routes-shell {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .routes-hero {
+    padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 9vw, 7rem);
+    color: #eff5ed;
+    background: #19342d;
+  }
+
+  .eyebrow {
+    margin: 0 0 1.2rem;
+    color: #e5b77e;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.95;
+  }
+
+  h1 {
+    max-width: 10ch;
+    color: #fff;
+    font-size: clamp(4rem, 12vw, 9rem);
+  }
+
+  .routes-hero p:last-child {
+    max-width: 35rem;
+    margin: 2rem 0 0;
+    color: #b7d0bc;
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    line-height: 1.7;
+  }
+
+  .routes-section {
+    padding: clamp(4.5rem, 10vw, 8rem) 0;
+    background: #d8e6d6;
+  }
+
+  .routes-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2rem, 7vw, 7rem);
+    align-items: end;
+    margin-bottom: 3rem;
+  }
+
+  .routes-heading .eyebrow {
+    color: #a05c32;
+  }
+
+  h2 {
+    max-width: 12ch;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+  }
+
+  .routes-heading > p {
+    max-width: 35rem;
+    margin: 0;
+    color: #527066;
+    line-height: 1.7;
+  }
+
+  .route-list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .route-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 2rem;
+    padding: clamp(1.5rem, 5vw, 3rem);
+    border-radius: 1.5rem;
+    background: #f4f1e9;
+  }
+
+  .route-card-header {
+    grid-column: 1 / -1;
+  }
+
+  .route-status {
+    width: fit-content;
+    margin: 0 0 1rem;
+    padding: 0.45rem 0.65rem;
+    border-radius: 999px;
+    color: #19342d;
+    background: #e5b77e;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    max-width: 18ch;
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+  }
+
+  .route-summary {
+    max-width: 37rem;
+    margin: 1.5rem 0 0;
+    color: #527066;
+    line-height: 1.7;
+  }
+
+  .route-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .route-facts div {
+    padding-top: 0.8rem;
+    border-top: 1px solid rgb(25 52 45 / 22%);
+  }
+
+  .route-facts dt {
+    color: #a05c32;
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .route-facts dd {
+    margin: 0.45rem 0 0;
+    color: #19342d;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.5rem;
+  }
+
+  .route-accessibility {
+    margin: 0;
+    color: #527066;
+    line-height: 1.7;
+  }
+
+  .route-disclaimer {
+    display: grid;
+    gap: 0.4rem;
+    grid-column: 1 / -1;
+    padding: 1rem 1.2rem;
+    border-left: 0.25rem solid #a05c32;
+    color: #19342d;
+    background: #f0dfc9;
+  }
+
+  .route-disclaimer span {
+    color: #527066;
+    line-height: 1.5;
+  }
+
+  .route-links {
+    display: flex;
+    grid-column: 1 / -1;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    align-items: center;
+  }
+
+  .route-links a {
+    font-weight: 750;
+    text-underline-offset: 0.25em;
+  }
+
+  .route-primary-link {
+    color: #19342d;
+  }
+
+  .route-context-link {
+    color: #a05c32;
+    font-size: 0.9rem;
+  }
+
+  .route-review {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: #527066;
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+
+  .routes-note {
+    padding: 1.5rem 0;
+    color: #527066;
+    background: #f4f1e9;
+  }
+
+  .routes-note p {
+    max-width: 48rem;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 50rem) {
+    .routes-heading,
+    .route-card {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .routes-shell {
+      width: min(100% - 2rem, 72rem);
+    }
+
+    .route-facts {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>
