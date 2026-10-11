@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import ActionLink from './ui/ActionLink.astro';
 import NewsCard from './NewsCard.astro';
 
 const posts = (await getCollection('noticias'))
@@ -29,9 +30,9 @@ const posts = (await getCollection('noticias'))
       <p class="news-empty">Pronto publicaremos las primeras noticias.</p>
     )}
 
-    <a class="news-archive-link" href="/noticias">
+    <ActionLink class="news-archive-link" variant="text" href="/noticias">
       Ver todas las noticias <span aria-hidden="true">→</span>
-    </a>
+    </ActionLink>
   </div>
 </section>
 
@@ -94,19 +95,7 @@ const posts = (await getCollection('noticias'))
   }
 
   .news-archive-link {
-    display: inline-flex;
-    gap: 0.55rem;
     margin-top: 2rem;
-    color: #2f6652;
-    font-weight: 750;
-    text-decoration: none;
-  }
-
-  .news-archive-link:hover,
-  .news-archive-link:focus-visible {
-    color: #a05c32;
-    text-decoration: underline;
-    text-underline-offset: 0.25rem;
   }
 
   @media (max-width: 50rem) {

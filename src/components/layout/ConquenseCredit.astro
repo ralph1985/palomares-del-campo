@@ -1,11 +1,10 @@
 ---
+import ExternalLink from '../ui/ExternalLink.astro';
 ---
 
-<a
+<ExternalLink
   class="conquense-credit"
   href="https://conquense.dev/"
-  target="_blank"
-  rel="noopener noreferrer"
   aria-label="Web realizada por conquense.dev"
 >
   <span class="conquense-credit-label">Web realizada por</span>
@@ -19,7 +18,7 @@
     />
     <canvas data-conquense-logo-canvas aria-hidden="true"></canvas>
   </span>
-</a>
+</ExternalLink>
 
 <script>
   import '../../scripts/conquense-logo.ts';

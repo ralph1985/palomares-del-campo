@@ -1,4 +1,5 @@
 ---
+import ActionLink from '../../components/ui/ActionLink.astro';
 import SiteFooter from '../../components/layout/SiteFooter.astro';
 import GameMap from '../../components/game/GameMap.astro';
 import GameRules from '../../components/game/GameRules.astro';
@@ -34,9 +35,9 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
               en juego.
             </h1>
             <p>Encuentra la ubicación. Llega antes que el resto. Captura y sube puestos.</p>
-            <a class="game-hero-cta" href="#game-map">
+            <ActionLink class="game-hero-cta" variant="solid" href="#game-map">
               Entrar en la partida <span aria-hidden="true">↓</span>
-            </a>
+            </ActionLink>
           </div>
 
           <div class="match-card" aria-label="Estado de la partida">
@@ -190,23 +191,7 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
   }
 
   .game-hero-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.7rem;
     margin-top: 1.5rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid rgb(229 183 126 / 45%);
-    border-radius: 0.55rem;
-    color: #19342d;
-    background: #e5b77e;
-    font-size: 0.78rem;
-    font-weight: 800;
-    text-decoration: none;
-    text-transform: uppercase;
-  }
-
-  .game-hero-cta:hover {
-    background: #f0c995;
   }
 
   .match-card {

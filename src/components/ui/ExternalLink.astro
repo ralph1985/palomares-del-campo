@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends Omit<HTMLAttributes<'a'>, 'href'> {
+  href: string;
+}
+
+const { href, class: className, ...linkAttributes } = Astro.props;
+---
+
+<a
+  {...linkAttributes}
+  href={href}
+  class:list={['ui-external-link', className]}
+  data-ui-external-link
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <slot />
+</a>

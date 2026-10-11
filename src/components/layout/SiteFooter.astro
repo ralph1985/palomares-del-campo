@@ -1,5 +1,6 @@
 ---
 import ConquenseCredit from './ConquenseCredit.astro';
+import ExternalLink from '../ui/ExternalLink.astro';
 import { footerExploreLinks, footerOfficialLinks, municipalContact } from '../../data/site-footer';
 
 const currentYear = new Date().getFullYear();
@@ -40,10 +41,10 @@ const currentYear = new Date().getFullYear();
       <ul>
         {footerOfficialLinks.map((link) => (
           <li>
-            <a href={link.href} target="_blank" rel="noopener noreferrer">
+            <ExternalLink href={link.href}>
               {link.label}
               <span aria-hidden="true">↗</span>
-            </a>
+            </ExternalLink>
           </li>
         ))}
       </ul>

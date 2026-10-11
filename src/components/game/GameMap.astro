@@ -1,4 +1,5 @@
 ---
+import ExternalLink from '../ui/ExternalLink.astro';
 import GameStatusPanel from './GameStatusPanel.astro';
 const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
 ---
@@ -48,9 +49,7 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
       ></div>
       <div class="map-attribution-note">
         Mapa ©{' '}
-        <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">
-          OpenStreetMap
-        </a>
+        <ExternalLink href="https://www.openstreetmap.org/copyright">OpenStreetMap</ExternalLink>
       </div>
     </div>
 

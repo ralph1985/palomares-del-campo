@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import ExternalLink from '../../components/ui/ExternalLink.astro';
 import SiteFooter from '../../components/layout/SiteFooter.astro';
 import SiteHeader from '../../components/layout/SiteHeader.astro';
 
@@ -56,9 +57,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 
         <footer class="article-source">
           <span>Fuente original:</span>
-          <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
-            {sourceName} ↗
-          </a>
+          <ExternalLink href={sourceUrl}>{sourceName} ↗</ExternalLink>
         </footer>
       </article>
     </main>

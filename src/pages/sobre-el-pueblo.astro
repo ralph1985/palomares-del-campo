@@ -1,4 +1,5 @@
 ---
+import ExternalLink from '../components/ui/ExternalLink.astro';
 import HeritageCard from '../components/about/HeritageCard.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
@@ -40,13 +41,9 @@ import '../styles/pages/sobre-el-pueblo.css';
                 height="890"
               />
               <figcaption>
-                <a
-                  href={aboutPalomares.heroImage.sourceHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <ExternalLink href={aboutPalomares.heroImage.sourceHref}>
                   {aboutPalomares.heroImage.sourceLabel} <span aria-hidden="true">↗</span>
-                </a>
+                </ExternalLink>
               </figcaption>
             </figure>
           </div>
@@ -63,14 +60,9 @@ import '../styles/pages/sobre-el-pueblo.css';
             {aboutPalomares.history.paragraphs.map((paragraph) => (
               <p>{paragraph}</p>
             ))}
-            <a
-              class="source-link"
-              href={aboutPalomares.history.source.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <ExternalLink class="source-link" href={aboutPalomares.history.source.href}>
               {aboutPalomares.history.source.label} <span aria-hidden="true">↗</span>
-            </a>
+            </ExternalLink>
           </div>
         </div>
       </section>
@@ -107,13 +99,9 @@ import '../styles/pages/sobre-el-pueblo.css';
               loading="lazy"
             />
             <figcaption>
-              <a
-                href={aboutPalomares.landscape.image.sourceHref}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <ExternalLink href={aboutPalomares.landscape.image.sourceHref}>
                 {aboutPalomares.landscape.image.sourceLabel} <span aria-hidden="true">↗</span>
-              </a>
+              </ExternalLink>
             </figcaption>
           </figure>
           <div class="landscape-copy">
@@ -121,22 +109,12 @@ import '../styles/pages/sobre-el-pueblo.css';
             <h2 id="landscape-title">{aboutPalomares.landscape.title}</h2>
             <p>{aboutPalomares.landscape.text}</p>
             <div class="landscape-actions">
-              <a
-                class="button-link"
-                href={aboutPalomares.landscape.directions.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <ExternalLink class="button-link" href={aboutPalomares.landscape.directions.href}>
                 {aboutPalomares.landscape.directions.label} <span aria-hidden="true">↗</span>
-              </a>
-              <a
-                class="source-link"
-                href={aboutPalomares.landscape.source.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              </ExternalLink>
+              <ExternalLink class="source-link" href={aboutPalomares.landscape.source.href}>
                 {aboutPalomares.landscape.source.label} <span aria-hidden="true">↗</span>
-              </a>
+              </ExternalLink>
             </div>
           </div>
         </div>
@@ -168,23 +146,14 @@ import '../styles/pages/sobre-el-pueblo.css';
                 loading="lazy"
               />
               <figcaption>
-                <a
-                  href={aboutPalomares.traditions.image.sourceHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <ExternalLink href={aboutPalomares.traditions.image.sourceHref}>
                   {aboutPalomares.traditions.image.sourceLabel} <span aria-hidden="true">↗</span>
-                </a>
+                </ExternalLink>
               </figcaption>
             </figure>
-            <a
-              class="source-link"
-              href={aboutPalomares.traditions.source.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <ExternalLink class="source-link" href={aboutPalomares.traditions.source.href}>
               {aboutPalomares.traditions.source.label} <span aria-hidden="true">↗</span>
-            </a>
+            </ExternalLink>
           </div>
         </div>
       </section>
@@ -199,9 +168,9 @@ import '../styles/pages/sobre-el-pueblo.css';
             <ul class="sources-list">
               {aboutPalomares.sources.map((source) => (
                 <li>
-                  <a href={source.href} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink href={source.href}>
                     {source.label} <span aria-hidden="true">↗</span>
-                  </a>
+                  </ExternalLink>
                 </li>
               ))}
             </ul>

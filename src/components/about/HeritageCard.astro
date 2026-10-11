@@ -1,5 +1,6 @@
 ---
 import type { HeritageFeature } from '../../data/about-palomares';
+import ExternalLink from '../ui/ExternalLink.astro';
 
 interface Props extends HeritageFeature {
   index: number;
@@ -13,9 +14,9 @@ const { eyebrow, title, description, body, source, index } = Astro.props;
   <h3>{title}</h3>
   <p class="heritage-card-description">{description}</p>
   <p class="heritage-card-body">{body}</p>
-  <a href={source.href} target="_blank" rel="noopener noreferrer">
+  <ExternalLink href={source.href}>
     {source.label} <span aria-hidden="true">↗</span>
-  </a>
+  </ExternalLink>
 </article>
 
 <style>
