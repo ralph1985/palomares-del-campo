@@ -17,6 +17,8 @@ export interface LocalRoute {
   contextSource: RouteSource;
   sourceUpdatedAt: string;
   reviewedAt: string;
+  traceStatusLabel: string;
+  traceStatusNote: string;
 }
 
 export const localRoutes: LocalRoute[] = [
@@ -42,5 +44,8 @@ export const localRoutes: LocalRoute[] = [
     },
     sourceUpdatedAt: '2024-07-26',
     reviewedAt: '2026-10-11',
+    traceStatusLabel: 'Mapa propio no disponible todavía.',
+    traceStatusNote:
+      'La descarga GPX de la fuente requiere una cuenta de Komoot; el trazado se consulta en el enlace externo y no se copia en este sitio.',
   },
 ];

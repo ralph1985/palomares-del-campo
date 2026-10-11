@@ -14,6 +14,8 @@ test.describe('local routes', () => {
     await expect(page.getByText('Fácil', { exact: true })).toBeVisible();
     await expect(page.getByText('Recomendación externa')).toBeVisible();
     await expect(page.getByText('No es una ruta municipal señalizada.')).toBeVisible();
+    await expect(page.getByText('Mapa propio no disponible todavía.')).toBeVisible();
+    await expect(page.getByText(/La descarga GPX de la fuente requiere una cuenta/)).toBeVisible();
     await expect(page.getByText(/Fuente actualizada el 26 de julio de 2024/)).toBeVisible();
     await expect(page.getByRole('link', { name: /Ver ruta en Komoot/ })).toHaveAttribute(
       'href',

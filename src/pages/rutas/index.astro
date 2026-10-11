@@ -102,6 +102,11 @@ const formatDate = (date: string) =>
                   </span>
                 </div>
 
+                <div class="route-trace-status">
+                  <strong>{route.traceStatusLabel}</strong>
+                  <span>{route.traceStatusNote}</span>
+                </div>
+
                 <div class="route-links">
                   <ExternalLink class="route-primary-link" href={route.routeSource.href}>
                     {route.routeSource.label} <span aria-hidden="true">↗</span>
@@ -315,6 +320,21 @@ const formatDate = (date: string) =>
   }
 
   .route-disclaimer span {
+    color: #527066;
+    line-height: 1.5;
+  }
+
+  .route-trace-status {
+    display: grid;
+    grid-column: 1 / -1;
+    gap: 0.4rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid rgb(25 52 45 / 22%);
+    color: #19342d;
+    background: #e8eee5;
+  }
+
+  .route-trace-status span {
     color: #527066;
     line-height: 1.5;
   }
