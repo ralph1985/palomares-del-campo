@@ -15,6 +15,17 @@ test.describe('local ball game', () => {
     await expect(page.locator('[data-game-ranking]')).toBeVisible();
   });
 
+  test('uses shared semantic button variants for game actions', async ({ page }) => {
+    await page.goto('/juego/');
+
+    await expect(page.locator('[data-ui-button][data-ui-variant="secondary"]')).toHaveCount(2);
+    await expect(page.locator('[data-ui-button][data-ui-variant="primary"]')).toHaveCount(1);
+    await expect(page.locator('[data-ui-button][data-ui-variant="capture"]')).toHaveCount(1);
+    await expect(page.locator('[data-ui-button][data-ui-variant="simulator"]')).toHaveCount(1);
+    await expect(page.locator('[data-game-join]')).toHaveAttribute('type', 'submit');
+    await expect(page.locator('[data-game-capture]')).toHaveAttribute('type', 'button');
+  });
+
   test('switches between the standard and immersive game modes', async ({ page }) => {
     await page.goto('/juego/');
 

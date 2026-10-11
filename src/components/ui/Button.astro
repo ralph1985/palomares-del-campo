@@ -1,0 +1,85 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type ButtonVariant = 'primary' | 'secondary' | 'capture' | 'simulator';
+
+interface Props extends HTMLAttributes<'button'> {
+  variant?: ButtonVariant;
+}
+
+const { variant = 'secondary', class: className, ...buttonAttributes } = Astro.props;
+---
+
+<button
+  {...buttonAttributes}
+  class:list={['game-button', `game-button-${variant}`, className]}
+  data-ui-button
+  data-ui-variant={variant}
+>
+  <slot />
+</button>
+
+<style is:global>
+  .game-button {
+    min-height: 3rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 750;
+    transition:
+      transform 180ms ease,
+      background 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .game-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+
+  .game-button:focus-visible {
+    outline: 3px solid #e5b77e;
+    outline-offset: 3px;
+  }
+
+  .game-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  .game-button-primary,
+  .game-button-capture {
+    color: #19342d;
+    background: #e5b77e;
+  }
+
+  .game-button-primary:hover:not(:disabled),
+  .game-button-capture:hover:not(:disabled) {
+    background: #f0c995;
+  }
+
+  .game-button-secondary {
+    border-color: rgb(239 245 237 / 28%);
+    color: #eff5ed;
+    background: transparent;
+  }
+
+  .game-button-secondary:hover:not(:disabled) {
+    border-color: #b7d0bc;
+    background: rgb(239 245 237 / 8%);
+  }
+
+  .game-button-simulator {
+    min-height: 2.6rem;
+    border-color: rgb(229 183 126 / 50%);
+    color: #e5b77e;
+    background: transparent;
+    font-size: 0.78rem;
+  }
+
+  .game-button-simulator:hover:not(:disabled) {
+    background: rgb(229 183 126 / 12%);
+  }
+</style>

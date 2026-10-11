@@ -1,5 +1,6 @@
 ---
 import { gameLocations } from '../../data/game-locations';
+import Button from '../ui/Button.astro';
 ---
 
 <aside class="game-panel" aria-labelledby="game-status-title">
@@ -27,9 +28,9 @@ import { gameLocations } from '../../data/game-locations';
         data-game-nickname
         required
       />
-      <button class="game-button game-button-secondary" type="submit" data-game-join>
+      <Button variant="secondary" type="submit" data-game-join>
         Entrar
-      </button>
+      </Button>
     </div>
     <p class="game-player-feedback" data-game-player-feedback role="status">
       Elige un nick para entrar en la partida.
@@ -58,15 +59,15 @@ import { gameLocations } from '../../data/game-locations';
   </div>
 
   <div class="game-actions">
-    <button class="game-button game-button-primary" type="button" data-game-locate>
+    <Button variant="primary" type="button" data-game-locate>
       Obtener ubicación
-    </button>
-    <button class="game-button game-button-secondary" type="button" data-game-check disabled>
+    </Button>
+    <Button variant="secondary" type="button" data-game-check disabled>
       Comprobar posición
-    </button>
-    <button class="game-button game-button-capture" type="button" data-game-capture disabled>
+    </Button>
+    <Button variant="capture" type="button" data-game-capture disabled>
       Capturar bola <span aria-hidden="true">+10</span>
-    </button>
+    </Button>
   </div>
 
   <p class="game-feedback" data-game-feedback role="status">
@@ -90,9 +91,9 @@ import { gameLocations } from '../../data/game-locations';
         <option value="outside">Fuera del radio</option>
         <option value="low-accuracy">Precisión insuficiente</option>
       </select>
-      <button class="game-button game-button-simulator" type="button" data-game-simulate disabled>
+      <Button variant="simulator" type="button" data-game-simulate disabled>
         Simular posición
-      </button>
+      </Button>
     </div>
   )}
 
@@ -268,57 +269,6 @@ import { gameLocations } from '../../data/game-locations';
     margin-top: 1.25rem;
   }
 
-  .game-button {
-    min-height: 3rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid transparent;
-    border-radius: 999px;
-    cursor: pointer;
-    font: inherit;
-    font-size: 0.85rem;
-    font-weight: 750;
-    transition:
-      transform 180ms ease,
-      background 180ms ease,
-      border-color 180ms ease;
-  }
-
-  .game-button:hover:not(:disabled) {
-    transform: translateY(-2px);
-  }
-
-  .game-button:focus-visible {
-    outline: 3px solid #e5b77e;
-    outline-offset: 3px;
-  }
-
-  .game-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.45;
-  }
-
-  .game-button-primary,
-  .game-button-capture {
-    color: #19342d;
-    background: #e5b77e;
-  }
-
-  .game-button-primary:hover:not(:disabled),
-  .game-button-capture:hover:not(:disabled) {
-    background: #f0c995;
-  }
-
-  .game-button-secondary {
-    border-color: rgb(239 245 237 / 28%);
-    color: #eff5ed;
-    background: transparent;
-  }
-
-  .game-button-secondary:hover:not(:disabled) {
-    border-color: #b7d0bc;
-    background: rgb(239 245 237 / 8%);
-  }
-
   .game-feedback {
     min-height: 3.2rem;
     margin: 1rem 0 0;
@@ -352,18 +302,6 @@ import { gameLocations } from '../../data/game-locations';
   .game-simulator select:focus-visible {
     outline: 3px solid #e5b77e;
     outline-offset: 2px;
-  }
-
-  .game-button-simulator {
-    min-height: 2.6rem;
-    border-color: rgb(229 183 126 / 50%);
-    color: #e5b77e;
-    background: transparent;
-    font-size: 0.78rem;
-  }
-
-  .game-button-simulator:hover:not(:disabled) {
-    background: rgb(229 183 126 / 12%);
   }
 
   .game-ranking {
