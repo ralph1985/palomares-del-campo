@@ -1,5 +1,6 @@
 ---
 import GameStatusPanel from './GameStatusPanel.astro';
+const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
 ---
 
 <section
@@ -9,14 +10,17 @@ import GameStatusPanel from './GameStatusPanel.astro';
 >
   <div class="game-map-heading">
     <div>
-      <p class="eyebrow">Mapa de juego</p>
-      <h2 id="game-map-title">La bola está en el pueblo.</h2>
+      <p class="eyebrow">01 / Tablero de juego</p>
+      <h2 id="game-map-title">Encuentra el punto activo.</h2>
       <p class="game-map-intro">
-        Acércate a la coordenada activa, comprueba tu posición y prueba la captura. El ranking y la
-        bola compartida se actualizan mediante Convex cuando el backend está configurado.
+        Acércate al objetivo, comprueba tu posición y captura antes que los demás. El ranking y la
+        bola compartida se actualizan en directo.
       </p>
     </div>
-    <span class="prototype-badge">Multijugador en desarrollo</span>
+    <span class="prototype-badge">
+      <span aria-hidden="true"></span>
+      {hasRemoteGame ? 'Multijugador en directo' : 'Modo local de prueba'}
+    </span>
   </div>
 
   <div class="game-map-layout">
@@ -93,8 +97,11 @@ import GameStatusPanel from './GameStatusPanel.astro';
   }
 
   .game-map-section {
+    position: relative;
+    z-index: 0;
+    isolation: isolate;
     width: min(100% - 2rem, 80rem);
-    margin: 2rem auto 0;
+    margin: 1rem auto 0;
     padding: clamp(1.25rem, 3vw, 2rem);
     overflow: hidden;
     border: 1px solid rgb(239 245 237 / 12%);
@@ -125,10 +132,10 @@ import GameStatusPanel from './GameStatusPanel.astro';
   h3 {
     margin: 0;
     color: #eff5ed;
-    font-family: Georgia, 'Times New Roman', serif;
-    font-weight: 500;
-    letter-spacing: -0.055em;
-    line-height: 0.98;
+    font-family: inherit;
+    font-weight: 850;
+    letter-spacing: -0.065em;
+    line-height: 0.92;
   }
 
   h2 {
@@ -146,6 +153,9 @@ import GameStatusPanel from './GameStatusPanel.astro';
   }
 
   .prototype-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
     flex: none;
     padding: 0.55rem 0.75rem;
     border: 1px solid rgb(229 183 126 / 42%);
@@ -156,6 +166,15 @@ import GameStatusPanel from './GameStatusPanel.astro';
     font-weight: 750;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  .prototype-badge::before {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    background: #e5b77e;
+    box-shadow: 0 0 0 0.2rem rgb(229 183 126 / 12%);
+    content: '';
   }
 
   .game-map-layout {
