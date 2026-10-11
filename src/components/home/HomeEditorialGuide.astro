@@ -1,0 +1,148 @@
+---
+import ActionLink from '../ui/ActionLink.astro';
+import { homeEditorialEntries } from '../../data/home';
+---
+
+<section class="editorial-section" aria-labelledby="editorial-title">
+  <div class="editorial-shell">
+    <div class="editorial-heading">
+      <p class="audience-eyebrow">Una primera guía</p>
+      <h2 id="editorial-title">Palomares se descubre de cuatro maneras.</h2>
+    </div>
+
+    <div class="editorial-grid">
+      {homeEditorialEntries.map((entry, index) => (
+        <article class:list={['editorial-card', `editorial-card--${entry.accent}`]}>
+          <span class="editorial-index">0{index + 1}</span>
+          <div>
+            <p class="audience-card-kicker">{entry.eyebrow}</p>
+            <h3>{entry.title}</h3>
+            <p>{entry.description}</p>
+          </div>
+          <ActionLink variant="underline" href={entry.href}>
+            {entry.linkLabel} <span aria-hidden="true">→</span>
+          </ActionLink>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .editorial-section {
+    padding: clamp(4.5rem, 10vw, 8rem) 0;
+    color: #19342d;
+    background: #e9eee7;
+  }
+
+  .editorial-shell {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .editorial-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+    gap: 2rem;
+    align-items: end;
+    margin-bottom: 2.5rem;
+  }
+
+  .editorial-heading h2 {
+    max-width: 15ch;
+  }
+
+  .editorial-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .editorial-card {
+    display: flex;
+    min-height: 20rem;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border-radius: 1.5rem;
+    background: #f4f1e9;
+  }
+
+  .editorial-card--landscape {
+    background: #d8e6d6;
+  }
+
+  .editorial-card--heritage {
+    background: #f0dfc9;
+  }
+
+  .editorial-card--traditions {
+    color: #eff5ed;
+    background: #2f6652;
+  }
+
+  .editorial-card--game {
+    color: #eff5ed;
+    background: #19342d;
+  }
+
+  .editorial-index {
+    color: #a05c32;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+  }
+
+  .editorial-card--traditions .editorial-index,
+  .editorial-card--game .editorial-index {
+    color: #e5b77e;
+  }
+
+  .editorial-card h3 {
+    margin: 0 0 0.8rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(2.4rem, 5vw, 4.6rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.95;
+  }
+
+  .editorial-card p:not(.audience-card-kicker) {
+    max-width: 24rem;
+    margin: 0;
+    color: #527066;
+    line-height: 1.6;
+  }
+
+  .editorial-card--traditions p:not(.audience-card-kicker),
+  .editorial-card--game p:not(.audience-card-kicker) {
+    color: #c3d9c7;
+  }
+
+  .editorial-card .ui-action-link {
+    align-self: flex-start;
+    margin-top: 2rem;
+  }
+
+  .editorial-card--traditions .ui-action-link,
+  .editorial-card--game .ui-action-link {
+    color: #e5b77e;
+  }
+
+  @media (max-width: 50rem) {
+    .editorial-heading {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .editorial-shell {
+      width: min(100% - 2rem, 72rem);
+    }
+
+    .editorial-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
