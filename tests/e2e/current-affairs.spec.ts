@@ -13,25 +13,35 @@ test.describe('current affairs sections', () => {
     );
   });
 
-  test('keeps notices separate from editorial news', async ({ page }) => {
-    await page.goto('/avisos/');
+  test('shows sourced municipal bandos and keeps the old path compatible', async ({ page }) => {
+    await page.goto('/bandos/');
 
-    await expect(page).toHaveTitle(/Avisos/);
-    await expect(page.getByRole('heading', { level: 1, name: 'Avisos' })).toBeVisible();
-    await expect(page.getByText('No hay avisos vigentes.')).toBeVisible();
-    await expect(page.locator('[data-current-affairs-empty]')).toHaveAttribute(
-      'data-section',
-      'avisos',
-    );
+    await expect(page).toHaveTitle(/Bandos/);
+    await expect(page.getByRole('heading', { level: 1, name: 'Bandos' })).toBeVisible();
+    await expect(page.locator('[data-bando-card]')).not.toHaveCount(0);
+    await expect(page.getByText('Palomares del Campo Informa').first()).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: /Ver comunicado original/ }).first(),
+    ).toHaveAttribute('href', /https:\/\/www\.bandomovil\.com\//);
+
+    await page.getByLabel('Buscar por título').fill('autobús');
+    await expect(page.locator('[data-bando-card]:visible')).not.toHaveCount(0);
+    await page.getByLabel('Buscar por título').fill('texto que no existe');
+    await expect(page.getByText('No hay bandos que coincidan con estos filtros.')).toBeVisible();
+    await page.getByLabel('Buscar por título').fill('autobús');
+
+    await page.locator('[data-bando-card] h2 a').first().click();
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await expect(page.getByText('Fuente original:')).toBeVisible();
+    await expect(page.getByRole('link', { name: /Palomares del Campo Informa/ })).toBeVisible();
+
+    await page.goto('/avisos/');
+    await expect(page).toHaveURL(/\/bandos\/$/);
 
     await page.goto('/');
     await page.getByRole('button', { name: 'Explorar' }).click();
     const menu = page.locator('#site-menu');
-    await expect(menu.getByRole('link', { name: /Noticias/ })).toHaveAttribute(
-      'href',
-      '/noticias/',
-    );
+    await expect(menu.getByRole('link', { name: /Bandos/ })).toHaveAttribute('href', '/bandos/');
     await expect(menu.getByRole('link', { name: /Agenda/ })).toHaveAttribute('href', '/agenda/');
-    await expect(menu.getByRole('link', { name: /Avisos/ })).toHaveAttribute('href', '/avisos/');
   });
 });

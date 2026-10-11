@@ -30,7 +30,7 @@ export const navigationGroups: NavigationGroup[] = [
     links: [
       { label: 'Noticias', href: '/noticias/' },
       { label: 'Agenda', href: '/agenda/' },
-      { label: 'Avisos', href: '/avisos/' },
+      { label: 'Bandos', href: '/bandos/' },
     ],
   },
   {

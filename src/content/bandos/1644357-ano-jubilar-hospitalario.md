@@ -1,0 +1,14 @@
+---
+title: 'AÑO JUBILAR HOSPITALARIO'
+description: 'EL PRÓXIMO SÁBADO, 19 DE SEPTIEMBRE, VENDRÁ LA VIRGEN DE LOURDES A NUESTRO PUEBLO. A PARTIR DE LAS 18:30 SE SALDRÁ DESDE ERMITA HASTA LA IGLESIA PARA DAR COMIENZO A LA SANTA MISA,…'
+author: 'Ayuntamiento de Palomares del Campo'
+date: 2026-09-17T09:36:08.000Z
+category: 'Info General'
+sourceName: 'Palomares del Campo Informa'
+sourceUrl: 'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1644357'
+sourceId: '1644357'
+---
+
+EL PRÓXIMO SÁBADO, 19 DE SEPTIEMBRE, VENDRÁ LA VIRGEN DE LOURDES A NUESTRO PUEBLO.
+
+A PARTIR DE LAS 18:30 SE SALDRÁ DESDE ERMITA HASTA LA IGLESIA PARA DAR COMIENZO A LA SANTA MISA, SEGUIDA DE UNA PROCESIÓN DE ANTORCHAS.

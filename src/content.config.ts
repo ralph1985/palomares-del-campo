@@ -18,6 +18,24 @@ const noticias = defineCollection({
   }),
 });
 
+const bandos = defineCollection({
+  loader: glob({
+    pattern: '**/[^_]*.md',
+    base: './src/content/bandos',
+  }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    author: z.string().default('Ayuntamiento de Palomares del Campo'),
+    date: z.coerce.date(),
+    category: z.string().default('Info General'),
+    sourceName: z.string(),
+    sourceUrl: z.string().url(),
+    sourceId: z.string(),
+  }),
+});
+
 export const collections = {
   noticias,
+  bandos,
 };

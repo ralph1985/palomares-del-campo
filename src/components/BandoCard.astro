@@ -1,0 +1,121 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ExternalLink from './ui/ExternalLink.astro';
+
+interface Props {
+  post: CollectionEntry<'bandos'>;
+}
+
+const { post } = Astro.props;
+const { title, description, date, category, sourceName, sourceUrl } = post.data;
+const formattedDate = new Intl.DateTimeFormat('es-ES', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(date);
+---
+
+<article
+  class="bando-card"
+  data-bando-card
+  data-bando-title={title.toLocaleLowerCase('es-ES')}
+  data-bando-category={category}
+>
+  <div class="bando-card-meta">
+    <time datetime={date.toISOString()}>{formattedDate}</time>
+    <span aria-hidden="true">·</span>
+    <span>{category}</span>
+  </div>
+  <h2>
+    <a href={`/bandos/${post.id}`}>{title}</a>
+  </h2>
+  <p>{description}</p>
+  <div class="bando-card-footer">
+    <span>{sourceName}</span>
+    <ExternalLink href={sourceUrl}>
+      Ver comunicado original <span aria-hidden="true">↗</span>
+    </ExternalLink>
+  </div>
+</article>
+
+<style>
+  .bando-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 18rem;
+    padding: clamp(1.35rem, 3vw, 2rem);
+    border: 1px solid rgb(25 52 45 / 14%);
+    border-radius: 1.15rem;
+    background: #fffdf8;
+    box-shadow: 0 0.75rem 2rem rgb(25 52 45 / 7%);
+  }
+
+  .bando-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    color: #a05c32;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .bando-card h2 {
+    margin: 1.25rem 0 0.8rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+  }
+
+  .bando-card h2 a {
+    color: #19342d;
+    text-decoration: none;
+  }
+
+  .bando-card h2 a:hover,
+  .bando-card h2 a:focus-visible {
+    color: #a05c32;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+
+  .bando-card p {
+    margin: 0;
+    color: #527066;
+    line-height: 1.6;
+  }
+
+  .bando-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    color: #6e8b7c;
+    font-size: 0.78rem;
+  }
+
+  .bando-card-footer a {
+    color: #2f6652;
+    font-weight: 750;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .bando-card-footer a:hover,
+  .bando-card-footer a:focus-visible {
+    color: #a05c32;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+
+  @media (max-width: 38rem) {
+    .bando-card-footer {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

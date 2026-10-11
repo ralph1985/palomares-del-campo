@@ -14,14 +14,4 @@ export interface AgendaItem {
   status: 'upcoming' | 'past' | 'cancelled';
 }
 
-export interface NoticeItem {
-  title: string;
-  summary: string;
-  publishedAt: string;
-  expiresAt?: string;
-  source: CurrentAffairsSource;
-  status: 'current' | 'expired';
-}
-
 export const agendaItems: AgendaItem[] = [];
-export const noticeItems: NoticeItem[] = [];
