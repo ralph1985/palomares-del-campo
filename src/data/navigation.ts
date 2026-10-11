@@ -12,6 +12,7 @@ export const navigationGroups: NavigationGroup[] = [
   {
     label: 'Vecinos',
     links: [
+      { label: 'Información práctica', href: '/informacion-practica/' },
       { label: 'Servicios municipales', href: '/#vecinos' },
       { label: 'Contacto', href: '/#contacto' },
     ],

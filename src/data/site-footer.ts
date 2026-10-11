@@ -47,6 +47,6 @@ export const municipalContact = {
   locality: 'Palomares del Campo, Cuenca',
   judicialDistrict: 'Partido judicial: Tarancón',
   phone: '969 277 601',
-  phoneHref: '+34969277601',
+  phoneHref: '969277601',
   email: 'ayto.palomares@gmail.com',
 };
