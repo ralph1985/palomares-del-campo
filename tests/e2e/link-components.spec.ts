@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test.describe('shared link components', () => {
   test('uses action-link variants for internal calls to action', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('[data-ui-link][data-ui-variant="underline"]')).toHaveCount(1);
+    await expect(page.locator('[data-ui-link][data-ui-variant="underline"]')).toHaveCount(2);
     await expect(page.locator('[data-ui-link][data-ui-variant="text"]')).toHaveCount(1);
 
     await page.goto('/juego/');
