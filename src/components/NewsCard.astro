@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import CollectionCardMeta from './ui/CollectionCardMeta.astro';
 
 interface Props {
   post: CollectionEntry<'noticias'>;
@@ -9,11 +10,6 @@ const { post } = Astro.props;
 const { title, description, date, sourceName, category } = post.data;
 const categoryLabel = category ?? 'Actualidad';
 const searchText = `${title} ${description} ${categoryLabel} ${sourceName} ${post.body ?? ''}`;
-const formattedDate = new Intl.DateTimeFormat('es-ES', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-}).format(date);
 ---
 
 <article
@@ -23,11 +19,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   data-search-category={categoryLabel}
   data-search-year={date.getFullYear()}
 >
-  <div class="news-card-meta">
-    <time datetime={date.toISOString()}>{formattedDate}</time>
-    <span aria-hidden="true">·</span>
-    <span>{sourceName}</span>
-  </div>
+  <CollectionCardMeta date={date} context={sourceName} />
   <h3>
     <a href={`/noticias/${post.id}`}>{title}</a>
   </h3>
@@ -62,17 +54,6 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   .news-card:hover {
     transform: translateY(-0.3rem);
     box-shadow: 0 1.2rem 2.5rem rgb(25 52 45 / 12%);
-  }
-
-  .news-card-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-    color: var(--color-clay);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-strong);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
   }
 
   .news-card h3 {

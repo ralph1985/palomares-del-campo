@@ -11,6 +11,7 @@ Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refac
 - Hay una hoja CSS externa específica de página: `src/styles/pages/sobre-el-pueblo.css`.
 - Los estilos compartidos de layout, UI, archivo y tarjetas permanecen junto a sus componentes porque Astro los encapsula.
 - La Fase 2 extrajo responsabilidades independientes del juego y la tarjeta de alojamiento repetida sin crear una hoja global monolítica.
+- La Fase 3 comparte la metadata visual de las tarjetas editoriales mediante `src/components/ui/CollectionCardMeta.astro`, sin fusionar los dominios de bandos y noticias.
 - `/juego/` mantiene un tema independiente y no debe mezclarse con la paleta clara general.
 
 ## Páginas
@@ -32,21 +33,22 @@ Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refac
 
 ## Componentes compartidos
 
-| Archivo                                                         | Clasificación      | Decisión de Fase 1                                                               |
-| --------------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------- |
-| `src/components/layout/SiteHeader.astro`                        | Shell global       | Mantener scoped junto a la cabecera y su comportamiento sticky.                  |
-| `src/components/layout/SideMenu.astro`                          | Shell global       | Mantener scoped junto al DOM, accesibilidad y estados del menú.                  |
-| `src/components/layout/SiteFooter.astro`                        | Shell global       | Mantener scoped; revisar tamaño en la Fase 2 antes de separar responsabilidades. |
-| `src/components/layout/ConquenseCredit.astro`                   | Shell global       | Mantener scoped junto a su fallback y carga visual.                              |
-| `src/components/ui/Button.astro`                                | UI reutilizable    | Mantener scoped; nuevos estados deben consumir tokens.                           |
-| `src/components/ui/ActionLink.astro`                            | UI reutilizable    | Mantener scoped; no fusionarlo con enlaces externos sin contrato común.          |
-| `src/components/ui/ExternalLink.astro`                          | UI reutilizable    | Mantener scoped y conservar seguridad/atribución.                                |
-| `src/components/CollectionSearch.astro`                         | Control compartido | Mantener scoped; lo comparte más de un archivo de colección.                     |
-| `src/components/CollectionArchive.astro`                        | Archivo compartido | Mantener scoped; conserva filtros y estados vacíos de las colecciones.           |
-| `src/components/BandoCard.astro`                                | Tarjeta editorial  | Mantener separado de `NewsCard.astro`; los dominios no se mezclan.               |
-| `src/components/NewsCard.astro`                                 | Tarjeta editorial  | Mantener separado de `BandoCard.astro`; revisar patrones comunes en Fase 3.      |
-| `src/components/NewsSection.astro`                              | Sección editorial  | Mantener scoped; candidato a revisar si aparece un segundo consumidor.           |
-| `src/components/current-affairs/CurrentAffairsEmptyState.astro` | Estado editorial   | Mantener scoped; extraer solo si aparece en varias colecciones.                  |
+| Archivo                                                         | Clasificación      | Decisión de Fase 1                                                                         |
+| --------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------ |
+| `src/components/layout/SiteHeader.astro`                        | Shell global       | Mantener scoped junto a la cabecera y su comportamiento sticky.                            |
+| `src/components/layout/SideMenu.astro`                          | Shell global       | Mantener scoped junto al DOM, accesibilidad y estados del menú.                            |
+| `src/components/layout/SiteFooter.astro`                        | Shell global       | Mantener scoped; revisar tamaño en la Fase 2 antes de separar responsabilidades.           |
+| `src/components/layout/ConquenseCredit.astro`                   | Shell global       | Mantener scoped junto a su fallback y carga visual.                                        |
+| `src/components/ui/Button.astro`                                | UI reutilizable    | Mantener scoped; nuevos estados deben consumir tokens.                                     |
+| `src/components/ui/ActionLink.astro`                            | UI reutilizable    | Mantener scoped; no fusionarlo con enlaces externos sin contrato común.                    |
+| `src/components/ui/ExternalLink.astro`                          | UI reutilizable    | Mantener scoped y conservar seguridad/atribución.                                          |
+| `src/components/CollectionSearch.astro`                         | Control compartido | Mantener scoped; lo comparte más de un archivo de colección.                               |
+| `src/components/CollectionArchive.astro`                        | Archivo compartido | Mantener scoped; conserva filtros y estados vacíos de las colecciones.                     |
+| `src/components/BandoCard.astro`                                | Tarjeta editorial  | Mantener separado de `NewsCard.astro`; consume `CollectionCardMeta` para el patrón común.  |
+| `src/components/NewsCard.astro`                                 | Tarjeta editorial  | Mantener separado de `BandoCard.astro`; consume `CollectionCardMeta` para el patrón común. |
+| `src/components/CollectionCardMeta.astro`                       | Metadata editorial | Compartir fecha y contexto visual entre las dos colecciones sin mezclar sus contratos.     |
+| `src/components/NewsSection.astro`                              | Sección editorial  | Mantener scoped; candidato a revisar si aparece un segundo consumidor.                     |
+| `src/components/current-affairs/CurrentAffairsEmptyState.astro` | Estado editorial   | Mantener scoped; extraer solo si aparece en varias colecciones.                            |
 
 ## Componentes específicos de página
 
@@ -86,6 +88,8 @@ Estos patrones merecen revisión posterior, pero no se extraen automáticamente 
 - estados nocturnos, bordes y halos del juego.
 
 La Fase 2 materializó tres responsabilidades independientes: `GameMapCanvas` agrupa el mapa interactivo y su HUD, `GameRanking` separa el ranking del panel de jugador y `GameDevelopmentSimulator` aísla la herramienta exclusiva de desarrollo. `AccommodationCard` elimina la duplicación de las fichas locales y cercanas mediante una variante explícita. `rutas/index.astro`, `informacion-practica.astro` y `SiteFooter.astro` se mantienen cohesionados: sus secciones son composiciones únicas y no tienen un segundo consumidor claro.
+
+La Fase 3 extrajo solo `CollectionCardMeta`: el patrón tiene dos consumidores, la misma semántica visual y estados compatibles. No se creó una tarjeta editorial genérica porque bandos y noticias conservan datos, enlaces, búsquedas y contratos públicos distintos.
 
 La repetición de una declaración no basta para crear una abstracción. En la Fase 3 solo se extraerán patrones que tengan más de un consumidor con la misma semántica y estados compatibles.
 

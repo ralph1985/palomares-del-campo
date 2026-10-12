@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import CollectionCardMeta from './ui/CollectionCardMeta.astro';
 import ExternalLink from './ui/ExternalLink.astro';
 
 interface Props {
@@ -11,11 +12,6 @@ const { title, description, date, category, sourceName, sourceUrl, sourceId, att
   post.data;
 const attachmentSearchText = attachments.map((attachment) => attachment.label).join(' ');
 const bodySearchText = post.body ?? '';
-const formattedDate = new Intl.DateTimeFormat('es-ES', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-}).format(date);
 ---
 
 <article
@@ -28,11 +24,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   data-search-category={category}
   data-search-year={date.getFullYear()}
 >
-  <div class="bando-card-meta">
-    <time datetime={date.toISOString()}>{formattedDate}</time>
-    <span aria-hidden="true">·</span>
-    <span>{category}</span>
-  </div>
+  <CollectionCardMeta date={date} context={category} />
   <h2>
     <a href={`/bandos/${post.id}`}>{title}</a>
   </h2>
@@ -55,17 +47,6 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     border-radius: 1.15rem;
     background: var(--color-surface);
     box-shadow: 0 0.75rem 2rem rgb(25 52 45 / 7%);
-  }
-
-  .bando-card-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-    color: var(--color-clay);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-strong);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
   }
 
   .bando-card[hidden] {

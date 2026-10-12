@@ -1,0 +1,32 @@
+---
+interface Props {
+  date: Date;
+  context: string;
+}
+
+const { date, context } = Astro.props;
+const formattedDate = new Intl.DateTimeFormat('es-ES', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(date);
+---
+
+<div class="collection-card-meta">
+  <time datetime={date.toISOString()}>{formattedDate}</time>
+  <span aria-hidden="true">·</span>
+  <span>{context}</span>
+</div>
+
+<style>
+  .collection-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+</style>
