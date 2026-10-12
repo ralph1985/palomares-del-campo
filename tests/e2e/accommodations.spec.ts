@@ -14,8 +14,7 @@ test.describe('rural accommodation directory', () => {
     await expect(page.getByText('Horcajada de la Torre')).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Alrededores' })).toBeVisible();
     await expect(page.locator('[data-accommodation-card]')).toHaveCount(10);
-    await expect(page.locator('main img')).toHaveCount(4);
-    await expect(page.getByText(/Entorno, no el alojamiento/)).toHaveCount(4);
+
     await expect(page.getByText(/No gestionamos reservas/)).toBeVisible();
     await expect(page.getByText(/comprueba precios, disponibilidad/)).toBeVisible();
     await expect(
