@@ -1,4 +1,5 @@
 ---
+import SEO from '../components/SEO.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import '../styles/global.css';
@@ -7,9 +8,39 @@ interface Props {
   title: string;
   description: string;
   bodyClass?: string;
+  canonicalPath?: string;
+  socialImage?: string;
+  socialImageAlt?: string;
+  type?: 'website' | 'article';
+  schema?: 'website' | 'article';
+  noindex?: boolean;
+  article?: {
+    headline?: string;
+    author: string;
+    authorType: 'Person' | 'Organization';
+    datePublished: Date;
+    sourceUrl?: string;
+    section?: string;
+  };
+  breadcrumbs?: Array<{
+    name: string;
+    path: string;
+  }>;
 }
 
-const { title, description, bodyClass } = Astro.props;
+const {
+  title,
+  description,
+  bodyClass,
+  canonicalPath,
+  socialImage,
+  socialImageAlt,
+  type,
+  schema,
+  noindex,
+  article,
+  breadcrumbs,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -17,8 +48,18 @@ const { title, description, bodyClass } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={description} />
-    <title>{title}</title>
+    <SEO
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      image={socialImage}
+      imageAlt={socialImageAlt}
+      type={type}
+      schema={schema}
+      noindex={noindex}
+      article={article}
+      breadcrumbs={breadcrumbs}
+    />
     <slot name="head" />
   </head>
   <body class={bodyClass}>

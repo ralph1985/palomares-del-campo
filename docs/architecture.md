@@ -36,9 +36,11 @@ Cada bloque se incorpora solo cuando tiene contenido y una necesidad real.
 
 `src/layouts/` contiene la estructura común:
 
-- `BaseLayout.astro`: documento HTML, metadatos comunes, estilos globales, cabecera y pie. Expone un slot para el contenido de cada ruta, un slot `head` para metadatos adicionales y `bodyClass` para variantes documentales como el tema del juego. Las páginas conservan su propio `<main>` para evitar anidamientos y mantienen en ellas la composición y los estilos específicos.
+- `BaseLayout.astro`: documento HTML, SEO común, estilos globales, cabecera y pie. Expone un slot para el contenido de cada ruta, un slot `head` para metadatos adicionales y `bodyClass` para variantes documentales como el tema del juego. Las páginas conservan su propio `<main>` para evitar anidamientos y mantienen en ellas la composición y los estilos específicos.
 
-La extracción desde el actual `src/pages/index.astro` debe conservar la apariencia y ser un refactor separado de la creación de nuevas funcionalidades.
+`src/components/SEO.astro` concentra el `<title>`, descripción, canonical, robots, Open Graph, Twitter Cards y JSON-LD opcional. Las páginas de detalle aportan los datos editoriales reales para `Article` y breadcrumbs; la portada aporta `WebSite`. No se genera una organización ficticia ni se fuerza una imagen social cuando no existe un recurso adecuado. La implementación de SEO estructurado usa `authorType` explícito en las Content Collections (`Person` u `Organization`) para que los nodos `Article.author` sean verificables. Los bandos conservan el autor editorial de su frontmatter y no confunden autoría con `sourceName`.
+
+El dominio canónico se declara en `astro.config.mjs` como `https://palomaresdelcampo.conquense.dev`. La integración oficial `@astrojs/sitemap` genera el sitemap estático y excluye `/avisos/`, que es una redirección 301. `public/robots.txt` permite el rastreo y referencia `sitemap-index.xml`. `pnpm check:seo` valida los artefactos generados tras el build.
 
 ### Componentes
 
@@ -152,13 +154,13 @@ Las páginas y componentes no deben repetir sistemáticamente hexadecimales, esc
 
 ## Evolución prevista
 
-### Siguiente bloque técnico
+### Mantenimiento técnico
 
-1. Extraer `BaseLayout`, `SiteHeader`, `SiteFooter` y `SideMenu`.
-2. Crear `tokens.css` y `global.css`.
-3. Reducir `src/pages/index.astro` a composición de secciones.
-4. Mantener rutas y aspecto actuales.
-5. Ejecutar build y verificación de teclado/navegador.
+1. Mantener `BaseLayout` como único shell HTML compartido.
+2. Añadir nuevas rutas con título, descripción y canonical derivados de su contenido real.
+3. Usar `schema` y `article` solo cuando exista una entidad verificable.
+4. Ejecutar `pnpm build` y `pnpm check:seo` después de cambios SEO.
+5. Mantener fuera del sitemap las redirecciones y cualquier futura ruta explícitamente no indexable.
 
 ### Siguientes bloques de producto
 

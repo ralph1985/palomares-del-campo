@@ -13,6 +13,7 @@
     "test:e2e": "playwright test",
     "qa:visual": "node scripts/visual-qa.mjs",
     "check:css:architecture": "node scripts/check-css-architecture.js",
+    "check:seo": "node scripts/verify-seo.mjs",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -28,6 +29,7 @@
     "three": "0.186.1"
   },
   "devDependencies": {
+    "@astrojs/sitemap": "3.7.4",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.64.0",
     "@types/three": "0.186.0",

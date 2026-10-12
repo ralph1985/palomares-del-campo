@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { title, description, author, date, sourceName, sourceUrl, category } = post.data;
+const { title, description, author, authorType, date, sourceName, sourceUrl, category } = post.data;
 const formattedDate = new Intl.DateTimeFormat('es-ES', {
   day: 'numeric',
   month: 'long',
@@ -23,7 +23,26 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 }).format(date);
 ---
 
-<BaseLayout title={`${title} · Palomares del Campo`} description={description}>
+<BaseLayout
+  title={`${title} · Palomares del Campo`}
+  description={description}
+  canonicalPath={`/noticias/${post.id}/`}
+  type="article"
+  schema="article"
+  article={{
+    headline: title,
+    author,
+    authorType,
+    datePublished: date,
+    sourceUrl,
+    section: category,
+  }}
+  breadcrumbs={[
+    { name: 'Inicio', path: '/' },
+    { name: 'Noticias', path: '/noticias/' },
+    { name: title, path: `/noticias/${post.id}/` },
+  ]}
+>
   <main class="article-shell">
     <a class="back-link" href="/noticias">
       ← Volver a noticias

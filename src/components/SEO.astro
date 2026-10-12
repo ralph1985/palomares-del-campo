@@ -1,0 +1,126 @@
+---
+interface ArticleData {
+  headline?: string;
+  author: string;
+  authorType: 'Person' | 'Organization';
+  datePublished: Date;
+  sourceUrl?: string;
+  section?: string;
+}
+
+interface Breadcrumb {
+  name: string;
+  path: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article';
+  schema?: 'website' | 'article';
+  noindex?: boolean;
+  article?: ArticleData;
+  breadcrumbs?: Breadcrumb[];
+}
+
+const {
+  title,
+  description,
+  canonicalPath,
+  image,
+  imageAlt = title,
+  type = 'website',
+  schema,
+  noindex = false,
+  article,
+  breadcrumbs = [],
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://palomaresdelcampo.conquense.dev');
+const canonicalUrl = new URL(canonicalPath ?? Astro.url.pathname, site);
+canonicalUrl.search = '';
+canonicalUrl.hash = '';
+
+const imageUrl = image ? new URL(image, site).href : undefined;
+const structuredData: Record<string, unknown>[] = [];
+
+if (schema === 'website') {
+  structuredData.push({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${canonicalUrl.origin}/#website`,
+    name: 'Palomares del Campo',
+    description,
+    url: canonicalUrl.origin,
+    inLanguage: 'es-ES',
+  });
+}
+
+if (schema === 'article' && article) {
+  structuredData.push({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    '@id': `${canonicalUrl.href}#article`,
+    headline: article.headline ?? title,
+    description,
+    url: canonicalUrl.href,
+    mainEntityOfPage: canonicalUrl.href,
+    inLanguage: 'es-ES',
+    datePublished: article.datePublished.toISOString(),
+    author: {
+      '@type': article.authorType,
+      name: article.author,
+    },
+    ...(article.section ? { articleSection: article.section } : {}),
+    ...(article.sourceUrl ? { isBasedOn: article.sourceUrl } : {}),
+  });
+}
+
+if (breadcrumbs.length > 0) {
+  structuredData.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((breadcrumb, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: breadcrumb.name,
+      item: new URL(breadcrumb.path, site).href,
+    })),
+  });
+}
+
+const structuredDataText = JSON.stringify(structuredData).replace(/</g, '\\u003c');
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={noindex ? 'noindex,follow' : 'index,follow'} />
+<link rel="canonical" href={canonicalUrl.href} />
+
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalUrl.href} />
+<meta property="og:locale" content="es_ES" />
+<meta property="og:site_name" content="Palomares del Campo" />
+{imageUrl && <meta property="og:image" content={imageUrl} />}
+{imageUrl && <meta property="og:image:alt" content={imageAlt} />}
+
+<meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{imageUrl && <meta name="twitter:image" content={imageUrl} />}
+{imageUrl && <meta name="twitter:image:alt" content={imageAlt} />}
+
+{type === 'article' && article && (
+  <>
+    <meta property="article:published_time" content={article.datePublished.toISOString()} />
+    <meta property="article:author" content={article.author} />
+    {article.section && <meta property="article:section" content={article.section} />}
+  </>
+)}
+
+{structuredData.length > 0 && <script type="application/ld+json" set:html={structuredDataText} />}

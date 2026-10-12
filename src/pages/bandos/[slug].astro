@@ -13,7 +13,18 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { title, description, date, category, sourceName, sourceUrl, attachments } = post.data;
+const {
+  title,
+  description,
+  author,
+  authorType,
+  date,
+  category,
+  sourceName,
+  sourceUrl,
+  attachments,
+} = post.data;
+const imageAttachment = attachments.find((attachment) => attachment.type === 'image');
 const formattedDate = new Intl.DateTimeFormat('es-ES', {
   day: 'numeric',
   month: 'long',
@@ -21,7 +32,28 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 }).format(date);
 ---
 
-<BaseLayout title={`${title} · Bandos · Palomares del Campo`} description={description}>
+<BaseLayout
+  title={`${title} · Bandos · Palomares del Campo`}
+  description={description}
+  canonicalPath={`/bandos/${post.id}/`}
+  type="article"
+  schema="article"
+  article={{
+    headline: title,
+    author,
+    authorType,
+    datePublished: date,
+    sourceUrl,
+    section: category,
+  }}
+  socialImage={imageAttachment?.url}
+  socialImageAlt={imageAttachment?.label}
+  breadcrumbs={[
+    { name: 'Inicio', path: '/' },
+    { name: 'Bandos', path: '/bandos/' },
+    { name: title, path: `/bandos/${post.id}/` },
+  ]}
+>
   <main class="article-shell">
     <a class="back-link" href="/bandos/">
       ← Volver a bandos
