@@ -18,3 +18,15 @@ const { href, class: className, ...linkAttributes } = Astro.props;
 >
   <slot />
 </a>
+
+<style is:global>
+  .ui-external-link {
+    color: inherit;
+    text-underline-offset: 0.2em;
+  }
+
+  .ui-external-link:hover,
+  .ui-external-link:focus-visible {
+    color: var(--color-clay);
+  }
+</style>

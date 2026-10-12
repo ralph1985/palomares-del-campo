@@ -26,12 +26,12 @@ const { href, variant = 'text', class: className, ...linkAttributes } = Astro.pr
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     text-decoration: none;
   }
 
   .ui-action-link:focus-visible {
-    outline: 3px solid #c68455;
+    outline: 3px solid var(--color-clay);
     outline-offset: 5px;
   }
 
@@ -45,32 +45,32 @@ const { href, variant = 'text', class: className, ...linkAttributes } = Astro.pr
   }
 
   .ui-action-link-text {
-    color: #2f6652;
-    font-size: 0.9rem;
+    color: var(--color-forest);
+    font-size: var(--font-size-small);
   }
 
   .ui-action-link-text:hover,
   .ui-action-link-text:focus-visible {
-    color: #a05c32;
+    color: var(--color-clay);
     text-decoration: underline;
     text-underline-offset: 0.25rem;
   }
 
   .ui-action-link-underline {
     padding-bottom: 0.35rem;
-    border-bottom: 1px solid #a05c32;
-    color: #a05c32;
-    font-size: 0.9rem;
+    border-bottom: 1px solid var(--color-clay);
+    color: var(--color-clay);
+    font-size: var(--font-size-small);
   }
 
   .ui-action-link-solid {
     padding: 0.75rem 1rem;
     border: 1px solid rgb(229 183 126 / 45%);
     border-radius: 0.55rem;
-    color: #19342d;
-    background: #e5b77e;
-    font-size: 0.78rem;
-    font-weight: 800;
+    color: var(--color-ink);
+    background: var(--color-ochre);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-bold);
     text-transform: uppercase;
   }
 

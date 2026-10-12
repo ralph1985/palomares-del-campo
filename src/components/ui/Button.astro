@@ -27,8 +27,8 @@ const { variant = 'secondary', class: className, ...buttonAttributes } = Astro.p
     border-radius: 999px;
     cursor: pointer;
     font: inherit;
-    font-size: 0.85rem;
-    font-weight: 750;
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-strong);
     transition:
       transform 180ms ease,
       background 180ms ease,
@@ -40,7 +40,7 @@ const { variant = 'secondary', class: className, ...buttonAttributes } = Astro.p
   }
 
   .game-button:focus-visible {
-    outline: 3px solid #e5b77e;
+    outline: 3px solid var(--color-ochre);
     outline-offset: 3px;
   }
 
@@ -51,8 +51,8 @@ const { variant = 'secondary', class: className, ...buttonAttributes } = Astro.p
 
   .game-button-primary,
   .game-button-capture {
-    color: #19342d;
-    background: #e5b77e;
+    color: var(--color-ink);
+    background: var(--color-ochre);
   }
 
   .game-button-primary:hover:not(:disabled),
@@ -62,19 +62,19 @@ const { variant = 'secondary', class: className, ...buttonAttributes } = Astro.p
 
   .game-button-secondary {
     border-color: rgb(239 245 237 / 28%);
-    color: #eff5ed;
+    color: var(--color-surface-soft);
     background: transparent;
   }
 
   .game-button-secondary:hover:not(:disabled) {
-    border-color: #b7d0bc;
+    border-color: var(--color-sage-light);
     background: rgb(239 245 237 / 8%);
   }
 
   .game-button-simulator {
     min-height: 2.6rem;
     border-color: rgb(229 183 126 / 50%);
-    color: #e5b77e;
+    color: var(--color-ochre);
     background: transparent;
     font-size: 0.78rem;
   }
