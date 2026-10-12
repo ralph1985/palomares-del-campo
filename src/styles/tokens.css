@@ -18,6 +18,15 @@
   --color-clay: #a05c32;
   --color-ochre: #e5b77e;
   --color-night: #0a1513;
+  --color-night-surface: #10231f;
+  --color-night-panel: #214538;
+  --color-night-muted: #8fb49c;
+  --color-night-text: #a9cbb6;
+  --color-night-soft: #d4e4d5;
+  --color-night-highlight: #f0c995;
+  --color-game-capture: #3f9b69;
+  --color-game-map: #dce8dc;
+  --color-game-marker: #c68455;
 
   /* Typography */
   --font-sans:
@@ -29,6 +38,8 @@
   --font-weight-medium: 500;
   --font-weight-bold: 700;
   --font-weight-strong: 750;
+  --font-weight-emphasis: 800;
+  --font-weight-display: 850;
 
   /* Type scale */
   --font-size-body: 1rem;

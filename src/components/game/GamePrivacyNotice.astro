@@ -53,9 +53,9 @@ const { hasRemoteGame } = Astro.props;
 
   .eyebrow {
     margin: 0 0 0.8rem;
-    color: #a05c32;
-    font-size: 0.72rem;
-    font-weight: 750;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
@@ -63,15 +63,15 @@ const { hasRemoteGame } = Astro.props;
   h2,
   h3 {
     margin: 0;
-    font-family: Georgia, 'Times New Roman', serif;
-    font-weight: 500;
+    font-family: var(--font-serif);
+    font-weight: var(--font-weight-emphasis);
     letter-spacing: -0.055em;
     line-height: 0.98;
   }
 
   h2 {
     max-width: 13ch;
-    color: #19342d;
+    color: var(--color-ink);
     font-size: clamp(2.8rem, 6vw, 5.5rem);
   }
 
@@ -90,13 +90,13 @@ const { hasRemoteGame } = Astro.props;
   }
 
   h3 {
-    color: #19342d;
+    color: var(--color-ink);
     font-size: 1.7rem;
   }
 
   article p {
     margin: 0.75rem 0 0;
-    color: #527066;
+    color: var(--color-muted);
     font-size: 0.85rem;
     line-height: 1.6;
   }

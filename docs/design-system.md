@@ -16,7 +16,17 @@ Este documento registra el lenguaje visual actual de la web. Durante el primer b
 | `--color-sage-light`   | `#b7d0bc`    | Texto claro secundario sobre fondos oscuros.                     |
 | `--color-clay`         | `#a05c32`    | Acento terracota, etiquetas y estados destacados.                |
 | `--color-ochre`        | `#e5b77e`    | Acento cálido sobre fondos oscuros.                              |
-| `--color-night`        | `#0a1513`    | Tema oscuro del juego.                                           |
+
+- `--color-night` | `#0a1513` | Fondo principal del tema oscuro del juego. |
+  | `--color-night-surface` | `#10231f` | Superficie oscura del tablero y tarjetas del juego. |
+  | `--color-night-panel` | `#214538` | Controles y selectores sobre el tablero oscuro. |
+  | `--color-night-muted` | `#8fb49c` | Etiquetas y metadatos del juego. |
+  | `--color-night-text` | `#a9cbb6` | Texto secundario legible sobre el tema oscuro. |
+  | `--color-night-soft` | `#d4e4d5` | Texto claro de notas y reglas del juego. |
+  | `--color-night-highlight` | `#f0c995` | Estado de aviso dentro del juego. |
+  | `--color-game-capture` | `#3f9b69` | Estado de captura o conexión positiva. |
+  | `--color-game-map` | `#dce8dc` | Superficie cartográfica del mapa local. |
+  | `--color-game-marker` | `#c68455` | Marcador secundario del mapa. |
 
 Los componentes pueden conservar colores adicionales cuando representen un estado o una visualización específica. Esas excepciones deberán documentarse antes de convertirse en tokens nuevos.
 
@@ -33,6 +43,8 @@ Inter no está importada ni empaquetada actualmente. En esta fase se conserva es
 - `--font-weight-medium`: 500, titulares serif y énfasis moderado.
 - `--font-weight-bold`: 700, controles y navegación.
 - `--font-weight-strong`: 750, etiquetas y encabezados de grupos.
+- `--font-weight-emphasis`: 800, controles y datos destacados del juego.
+- `--font-weight-display`: 850, displays principales del juego.
 - `--font-size-body`: 1rem, tamaño base.
 - `--font-size-small`: 0.85rem, información secundaria.
 - `--font-size-label`: 0.7rem, etiquetas en mayúsculas.

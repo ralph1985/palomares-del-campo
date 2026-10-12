@@ -125,8 +125,8 @@ import Button from '../ui/Button.astro';
     padding: clamp(1.25rem, 2.5vw, 1.75rem);
     border: 1px solid rgb(239 245 237 / 12%);
     border-radius: 1.25rem;
-    color: #eff5ed;
-    background: linear-gradient(155deg, rgb(47 102 82 / 23%), transparent 40%), #19342d;
+    color: var(--color-surface-soft);
+    background: linear-gradient(155deg, rgb(47 102 82 / 23%), transparent 40%), var(--color-ink);
     box-shadow: 0 1rem 2rem rgb(0 0 0 / 18%);
   }
 
@@ -134,9 +134,9 @@ import Button from '../ui/Button.astro';
     display: flex;
     align-items: center;
     gap: 0.55rem;
-    color: #b7d0bc;
-    font-size: 0.7rem;
-    font-weight: 750;
+    color: var(--color-sage-light);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.12em;
     text-transform: uppercase;
   }
@@ -145,16 +145,16 @@ import Button from '../ui/Button.astro';
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background: #e5b77e;
+    background: var(--color-ochre);
     box-shadow: 0 0 0 0.3rem rgb(229 183 126 / 16%);
   }
 
   .game-panel h3 {
     margin: 2rem 0 0;
-    color: #eff5ed;
+    color: var(--color-surface-soft);
     font-family: inherit;
     font-size: clamp(1.7rem, 3vw, 2.4rem);
-    font-weight: 850;
+    font-weight: var(--font-weight-display);
     letter-spacing: -0.065em;
     line-height: 0.92;
   }
@@ -162,7 +162,7 @@ import Button from '../ui/Button.astro';
   .game-location-description {
     min-height: 3.2rem;
     margin: 1rem 0 0;
-    color: #b7d0bc;
+    color: var(--color-sage-light);
     font-size: 0.9rem;
     line-height: 1.6;
   }
@@ -178,7 +178,7 @@ import Button from '../ui/Button.astro';
   .game-player-form label {
     display: block;
     margin-bottom: 0.45rem;
-    color: #b7d0bc;
+    color: var(--color-sage-light);
     font-size: 0.75rem;
     font-weight: 700;
   }
@@ -195,26 +195,26 @@ import Button from '../ui/Button.astro';
     padding: 0.75rem 0.85rem;
     border: 1px solid rgb(239 245 237 / 28%);
     border-radius: 0.7rem;
-    color: #eff5ed;
+    color: var(--color-surface-soft);
     background: rgb(0 0 0 / 14%);
     font: inherit;
   }
 
   .game-player-input-row input:focus-visible {
-    outline: 3px solid #e5b77e;
+    outline: 3px solid var(--color-ochre);
     outline-offset: 2px;
   }
 
   .game-player-feedback {
     min-height: 1.2rem;
     margin: 0.55rem 0 0;
-    color: #b7d0bc;
-    font-size: 0.72rem;
+    color: var(--color-sage-light);
+    font-size: var(--font-size-label);
     line-height: 1.4;
   }
 
   .game-player-feedback[data-state='error'] {
-    color: #f0c995;
+    color: var(--color-night-highlight);
   }
 
   .game-stats {
@@ -235,9 +235,9 @@ import Button from '../ui/Button.astro';
   .stat-label {
     display: block;
     margin-bottom: 0.35rem;
-    color: #8fb49c;
+    color: var(--color-night-muted);
     font-size: 0.67rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
@@ -258,8 +258,8 @@ import Button from '../ui/Button.astro';
   .location-readout small {
     display: block;
     margin-top: 0.45rem;
-    color: #b7d0bc;
-    font-size: 0.72rem;
+    color: var(--color-sage-light);
+    font-size: var(--font-size-label);
     line-height: 1.45;
   }
 
@@ -272,7 +272,7 @@ import Button from '../ui/Button.astro';
   .game-feedback {
     min-height: 3.2rem;
     margin: 1rem 0 0;
-    color: #e5b77e;
+    color: var(--color-ochre);
     font-size: 0.82rem;
     line-height: 1.5;
   }
@@ -293,14 +293,14 @@ import Button from '../ui/Button.astro';
     padding: 0.55rem 0.7rem;
     border: 1px solid rgb(239 245 237 / 22%);
     border-radius: 0.55rem;
-    color: #eff5ed;
-    background: #214538;
+    color: var(--color-surface-soft);
+    background: var(--color-night-panel);
     font: inherit;
     font-size: 0.8rem;
   }
 
   .game-simulator select:focus-visible {
-    outline: 3px solid #e5b77e;
+    outline: 3px solid var(--color-ochre);
     outline-offset: 2px;
   }
 
@@ -319,14 +319,14 @@ import Button from '../ui/Button.astro';
 
   .game-ranking h4 {
     margin: 0.2rem 0 0;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-size: 1.15rem;
     font-weight: 500;
   }
 
   .game-ranking-status {
-    color: #b7d0bc;
-    font-size: 0.72rem;
+    color: var(--color-sage-light);
+    font-size: var(--font-size-label);
   }
 
   .game-ranking-list {
@@ -361,9 +361,9 @@ import Button from '../ui/Button.astro';
 
   :global(.game-ranking-entry[data-current]::after) {
     content: 'Tú';
-    color: #a9cbb6;
+    color: var(--color-night-text);
     font-size: 0.62rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
@@ -375,7 +375,7 @@ import Button from '../ui/Button.astro';
     place-items: center;
     border: 1px solid rgb(229 183 126 / 32%);
     border-radius: 50%;
-    color: #e5b77e;
+    color: var(--color-ochre);
     background: rgb(229 183 126 / 8%);
     font-size: 0.68rem;
     font-variant-numeric: tabular-nums;
@@ -392,16 +392,16 @@ import Button from '../ui/Button.astro';
     padding: 0.25rem 0.45rem;
     border: 1px solid rgb(229 183 126 / 24%);
     border-radius: 0.45rem;
-    color: #e5b77e;
+    color: var(--color-ochre);
     background: rgb(229 183 126 / 8%);
-    font-size: 0.72rem;
+    font-size: var(--font-size-label);
     font-variant-numeric: tabular-nums;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
   }
 
   .game-ranking-empty {
     margin: 0.8rem 0 0;
-    color: #b7d0bc;
+    color: var(--color-sage-light);
     font-size: 0.76rem;
     line-height: 1.5;
   }

@@ -78,7 +78,7 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
 <style>
   main {
     overflow: hidden;
-    background: #0a1513;
+    background: var(--color-night);
   }
 
   :global(.game-page .site-header) {
@@ -86,16 +86,16 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
     z-index: 1100;
     isolation: isolate;
     border-bottom-color: rgb(239 245 237 / 10%);
-    background: #0a1513;
+    background: var(--color-night);
   }
 
   :global(.game-page .site-header .brand),
   :global(.game-page .site-header .menu-toggle) {
-    color: #eff5ed;
+    color: var(--color-surface-soft);
   }
 
   :global(.game-page .site-header .menu-toggle-icon span) {
-    background: #e5b77e;
+    background: var(--color-ochre);
   }
 
   :global(.game-page .site-header .header-inner) {
@@ -106,9 +106,9 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
     position: relative;
     overflow: hidden;
     padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(2rem, 4vw, 3.25rem);
-    color: #eff5ed;
+    color: var(--color-surface-soft);
     background:
-      radial-gradient(circle at 85% 30%, rgb(47 102 82 / 28%), transparent 24rem), #19342d;
+      radial-gradient(circle at 85% 30%, rgb(47 102 82 / 28%), transparent 24rem), var(--color-ink);
   }
 
   .game-hero::after {
@@ -139,9 +139,9 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
     align-items: center;
     gap: 0.55rem;
     margin-bottom: 1rem;
-    color: #e5b77e;
-    font-size: 0.7rem;
-    font-weight: 800;
+    color: var(--color-ochre);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-emphasis);
     letter-spacing: 0.12em;
     text-transform: uppercase;
   }
@@ -151,7 +151,7 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
     width: 0.45rem;
     height: 0.45rem;
     border-radius: 50%;
-    background: #e5b77e;
+    background: var(--color-ochre);
     box-shadow: 0 0 0 0.25rem rgb(229 183 126 / 14%);
   }
 
@@ -160,7 +160,7 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
     margin: 0;
     font-family: inherit;
     font-size: clamp(3.5rem, 8vw, 6.8rem);
-    font-weight: 850;
+    font-weight: var(--font-weight-display);
     letter-spacing: -0.08em;
     line-height: 0.86;
   }
@@ -168,7 +168,7 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
   .game-hero-copy > p {
     max-width: 34rem;
     margin: 1.5rem 0 0;
-    color: #b7d0bc;
+    color: var(--color-sage-light);
     font-size: 1rem;
     line-height: 1.5;
   }
@@ -191,9 +191,9 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    color: #8fb49c;
+    color: var(--color-night-muted);
     font-size: 0.64rem;
-    font-weight: 800;
+    font-weight: var(--font-weight-emphasis);
     letter-spacing: 0.1em;
   }
 
@@ -201,15 +201,15 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    color: #e5b77e;
+    color: var(--color-ochre);
   }
 
   .match-card strong {
     display: block;
     margin-top: 2.5rem;
-    color: #eff5ed;
+    color: var(--color-surface-soft);
     font-size: clamp(2rem, 4vw, 3.2rem);
-    font-weight: 850;
+    font-weight: var(--font-weight-display);
     letter-spacing: -0.07em;
     line-height: 0.9;
   }
@@ -217,7 +217,7 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
   .match-card p {
     max-width: 18rem;
     margin: 0.8rem 0 2rem;
-    color: #b7d0bc;
+    color: var(--color-sage-light);
     font-size: 0.78rem;
     line-height: 1.5;
   }
@@ -234,8 +234,8 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
   }
 
   .match-card-stats b {
-    color: #eff5ed;
-    font-size: 0.72rem;
+    color: var(--color-surface-soft);
+    font-size: var(--font-size-label);
   }
 
   @media (max-width: 38rem) {
