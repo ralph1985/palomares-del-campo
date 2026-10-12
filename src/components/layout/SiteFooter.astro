@@ -70,6 +70,10 @@ const currentYear = new Date().getFullYear();
       <ConquenseCredit />
     </div>
   </div>
+
+  <button type="button" class="back-to-top" data-back-to-top aria-label="Volver arriba" hidden>
+    <span aria-hidden="true">↑</span>
+  </button>
 </footer>
 
 <style>
@@ -238,6 +242,50 @@ const currentYear = new Date().getFullYear();
     }
   }
 
+  .back-to-top {
+    position: fixed;
+    right: clamp(1rem, 3vw, 2rem);
+    bottom: clamp(1rem, 3vw, 2rem);
+    z-index: 20;
+    display: grid;
+    width: 2.9rem;
+    height: 2.9rem;
+    place-items: center;
+    border: 1px solid #19342d;
+    border-radius: 50%;
+    color: #19342d;
+    background: #e5b77e;
+    box-shadow: 0 0.65rem 1.5rem rgb(25 52 45 / 22%);
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      transform 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .back-to-top[hidden] {
+    display: none;
+  }
+
+  .back-to-top:hover,
+  .back-to-top:focus-visible {
+    background: #f4d3a5;
+    transform: translateY(-0.2rem);
+  }
+
+  .back-to-top:focus-visible {
+    outline: 3px solid #f4f1e9;
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top {
+      transition-duration: 0.01ms;
+    }
+  }
+
   @media (max-width: 38rem) {
     .footer-inner,
     .footer-bottom-inner {
@@ -268,3 +316,20 @@ const currentYear = new Date().getFullYear();
     }
   }
 </style>
+
+<script>
+  const backToTop = document.querySelector<HTMLButtonElement>('[data-back-to-top]');
+
+  if (backToTop) {
+    const updateBackToTopVisibility = () => {
+      backToTop.hidden = window.scrollY < 480;
+    };
+
+    window.addEventListener('scroll', updateBackToTopVisibility, { passive: true });
+    updateBackToTopVisibility();
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+</script>

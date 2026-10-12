@@ -106,9 +106,9 @@ test.describe('current affairs sections', () => {
 
     await search.fill('plaza de toros');
     await expect(page.locator('[data-bando-card]:visible')).not.toHaveCount(0);
-    await expect(page.getByRole('button', { name: 'Limpiar' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Limpiar búsqueda' })).toBeVisible();
 
-    await page.getByRole('button', { name: 'Limpiar' }).click();
+    await page.getByRole('button', { name: 'Limpiar búsqueda' }).click();
     await expect(search).toHaveValue('');
     expect(new URL(page.url()).searchParams.has('q')).toBe(false);
 
