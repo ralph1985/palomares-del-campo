@@ -24,6 +24,13 @@ test.describe('local routes', () => {
     );
     await expect(page.getByText('GPX disponible para descarga.')).toBeVisible();
     await expect(page.getByText(/El archivo procede del trazado GPX aportado/)).toBeVisible();
+    const routeMap = page.locator('[data-route-map]');
+    await expect(routeMap).toHaveAttribute('data-map-status', 'ready');
+    await expect(routeMap.locator('.leaflet-tile')).not.toHaveCount(0);
+    await expect(routeMap.locator('.route-track-line')).toHaveCount(1);
+    await expect(routeMap.locator('.route-waypoint-marker')).toHaveCount(2);
+    await expect(page.getByText('Mapa interactivo del trazado')).toBeVisible();
+    await expect(page.getByText(/Mapa basado en el GPX aportado/)).toBeVisible();
     await expect(page.getByText(/Fuente actualizada el 26 de julio de 2024/)).toBeVisible();
     await expect(page.getByRole('link', { name: /Ver ruta en Komoot/ })).toHaveAttribute(
       'href',
@@ -40,5 +47,18 @@ test.describe('local routes', () => {
       'href',
       '/rutas/',
     );
+  });
+
+  test('keeps the route map usable on a narrow viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/rutas/');
+
+    const routeMap = page.locator('[data-route-map]');
+    await expect(routeMap).toHaveAttribute('data-map-status', 'ready');
+    await expect(routeMap).toBeVisible();
+    const hasHorizontalOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    );
+    expect(hasHorizontalOverflow).toBe(false);
   });
 });
