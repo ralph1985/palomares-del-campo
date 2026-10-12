@@ -414,11 +414,11 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort((a
   }
 
   function normaliseSearchText(value: string) {
-    return value
-      .normalize('NFD')
+    const normalised = typeof value.normalize === 'function' ? value.normalize('NFD') : value;
+    return normalised
       .replace(/[\u0300-\u036f]/g, '')
       .toLocaleLowerCase('es-ES')
-      .replace(/[^\p{L}\p{N}]+/gu, ' ')
+      .replace(/[^a-z0-9]+/g, ' ')
       .trim();
   }
 </script>
