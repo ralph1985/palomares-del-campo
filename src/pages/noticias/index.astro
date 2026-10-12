@@ -2,9 +2,7 @@
 import { getCollection } from 'astro:content';
 import CollectionArchive from '../../components/CollectionArchive.astro';
 import NewsCard from '../../components/NewsCard.astro';
-import SiteFooter from '../../components/layout/SiteFooter.astro';
-import SiteHeader from '../../components/layout/SiteHeader.astro';
-import '../../styles/global.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const posts = (await getCollection('noticias')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -15,57 +13,43 @@ const categories = [...new Set(posts.map((post) => post.data.category ?? 'Actual
 const years = [...new Set(posts.map((post) => post.data.date.getFullYear()))].sort((a, b) => b - a);
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta
-      name="description"
-      content="Noticias publicadas sobre Palomares del Campo y su entorno."
-    />
-    <title>Noticias · Palomares del Campo</title>
-  </head>
-  <body>
-    <SiteHeader />
+<BaseLayout
+  title="Noticias · Palomares del Campo"
+  description="Noticias publicadas sobre Palomares del Campo y su entorno."
+>
+  <main>
+    <section class="news-hero" aria-labelledby="page-title">
+      <div class="news-hero-inner">
+        <p class="eyebrow">Palomares del Campo · Actualidad</p>
+        <h1 id="page-title">Noticias</h1>
+        <p>
+          Noticias publicadas sobre el pueblo, sus vecinos y los proyectos que afectan a su entorno.
+        </p>
+      </div>
+    </section>
 
-    <main>
-      <section class="news-hero" aria-labelledby="page-title">
-        <div class="news-hero-inner">
-          <p class="eyebrow">Palomares del Campo · Actualidad</p>
-          <h1 id="page-title">Noticias</h1>
-          <p>
-            Noticias publicadas sobre el pueblo, sus vecinos y los proyectos que afectan a su
-            entorno.
-          </p>
-        </div>
-      </section>
-
-      <CollectionArchive
-        scope="news"
-        headingId="archive-title"
-        eyebrow="Archivo editorial"
-        title="Todas las noticias"
-        total={posts.length}
-        itemSingular="noticia publicada"
-        itemPlural="noticias publicadas"
-        emptyMessage="Todavía no hay noticias publicadas."
-        searchLabel="Buscar en noticias"
-        inputId="news-search"
-        placeholder="Ej. carretera, fiestas o agua"
-        action="/noticias/"
-        categories={categories}
-        years={years}
-      >
-        {posts.map((post) => (
-          <NewsCard post={post} />
-        ))}
-      </CollectionArchive>
-    </main>
-
-    <SiteFooter />
-  </body>
-</html>
+    <CollectionArchive
+      scope="news"
+      headingId="archive-title"
+      eyebrow="Archivo editorial"
+      title="Todas las noticias"
+      total={posts.length}
+      itemSingular="noticia publicada"
+      itemPlural="noticias publicadas"
+      emptyMessage="Todavía no hay noticias publicadas."
+      searchLabel="Buscar en noticias"
+      inputId="news-search"
+      placeholder="Ej. carretera, fiestas o agua"
+      action="/noticias/"
+      categories={categories}
+      years={years}
+    >
+      {posts.map((post) => (
+        <NewsCard post={post} />
+      ))}
+    </CollectionArchive>
+  </main>
+</BaseLayout>
 
 <style>
   .page-header {

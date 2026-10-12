@@ -1,9 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import ExternalLink from '../../components/ui/ExternalLink.astro';
-import SiteFooter from '../../components/layout/SiteFooter.astro';
-import SiteHeader from '../../components/layout/SiteHeader.astro';
-import '../../styles/global.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export const prerender = true;
 
@@ -25,47 +23,34 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 }).format(date);
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={description} />
-    <title>{title} · Palomares del Campo</title>
-  </head>
-  <body>
-    <SiteHeader />
-
-    <main class="article-shell">
-      <a class="back-link" href="/noticias">
-        ← Volver a noticias
-      </a>
-      <article>
-        <header class="article-header">
-          <p class="eyebrow">{category ?? 'Actualidad'}</p>
-          <h1>{title}</h1>
-          <p class="article-description">{description}</p>
-          <div class="article-meta">
-            <span>{author}</span>
-            <span aria-hidden="true">·</span>
-            <time datetime={date.toISOString()}>{formattedDate}</time>
-          </div>
-        </header>
-
-        <div class="article-content">
-          <Content />
+<BaseLayout title={`${title} · Palomares del Campo`} description={description}>
+  <main class="article-shell">
+    <a class="back-link" href="/noticias">
+      ← Volver a noticias
+    </a>
+    <article>
+      <header class="article-header">
+        <p class="eyebrow">{category ?? 'Actualidad'}</p>
+        <h1>{title}</h1>
+        <p class="article-description">{description}</p>
+        <div class="article-meta">
+          <span>{author}</span>
+          <span aria-hidden="true">·</span>
+          <time datetime={date.toISOString()}>{formattedDate}</time>
         </div>
+      </header>
 
-        <footer class="article-source">
-          <span>Fuente original:</span>
-          <ExternalLink href={sourceUrl}>{sourceName} ↗</ExternalLink>
-        </footer>
-      </article>
-    </main>
+      <div class="article-content">
+        <Content />
+      </div>
 
-    <SiteFooter />
-  </body>
-</html>
+      <footer class="article-source">
+        <span>Fuente original:</span>
+        <ExternalLink href={sourceUrl}>{sourceName} ↗</ExternalLink>
+      </footer>
+    </article>
+  </main>
+</BaseLayout>
 
 <style>
   .page-header {

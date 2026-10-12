@@ -1,9 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import ExternalLink from '../../components/ui/ExternalLink.astro';
-import SiteFooter from '../../components/layout/SiteFooter.astro';
-import SiteHeader from '../../components/layout/SiteHeader.astro';
-import '../../styles/global.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('bandos');
@@ -23,70 +21,57 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 }).format(date);
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={description} />
-    <title>{title} · Bandos · Palomares del Campo</title>
-  </head>
-  <body>
-    <SiteHeader />
-
-    <main class="article-shell">
-      <a class="back-link" href="/bandos/">
-        ← Volver a bandos
-      </a>
-      <article>
-        <header class="article-header">
-          <p class="eyebrow">{category}</p>
-          <h1>{title}</h1>
-          <div class="article-meta">
-            <time datetime={date.toISOString()}>{formattedDate}</time>
-          </div>
-        </header>
-
-        <div class="article-content">
-          <Content />
+<BaseLayout title={`${title} · Bandos · Palomares del Campo`} description={description}>
+  <main class="article-shell">
+    <a class="back-link" href="/bandos/">
+      ← Volver a bandos
+    </a>
+    <article>
+      <header class="article-header">
+        <p class="eyebrow">{category}</p>
+        <h1>{title}</h1>
+        <div class="article-meta">
+          <time datetime={date.toISOString()}>{formattedDate}</time>
         </div>
+      </header>
 
-        {attachments.length > 0 && (
-          <section class="article-attachments" aria-labelledby="attachments-title">
-            <h2 id="attachments-title">Recursos del comunicado</h2>
-            <div class="attachment-list">
-              {attachments.map((attachment) =>
-                attachment.type === 'image' ? (
-                  <figure class="attachment-image">
-                    <img
-                      src={attachment.url}
-                      alt={attachment.alt ?? attachment.label}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <figcaption>{attachment.label}</figcaption>
-                  </figure>
-                ) : (
-                  <div class="attachment-link">
-                    <span>{attachment.type === 'video' ? 'Vídeo' : 'Documento'}</span>
-                    <ExternalLink href={attachment.url}>{attachment.label} ↗</ExternalLink>
-                  </div>
-                ),
-              )}
-            </div>
-          </section>
-        )}
+      <div class="article-content">
+        <Content />
+      </div>
 
-        <footer class="article-source">
-          <span>Fuente original:</span>
-          <ExternalLink href={sourceUrl}>{sourceName} ↗</ExternalLink>
-        </footer>
-      </article>
-    </main>
+      {attachments.length > 0 && (
+        <section class="article-attachments" aria-labelledby="attachments-title">
+          <h2 id="attachments-title">Recursos del comunicado</h2>
+          <div class="attachment-list">
+            {attachments.map((attachment) =>
+              attachment.type === 'image' ? (
+                <figure class="attachment-image">
+                  <img
+                    src={attachment.url}
+                    alt={attachment.alt ?? attachment.label}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption>{attachment.label}</figcaption>
+                </figure>
+              ) : (
+                <div class="attachment-link">
+                  <span>{attachment.type === 'video' ? 'Vídeo' : 'Documento'}</span>
+                  <ExternalLink href={attachment.url}>{attachment.label} ↗</ExternalLink>
+                </div>
+              ),
+            )}
+          </div>
+        </section>
+      )}
 
-    <SiteFooter />
-  </body>
-</html>
+      <footer class="article-source">
+        <span>Fuente original:</span>
+        <ExternalLink href={sourceUrl}>{sourceName} ↗</ExternalLink>
+      </footer>
+    </article>
+  </main>
+</BaseLayout>
 
 <style>
   :global(html) {

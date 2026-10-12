@@ -1,9 +1,7 @@
 ---
 import AccommodationCard from '../../components/accommodations/AccommodationCard.astro';
-import SiteFooter from '../../components/layout/SiteFooter.astro';
-import SiteHeader from '../../components/layout/SiteHeader.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { accommodationReviewedAt, ruralAccommodations } from '../../data/accommodations';
-import '../../styles/global.css';
 
 const localAccommodations = ruralAccommodations.filter(
   (accommodation) => accommodation.area === 'Palomares del Campo',
@@ -19,99 +17,85 @@ const formatDate = (date: string) =>
   });
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta
-      name="description"
-      content="Directorio informativo de casas rurales y otros alojamientos en Palomares del Campo y localidades cercanas."
-    />
-    <title>Alojamientos rurales · Palomares del Campo</title>
-  </head>
-  <body>
-    <SiteHeader />
+<BaseLayout
+  title="Alojamientos rurales · Palomares del Campo"
+  description="Directorio informativo de casas rurales y otros alojamientos en Palomares del Campo y localidades cercanas."
+>
+  <main>
+    <section class="accommodation-hero" aria-labelledby="page-title">
+      <div class="accommodation-shell">
+        <p class="eyebrow">Palomares del Campo · Visita</p>
+        <h1 id="page-title">Alojamientos rurales</h1>
+        <p>
+          Una selección de casas rurales y alojamientos de Palomares del Campo y su entorno para
+          empezar a organizar una visita con información visible y enlaces de origen.
+        </p>
+      </div>
+    </section>
 
-    <main>
-      <section class="accommodation-hero" aria-labelledby="page-title">
-        <div class="accommodation-shell">
-          <p class="eyebrow">Palomares del Campo · Visita</p>
-          <h1 id="page-title">Alojamientos rurales</h1>
+    <section class="criteria-section" aria-labelledby="criteria-title">
+      <div class="accommodation-shell criteria-grid">
+        <div>
+          <p class="eyebrow">Directorio informativo</p>
+          <h2 id="criteria-title">Dormir cerca también forma parte del viaje.</h2>
+        </div>
+        <div class="criteria-copy">
           <p>
-            Una selección de casas rurales y alojamientos de Palomares del Campo y su entorno para
-            empezar a organizar una visita con información visible y enlaces de origen.
+            La primera búsqueda localiza una casa rural en Palomares del Campo y varias opciones en
+            localidades cercanas como Carrascosa del Campo, El Hito, Saelices, Uclés y Huete.
+          </p>
+          <p>
+            Los datos resumidos proceden de las fichas enlazadas. No mostramos precios ni prometemos
+            disponibilidad: conviene confirmar directamente cada condición antes de reservar.
           </p>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="criteria-section" aria-labelledby="criteria-title">
-        <div class="accommodation-shell criteria-grid">
-          <div>
-            <p class="eyebrow">Directorio informativo</p>
-            <h2 id="criteria-title">Dormir cerca también forma parte del viaje.</h2>
-          </div>
-          <div class="criteria-copy">
-            <p>
-              La primera búsqueda localiza una casa rural en Palomares del Campo y varias opciones
-              en localidades cercanas como Carrascosa del Campo, El Hito, Saelices, Uclés y Huete.
-            </p>
-            <p>
-              Los datos resumidos proceden de las fichas enlazadas. No mostramos precios ni
-              prometemos disponibilidad: conviene confirmar directamente cada condición antes de
-              reservar.
-            </p>
-          </div>
+    <section class="list-section" aria-labelledby="local-title">
+      <div class="accommodation-shell">
+        <div class="section-heading">
+          <p class="eyebrow">Dentro del municipio</p>
+          <h2 id="local-title">Palomares del Campo</h2>
         </div>
-      </section>
-
-      <section class="list-section" aria-labelledby="local-title">
-        <div class="accommodation-shell">
-          <div class="section-heading">
-            <p class="eyebrow">Dentro del municipio</p>
-            <h2 id="local-title">Palomares del Campo</h2>
-          </div>
-          <div class="accommodation-grid">
-            {localAccommodations.map((accommodation) => (
-              <AccommodationCard accommodation={accommodation} />
-            ))}
-          </div>
+        <div class="accommodation-grid">
+          {localAccommodations.map((accommodation) => (
+            <AccommodationCard accommodation={accommodation} />
+          ))}
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="nearby-section" aria-labelledby="nearby-title">
-        <div class="accommodation-shell">
-          <div class="section-heading">
-            <p class="eyebrow">A poca distancia</p>
-            <h2 id="nearby-title">Alrededores</h2>
-            <p>
-              Opciones en municipios próximos que pueden completar la visita a Palomares y a otros
-              puntos de interés de la comarca.
-            </p>
-          </div>
-          <div class="accommodation-grid">
-            {nearbyAccommodations.map((accommodation) => (
-              <AccommodationCard accommodation={accommodation} variant="dark" />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section class="source-section" aria-label="Criterio y fecha de revisión">
-        <div class="accommodation-shell source-inner">
+    <section class="nearby-section" aria-labelledby="nearby-title">
+      <div class="accommodation-shell">
+        <div class="section-heading">
+          <p class="eyebrow">A poca distancia</p>
+          <h2 id="nearby-title">Alrededores</h2>
           <p>
-            No gestionamos reservas ni representamos a estos alojamientos. Los nombres, ubicaciones
-            y capacidades pueden cambiar; comprueba precios, disponibilidad, dirección y condiciones
-            en la fuente original antes de tomar una decisión.
+            Opciones en municipios próximos que pueden completar la visita a Palomares y a otros
+            puntos de interés de la comarca.
           </p>
-          <p>Fuentes consultadas y fichas revisadas el {formatDate(accommodationReviewedAt)}.</p>
         </div>
-      </section>
-    </main>
+        <div class="accommodation-grid">
+          {nearbyAccommodations.map((accommodation) => (
+            <AccommodationCard accommodation={accommodation} variant="dark" />
+          ))}
+        </div>
+      </div>
+    </section>
 
-    <SiteFooter />
-  </body>
-</html>
+    <section class="source-section" aria-label="Criterio y fecha de revisión">
+      <div class="accommodation-shell source-inner">
+        <p>
+          No gestionamos reservas ni representamos a estos alojamientos. Los nombres, ubicaciones y
+          capacidades pueden cambiar; comprueba precios, disponibilidad, dirección y condiciones en
+          la fuente original antes de tomar una decisión.
+        </p>
+        <p>Fuentes consultadas y fichas revisadas el {formatDate(accommodationReviewedAt)}.</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
 
 <style>
   .accommodation-shell {

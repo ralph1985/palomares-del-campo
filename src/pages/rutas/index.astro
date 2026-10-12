@@ -2,10 +2,8 @@
 import 'leaflet/dist/leaflet.css';
 import ActionLink from '../../components/ui/ActionLink.astro';
 import ExternalLink from '../../components/ui/ExternalLink.astro';
-import SiteFooter from '../../components/layout/SiteFooter.astro';
-import SiteHeader from '../../components/layout/SiteHeader.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { localRoutes } from '../../data/routes';
-import '../../styles/global.css';
 
 const formatDistance = (distanceKm: number) =>
   distanceKm.toLocaleString('es-ES', {
@@ -27,147 +25,134 @@ const formatDate = (date: string) =>
   });
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta
-      name="description"
-      content="Rutas y paseos relacionados con Palomares del Campo, con fuentes visibles y estado de verificación."
-    />
-    <title>Rutas del pueblo · Palomares del Campo</title>
-  </head>
-  <body>
-    <SiteHeader />
+<BaseLayout
+  title="Rutas del pueblo · Palomares del Campo"
+  description="Rutas y paseos relacionados con Palomares del Campo, con fuentes visibles y estado de verificación."
+>
+  <main>
+    <section class="routes-hero" aria-labelledby="page-title">
+      <div class="routes-shell">
+        <p class="eyebrow">Palomares del Campo · Visita</p>
+        <h1 id="page-title">Rutas del pueblo</h1>
+        <p>
+          Una primera selección de recorridos encontrados en fuentes externas. La etiqueta de cada
+          ficha indica qué está verificado y qué todavía requiere revisión local.
+        </p>
+      </div>
+    </section>
 
-    <main>
-      <section class="routes-hero" aria-labelledby="page-title">
-        <div class="routes-shell">
-          <p class="eyebrow">Palomares del Campo · Visita</p>
-          <h1 id="page-title">Rutas del pueblo</h1>
+    <section class="routes-section" aria-labelledby="routes-title">
+      <div class="routes-shell">
+        <div class="routes-heading">
+          <div>
+            <p class="eyebrow">Primer recorrido</p>
+            <h2 id="routes-title">Pasear también necesita contexto.</h2>
+          </div>
           <p>
-            Una primera selección de recorridos encontrados en fuentes externas. La etiqueta de cada
-            ficha indica qué está verificado y qué todavía requiere revisión local.
+            El entorno de Palomares ofrece caminos rurales para senderismo ligero según Turismo de
+            Castilla-La Mancha. El trazado de esta ficha procede de una plataforma externa.
           </p>
         </div>
-      </section>
 
-      <section class="routes-section" aria-labelledby="routes-title">
-        <div class="routes-shell">
-          <div class="routes-heading">
-            <div>
-              <p class="eyebrow">Primer recorrido</p>
-              <h2 id="routes-title">Pasear también necesita contexto.</h2>
-            </div>
-            <p>
-              El entorno de Palomares ofrece caminos rurales para senderismo ligero según Turismo de
-              Castilla-La Mancha. El trazado de esta ficha procede de una plataforma externa.
-            </p>
-          </div>
+        <div class="route-list">
+          {localRoutes.map((route) => (
+            <article class="route-card">
+              <div class="route-card-header">
+                <p class="route-status">{route.statusLabel}</p>
+                <h3>{route.title}</h3>
+                <p class="route-summary">{route.summary}</p>
+              </div>
 
-          <div class="route-list">
-            {localRoutes.map((route) => (
-              <article class="route-card">
-                <div class="route-card-header">
-                  <p class="route-status">{route.statusLabel}</p>
-                  <h3>{route.title}</h3>
-                  <p class="route-summary">{route.summary}</p>
+              <dl class="route-facts">
+                <div>
+                  <dt>Distancia</dt>
+                  <dd>{formatDistance(route.distanceKm)} km</dd>
                 </div>
+                <div>
+                  <dt>Duración</dt>
+                  <dd>{formatDuration(route.durationMinutes)}</dd>
+                </div>
+                <div>
+                  <dt>Dificultad</dt>
+                  <dd>{route.difficulty}</dd>
+                </div>
+                <div>
+                  <dt>Desnivel positivo</dt>
+                  <dd>{route.elevationGainMetres} m</dd>
+                </div>
+              </dl>
 
-                <dl class="route-facts">
-                  <div>
-                    <dt>Distancia</dt>
-                    <dd>{formatDistance(route.distanceKm)} km</dd>
-                  </div>
-                  <div>
-                    <dt>Duración</dt>
-                    <dd>{formatDuration(route.durationMinutes)}</dd>
-                  </div>
-                  <div>
-                    <dt>Dificultad</dt>
-                    <dd>{route.difficulty}</dd>
-                  </div>
-                  <div>
-                    <dt>Desnivel positivo</dt>
-                    <dd>{route.elevationGainMetres} m</dd>
-                  </div>
-                </dl>
+              <p class="route-accessibility">
+                <strong>Accesibilidad:</strong> {route.accessibilityNote}
+              </p>
 
-                <p class="route-accessibility">
-                  <strong>Accesibilidad:</strong> {route.accessibilityNote}
+              <div class="route-disclaimer">
+                <strong>No es una ruta municipal señalizada.</strong>
+                <span>
+                  Consulta el trazado, el estado del camino y las condiciones antes de salir.
+                </span>
+              </div>
+
+              <div class="route-trace-status">
+                <strong>{route.traceStatusLabel}</strong>
+                <span>{route.traceStatusNote}</span>
+              </div>
+
+              <div class="route-map-panel">
+                <div class="route-map-heading">
+                  <strong>Mapa interactivo del trazado</strong>
+                  <span>Consulta el recorrido y sus puntos de interés.</span>
+                </div>
+                <div
+                  class="route-map"
+                  data-route-map
+                  data-gpx-url={route.traceUrl}
+                  data-map-status="loading"
+                  aria-label={`Mapa del trazado ${route.title}`}
+                  aria-busy="true"
+                ></div>
+                <p class="route-map-status" data-route-map-status aria-live="polite">
+                  Cargando mapa…
                 </p>
-
-                <div class="route-disclaimer">
-                  <strong>No es una ruta municipal señalizada.</strong>
-                  <span>
-                    Consulta el trazado, el estado del camino y las condiciones antes de salir.
-                  </span>
-                </div>
-
-                <div class="route-trace-status">
-                  <strong>{route.traceStatusLabel}</strong>
-                  <span>{route.traceStatusNote}</span>
-                </div>
-
-                <div class="route-map-panel">
-                  <div class="route-map-heading">
-                    <strong>Mapa interactivo del trazado</strong>
-                    <span>Consulta el recorrido y sus puntos de interés.</span>
-                  </div>
-                  <div
-                    class="route-map"
-                    data-route-map
-                    data-gpx-url={route.traceUrl}
-                    data-map-status="loading"
-                    aria-label={`Mapa del trazado ${route.title}`}
-                    aria-busy="true"
-                  ></div>
-                  <p class="route-map-status" data-route-map-status aria-live="polite">
-                    Cargando mapa…
-                  </p>
-                  <p class="route-map-note">
-                    Mapa basado en el GPX aportado. La cartografía procede de OpenStreetMap.
-                  </p>
-                </div>
-
-                <div class="route-links">
-                  <ExternalLink class="route-primary-link" href={route.routeSource.href}>
-                    {route.routeSource.label} <span aria-hidden="true">↗</span>
-                  </ExternalLink>
-                  <ExternalLink class="route-context-link" href={route.contextSource.href}>
-                    Contexto: {route.contextSource.label} <span aria-hidden="true">↗</span>
-                  </ExternalLink>
-                  <ActionLink class="route-gpx-link" variant="solid" href={route.traceUrl} download>
-                    Descargar GPX <span aria-hidden="true">↓</span>
-                  </ActionLink>
-                  <ActionLink class="route-game-link" variant="underline" href="/juego/">
-                    Probar La bola <span aria-hidden="true">→</span>
-                  </ActionLink>
-                </div>
-                <p class="route-review">
-                  Fuente actualizada el {formatDate(route.sourceUpdatedAt)} · ficha revisada el
-                  {` ${formatDate(route.reviewedAt)}`}
+                <p class="route-map-note">
+                  Mapa basado en el GPX aportado. La cartografía procede de OpenStreetMap.
                 </p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+              </div>
 
-      <section class="routes-note" aria-label="Criterio editorial de las rutas">
-        <div class="routes-shell">
-          <p>
-            Las próximas rutas solo pasarán a presentarse como recorridos propios cuando podamos
-            comprobar sus puntos, distancias, accesibilidad y condiciones sobre el terreno.
-          </p>
+              <div class="route-links">
+                <ExternalLink class="route-primary-link" href={route.routeSource.href}>
+                  {route.routeSource.label} <span aria-hidden="true">↗</span>
+                </ExternalLink>
+                <ExternalLink class="route-context-link" href={route.contextSource.href}>
+                  Contexto: {route.contextSource.label} <span aria-hidden="true">↗</span>
+                </ExternalLink>
+                <ActionLink class="route-gpx-link" variant="solid" href={route.traceUrl} download>
+                  Descargar GPX <span aria-hidden="true">↓</span>
+                </ActionLink>
+                <ActionLink class="route-game-link" variant="underline" href="/juego/">
+                  Probar La bola <span aria-hidden="true">→</span>
+                </ActionLink>
+              </div>
+              <p class="route-review">
+                Fuente actualizada el {formatDate(route.sourceUpdatedAt)} · ficha revisada el
+                {` ${formatDate(route.reviewedAt)}`}
+              </p>
+            </article>
+          ))}
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
 
-    <SiteFooter />
-  </body>
-</html>
+    <section class="routes-note" aria-label="Criterio editorial de las rutas">
+      <div class="routes-shell">
+        <p>
+          Las próximas rutas solo pasarán a presentarse como recorridos propios cuando podamos
+          comprobar sus puntos, distancias, accesibilidad y condiciones sobre el terreno.
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
 
 <script>
   import '../../scripts/route-map';

@@ -1,10 +1,8 @@
 ---
 import CurrentAffairsEmptyState from '../../components/current-affairs/CurrentAffairsEmptyState.astro';
 import ExternalLink from '../../components/ui/ExternalLink.astro';
-import SiteFooter from '../../components/layout/SiteFooter.astro';
-import SiteHeader from '../../components/layout/SiteHeader.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { agendaItems } from '../../data/current-affairs';
-import '../../styles/global.css';
 
 const hasAgenda = agendaItems.length > 0;
 const formatDate = (date: string) =>
@@ -15,60 +13,47 @@ const formatDate = (date: string) =>
   });
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta
-      name="description"
-      content="Agenda de actividades y eventos publicados para Palomares del Campo."
-    />
-    <title>Agenda · Palomares del Campo</title>
-  </head>
-  <body>
-    <SiteHeader />
-
-    <main>
-      {hasAgenda ? (
-        <section class="agenda-section" aria-labelledby="agenda-title">
-          <div class="agenda-shell">
-            <p class="eyebrow">Actualidad · Agenda</p>
-            <h1 id="agenda-title">Agenda</h1>
-            <div class="agenda-list">
-              {agendaItems.map((item) => (
-                <article class="agenda-card">
-                  <p class="agenda-date">
-                    {formatDate(item.startDate)}
-                    {item.endDate ? ` — ${formatDate(item.endDate)}` : ''}
-                  </p>
-                  <h2>{item.title}</h2>
-                  <p class="agenda-meta">
-                    {item.category} · {item.location}
-                  </p>
-                  <p>{item.summary}</p>
-                  <ExternalLink href={item.source.href}>
-                    {item.source.label} <span aria-hidden="true">↗</span>
-                  </ExternalLink>
-                </article>
-              ))}
-            </div>
+<BaseLayout
+  title="Agenda · Palomares del Campo"
+  description="Agenda de actividades y eventos publicados para Palomares del Campo."
+>
+  <main>
+    {hasAgenda ? (
+      <section class="agenda-section" aria-labelledby="agenda-title">
+        <div class="agenda-shell">
+          <p class="eyebrow">Actualidad · Agenda</p>
+          <h1 id="agenda-title">Agenda</h1>
+          <div class="agenda-list">
+            {agendaItems.map((item) => (
+              <article class="agenda-card">
+                <p class="agenda-date">
+                  {formatDate(item.startDate)}
+                  {item.endDate ? ` — ${formatDate(item.endDate)}` : ''}
+                </p>
+                <h2>{item.title}</h2>
+                <p class="agenda-meta">
+                  {item.category} · {item.location}
+                </p>
+                <p>{item.summary}</p>
+                <ExternalLink href={item.source.href}>
+                  {item.source.label} <span aria-hidden="true">↗</span>
+                </ExternalLink>
+              </article>
+            ))}
           </div>
-        </section>
-      ) : (
-        <CurrentAffairsEmptyState
-          section="agenda"
-          eyebrow="Actualidad · Agenda"
-          title="Agenda"
-          description="Aquí reuniremos actividades, encuentros y fechas públicas cuando estén confirmadas y tengan una fuente visible."
-          emptyMessage="No hay actividades publicadas todavía."
-        />
-      )}
-    </main>
-
-    <SiteFooter />
-  </body>
-</html>
+        </div>
+      </section>
+    ) : (
+      <CurrentAffairsEmptyState
+        section="agenda"
+        eyebrow="Actualidad · Agenda"
+        title="Agenda"
+        description="Aquí reuniremos actividades, encuentros y fechas públicas cuando estén confirmadas y tengan una fuente visible."
+        emptyMessage="No hay actividades publicadas todavía."
+      />
+    )}
+  </main>
+</BaseLayout>
 
 <style>
   .agenda-section {

@@ -3,46 +3,31 @@ import ActionLink from '../components/ui/ActionLink.astro';
 import HomeAudienceCards from '../components/home/HomeAudienceCards.astro';
 import HomeEditorialGuide from '../components/home/HomeEditorialGuide.astro';
 import NewsSection from '../components/NewsSection.astro';
-import SiteFooter from '../components/layout/SiteFooter.astro';
-import SiteHeader from '../components/layout/SiteHeader.astro';
-import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta
-      name="description"
-      content="Palomares del Campo: un nuevo espacio digital para el pueblo."
-    />
-    <title>Palomares del Campo</title>
-  </head>
-  <body>
-    <SiteHeader />
+<BaseLayout
+  title="Palomares del Campo"
+  description="Palomares del Campo: un nuevo espacio digital para el pueblo."
+>
+  <main id="inicio">
+    <section class="intro" id="proyecto" aria-labelledby="intro-title">
+      <p class="eyebrow">Palomares del Campo · Cuenca</p>
+      <h1 id="intro-title">Un nuevo espacio para descubrir el pueblo.</h1>
+      <p class="intro-copy">
+        Este proyecto está tomando forma. Aquí reuniremos información, lugares e historias de
+        Palomares del Campo en una experiencia clara y cercana.
+      </p>
+      <ActionLink class="intro-action" variant="underline" href="/juego/">
+        Probar el mapa del juego <span aria-hidden="true">→</span>
+      </ActionLink>
+    </section>
 
-    <main id="inicio">
-      <section class="intro" id="proyecto" aria-labelledby="intro-title">
-        <p class="eyebrow">Palomares del Campo · Cuenca</p>
-        <h1 id="intro-title">Un nuevo espacio para descubrir el pueblo.</h1>
-        <p class="intro-copy">
-          Este proyecto está tomando forma. Aquí reuniremos información, lugares e historias de
-          Palomares del Campo en una experiencia clara y cercana.
-        </p>
-        <ActionLink class="intro-action" variant="underline" href="/juego/">
-          Probar el mapa del juego <span aria-hidden="true">→</span>
-        </ActionLink>
-      </section>
-
-      <HomeAudienceCards />
-      <HomeEditorialGuide />
-      <NewsSection />
-    </main>
-
-    <SiteFooter />
-  </body>
-</html>
+    <HomeAudienceCards />
+    <HomeEditorialGuide />
+    <NewsSection />
+  </main>
+</BaseLayout>
 
 <style>
   .intro {

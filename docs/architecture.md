@@ -36,8 +36,7 @@ Cada bloque se incorpora solo cuando tiene contenido y una necesidad real.
 
 `src/layouts/` contiene la estructura común:
 
-- `BaseLayout.astro`: `html`, metadatos, cabecera, navegación, pie y estilos globales.
-- `ArticleLayout.astro`: título, fecha, fuente, cuerpo y navegación de contenidos editoriales.
+- `BaseLayout.astro`: documento HTML, metadatos comunes, estilos globales, cabecera y pie. Expone un slot para el contenido de cada ruta, un slot `head` para metadatos adicionales y `bodyClass` para variantes documentales como el tema del juego. Las páginas conservan su propio `<main>` para evitar anidamientos y mantienen en ellas la composición y los estilos específicos.
 
 La extracción desde el actual `src/pages/index.astro` debe conservar la apariencia y ser un refactor separado de la creación de nuevas funcionalidades.
 

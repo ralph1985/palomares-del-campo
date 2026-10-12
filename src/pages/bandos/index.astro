@@ -2,9 +2,7 @@
 import { getCollection } from 'astro:content';
 import BandoCard from '../../components/BandoCard.astro';
 import CollectionArchive from '../../components/CollectionArchive.astro';
-import SiteFooter from '../../components/layout/SiteFooter.astro';
-import SiteHeader from '../../components/layout/SiteHeader.astro';
-import '../../styles/global.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const posts = (await getCollection('bandos')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -15,57 +13,44 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort((a
 const years = [...new Set(posts.map((post) => post.data.date.getFullYear()))].sort((a, b) => b - a);
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta
-      name="description"
-      content="Bandos y comunicados publicados por el Ayuntamiento de Palomares del Campo."
-    />
-    <title>Bandos · Palomares del Campo</title>
-  </head>
-  <body>
-    <SiteHeader />
+<BaseLayout
+  title="Bandos · Palomares del Campo"
+  description="Bandos y comunicados publicados por el Ayuntamiento de Palomares del Campo."
+>
+  <main>
+    <section class="bandos-hero" aria-labelledby="page-title">
+      <div class="bandos-hero-inner">
+        <p class="eyebrow">Palomares del Campo · Actualidad</p>
+        <h1 id="page-title">Bandos</h1>
+        <p>
+          Comunicados municipales publicados en el canal de Palomares del Campo Informa, con fecha,
+          categoría y enlace a la fuente original.
+        </p>
+      </div>
+    </section>
 
-    <main>
-      <section class="bandos-hero" aria-labelledby="page-title">
-        <div class="bandos-hero-inner">
-          <p class="eyebrow">Palomares del Campo · Actualidad</p>
-          <h1 id="page-title">Bandos</h1>
-          <p>
-            Comunicados municipales publicados en el canal de Palomares del Campo Informa, con
-            fecha, categoría y enlace a la fuente original.
-          </p>
-        </div>
-      </section>
-
-      <CollectionArchive
-        scope="bando"
-        headingId="archive-title"
-        eyebrow="Comunicaciones municipales"
-        title="Bandos publicados"
-        total={posts.length}
-        itemSingular="bando publicado"
-        itemPlural="bandos publicados"
-        emptyMessage="Todavía no hay bandos publicados."
-        searchLabel="Buscar en bandos"
-        inputId="bando-search"
-        placeholder="Ej. autobús, piscina o dentista"
-        action="/bandos/"
-        categories={categories}
-        years={years}
-      >
-        {posts.map((post) => (
-          <BandoCard post={post} />
-        ))}
-      </CollectionArchive>
-    </main>
-
-    <SiteFooter />
-  </body>
-</html>
+    <CollectionArchive
+      scope="bando"
+      headingId="archive-title"
+      eyebrow="Comunicaciones municipales"
+      title="Bandos publicados"
+      total={posts.length}
+      itemSingular="bando publicado"
+      itemPlural="bandos publicados"
+      emptyMessage="Todavía no hay bandos publicados."
+      searchLabel="Buscar en bandos"
+      inputId="bando-search"
+      placeholder="Ej. autobús, piscina o dentista"
+      action="/bandos/"
+      categories={categories}
+      years={years}
+    >
+      {posts.map((post) => (
+        <BandoCard post={post} />
+      ))}
+    </CollectionArchive>
+  </main>
+</BaseLayout>
 
 <style>
   .bandos-hero {

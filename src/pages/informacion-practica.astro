@@ -1,8 +1,6 @@
 ---
 import ExternalLink from '../components/ui/ExternalLink.astro';
-import SiteFooter from '../components/layout/SiteFooter.astro';
-import SiteHeader from '../components/layout/SiteHeader.astro';
-import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import {
   municipalEmailHref,
   municipalInfo,
@@ -15,146 +13,136 @@ const transportPublishedAt = new Date(
 ).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={municipalInfo.pageDescription} />
-    <title>{municipalInfo.pageTitle} · Palomares del Campo</title>
-  </head>
-  <body>
-    <SiteHeader />
+<BaseLayout
+  title={`${municipalInfo.pageTitle} · Palomares del Campo`}
+  description={municipalInfo.pageDescription}
+>
+  <main>
+    <section class="practical-hero" aria-labelledby="page-title">
+      <div class="practical-shell">
+        <p class="eyebrow">Para vecinos y visitantes</p>
+        <h1 id="page-title">{municipalInfo.pageTitle}</h1>
+        <p class="hero-intro">
+          Lo esencial para contactar con el Ayuntamiento y llegar a sus canales oficiales sin dar
+          vueltas innecesarias.
+        </p>
+      </div>
+    </section>
 
-    <main>
-      <section class="practical-hero" aria-labelledby="page-title">
-        <div class="practical-shell">
-          <p class="eyebrow">Para vecinos y visitantes</p>
-          <h1 id="page-title">{municipalInfo.pageTitle}</h1>
-          <p class="hero-intro">
-            Lo esencial para contactar con el Ayuntamiento y llegar a sus canales oficiales sin dar
-            vueltas innecesarias.
+    <section class="contact-section" aria-labelledby="contact-title">
+      <div class="practical-shell contact-grid">
+        <div class="section-intro">
+          <p class="eyebrow">Contacto municipal</p>
+          <h2 id="contact-title">Ayuntamiento y contacto</h2>
+          <p>
+            Para trámites, avisos y consultas municipales, utiliza los datos de contacto o los
+            canales oficiales que aparecen más abajo.
           </p>
         </div>
-      </section>
 
-      <section class="contact-section" aria-labelledby="contact-title">
-        <div class="practical-shell contact-grid">
-          <div class="section-intro">
-            <p class="eyebrow">Contacto municipal</p>
-            <h2 id="contact-title">Ayuntamiento y contacto</h2>
-            <p>
-              Para trámites, avisos y consultas municipales, utiliza los datos de contacto o los
-              canales oficiales que aparecen más abajo.
-            </p>
-          </div>
-
-          <address class="contact-card">
-            <p class="contact-name">{municipalInfo.contact.name}</p>
-            <p>
-              {municipalInfo.contact.address}
-              <br />
-              {municipalInfo.contact.locality}
-            </p>
-            <p>{municipalInfo.contact.judicialDistrict}</p>
-            <div class="contact-actions">
-              <a class="button-link" href={municipalPhoneHref}>
-                Llamar al Ayuntamiento
-              </a>
-              <a class="text-link" href={municipalEmailHref}>
-                Escribir por correo electrónico
-              </a>
-              <ExternalLink class="text-link" href={municipalInfo.contact.mapHref}>
-                Abrir ubicación en OpenStreetMap
-              </ExternalLink>
-            </div>
-          </address>
-        </div>
-      </section>
-
-      <section class="services-section" aria-labelledby="services-title">
-        <div class="practical-shell services-grid">
-          <div class="section-intro">
-            <p class="eyebrow">Trámites y canales</p>
-            <h2 id="services-title">Trámites y canales oficiales</h2>
-            <p>
-              Estos enlaces llevan a los servicios de la sede y del portal municipal. La web
-              editorial orienta; los trámites se realizan en sus plataformas oficiales.
-            </p>
-          </div>
-
-          <nav aria-label="Canales oficiales del Ayuntamiento">
-            <ul class="service-list">
-              {municipalInfo.officialServices.map((service, index) => (
-                <li>
-                  <ExternalLink href={service.href}>
-                    <span class="service-index">0{index + 1}</span>
-                    <span>{service.label}</span>
-                    <span class="service-arrow" aria-hidden="true">
-                      ↗
-                    </span>
-                  </ExternalLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-      </section>
-
-      <section class="transport-section" aria-labelledby="transport-title">
-        <div class="practical-shell transport-grid">
-          <div>
-            <p class="eyebrow">Fuente oficial · Publicado el {transportPublishedAt}</p>
-            <h2 id="transport-title">{municipalInfo.transport.title}</h2>
-          </div>
-          <div>
-            <p>{municipalInfo.transport.description}</p>
-            <div class="transport-routes">
-              {municipalInfo.transport.routes.map((route) => (
-                <section class="transport-route" aria-labelledby={`route-${route.title}`}>
-                  <h3 id={`route-${route.title}`}>{route.title}</h3>
-                  <table aria-label={`Horarios ${route.title.replace(' → ', ' a ')}`}>
-                    <thead>
-                      <tr>
-                        <th scope="col">Día</th>
-                        <th scope="col">Hora</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {route.entries.map((entry) => (
-                        <tr>
-                          <th scope="row">{entry.day}</th>
-                          <td>{entry.time}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </section>
-              ))}
-            </div>
-            <p class="transport-note">
-              Horarios publicados en el bando citado; comprueba posibles cambios antes de viajar.
-            </p>
-            <ExternalLink class="source-link" href={municipalInfo.transport.source.href}>
-              Ver bando original <span aria-hidden="true">↗</span>
+        <address class="contact-card">
+          <p class="contact-name">{municipalInfo.contact.name}</p>
+          <p>
+            {municipalInfo.contact.address}
+            <br />
+            {municipalInfo.contact.locality}
+          </p>
+          <p>{municipalInfo.contact.judicialDistrict}</p>
+          <div class="contact-actions">
+            <a class="button-link" href={municipalPhoneHref}>
+              Llamar al Ayuntamiento
+            </a>
+            <a class="text-link" href={municipalEmailHref}>
+              Escribir por correo electrónico
+            </a>
+            <ExternalLink class="text-link" href={municipalInfo.contact.mapHref}>
+              Abrir ubicación en OpenStreetMap
             </ExternalLink>
           </div>
-        </div>
-      </section>
+        </address>
+      </div>
+    </section>
 
-      <section class="review-section" aria-label="Revisión de la información">
-        <div class="practical-shell review-inner">
+    <section class="services-section" aria-labelledby="services-title">
+      <div class="practical-shell services-grid">
+        <div class="section-intro">
+          <p class="eyebrow">Trámites y canales</p>
+          <h2 id="services-title">Trámites y canales oficiales</h2>
           <p>
-            Fuentes visibles en cada bloque · Revisado el
-            {` ${new Date(`${municipalInfoReviewedAt}T00:00:00`).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}`}
+            Estos enlaces llevan a los servicios de la sede y del portal municipal. La web editorial
+            orienta; los trámites se realizan en sus plataformas oficiales.
           </p>
         </div>
-      </section>
-    </main>
 
-    <SiteFooter />
-  </body>
-</html>
+        <nav aria-label="Canales oficiales del Ayuntamiento">
+          <ul class="service-list">
+            {municipalInfo.officialServices.map((service, index) => (
+              <li>
+                <ExternalLink href={service.href}>
+                  <span class="service-index">0{index + 1}</span>
+                  <span>{service.label}</span>
+                  <span class="service-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </ExternalLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+    <section class="transport-section" aria-labelledby="transport-title">
+      <div class="practical-shell transport-grid">
+        <div>
+          <p class="eyebrow">Fuente oficial · Publicado el {transportPublishedAt}</p>
+          <h2 id="transport-title">{municipalInfo.transport.title}</h2>
+        </div>
+        <div>
+          <p>{municipalInfo.transport.description}</p>
+          <div class="transport-routes">
+            {municipalInfo.transport.routes.map((route) => (
+              <section class="transport-route" aria-labelledby={`route-${route.title}`}>
+                <h3 id={`route-${route.title}`}>{route.title}</h3>
+                <table aria-label={`Horarios ${route.title.replace(' → ', ' a ')}`}>
+                  <thead>
+                    <tr>
+                      <th scope="col">Día</th>
+                      <th scope="col">Hora</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {route.entries.map((entry) => (
+                      <tr>
+                        <th scope="row">{entry.day}</th>
+                        <td>{entry.time}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </section>
+            ))}
+          </div>
+          <p class="transport-note">
+            Horarios publicados en el bando citado; comprueba posibles cambios antes de viajar.
+          </p>
+          <ExternalLink class="source-link" href={municipalInfo.transport.source.href}>
+            Ver bando original <span aria-hidden="true">↗</span>
+          </ExternalLink>
+        </div>
+      </div>
+    </section>
+
+    <section class="review-section" aria-label="Revisión de la información">
+      <div class="practical-shell review-inner">
+        <p>
+          Fuentes visibles en cada bloque · Revisado el
+          {` ${new Date(`${municipalInfoReviewedAt}T00:00:00`).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}`}
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
 
 <style>
   .practical-shell {
