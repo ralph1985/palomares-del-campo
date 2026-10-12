@@ -11,15 +11,19 @@ test.describe('local routes', () => {
     ).toBeVisible();
     await expect(page.getByText('5,13 km')).toBeVisible();
     await expect(page.getByText('1 h 21 min')).toBeVisible();
-    await expect(page.getByText('Fácil', { exact: true })).toBeVisible();
+    await expect(page.getByText('48 m')).toBeVisible();
     await expect(page.getByText('Recomendación externa')).toBeVisible();
     await expect(page.getByText('No es una ruta municipal señalizada.')).toBeVisible();
     await expect(page.getByRole('link', { name: /Probar La bola/ })).toHaveAttribute(
       'href',
       '/juego/',
     );
-    await expect(page.getByText('Mapa propio no disponible todavía.')).toBeVisible();
-    await expect(page.getByText(/La descarga GPX de la fuente requiere una cuenta/)).toBeVisible();
+    await expect(page.getByRole('link', { name: /Descargar GPX/ })).toHaveAttribute(
+      'href',
+      '/routes/campos-palomares-del-campo.gpx',
+    );
+    await expect(page.getByText('GPX disponible para descarga.')).toBeVisible();
+    await expect(page.getByText(/El archivo procede del trazado GPX aportado/)).toBeVisible();
     await expect(page.getByText(/Fuente actualizada el 26 de julio de 2024/)).toBeVisible();
     await expect(page.getByRole('link', { name: /Ver ruta en Komoot/ })).toHaveAttribute(
       'href',

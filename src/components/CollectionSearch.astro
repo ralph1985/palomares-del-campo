@@ -1,0 +1,274 @@
+---
+interface Props {
+  scope: 'bando' | 'news';
+  label: string;
+  inputId: string;
+  placeholder: string;
+  action: string;
+  total: number;
+  categories?: string[];
+  years?: number[];
+}
+
+const {
+  scope,
+  label,
+  inputId,
+  placeholder,
+  action,
+  total,
+  categories = [],
+  years = [],
+} = Astro.props;
+const collectionLabel = scope === 'bando' ? 'bandos' : 'noticias';
+const noResultsMessage =
+  scope === 'bando'
+    ? 'No hay bandos que coincidan con estos filtros.'
+    : 'No hay noticias que coincidan con estos filtros.';
+const categoryId = `${scope}-category`;
+const yearId = `${scope}-year`;
+---
+
+<form
+  class="filters"
+  data-search-filters={scope}
+  role="search"
+  aria-label={label}
+  action={action}
+  method="get"
+>
+  <div class="filter-field">
+    <label for={inputId}>{label}</label>
+    <div class="search-control">
+      <input
+        id={inputId}
+        name="q"
+        type="search"
+        placeholder={placeholder}
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <div class="search-actions">
+        <button type="button" data-search-clear hidden>
+          Limpiar búsqueda
+        </button>
+      </div>
+    </div>
+  </div>
+  {categories.length > 0 && (
+    <div class="filter-field">
+      <label for={categoryId}>Categoría</label>
+      <select id={categoryId} name="category">
+        <option value="">Todas las categorías</option>
+        {categories.map((category) => (
+          <option value={category}>{category}</option>
+        ))}
+      </select>
+    </div>
+  )}
+  {years.length > 0 && (
+    <div class="filter-field">
+      <label for={yearId}>Año</label>
+      <select id={yearId} name="year">
+        <option value="">Todos los años</option>
+        {years.map((year) => (
+          <option value={year}>{year}</option>
+        ))}
+      </select>
+    </div>
+  )}
+  <p class="filter-results" data-search-results role="status" aria-live="polite">
+    {total} {total === 1 ? 'resultado' : 'resultados'} en {collectionLabel}
+  </p>
+</form>
+<p class="empty search-empty" data-search-no-results hidden>
+  {noResultsMessage}
+</p>
+
+<style>
+  .filters {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) repeat(3, minmax(9rem, 1fr));
+    align-items: end;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid rgb(25 52 45 / 12%);
+    border-radius: 1rem;
+    background: rgb(255 253 248 / 70%);
+  }
+
+  .filter-field {
+    display: grid;
+    gap: 0.45rem;
+  }
+  .search-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .search-control input {
+    min-width: 0;
+    flex: 1;
+  }
+  .search-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .search-actions button {
+    min-height: 2.75rem;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid #2f6652;
+    border-radius: 0.55rem;
+    color: #2f6652;
+    background: transparent;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 750;
+    cursor: pointer;
+  }
+  .search-actions button:hover,
+  .search-actions button:focus-visible {
+    border-color: #a05c32;
+    color: #fffdf8;
+    background: #a05c32;
+  }
+  .search-actions button:focus-visible {
+    outline: 3px solid rgb(160 92 50 / 28%);
+    outline-offset: 2px;
+  }
+  .filter-field label {
+    color: #527066;
+    font-size: 0.78rem;
+    font-weight: 750;
+  }
+  .filter-field input,
+  .filter-field select {
+    min-height: 2.75rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid rgb(25 52 45 / 20%);
+    border-radius: 0.55rem;
+    color: #19342d;
+    background: #fffdf8;
+    font: inherit;
+  }
+  .filter-field input:focus-visible,
+  .filter-field select:focus-visible {
+    outline: 3px solid rgb(160 92 50 / 28%);
+    outline-offset: 2px;
+  }
+  .filter-results {
+    margin: 0 0 0.7rem;
+    color: #527066;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+  .search-empty {
+    padding: 2rem;
+    border: 1px dashed rgb(25 52 45 / 22%);
+    color: #527066;
+  }
+  .search-empty[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 60rem) {
+    .filters {
+      grid-template-columns: minmax(0, 2fr) repeat(2, minmax(9rem, 1fr));
+    }
+  }
+  @media (max-width: 38rem) {
+    .filters {
+      grid-template-columns: 1fr;
+    }
+    .filter-results {
+      margin-bottom: 0;
+    }
+  }
+</style>
+
+<script>
+  const filters = document.querySelector<HTMLFormElement>('[data-search-filters]');
+
+  if (filters) {
+    const scope = filters.dataset.searchFilters;
+    const search = filters.querySelector<HTMLInputElement>('input[name="q"]');
+    const category = filters.querySelector<HTMLSelectElement>('select[name="category"]');
+    const year = filters.querySelector<HTMLSelectElement>('select[name="year"]');
+    const clearSearch = filters.querySelector<HTMLButtonElement>('[data-search-clear]');
+    const cards = scope
+      ? Array.from(document.querySelectorAll<HTMLElement>(`[data-${scope}-card]`)).map((card) => ({
+          element: card,
+          searchText: normaliseSearchText(card.dataset.searchText ?? ''),
+        }))
+      : [];
+    const results = filters.querySelector<HTMLElement>('[data-search-results]');
+    const noResults = document.querySelector<HTMLElement>('[data-search-no-results]');
+    const params = new URLSearchParams(window.location.search);
+
+    if (search && params.get('q')) search.value = params.get('q') ?? '';
+    if (category && params.has('category')) category.value = params.get('category') ?? '';
+    if (year && params.has('year')) year.value = params.get('year') ?? '';
+
+    const updateResults = ({ syncUrl = true } = {}) => {
+      const query = normaliseSearchText(search?.value ?? '');
+      const queryTokens = query ? query.split(' ') : [];
+      const selectedCategory = category?.value ?? '';
+      const selectedYear = year?.value ?? '';
+      let visibleCount = 0;
+
+      cards.forEach(({ element, searchText }) => {
+        const matchesQuery = queryTokens.every((token) => searchText.includes(token));
+        const matchesCategory =
+          !selectedCategory || element.dataset.searchCategory === selectedCategory;
+        const matchesYear = !selectedYear || element.dataset.searchYear === selectedYear;
+        const visible = matchesQuery && matchesCategory && matchesYear;
+        element.hidden = !visible;
+        if (visible) visibleCount += 1;
+      });
+
+      if (results)
+        results.textContent = `${visibleCount} ${visibleCount === 1 ? 'resultado' : 'resultados'}`;
+      if (noResults) noResults.hidden = visibleCount !== 0;
+      if (clearSearch) clearSearch.hidden = !search?.value;
+
+      if (syncUrl) {
+        const url = new URL(window.location.href);
+        const rawQuery = search?.value.trim() ?? '';
+        if (rawQuery) url.searchParams.set('q', rawQuery);
+        else url.searchParams.delete('q');
+        if (selectedCategory) url.searchParams.set('category', selectedCategory);
+        else url.searchParams.delete('category');
+        if (selectedYear) url.searchParams.set('year', selectedYear);
+        else url.searchParams.delete('year');
+        window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+      }
+    };
+
+    filters.addEventListener('submit', (event) => {
+      event.preventDefault();
+      updateResults();
+    });
+    search?.addEventListener('input', () => updateResults());
+    category?.addEventListener('change', () => updateResults());
+    year?.addEventListener('change', () => updateResults());
+    clearSearch?.addEventListener('click', () => {
+      if (!search) return;
+      search.value = '';
+      updateResults();
+      search.focus();
+    });
+
+    updateResults({ syncUrl: false });
+  }
+
+  function normaliseSearchText(value: string) {
+    const normalised = typeof value.normalize === 'function' ? value.normalize('NFD') : value;
+    return normalised
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLocaleLowerCase('es-ES')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+</script>

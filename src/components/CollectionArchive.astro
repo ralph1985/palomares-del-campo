@@ -1,0 +1,135 @@
+---
+import CollectionSearch from './CollectionSearch.astro';
+
+interface Props {
+  scope: 'bando' | 'news';
+  headingId: string;
+  eyebrow: string;
+  title: string;
+  total: number;
+  itemSingular: string;
+  itemPlural: string;
+  emptyMessage: string;
+  searchLabel: string;
+  inputId: string;
+  placeholder: string;
+  action: string;
+  categories?: string[];
+  years?: number[];
+}
+
+const {
+  scope,
+  headingId,
+  eyebrow,
+  title,
+  total,
+  itemSingular,
+  itemPlural,
+  emptyMessage,
+  searchLabel,
+  inputId,
+  placeholder,
+  action,
+  categories = [],
+  years = [],
+} = Astro.props;
+---
+
+<section class={`archive archive-${scope}`} aria-labelledby={headingId}>
+  <div class="archive-inner">
+    <div class="archive-heading">
+      <div>
+        <p class="eyebrow">{eyebrow}</p>
+        <h2 id={headingId}>{title}</h2>
+      </div>
+      <p>
+        {total} {total === 1 ? itemSingular : itemPlural}
+      </p>
+    </div>
+
+    <CollectionSearch
+      scope={scope}
+      label={searchLabel}
+      inputId={inputId}
+      placeholder={placeholder}
+      action={action}
+      total={total}
+      categories={categories}
+      years={years}
+    />
+
+    {total > 0 ? (
+      <div class={`collection-grid ${scope}-grid`}>
+        <slot />
+      </div>
+    ) : (
+      <p class="empty">{emptyMessage}</p>
+    )}
+  </div>
+</section>
+
+<style>
+  .archive {
+    padding: clamp(4rem, 9vw, 8rem) 0;
+  }
+  .archive-inner {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+  .archive-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .archive-heading .eyebrow {
+    margin: 0 0 1rem;
+    color: #e5b77e;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .archive-bando .archive-heading .eyebrow {
+    color: #a05c32;
+  }
+  .archive-heading h2 {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.95;
+  }
+  .archive-heading > p {
+    margin: 0;
+    color: #527066;
+    font-size: 0.9rem;
+  }
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .empty {
+    padding: 2rem;
+    border: 1px dashed rgb(25 52 45 / 22%);
+    color: #527066;
+  }
+  @media (max-width: 50rem) {
+    .collection-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 38rem) {
+    .archive-inner {
+      width: min(100% - 2rem, 72rem);
+    }
+    .archive-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

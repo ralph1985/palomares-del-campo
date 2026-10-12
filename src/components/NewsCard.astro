@@ -7,6 +7,8 @@ interface Props {
 
 const { post } = Astro.props;
 const { title, description, date, sourceName, category } = post.data;
+const categoryLabel = category ?? 'Actualidad';
+const searchText = `${title} ${description} ${categoryLabel} ${sourceName} ${post.body ?? ''}`;
 const formattedDate = new Intl.DateTimeFormat('es-ES', {
   day: 'numeric',
   month: 'long',
@@ -14,7 +16,13 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 }).format(date);
 ---
 
-<article class="news-card">
+<article
+  class="news-card"
+  data-news-card
+  data-search-text={searchText}
+  data-search-category={categoryLabel}
+  data-search-year={date.getFullYear()}
+>
   <div class="news-card-meta">
     <time datetime={date.toISOString()}>{formattedDate}</time>
     <span aria-hidden="true">·</span>
@@ -25,7 +33,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   </h3>
   <p>{description}</p>
   <div class="news-card-footer">
-    <span>{category ?? 'Actualidad'}</span>
+    <span>{categoryLabel}</span>
     <a class="news-card-link" href={`/noticias/${post.id}`}>
       Leer noticia <span aria-hidden="true">↗</span>
     </a>
@@ -45,6 +53,10 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     transition:
       transform 220ms ease,
       box-shadow 220ms ease;
+  }
+
+  .news-card[hidden] {
+    display: none;
   }
 
   .news-card:hover {

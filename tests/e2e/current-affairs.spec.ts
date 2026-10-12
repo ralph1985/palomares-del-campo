@@ -83,6 +83,19 @@ test.describe('current affairs sections', () => {
     ).toHaveAttribute('href', /HORARIOSOCUELLAMOSCUENCAFUENTELESPINO\.pdf$/);
   });
 
+  test('filters bandos by publication year and restores it from the URL', async ({ page }) => {
+    await page.goto('/bandos/');
+
+    const year = page.getByRole('combobox', { name: 'Año' });
+    await year.selectOption('2025');
+    await expect(page.locator('[data-bando-card]:visible')).not.toHaveCount(0);
+    expect(new URL(page.url()).searchParams.get('year')).toBe('2025');
+
+    await page.reload();
+    await expect(year).toHaveValue('2025');
+    await expect(page.locator('[data-bando-card]:visible')).not.toHaveCount(0);
+  });
+
   test('shows sourced municipal bandos and keeps the old path compatible', async ({ page }) => {
     await page.goto('/bandos/');
 

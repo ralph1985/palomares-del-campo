@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BandoCard from '../../components/BandoCard.astro';
+import CollectionArchive from '../../components/CollectionArchive.astro';
 import SiteFooter from '../../components/layout/SiteFooter.astro';
 import SiteHeader from '../../components/layout/SiteHeader.astro';
 
@@ -10,6 +11,7 @@ const posts = (await getCollection('bandos')).sort(
 const categories = [...new Set(posts.map((post) => post.data.category))].sort((a, b) =>
   a.localeCompare(b, 'es'),
 );
+const years = [...new Set(posts.map((post) => post.data.date.getFullYear()))].sort((a, b) => b - a);
 ---
 
 <!doctype html>
@@ -38,72 +40,26 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort((a
         </div>
       </section>
 
-      <section class="archive" aria-labelledby="archive-title">
-        <div class="archive-inner">
-          <div class="archive-heading">
-            <div>
-              <p class="eyebrow">Comunicaciones municipales</p>
-              <h2 id="archive-title">Bandos publicados</h2>
-            </div>
-            <p>
-              {posts.length} {posts.length === 1 ? 'bando publicado' : 'bandos publicados'}
-            </p>
-          </div>
-
-          <form
-            class="filters"
-            data-bando-filters
-            role="search"
-            aria-label="Buscar en bandos"
-            action="/bandos/"
-            method="get"
-          >
-            <div class="filter-field">
-              <label for="bando-search">Buscar en bandos</label>
-              <div class="search-control">
-                <input
-                  id="bando-search"
-                  name="q"
-                  type="search"
-                  placeholder="Ej. autobús, piscina o dentista"
-                  autocomplete="off"
-                  spellcheck="false"
-                />
-                <div class="search-actions">
-                  <button type="button" data-bando-clear hidden>
-                    Limpiar búsqueda
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="filter-field">
-              <label for="bando-category">Categoría</label>
-              <select id="bando-category" name="category">
-                <option value="">Todas las categorías</option>
-                {categories.map((category) => (
-                  <option value={category}>{category}</option>
-                ))}
-              </select>
-            </div>
-            <p class="filter-results" data-bando-results role="status" aria-live="polite">
-              {posts.length} resultados
-            </p>
-          </form>
-
-          {posts.length > 0 ? (
-            <div class="bando-grid">
-              {posts.map((post) => (
-                <BandoCard post={post} />
-              ))}
-            </div>
-          ) : (
-            <p class="empty">Todavía no hay bandos publicados.</p>
-          )}
-          <p class="empty" data-bando-no-results hidden>
-            No hay bandos que coincidan con estos filtros.
-          </p>
-        </div>
-      </section>
+      <CollectionArchive
+        scope="bando"
+        headingId="archive-title"
+        eyebrow="Comunicaciones municipales"
+        title="Bandos publicados"
+        total={posts.length}
+        itemSingular="bando publicado"
+        itemPlural="bandos publicados"
+        emptyMessage="Todavía no hay bandos publicados."
+        searchLabel="Buscar en bandos"
+        inputId="bando-search"
+        placeholder="Ej. autobús, piscina o dentista"
+        action="/bandos/"
+        categories={categories}
+        years={years}
+      >
+        {posts.map((post) => (
+          <BandoCard post={post} />
+        ))}
+      </CollectionArchive>
     </main>
 
     <SiteFooter />
@@ -114,7 +70,6 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort((a
   :global(*) {
     box-sizing: border-box;
   }
-
   :global(body) {
     min-width: 320px;
     min-height: 100vh;
@@ -130,22 +85,15 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort((a
       'Segoe UI',
       sans-serif;
   }
-
   .bandos-hero {
     padding: clamp(5rem, 13vw, 10rem) 0 clamp(4rem, 9vw, 7rem);
     background: #19342d;
   }
-
-  .bandos-hero-inner,
-  .archive-inner {
+  .bandos-hero-inner {
     width: min(100% - 2.5rem, 72rem);
     margin: 0 auto;
-  }
-
-  .bandos-hero-inner {
     color: #eff5ed;
   }
-
   .eyebrow {
     margin: 0 0 1rem;
     color: #e5b77e;
@@ -154,20 +102,14 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort((a
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
-
-  h1,
-  h2 {
+  h1 {
     margin: 0;
     font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(4rem, 11vw, 8rem);
     font-weight: 500;
     letter-spacing: -0.06em;
     line-height: 0.95;
   }
-
-  h1 {
-    font-size: clamp(4rem, 11vw, 8rem);
-  }
-
   .bandos-hero p:last-child {
     max-width: 36rem;
     margin: 2rem 0 0;
@@ -175,249 +117,9 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort((a
     font-size: clamp(1rem, 1.6vw, 1.2rem);
     line-height: 1.65;
   }
-
-  .archive {
-    padding: clamp(4rem, 9vw, 8rem) 0;
-  }
-
-  .archive-heading {
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
-    gap: 2rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .archive-heading .eyebrow {
-    color: #a05c32;
-  }
-
-  .archive-heading h2 {
-    font-size: clamp(2.25rem, 5vw, 4rem);
-  }
-
-  .archive-heading > p {
-    margin: 0;
-    color: #527066;
-    font-size: 0.9rem;
-  }
-
-  .filters {
-    display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(12rem, 1fr) auto;
-    align-items: end;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    border: 1px solid rgb(25 52 45 / 12%);
-    border-radius: 1rem;
-    background: rgb(255 253 248 / 70%);
-  }
-
-  .filter-field {
-    display: grid;
-    gap: 0.45rem;
-  }
-
-  .search-control {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .search-control input {
-    min-width: 0;
-    flex: 1;
-  }
-
-  .search-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .search-actions button {
-    min-height: 2.75rem;
-    padding: 0.65rem 0.8rem;
-    border: 1px solid #2f6652;
-    border-radius: 0.55rem;
-    color: #fffdf8;
-    background: #2f6652;
-    font: inherit;
-    font-size: 0.82rem;
-    font-weight: 750;
-    cursor: pointer;
-  }
-
-  .search-actions button[data-bando-clear] {
-    color: #2f6652;
-    background: transparent;
-  }
-
-  .search-actions button:hover,
-  .search-actions button:focus-visible {
-    border-color: #a05c32;
-    background: #a05c32;
-  }
-
-  .search-actions button[data-bando-clear]:hover,
-  .search-actions button[data-bando-clear]:focus-visible {
-    color: #fffdf8;
-  }
-
-  .search-actions button:focus-visible {
-    outline: 3px solid rgb(160 92 50 / 28%);
-    outline-offset: 2px;
-  }
-
-  .filter-field label {
-    color: #527066;
-    font-size: 0.78rem;
-    font-weight: 750;
-  }
-
-  .filter-field input,
-  .filter-field select {
-    min-height: 2.75rem;
-    padding: 0.65rem 0.75rem;
-    border: 1px solid rgb(25 52 45 / 20%);
-    border-radius: 0.55rem;
-    color: #19342d;
-    background: #fffdf8;
-    font: inherit;
-  }
-
-  .filter-field input:focus-visible,
-  .filter-field select:focus-visible {
-    outline: 3px solid rgb(160 92 50 / 28%);
-    outline-offset: 2px;
-  }
-
-  .filter-results {
-    margin: 0 0 0.7rem;
-    color: #527066;
-    font-size: 0.82rem;
-    white-space: nowrap;
-  }
-
-  .bando-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
-  }
-
-  .empty {
-    padding: 2rem;
-    border: 1px dashed rgb(25 52 45 / 22%);
-    color: #527066;
-  }
-
-  @media (max-width: 50rem) {
-    .bando-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
   @media (max-width: 38rem) {
-    .bandos-hero-inner,
-    .archive-inner {
+    .bandos-hero-inner {
       width: min(100% - 2rem, 72rem);
-    }
-
-    .archive-heading {
-      align-items: flex-start;
-      flex-direction: column;
-    }
-
-    .filters {
-      grid-template-columns: 1fr;
-    }
-
-    .filter-results {
-      margin-bottom: 0;
     }
   }
 </style>
-
-<script>
-  const filters = document.querySelector<HTMLFormElement>('[data-bando-filters]');
-
-  if (filters) {
-    const search = filters.querySelector<HTMLInputElement>('#bando-search');
-    const category = filters.querySelector<HTMLSelectElement>('#bando-category');
-    const clearSearch = filters.querySelector<HTMLButtonElement>('[data-bando-clear]');
-    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-bando-card]')).map(
-      (card) => ({
-        element: card,
-        searchText: normaliseSearchText(card.dataset.bandoSearch ?? ''),
-      }),
-    );
-    const results = filters.querySelector<HTMLElement>('[data-bando-results]');
-    const noResults = document.querySelector<HTMLElement>('[data-bando-no-results]');
-    const params = new URLSearchParams(window.location.search);
-
-    const queryFromUrl = params.get('q');
-    if (search && queryFromUrl) search.value = queryFromUrl;
-    if (category && params.has('category')) category.value = params.get('category') ?? '';
-
-    const updateResults = ({ syncUrl = true } = {}) => {
-      const query = normaliseSearchText(search?.value ?? '');
-      const queryTokens = query ? query.split(' ') : [];
-      const selectedCategory = category?.value ?? '';
-      let visibleCount = 0;
-
-      cards.forEach(({ element, searchText }) => {
-        const matchesQuery = queryTokens.every((token) => searchText.includes(token));
-        const matchesCategory =
-          !selectedCategory || element.dataset.bandoCategory === selectedCategory;
-        const visible = matchesQuery && matchesCategory;
-        element.hidden = !visible;
-        if (visible) visibleCount += 1;
-      });
-
-      if (results) {
-        results.textContent = `${visibleCount} ${visibleCount === 1 ? 'resultado' : 'resultados'}`;
-      }
-      if (noResults) {
-        noResults.hidden = visibleCount !== 0;
-      }
-      if (clearSearch) {
-        clearSearch.hidden = !search?.value;
-      }
-
-      if (syncUrl) {
-        const url = new URL(window.location.href);
-        const rawQuery = search?.value.trim() ?? '';
-        if (rawQuery) url.searchParams.set('q', rawQuery);
-        else url.searchParams.delete('q');
-        if (selectedCategory) url.searchParams.set('category', selectedCategory);
-        else url.searchParams.delete('category');
-        window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
-      }
-    };
-
-    filters.addEventListener('submit', (event) => {
-      event.preventDefault();
-      updateResults();
-    });
-    search?.addEventListener('input', () => updateResults());
-    category?.addEventListener('change', () => updateResults());
-    clearSearch?.addEventListener('click', () => {
-      if (!search) return;
-      search.value = '';
-      updateResults();
-      search.focus();
-    });
-
-    updateResults({ syncUrl: false });
-  }
-
-  function normaliseSearchText(value: string) {
-    const normalised = typeof value.normalize === 'function' ? value.normalize('NFD') : value;
-    return normalised
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLocaleLowerCase('es-ES')
-      .replace(/[^a-z0-9]+/g, ' ')
-      .trim();
-  }
-</script>

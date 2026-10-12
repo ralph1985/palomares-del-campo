@@ -115,6 +115,9 @@ const formatDate = (date: string) =>
                   <ExternalLink class="route-context-link" href={route.contextSource.href}>
                     Contexto: {route.contextSource.label} <span aria-hidden="true">↗</span>
                   </ExternalLink>
+                  <ActionLink class="route-gpx-link" variant="solid" href={route.traceUrl} download>
+                    Descargar GPX <span aria-hidden="true">↓</span>
+                  </ActionLink>
                   <ActionLink class="route-game-link" variant="underline" href="/juego/">
                     Probar La bola <span aria-hidden="true">→</span>
                   </ActionLink>

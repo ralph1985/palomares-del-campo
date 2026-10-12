@@ -19,6 +19,7 @@ export interface LocalRoute {
   reviewedAt: string;
   traceStatusLabel: string;
   traceStatusNote: string;
+  traceUrl: string;
 }
 
 export const localRoutes: LocalRoute[] = [
@@ -30,7 +31,7 @@ export const localRoutes: LocalRoute[] = [
     distanceKm: 5.13,
     durationMinutes: 81,
     difficulty: 'Fácil',
-    elevationGainMetres: 50,
+    elevationGainMetres: 48,
     accessibilityNote:
       'La fuente lo describe como de fácil acceso y apto para todos los niveles. Conviene confirmar el estado del firme antes de salir.',
     statusLabel: 'Recomendación externa',
@@ -44,8 +45,9 @@ export const localRoutes: LocalRoute[] = [
     },
     sourceUpdatedAt: '2024-07-26',
     reviewedAt: '2026-10-11',
-    traceStatusLabel: 'Mapa propio no disponible todavía.',
+    traceStatusLabel: 'GPX disponible para descarga.',
     traceStatusNote:
-      'La descarga GPX de la fuente requiere una cuenta de Komoot; el trazado se consulta en el enlace externo y no se copia en este sitio.',
+      'El archivo procede del trazado GPX aportado para esta ficha y permite consultar el recorrido fuera de la web.',
+    traceUrl: '/routes/campos-palomares-del-campo.gpx',
   },
 ];

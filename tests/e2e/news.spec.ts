@@ -5,10 +5,24 @@ test.describe('editorial news', () => {
     await page.goto('/noticias/');
 
     await expect(page.getByRole('heading', { name: 'Noticias', exact: true })).toBeVisible();
-    await expect(page.locator('.news-card')).toHaveCount(4);
-    await expect(page.getByText('4 noticias publicadas')).toBeVisible();
+    await expect(page.locator('.news-card')).toHaveCount(13);
+    await expect(page.getByText('13 noticias publicadas')).toBeVisible();
   });
 
+  test('filters news by publication year and restores it from the URL', async ({ page }) => {
+    await page.goto('/noticias/');
+
+    const year = page.getByRole('combobox', { name: 'Año' });
+    const cards = page.locator('[data-news-card]');
+    await year.selectOption('2025');
+    await expect(cards.filter({ has: page.locator('time[datetime^="2025"]') })).toHaveCount(4);
+    await expect(page.locator('[data-news-card]:visible')).toHaveCount(4);
+    expect(new URL(page.url()).searchParams.get('year')).toBe('2025');
+
+    await page.reload();
+    await expect(year).toHaveValue('2025');
+    await expect(page.locator('[data-news-card]:visible')).toHaveCount(4);
+  });
   test('opens a news article from its archive card', async ({ page }) => {
     await page.goto('/noticias/');
     const firstCard = page.locator('.news-card').first();
@@ -19,10 +33,6 @@ test.describe('editorial news', () => {
     await expect(page.getByRole('heading', { name: title })).toBeVisible();
     await expect(page.locator('article')).toBeVisible();
     await expect(page.getByText('Fuente original:')).toBeVisible();
-    await expect(
-      page.getByRole('link', {
-        name: /Voces de Cuenca|La Cerca|Encastillalamancha|Castilla-La Mancha Media/,
-      }),
-    ).toBeVisible();
+    await expect(page.locator('.article-source a')).toHaveAttribute('href', /^https:\/\//);
   });
 });

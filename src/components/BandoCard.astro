@@ -23,7 +23,10 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   data-bando-card
   data-bando-title={title.toLocaleLowerCase('es-ES')}
   data-bando-search={`${title} ${description} ${category} ${sourceId} ${bodySearchText} ${attachmentSearchText}`}
+  data-search-text={`${title} ${description} ${category} ${sourceId} ${bodySearchText} ${attachmentSearchText}`}
   data-bando-category={category}
+  data-search-category={category}
+  data-search-year={date.getFullYear()}
 >
   <div class="bando-card-meta">
     <time datetime={date.toISOString()}>{formattedDate}</time>
