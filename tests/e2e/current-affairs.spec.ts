@@ -57,6 +57,12 @@ test.describe('current affairs sections', () => {
     await page.goto('/bandos/1659178-horarios-autobus-de-linea/');
 
     await expect(page.locator('.article-description')).toHaveCount(0);
+    await expect(page.locator('.article-meta')).toContainText('9 de octubre de 2026');
+    await expect(
+      page.locator('.article-meta').getByText('Ayuntamiento de Palomares del Campo', {
+        exact: true,
+      }),
+    ).toHaveCount(0);
     await expect(page.locator('.article-content')).toContainText(
       'NUEVOS HORARIOS DE AUTOBÚS DE LÍNEA',
     );
