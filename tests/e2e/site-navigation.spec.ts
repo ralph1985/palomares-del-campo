@@ -59,6 +59,8 @@ test.describe('web navigation', () => {
     await page.goto('/');
 
     const footer = page.getByRole('contentinfo');
+    await expect(footer.getByText('Información municipal')).toBeVisible();
+    await expect(footer.getByText('Web editorial')).toHaveCount(0);
     await expect(footer.getByRole('link', { name: 'Sede electrónica' })).toHaveAttribute(
       'href',
       'https://palomaresdelcampo.sedelectronica.es/info.0',
