@@ -67,17 +67,47 @@ Las variables de entorno se mantienen en archivos locales ignorados por Git. No 
 
 ## Comandos
 
-| Comando             | Uso                                                           |
-| ------------------- | ------------------------------------------------------------- |
-| `pnpm dev`          | Servidor Astro con recarga en desarrollo.                     |
-| `pnpm build`        | Genera el sitio estático en `dist/`.                          |
-| `pnpm preview`      | Sirve localmente el build generado.                           |
-| `pnpm test`         | Ejecuta las pruebas unitarias y de integración con Vitest.    |
-| `pnpm test:watch`   | Ejecuta Vitest en modo observación.                           |
-| `pnpm test:e2e`     | Ejecuta Playwright contra la aplicación en un navegador.      |
-| `pnpm lint`         | Ejecuta ESLint sobre el repositorio.                          |
-| `pnpm format`       | Formatea el código con Prettier.                              |
-| `pnpm format:check` | Comprueba que el formato sea correcto sin modificar archivos. |
+| Comando             | Uso                                                                       |
+| ------------------- | ------------------------------------------------------------------------- |
+| `pnpm dev`          | Servidor Astro con recarga en desarrollo.                                 |
+| `pnpm build`        | Genera el sitio estático en `dist/`.                                      |
+| `pnpm preview`      | Sirve localmente el build generado.                                       |
+| `pnpm test`         | Ejecuta las pruebas unitarias y de integración con Vitest.                |
+| `pnpm test:watch`   | Ejecuta Vitest en modo observación.                                       |
+| `pnpm test:e2e`     | Ejecuta Playwright contra la aplicación en un navegador.                  |
+| `pnpm lint`         | Ejecuta ESLint sobre el repositorio.                                      |
+| `pnpm format`       | Formatea el código con Prettier.                                          |
+| `pnpm format:check` | Comprueba que el formato sea correcto sin modificar archivos.             |
+| `pnpm fetch-bandos` | Importa los comunicados nuevos del RSS oficial sin eliminar históricos.   |
+| `pnpm sync-bandos`  | Ejecuta el sincronizador aislado; requiere `gh` y está pensado para cron. |
+
+### Sincronización automática de bandos
+
+`pnpm fetch-bandos` usa por defecto el RSS oficial de Bandomovil como fuente incremental. Añade y actualiza comunicados, conserva los Markdown históricos que no aparezcan en la ventana del RSS y mantiene los adjuntos externos de Bandomovil. Para ejecutar manualmente el backfill histórico ya existente, usa `BANDOS_IMPORT_MODE=archive pnpm fetch-bandos`; ese modo está restringido a los años configurados en `scripts/fetch-bandos.js` y sí reconcilia el directorio generado.
+
+`pnpm sync-bandos` está diseñado para ejecutarse desde cron en un host con `pnpm`, Node.js y una sesión válida de GitHub CLI. Bloquea ejecuciones concurrentes, alinea `main`, trabaja en un worktree temporal, ejecuta el importador incremental, valida el contenido y crea una Pull Request limitada a `src/content/bandos/*.md`. No publica directamente en `main`.
+
+El aviso posterior a la fusión se envía por SMTP, igual que en `ayuntamiento-de-belmontejo`, mediante `nodemailer` y un `.env` local ignorado por Git. Reutiliza estas variables:
+
+```text
+BANDOS_SMTP_HOST
+BANDOS_SMTP_PORT=587
+BANDOS_SMTP_SECURE=false
+BANDOS_SMTP_USER
+BANDOS_SMTP_PASSWORD
+BANDOS_NOTIFY_FROM
+BANDOS_NOTIFY_TO
+```
+
+`BANDOS_SITE_URL` es opcional. Si se configura, el correo enlaza al bando publicado en Palomares; si no, conserva el enlace oficial original de Bandomovil. El sincronizador no envía notificaciones por Telegram ni guarda credenciales en el repositorio.
+
+Para comprobar el flujo sin crear ramas, PRs, merges ni notificaciones:
+
+```bash
+SYNC_BANDOS_DRY_RUN=1 pnpm sync-bandos
+```
+
+La instalación de cron, la configuración SMTP y el auto-merge requieren un host autorizado y variables locales ignoradas por Git. Nunca guardes esas credenciales en el repositorio.
 
 Validación completa antes de publicar cambios:
 

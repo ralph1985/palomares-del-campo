@@ -1,11 +1,11 @@
 ---
 title: 'LIBRO FIESTAS SEPTIEMBRE 2026'
-description: 'LIBRO DE FIESTAS PATRONALES EN HONOR AL SANTO CRISTO DE LA PAZ (Del 24 al 27 de septiembre de 2026) Archivo adjunto: FIESTAS2026-09PALOMARESDELCAMPO.pdf'
+description: 'LIBRO DE FIESTAS PATRONALES EN HONOR AL SANTO CRISTO DE LA PAZ (Del 24 al 27 de septiembre de 2026)'
 author: 'Ayuntamiento de Palomares del Campo'
-date: 2026-09-21T10:37:00.000Z
+date: 2026-09-21T08:37:31.000Z
 category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
-sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1646002/0'
+sourceUrl: 'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1646002'
 sourceId: '1646002'
 attachments:
   - type: 'document'
@@ -14,5 +14,3 @@ attachments:
 ---
 
 LIBRO DE FIESTAS PATRONALES EN HONOR AL SANTO CRISTO DE LA PAZ (Del 24 al 27 de septiembre de 2026)
-Archivo adjunto:
-FIESTAS2026-09PALOMARESDELCAMPO.pdf

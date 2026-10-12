@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   createBandoMarkdown,
   generateFilename,
+  getImportMode,
+  mergeExistingAttachments,
   parseArchiveItems,
   parseBandomovilDate,
   parseRSSItems,
@@ -31,6 +33,15 @@ const archivePage = `
     </a>
   </li>
 `;
+
+describe('import mode', () => {
+  it('uses incremental RSS by default and allows explicit archive backfill', () => {
+    expect(getImportMode(undefined)).toBe('rss');
+    expect(getImportMode('rss')).toBe('rss');
+    expect(getImportMode('archive')).toBe('archive');
+    expect(getImportMode('unexpected')).toBe('rss');
+  });
+});
 
 describe('fetch bandos', () => {
   it('parses RSS items and decodes their source fields', () => {
@@ -80,6 +91,41 @@ describe('fetch bandos', () => {
         'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=123',
       ),
     ).toBe('123-aviso-de-agua');
+  });
+
+  it('preserves attachments already imported when RSS omits them', () => {
+    const previousMarkdown = createBandoMarkdown({
+      title: 'Aviso de agua',
+      link: 'https://www.bandomovil.com/palomaresdelcampo/123/0',
+      description: 'Aviso completo',
+      category: 'Avisos',
+      pubDate: 'Sun, 11 Oct 2026 10:00:00 +0200',
+      guid: 'https://www.bandomovil.com/palomaresdelcampo/123/0',
+      attachments: [
+        {
+          type: 'document',
+          url: 'https://www.bandomovil.com/userFiles/5r/aviso.pdf',
+          label: 'aviso.pdf',
+        },
+      ],
+    });
+
+    const merged = mergeExistingAttachments(
+      {
+        title: 'Aviso de agua',
+        description: 'Resumen RSS',
+        attachments: [],
+      },
+      previousMarkdown,
+    );
+
+    expect(merged.attachments).toEqual([
+      {
+        type: 'document',
+        url: 'https://www.bandomovil.com/userFiles/5r/aviso.pdf',
+        label: 'aviso.pdf',
+      },
+    ]);
   });
 
   it('sanitizes imported HTML while keeping readable Markdown', () => {

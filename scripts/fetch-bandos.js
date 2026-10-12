@@ -355,12 +355,72 @@ async function fetchArchiveDetail(item) {
   return detail ?? item;
 }
 
-export async function fetchBandos() {
-  const { items: archiveItems, pageCount } = await fetchArchiveItems();
-  const inScope = archiveItems.filter((item) =>
-    TARGET_YEARS.has(new Date(item.pubDate).getUTCFullYear()),
-  );
-  const items = await mapWithConcurrency(inScope, DETAIL_CONCURRENCY, fetchArchiveDetail);
+async function fetchRSSItems() {
+  const xml = await fetchText(RSS_URL);
+  const items = parseRSSItems(xml);
+
+  if (items.length === 0) {
+    throw new Error('The Bandomovil RSS did not contain any bandos');
+  }
+
+  return items;
+}
+
+export function getImportMode(value = process.env.BANDOS_IMPORT_MODE) {
+  return value === 'archive' ? 'archive' : 'rss';
+}
+
+async function loadImportItems(mode) {
+  if (mode === 'archive') {
+    const { items: archiveItems, pageCount } = await fetchArchiveItems();
+    const inScope = archiveItems.filter((item) =>
+      TARGET_YEARS.has(new Date(item.pubDate).getUTCFullYear()),
+    );
+    const items = await mapWithConcurrency(inScope, DETAIL_CONCURRENCY, fetchArchiveDetail);
+    return { items, pageCount };
+  }
+
+  return { items: await fetchRSSItems(), pageCount: 0 };
+}
+
+export function mergeExistingAttachments(item, previousMarkdown) {
+  if (!previousMarkdown) return item;
+
+  const previousAttachments = extractSerializedAttachments(previousMarkdown);
+  if (previousAttachments.length === 0) return item;
+
+  const attachments = [...(item.attachments ?? [])];
+  const seenUrls = new Set(attachments.map((attachment) => attachment.url));
+  for (const attachment of previousAttachments) {
+    if (!seenUrls.has(attachment.url)) {
+      attachments.push(attachment);
+      seenUrls.add(attachment.url);
+    }
+  }
+
+  return { ...item, attachments };
+}
+
+function extractSerializedAttachments(markdown) {
+  const attachments = [];
+  const attachmentPattern =
+    / {2}- type: '((?:''|[^'])*)'\n {4}url: '((?:''|[^'])*)'\n {4}label: '((?:''|[^'])*)'(?:\n {4}alt: '((?:''|[^'])*)')?/g;
+
+  for (const match of markdown.matchAll(attachmentPattern)) {
+    attachments.push({
+      type: match[1].replaceAll("''", "'"),
+      url: match[2].replaceAll("''", "'"),
+      label: match[3].replaceAll("''", "'"),
+      ...(match[4] ? { alt: match[4].replaceAll("''", "'") } : {}),
+    });
+  }
+
+  return attachments;
+}
+
+export async function fetchBandos({ mode = getImportMode() } = {}) {
+  const importMode = getImportMode(mode);
+  const { items, pageCount } = await loadImportItems(importMode);
 
   await fs.mkdir(contentDirectory, { recursive: true });
   let created = 0;
@@ -372,7 +432,6 @@ export async function fetchBandos() {
 
   for (const item of items) {
     const filePath = path.join(contentDirectory, `${generateFilename(item.title, item.guid)}.md`);
-    const markdown = createBandoMarkdown(item);
     let previous = '';
     try {
       previous = await fs.readFile(filePath, 'utf8');
@@ -380,16 +439,21 @@ export async function fetchBandos() {
       if (error.code !== 'ENOENT') throw error;
     }
 
+    const itemWithPreservedAttachments =
+      importMode === 'rss' ? mergeExistingAttachments(item, previous) : item;
+    const markdown = createBandoMarkdown(itemWithPreservedAttachments);
     if (previous === markdown) continue;
     await fs.writeFile(filePath, markdown, 'utf8');
     if (previous) updated += 1;
     else created += 1;
   }
 
-  for (const entry of await fs.readdir(contentDirectory, { withFileTypes: true })) {
-    if (!entry.isFile() || !entry.name.endsWith('.md') || expectedFiles.has(entry.name)) continue;
-    await fs.unlink(path.join(contentDirectory, entry.name));
-    removed += 1;
+  if (importMode === 'archive') {
+    for (const entry of await fs.readdir(contentDirectory, { withFileTypes: true })) {
+      if (!entry.isFile() || !entry.name.endsWith('.md') || expectedFiles.has(entry.name)) continue;
+      await fs.unlink(path.join(contentDirectory, entry.name));
+      removed += 1;
+    }
   }
 
   if (created || updated || removed) {
@@ -398,14 +462,14 @@ export async function fetchBandos() {
     });
   }
 
-  return { created, updated, removed, total: items.length, pageCount };
+  return { created, updated, removed, total: items.length, pageCount, mode: importMode };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const result = await fetchBandos();
     console.log(
-      `Bandos importados: ${result.created} nuevos, ${result.updated} actualizados, ${result.removed} eliminados, ${result.total} dentro de 2025–2026 en ${result.pageCount} páginas.`,
+      `Bandos importados en modo ${result.mode}: ${result.created} nuevos, ${result.updated} actualizados, ${result.removed} eliminados, ${result.total} procesados${result.pageCount ? ` en ${result.pageCount} páginas` : ''}.`,
     );
   } catch (error) {
     console.error(error);
