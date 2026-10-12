@@ -1,0 +1,44 @@
+/*
+ * Shared visual tokens.
+ *
+ * This file is intentionally not imported yet. Block 1 records the current
+ * visual language without changing the rendered site; later blocks will move
+ * consumers to these semantic names incrementally.
+ */
+:root {
+  /* Brand and surface colors */
+  --color-ink: #19342d;
+  --color-forest: #2f6652;
+  --color-muted: #527066;
+  --color-paper: #f4f1e9;
+  --color-surface: #fffdf8;
+  --color-surface-soft: #eff5ed;
+  --color-sage: #d8e6d6;
+  --color-sage-light: #b7d0bc;
+  --color-clay: #a05c32;
+  --color-ochre: #e5b77e;
+  --color-night: #0a1513;
+
+  /* Typography */
+  --font-sans:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif: Georgia, 'Times New Roman', serif;
+
+  /* Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-weight-strong: 750;
+
+  /* Type scale */
+  --font-size-body: 1rem;
+  --font-size-small: 0.85rem;
+  --font-size-label: 0.7rem;
+  --font-size-display: clamp(3.4rem, 8vw, 7.5rem);
+
+  /* Reading rhythm */
+  --line-height-body: 1.7;
+  --line-height-heading: 0.98;
+  --tracking-label: 0.16em;
+  --tracking-heading: -0.06em;
+}
