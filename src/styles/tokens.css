@@ -1,9 +1,8 @@
 /*
  * Shared visual tokens.
  *
- * This file is intentionally not imported yet. Block 1 records the current
- * visual language without changing the rendered site; later blocks will move
- * consumers to these semantic names incrementally.
+ * Tokens are imported by global.css and adopted by pages and components
+ * incrementally to avoid a sudden visual rewrite.
  */
 :root {
   /* Brand and surface colors */

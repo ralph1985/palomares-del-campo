@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "qa:visual": "node scripts/visual-qa.mjs",
+    "check:css:architecture": "node scripts/check-css-architecture.js",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

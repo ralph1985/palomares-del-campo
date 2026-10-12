@@ -1,6 +1,6 @@
 # Sistema visual de Palomares del Campo
 
-Este documento registra el lenguaje visual actual de la web. Durante el primer bloque los tokens solo describen la interfaz: todavía no se importan en las páginas y, por tanto, no cambian el aspecto renderizado.
+Este documento registra el lenguaje visual actual de la web. Los tokens se importan desde `src/styles/global.css`; su adopción por páginas y componentes se mantiene incremental para evitar una reescritura visual brusca.
 
 ## Colores
 
@@ -35,7 +35,7 @@ Los componentes pueden conservar colores adicionales cuando representen un estad
 - **Inter con fallback de sistema** (`--font-sans`): interfaz, navegación, botones, filtros, metadatos y texto de lectura.
 - **Georgia con fallback Times** (`--font-serif`): titulares, navegación editorial, tarjetas y bloques destacados.
 
-Inter no está importada ni empaquetada actualmente. En esta fase se conserva esa realidad; antes de usar `--font-sans` de forma global habrá que decidir si se mantiene la sustitución del sistema o se distribuye la fuente localmente.
+Inter no está importada ni empaquetada actualmente. `src/styles/global.css` usa `--font-sans` con Inter como primera opción y fallback del sistema; antes de cambiar la estrategia de entrega de fuentes habrá que tomar una decisión independiente.
 
 ## Pesos y escala
 
@@ -68,3 +68,5 @@ Se conservan dos familias de excepciones documentadas:
 3. Mantener la pareja sans-serif/serif mientras no exista una decisión explícita para cambiarla.
 4. Revisar contraste y focus visible cuando un token se aplique a controles o texto pequeño.
 5. Migrar página a página y validar escritorio y móvil antes de eliminar los valores literales antiguos.
+6. Ejecutar `pnpm check:css:architecture` antes de cerrar un cambio de estilos; las excepciones deben quedar documentadas.
+7. Consultar `docs/css-architecture-inventory.md` antes de extraer CSS o crear una nueva abstracción.
