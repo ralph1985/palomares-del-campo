@@ -73,9 +73,23 @@ Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refac
 
 ## Hoja CSS específica de página
 
-| Archivo                                | Clasificación                | Decisión de Fase 1                                                                                  |
-| -------------------------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------- |
-| `src/styles/pages/sobre-el-pueblo.css` | Variante exclusiva de página | Mantener externa porque ya tiene una responsabilidad de página clara; no convertirla en CSS global. |
+| Archivo                                | Clasificación                | Decisión de Fase 1                                                                                                                                   |
+| -------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/styles/pages/sobre-el-pueblo.css` | Variante exclusiva de página | Mantener externa porque ya tiene una responsabilidad de página clara; se importa solo desde `sobre-el-pueblo.astro` y no se convierte en CSS global. |
+
+## Evaluación de hojas externas — Fase 4
+
+La evaluación no extrae nuevas hojas: el scoped CSS de Astro sigue siendo más seguro para las composiciones únicas revisadas.
+
+| Superficie                             | Tamaño CSS aproximado | Decisión         | Motivo                                                                                                    |
+| -------------------------------------- | --------------------: | ---------------- | --------------------------------------------------------------------------------------------------------- |
+| `src/styles/pages/sobre-el-pueblo.css` |            509 líneas | Mantener externa | Ya agrupa una página completa con varias secciones visuales; tiene un único punto de importación.         |
+| `src/pages/rutas/index.astro`          |            287 líneas | Mantener scoped  | La hoja acompaña el contrato exclusivo de la ruta, el mapa y sus estados; moverla no añade reutilización. |
+| `src/pages/informacion-practica.astro` |            266 líneas | Mantener scoped  | Es una composición única de servicios municipales, contactos y transporte, sin consumidor compartido.     |
+| `src/pages/bandos/[slug].astro`        |            170 líneas | Mantener scoped  | El detalle editorial conserva estructura y estados propios de un bando.                                   |
+| `src/pages/noticias/[slug].astro`      |            168 líneas | Mantener scoped  | El detalle editorial de noticias no debe fusionarse con el detalle de bandos.                             |
+
+No se introduce `@layer`: no existe un conflicto de precedencia reproducible entre hojas globales, estilos scoped o dependencias externas. Una futura extracción a `src/styles/pages/` deberá tener un único importador claro, clases con ámbito de página y una ganancia de mantenimiento verificable.
 
 ## Patrones repetidos detectados
 

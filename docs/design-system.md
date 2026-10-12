@@ -70,3 +70,4 @@ Se conservan dos familias de excepciones documentadas:
 5. Migrar página a página y validar escritorio y móvil antes de eliminar los valores literales antiguos.
 6. Ejecutar `pnpm check:css:architecture` antes de cerrar un cambio de estilos; las excepciones deben quedar documentadas.
 7. Consultar `docs/css-architecture-inventory.md` antes de extraer CSS o crear una nueva abstracción.
+8. Mantener el CSS exclusivo de una composición en su `<style>` scoped; usar `src/styles/pages/` solo para una hoja de página grande con importador único y responsabilidad documentada. No introducir `@layer` sin conflicto de cascada reproducible.

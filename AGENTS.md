@@ -60,7 +60,7 @@ Si una carpeta aún no existe, créala solo cuando el primer cambio que la neces
 
 - `src/pages/` compone rutas y datos; no contiene la implementación completa de componentes, del shell global ni CSS de otras rutas.
 - `SiteHeader.astro` contiene la cabecera; `SideMenu.astro` contiene el DOM, estilos y accesibilidad del menú lateral.
-- `GameMap.astro` compone el mapa; `GameStatusPanel.astro` contiene estado, controles, simulador y ranking provisional.
+- `GameMap.astro` compone el mapa; `GameMapCanvas.astro` contiene la superficie Leaflet y su HUD; `GameStatusPanel.astro` contiene el estado y los controles del jugador; el simulador y el ranking viven en sus componentes específicos.
 - Por encima de 300 líneas de aplicación se revisa si un archivo mezcla responsabilidades; por encima de 400 se divide o se documenta por qué todavía no compensa.
 - Al dividir un componente se mueven también sus estilos responsive; no dejar CSS duplicado o huérfano en la página consumidora.
 - Toda refactorización estructural conserva o amplía una prueba de comportamiento y vuelve a medir el bundle si cambia la carga de cliente.
@@ -73,6 +73,7 @@ Si una carpeta aún no existe, créala solo cuando el primer cambio que la neces
 - Mantener los estilos específicos junto al componente Astro que los utiliza; Astro recomienda los estilos scoped para la mayoría de componentes.
 - Mantener en una página Astro el CSS de su composición exclusiva cuando siga siendo legible y no se reutilice en otras rutas.
 - Extraer CSS a `src/styles/pages/` solo cuando una hoja de página grande mejore realmente la mantenibilidad; no convertir esos archivos en estilos globales accidentales.
+- Una hoja externa de página debe tener un único importador claro, clases con ámbito de página y una ganancia de revisión demostrable; no introducir `@layer` sin un conflicto de cascada reproducible.
 - Extraer primero patrones repetidos a componentes reutilizables, no a un CSS monolítico con selectores genéricos.
 - Antes de mover CSS, clasificarlo como token/base global, componente compartido, variante de página, tema independiente o excepción de librería.
 - Si un archivo supera 300 líneas de aplicación, revisar si mezcla responsabilidades; por encima de 400, dividirlo o documentar por qué todavía no compensa. Al dividirlo, mover también sus estilos responsive y sus pruebas.

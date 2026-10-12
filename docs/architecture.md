@@ -94,7 +94,7 @@ Cuando aparezca otra interacción compleja, se evaluará primero una isla Astro 
 
 - `src/pages/` compone rutas y datos; no contiene la implementación completa de componentes, del shell global ni CSS de otras rutas.
 - `SiteHeader.astro` contiene la cabecera; `SideMenu.astro` contiene el DOM, estilos y accesibilidad del menú lateral.
-- `GameMap.astro` compone el mapa; `GameStatusPanel.astro` contiene estado, controles, simulador y ranking provisional.
+- `GameMap.astro` compone el mapa; `GameMapCanvas.astro` contiene la superficie Leaflet y su HUD; `GameStatusPanel.astro` contiene el estado y los controles del jugador; el simulador y el ranking viven en sus componentes específicos.
 - Por encima de 300 líneas de aplicación se revisa si un archivo mezcla responsabilidades; por encima de 400 se divide o se documenta por qué todavía no compensa.
 - Al dividir un componente se mueven también sus estilos responsive; no dejar CSS duplicado o huérfano en la página consumidora.
 - Toda refactorización estructural conserva o amplía una prueba de comportamiento y vuelve a medir el bundle si cambia la carga de cliente.
@@ -110,7 +110,9 @@ src/styles/
 └── typography.css  # reglas tipográficas compartidas, si llegan a ser necesarias
 ```
 
-Los estilos propios de un componente permanecen en su `<style>` scoped. Los estilos globales no deben vivir accidentalmente en una página concreta.
+Los estilos propios de un componente permanecen en su `<style>` scoped. Los estilos globales no deben vivir accidentalmente en una página concreta. Una hoja en `src/styles/pages/` solo se justifica cuando agrupa una composición de página grande, tiene un importador claro y mejora la revisión; no se extrae CSS para eliminar `<style>` de una página.
+
+No se adopta `@layer` por defecto. Solo debe introducirse ante un conflicto de precedencia reproducible entre CSS global, hojas de página o dependencias externas.
 
 ### Tokens
 
