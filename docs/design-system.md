@@ -8,7 +8,7 @@ Este documento registra el lenguaje visual actual de la web. Durante el primer b
 | ---------------------- | ------------ | ---------------------------------------------------------------- |
 | `--color-ink`          | `#19342d`    | Texto principal, cabecera y superficies institucionales oscuras. |
 | `--color-forest`       | `#2f6652`    | Acciones, enlaces y elementos interactivos.                      |
-| `--color-muted`        | `#527066`    | Texto secundario, descripciones y metadatos.                     |
+| `--color-muted`        | `#4a685b`    | Texto secundario, descripciones y metadatos.                     |
 | `--color-paper`        | `#f4f1e9`    | Fondo general de la web.                                         |
 | `--color-surface`      | `#fffdf8`    | Superficies claras y tarjetas.                                   |
 | `--color-surface-soft` | `#eff5ed`    | Texto claro o superficies suaves sobre fondos oscuros.           |
@@ -51,6 +51,15 @@ Inter no está importada ni empaquetada actualmente. En esta fase se conserva es
 - `--font-size-display`: escala fluida para titulares principales.
 
 Los tokens de ritmo (`--line-height-body`, `--line-height-heading`, `--tracking-label` y `--tracking-heading`) describen las proporciones actuales y se migrarán junto con cada superficie, no mediante una reescritura global brusca.
+
+## QA visual y excepciones
+
+La comprobación reproducible se ejecuta con `pnpm qa:visual` mientras el servidor Astro esté disponible. Recorre nueve rutas en escritorio (`1440×900`) y móvil (`375×812`) y verifica HTTP 200, ausencia de overflow horizontal, focus visible, contraste aproximado WCAG y errores de consola.
+
+Se conservan dos familias de excepciones documentadas:
+
+- `src/styles/pages/sobre-el-pueblo.css` mantiene dos superficies cálidas/verde oscuro ajustadas a sus fotografías (`#315f4e` y `#efe6d6`); no son colores de interfaz compartidos.
+- `src/scripts/route-map.ts` y `src/scripts/game-map.ts` mantienen valores hexadecimales para las opciones de color de Leaflet creadas en JavaScript. Son valores de una API de visualización y reflejan tokens ya definidos; no son declaraciones CSS independientes.
 
 ## Reglas de evolución
 

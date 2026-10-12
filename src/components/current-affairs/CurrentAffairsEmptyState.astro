@@ -52,7 +52,7 @@ const { section, eyebrow, title, description, emptyMessage } = Astro.props;
   h1 {
     max-width: 10ch;
     margin: 0;
-    color: #fff;
+    color: var(--color-surface-soft);
     font-family: var(--font-serif);
     font-size: clamp(4rem, 12vw, 9rem);
     font-weight: 500;
@@ -75,7 +75,7 @@ const { section, eyebrow, title, description, emptyMessage } = Astro.props;
     padding: 1.2rem 1.4rem;
     border: 1px solid rgb(229 183 126 / 55%);
     border-radius: 0.75rem;
-    color: #f4d3a5;
+    color: var(--color-ochre);
     font-weight: 700;
   }
 

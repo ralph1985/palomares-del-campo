@@ -45,6 +45,7 @@ const { hasRemoteGame } = Astro.props;
     width: min(100% - 2.5rem, 72rem);
     margin: 0 auto;
     padding: 0 0 clamp(4rem, 9vw, 8rem);
+    color: var(--color-surface-soft);
   }
 
   .privacy-heading {
@@ -71,7 +72,7 @@ const { hasRemoteGame } = Astro.props;
 
   h2 {
     max-width: 13ch;
-    color: var(--color-ink);
+    color: var(--color-surface-soft);
     font-size: clamp(2.8rem, 6vw, 5.5rem);
   }
 
@@ -86,17 +87,18 @@ const { hasRemoteGame } = Astro.props;
     padding: 1.35rem;
     border: 1px solid rgb(25 52 45 / 13%);
     border-radius: 1.25rem;
-    background: rgb(255 255 255 / 28%);
+    color: var(--color-surface-soft);
+    background: var(--color-night-surface);
   }
 
   h3 {
-    color: var(--color-ink);
+    color: var(--color-surface-soft);
     font-size: 1.7rem;
   }
 
   article p {
     margin: 0.75rem 0 0;
-    color: var(--color-muted);
+    color: var(--color-night-text);
     font-size: 0.85rem;
     line-height: 1.6;
   }

@@ -339,6 +339,15 @@ h2 {
   margin-top: 2.5rem;
 }
 
+.landscape-actions .source-link {
+  color: var(--color-ochre);
+}
+
+.landscape-actions .source-link:hover,
+.landscape-actions .source-link:focus-visible {
+  color: var(--color-surface-soft);
+}
+
 .button-link {
   display: inline-flex;
   gap: 0.7rem;
