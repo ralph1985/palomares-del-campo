@@ -67,13 +67,21 @@ Si una carpeta aún no existe, créala solo cuando el primer cambio que la neces
 
 ## CSS
 
-- Usar CSS nativo con estilos scoped de Astro.
+- Usar CSS nativo con estilos scoped de Astro. La calidad no se mide por tener cero bloques `<style>` en los archivos `.astro`.
 - Centralizar colores, tipografía, espacios, radios, sombras y motion tokens en `src/styles/tokens.css`.
 - Mantener reset, base tipográfica, foco visible y reglas globales en `src/styles/global.css`.
-- Mantener los estilos específicos junto al componente Astro que los utiliza.
+- Mantener los estilos específicos junto al componente Astro que los utiliza; Astro recomienda los estilos scoped para la mayoría de componentes.
+- Mantener en una página Astro el CSS de su composición exclusiva cuando siga siendo legible y no se reutilice en otras rutas.
+- Extraer CSS a `src/styles/pages/` solo cuando una hoja de página grande mejore realmente la mantenibilidad; no convertir esos archivos en estilos globales accidentales.
+- Extraer primero patrones repetidos a componentes reutilizables, no a un CSS monolítico con selectores genéricos.
+- Antes de mover CSS, clasificarlo como token/base global, componente compartido, variante de página, tema independiente o excepción de librería.
+- Si un archivo supera 300 líneas de aplicación, revisar si mezcla responsabilidades; por encima de 400, dividirlo o documentar por qué todavía no compensa. Al dividirlo, mover también sus estilos responsive y sus pruebas.
+- El tema oscuro de `/juego/` conserva su identidad propia y sus tokens nocturnos; no forzarlo a reutilizar la paleta clara.
 - No introducir Tailwind, CSS-in-JS ni otra capa de utilidades sin decisión explícita.
 - No repetir valores de diseño en varios componentes cuando puedan ser un token semántico.
 - Diseñar primero para móvil y comprobar los estados de foco, teclado, `prefers-reduced-motion` y contraste.
+- En cambios de UI, ejecutar también `pnpm qa:visual` cuando el servidor de desarrollo esté disponible, además de la validación general indicada abajo.
+- La hoja de ruta vigente para esta arquitectura es `.hermes/plans/2026-10-12_194547-palomares-css-architecture.md`; actualizarla en lugar de crear planes paralelos.
 
 ## Menú y Three.js
 
