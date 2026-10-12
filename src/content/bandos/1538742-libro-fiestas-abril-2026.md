@@ -7,6 +7,10 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1538742/0'
 sourceId: '1538742'
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/Zs/ZsrQYLIBROFIESTASPALOMARESDELCAMPOABRIL2026.pdf'
+    label: 'LIBROFIESTASPALOMARESDELCAMPOABRIL2026.pdf'
 ---
 
 LIBRO DE FIESTAS PATRONALES EN HONOR A LA VIRGEN DE LA CABEZA 2026 (DEL 25 AL 28 DE ABRIL).

@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1323683/0'
 sourceId: '1323683'
+attachments: []
 ---
 
 EL PRÓXIMO MIÉRCOLES 7 DE MAYO VIENE EL SERVICIO DE DENTISTA "RURALDENTMÓVIL" A LAS 15:00 HORAS.

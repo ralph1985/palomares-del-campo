@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1519480/0'
 sourceId: '1519480'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/1A/1A8ynIMG-20260312-WA0004.jpg'
+    label: '1A8ynIMG-20260312-WA0004.jpg'
+    alt: '1A8ynIMG-20260312-WA0004.jpg'
 ---
 
 El próximo sábado 14 de 10 a 13 horas.

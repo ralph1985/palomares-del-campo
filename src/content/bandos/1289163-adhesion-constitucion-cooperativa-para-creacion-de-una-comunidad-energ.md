@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1289163/0'
 sourceId: '1289163'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/9U/9UmZFTALLERPARTICIPATIVOCREACIONCOMUNIDADESENERGETICAS.png'
+    label: '9UmZFTALLERPARTICIPATIVOCREACIONCOMUNIDADESENERGETICAS.png'
+    alt: '9UmZFTALLERPARTICIPATIVOCREACIONCOMUNIDADESENERGETICAS.png'
 ---
 
 Quienes quieran acogerse a la adhesión pueden venir al Ayuntamiento para firmar la solicitud.

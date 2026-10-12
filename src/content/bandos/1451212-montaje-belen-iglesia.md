@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1451212/0'
 sourceId: '1451212'
+attachments: []
 ---
 
 Montaje del Belén para estas Navidades en la Iglesia Parroquial.

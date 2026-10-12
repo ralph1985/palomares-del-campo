@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1368241/0'
 sourceId: '1368241'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/cQ/cQobnIMG-20250711-WA0004.jpg'
+    label: 'cQobnIMG-20250711-WA0004.jpg'
+    alt: 'cQobnIMG-20250711-WA0004.jpg'
 ---
 
 AQUA ZUMBA (DEL 16 DE JULIO AL 18 DE AGOSTO).

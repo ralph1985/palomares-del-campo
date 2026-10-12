@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1351397/0'
 sourceId: '1351397'
+attachments: []
 ---
 
 EL PRÓXIMO MIÉRCOLES 25 DE JUNIO VIENE EL SERVICIO DE DENTISTA "RURALDENTMÓVIL" SOBRE LAS11:30 HORAS.

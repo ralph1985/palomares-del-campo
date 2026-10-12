@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1347521/0'
 sourceId: '1347521'
+attachments: []
 ---
 
 Recordar que hoy a las 20'00 es la reunión para el curso de soldador

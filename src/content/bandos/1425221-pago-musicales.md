@@ -7,6 +7,7 @@ category: 'Cultura'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1425221/0'
 sourceId: '1425221'
+attachments: []
 ---
 
 **MUSICAL 7 de noviembre –**** ANASTASIA**: el precio es de **18 € por entrada.**

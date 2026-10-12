@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1477244/0'
 sourceId: '1477244'
+attachments: []
 ---
 
 FINALMENTE EL **CARTERO REAL** NOS VISITARÁ **MAÑANA** MARTES A LAS **17:30 HORAS EN EL SALÓN DE ACTOS DEL AYUNTAMIENTO**.

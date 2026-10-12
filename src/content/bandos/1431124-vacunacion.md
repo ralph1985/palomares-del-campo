@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1431124/0'
 sourceId: '1431124'
+attachments: []
 ---
 
 Las personas que quieran vacunarse de la gripe ya pueden acudir al centro médico.

@@ -27,7 +27,7 @@ const archivePage = `
       <div class="post-category"><h3>Aviso de agua</h3></div>
       <div class="post-publication"><p>11-Septiembre-2026 11:28</p></div>
       <span class="badge">Info General</span>
-      <div class="comunicadobody"><div>Aviso corte de agua.<br><a href="https://www.bandomovil.com/userFiles/5r/aviso.pdf">aviso.pdf</a></div></div>
+      <div class="comunicadobody"><div>Aviso corte de agua.<br><img src="https://www.bandomovil.com/userFiles/5r/aviso.jpg" alt="Cartel del aviso"><br><a href="https://www.bandomovil.com/userFiles/5r/aviso.pdf">aviso.pdf</a></div></div>
     </a>
   </li>
 `;
@@ -55,6 +55,19 @@ describe('fetch bandos', () => {
       link: 'https://www.bandomovil.com/palomaresdelcampo/1641085/0',
     });
     expect(item.description).toContain('aviso.pdf');
+    expect(item.attachments).toEqual([
+      {
+        type: 'image',
+        url: 'https://www.bandomovil.com/userFiles/5r/aviso.jpg',
+        label: 'Cartel del aviso',
+        alt: 'Cartel del aviso',
+      },
+      {
+        type: 'document',
+        url: 'https://www.bandomovil.com/userFiles/5r/aviso.pdf',
+        label: 'aviso.pdf',
+      },
+    ]);
     expect(parseBandomovilDate('11-Septiembre-2026 11:28').toISOString()).toBe(
       '2026-09-11T11:28:00.000Z',
     );
@@ -78,10 +91,19 @@ describe('fetch bandos', () => {
       category: 'Avisos',
       pubDate: 'Sun, 11 Oct 2026 10:00:00 +0200',
       guid: 'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=123',
+      attachments: [
+        {
+          type: 'document',
+          url: 'https://www.bandomovil.com/userFiles/5r/aviso.pdf',
+          label: 'aviso.pdf',
+        },
+      ],
     });
 
     expect(markdown).toContain("title: 'Aviso de agua'");
     expect(markdown).toContain('sourceName:');
+    expect(markdown).toContain("  - type: 'document'");
+    expect(markdown).toContain("    url: 'https://www.bandomovil.com/userFiles/5r/aviso.pdf'");
     expect(markdown).toContain('Habrá un corte.');
     expect(markdown).toContain('**De 9:00 a 12:00**');
     expect(markdown).not.toContain('<script>');

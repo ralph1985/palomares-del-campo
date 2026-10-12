@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1259942/0'
 sourceId: '1259942'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/v1/v1E3VCARGLASSPALOMARESENERO2025.jpg'
+    label: 'v1E3VCARGLASSPALOMARESENERO2025.jpg'
+    alt: 'v1E3VCARGLASSPALOMARESENERO2025.jpg'
 ---
 
 2 y 3 de enero de 2025.

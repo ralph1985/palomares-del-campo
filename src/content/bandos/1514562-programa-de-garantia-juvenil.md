@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1514562/0'
 sourceId: '1514562'
+attachments: []
 ---
 
 DESTINADO A PERSONAS DE ENTRE 16 Y 29 AÑOS. 150 HORAS DE FORMACIÓN Y 120 HORAS DE PRÁCTICAS PARA MONTAJE DE PLACAS SOLARES.

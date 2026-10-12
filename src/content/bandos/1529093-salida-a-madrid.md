@@ -7,6 +7,7 @@ category: 'Cultura'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1529093/0'
 sourceId: '1529093'
+attachments: []
 ---
 
 Debido a los días de Semana Santa se amplía el plazo para apuntarse a la salida del 17 de mayo a Madrid.

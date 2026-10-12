@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1636235/0'
 sourceId: '1636235'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/M6/M64iwIMG-20260903-WA0001.jpg'
+    label: 'M64iwIMG-20260903-WA0001.jpg'
+    alt: 'M64iwIMG-20260903-WA0001.jpg'
 ---
 
 Palomares con Ceuta

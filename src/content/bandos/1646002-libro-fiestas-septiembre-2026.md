@@ -7,6 +7,10 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1646002/0'
 sourceId: '1646002'
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/3Z/3ZoZTFIESTAS2026-09PALOMARESDELCAMPO.pdf'
+    label: 'FIESTAS2026-09PALOMARESDELCAMPO.pdf'
 ---
 
 LIBRO DE FIESTAS PATRONALES EN HONOR AL SANTO CRISTO DE LA PAZ (Del 24 al 27 de septiembre de 2026)

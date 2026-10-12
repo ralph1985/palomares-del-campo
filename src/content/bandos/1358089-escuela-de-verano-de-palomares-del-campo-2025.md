@@ -7,6 +7,15 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1358089/0'
 sourceId: '1358089'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/R3/R3pozIMG-20250625-WA0002.jpg'
+    label: 'R3pozIMG-20250625-WA0002.jpg'
+    alt: 'R3pozIMG-20250625-WA0002.jpg'
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/Dp/DpHVGCartelgruposEscueladeVerano2025.PNG'
+    label: 'DpHVGCartelgruposEscueladeVerano2025.PNG'
+    alt: 'DpHVGCartelgruposEscueladeVerano2025.PNG'
 ---
 
 ESCUELA DE VERANO DE PALOMARES DEL CAMPO 2025.

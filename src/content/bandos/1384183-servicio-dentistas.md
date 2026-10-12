@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1384183/0'
 sourceId: '1384183'
+attachments: []
 ---
 
 EL PROXIMO 6 DE AGOSTO VENDRA EL SERVICIO DE DENTISTA "RURALDENTMOVIL" A PRIMERA HORA DE LA MAÑANA.

@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1366415/0'
 sourceId: '1366415'
+attachments: []
 ---
 
 EL PRÓXIMO 17 DE JULIO VENDRÁ EL SERVICIO DE DENTISTA "RURALDENTMÓVIL" A PRIMERA HORA DE LA MAÑANA.

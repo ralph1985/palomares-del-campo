@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1642553/0'
 sourceId: '1642553'
+attachments: []
 ---
 
 El Ayuntamiento de Palomares del Campo quiere informar de una situación surgida recientemente.

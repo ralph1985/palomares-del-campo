@@ -7,6 +7,10 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1500639/0'
 sourceId: '1500639'
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/13/13QbACarglass.pdf'
+    label: 'Carglass.pdf'
 ---
 
 Días 9, 10 y 11 de febrero.

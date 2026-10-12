@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1303368/0'
 sourceId: '1303368'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/9O/9OkjfCONCURSOTORRIJAS.png'
+    label: '9OkjfCONCURSOTORRIJAS.png'
+    alt: '9OkjfCONCURSOTORRIJAS.png'
 ---
 
 DÍA 2 DE ABRIL A LAS 17H.

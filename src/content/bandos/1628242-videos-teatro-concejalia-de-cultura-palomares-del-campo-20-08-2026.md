@@ -7,6 +7,11 @@ category: 'Cultura'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1628242/0'
 sourceId: '1628242'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/AL/ALd9iFolletoTeatroPalomaresdelCampo20-08-26.png'
+    label: 'ALd9iFolletoTeatroPalomaresdelCampo20-08-26.png'
+    alt: 'ALd9iFolletoTeatroPalomaresdelCampo20-08-26.png'
 ---
 
 - Sainete "Novios de internet" del autor José Cedena, representado por el "Grupo de Teatro de Nuestro Pueblo" Palomares del Campo.

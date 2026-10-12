@@ -1,6 +1,13 @@
 import { z, defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+const attachment = z.object({
+  type: z.enum(['image', 'document', 'video']),
+  url: z.string().url(),
+  label: z.string(),
+  alt: z.string().optional(),
+});
+
 const noticias = defineCollection({
   loader: glob({
     pattern: '**/[^_]*.md',
@@ -32,6 +39,7 @@ const bandos = defineCollection({
     sourceName: z.string(),
     sourceUrl: z.string().url(),
     sourceId: z.string(),
+    attachments: z.array(attachment).default([]),
   }),
 });
 

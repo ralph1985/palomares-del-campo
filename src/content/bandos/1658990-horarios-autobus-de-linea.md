@@ -7,6 +7,13 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1658990/0'
 sourceId: '1658990'
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/hz/hz1v1HORARIOSOCUELLAMOSCUENCAFUENTELESPINO.pdf'
+    label: 'HORARIOSOCUELLAMOSCUENCAFUENTELESPINO.pdf'
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/mB/mBdnlHORARIOSOCUELLAMOSCUENCAHORCAJO.pdf'
+    label: 'HORARIOSOCUELLAMOSCUENCAHORCAJO.pdf'
 ---
 
 HORARIOS ACTUALIZADOS DEL AUTOBÚS DE LÍNEA

@@ -7,6 +7,10 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1275109/0'
 sourceId: '1275109'
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/Y3/Y3ux0ANUNCIOLICITACIONPISCINA2025.pdf'
+    label: 'ANUNCIOLICITACIONPISCINA2025.pdf'
 ---
 
 Licitación piscina 2025

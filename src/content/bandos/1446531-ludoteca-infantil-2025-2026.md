@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1446531/0'
 sourceId: '1446531'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/5O/5Op2Wcartel2025ludotecapalomares.png'
+    label: '5Op2Wcartel2025ludotecapalomares.png'
+    alt: '5Op2Wcartel2025ludotecapalomares.png'
 ---
 
 Enlace al formulario de inscripción:

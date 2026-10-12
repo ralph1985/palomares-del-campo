@@ -7,6 +7,10 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1471054/0'
 sourceId: '1471054'
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/fC/fCwEZCARTELPROGRAMACIONNAVIDAD2025.pdf'
+    label: 'CARTELPROGRAMACIONNAVIDAD2025.pdf'
 ---
 
 Cartel Programación Navidad 2025.

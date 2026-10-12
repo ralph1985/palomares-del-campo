@@ -7,6 +7,10 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1610082/0'
 sourceId: '1610082'
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/7I/7I66ACARTELSONRISASYLAGRIMASAUDITORIOCUENCA.pdf'
+    label: 'CARTELSONRISASYLAGRIMASAUDITORIOCUENCA.pdf'
 ---
 
 MUSICAL "SONRISAS Y LÁGRIMAS" EN EL AUDITORIO DE CUENCA.

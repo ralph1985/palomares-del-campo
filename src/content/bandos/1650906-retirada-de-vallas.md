@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1650906/0'
 sourceId: '1650906'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/hU/hU3DrQUITARVALLAS2026.PNG'
+    label: 'hU3DrQUITARVALLAS2026.PNG'
+    alt: 'hU3DrQUITARVALLAS2026.PNG'
 ---
 
 EL PRÓXIMO SÁBADO DIA 3 DE OCTUBRE A LAS 8:00 DE LA MAÑANA SE VAN A RETIRAR LAS VALLAS DE LOS ENCIERROS. EL QUE QUIERA COLABORAR A ESA HORA AL SITIO HABITUAL.

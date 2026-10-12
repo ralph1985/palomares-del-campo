@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1659178/0'
 sourceId: '1659178'
+attachments: []
 ---
 
 NUEVOS HORARIOS DE AUTOBÚS DE LÍNEA

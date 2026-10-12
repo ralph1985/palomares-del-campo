@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1501417/0'
 sourceId: '1501417'
+attachments: []
 ---
 
 El próximo jueves, 12 de febrero a las 12:00 de la mañana vendrán a hacer una presentación del uso del DNI electrónico para ayudar, a todo aquel que esté interesado, con la instalación de la aplicación en el móvil de MiDNI. (Lugar: Salón de Actos del Ayuntamiento)

@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1646075/0'
 sourceId: '1646075'
+attachments: []
 ---
 
 Muchas gracias "Hospitalidad de Lourdes de Cuenca" por la visita.

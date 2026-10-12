@@ -67,6 +67,22 @@ test.describe('current affairs sections', () => {
       'NUEVOS HORARIOS DE AUTOBÚS DE LÍNEA',
     );
   });
+  test('renders images and documents attached to a bando', async ({ page }) => {
+    await page.goto('/bandos/1648341-clase-practica/');
+
+    await expect(page.getByRole('heading', { name: 'Recursos del comunicado' })).toBeVisible();
+    await expect(page.locator('.article-attachments img')).toHaveAttribute(
+      'src',
+      'https://www.bandomovil.com/userFiles/j3/j3a7jIMG-20260924-WA0000.jpg',
+    );
+
+    await page.goto('/bandos/1658990-horarios-autobus-de-linea/');
+    await expect(page.getByRole('heading', { name: 'Recursos del comunicado' })).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: 'HORARIOSOCUELLAMOSCUENCAFUENTELESPINO.pdf' }),
+    ).toHaveAttribute('href', /HORARIOSOCUELLAMOSCUENCAFUENTELESPINO\.pdf$/);
+  });
+
   test('shows sourced municipal bandos and keeps the old path compatible', async ({ page }) => {
     await page.goto('/bandos/');
 

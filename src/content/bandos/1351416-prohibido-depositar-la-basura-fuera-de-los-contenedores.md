@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1351416/0'
 sourceId: '1351416'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/zF/zFFTDPROHIBIDODEPOSITARLABASURAFUERADELOSCONTENEDORES.PNG'
+    label: 'zFFTDPROHIBIDODEPOSITARLABASURAFUERADELOSCONTENEDORES.PNG'
+    alt: 'zFFTDPROHIBIDODEPOSITARLABASURAFUERADELOSCONTENEDORES.PNG'
 ---
 
 PROHIBIDO DEPOSITAR LA BASURA FUERA DE LOS CONTENEDORES.

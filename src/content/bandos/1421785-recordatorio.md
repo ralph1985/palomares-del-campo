@@ -7,6 +7,7 @@ category: 'Cultura'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1421785/0'
 sourceId: '1421785'
+attachments: []
 ---
 
 **Recordatorio:**

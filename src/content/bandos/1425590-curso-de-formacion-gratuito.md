@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1425590/0'
 sourceId: '1425590'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/cd/cdHzPcartelusatumovilconconfianza.png'
+    label: 'cdHzPcartelusatumovilconconfianza.png'
+    alt: 'cdHzPcartelusatumovilconconfianza.png'
 ---
 
 El curso "USA TU MOVIL CON CONFIANZA" se impartirá esta tarde a partir de las 16:00 horas en la Asociación de Mujeres.

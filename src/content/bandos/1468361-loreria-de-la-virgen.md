@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1468361/0'
 sourceId: '1468361'
+attachments: []
 ---
 
 El próximo jueves se recogerá el número de la Lotería de la Virgen para llevarlo a la Administración de Lotería. Aquellos interesados en adquirir algún décimo que aún no lo hayan hecho que se acerquen al Ayuntamiento, Panadería, Frutería o a la tienda de Sagrario.

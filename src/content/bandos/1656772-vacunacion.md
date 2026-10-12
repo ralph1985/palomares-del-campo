@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1656772/0'
 sourceId: '1656772'
+attachments: []
 ---
 
 Se empezará a vacunar del la Gripe y del Covid a partir del martes 13 a las 11:00 de la mañana. Los interesados que acudan al Centro Médico. En principio se comenzará con los mayores de 80 años.

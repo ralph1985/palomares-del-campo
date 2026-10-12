@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1427928/0'
 sourceId: '1427928'
+attachments: []
 ---
 
 EL PRÓXIMO 14 DE OCTUBRE (MARTES) VENDRÁ EL SERVICIO DE DENTISTA "RURALDENTMOVIL" A LAS 12:30 HORAS.

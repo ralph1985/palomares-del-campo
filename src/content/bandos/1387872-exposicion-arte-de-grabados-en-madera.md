@@ -7,6 +7,11 @@ category: 'Cultura'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1387872/0'
 sourceId: '1387872'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/t0/t0AYDCartelExposicinFelipeZamora2025.png'
+    label: 't0AYDCartelExposicinFelipeZamora2025.png'
+    alt: 't0AYDCartelExposicinFelipeZamora2025.png'
 ---
 
 Con obras de nuestro paisano Felipe Zamora Malla.

@@ -7,6 +7,10 @@ category: 'Cultura'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1398895/0'
 sourceId: '1398895'
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/Wu/WuvMHProgramaTeatro17-08-2025.pdf'
+    label: 'ProgramaTeatro17-08-2025.pdf'
 ---
 
 - Sainete "Olvido, olvídame" del autor José Cedena, representado por el "Grupo de Teatro de Nuestro Pueblo" Palomares del Campo.

@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1644357/0'
 sourceId: '1644357'
+attachments: []
 ---
 
 EL PRÓXIMO SÁBADO, 19 DE SEPTIEMBRE, VENDRÁ LA VIRGEN DE LOURDES A NUESTRO PUEBLO.

@@ -7,6 +7,10 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1452409/0'
 sourceId: '1452409'
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/Fd/FdbwTTERMALISMOIMSERSO2026.pdf'
+    label: 'TERMALISMOIMSERSO2026.pdf'
 ---
 
 Abierto el plazo de solicitudes.

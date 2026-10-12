@@ -7,6 +7,10 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1623353/0'
 sourceId: '1623353'
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/0Y/0Yb4xBandoinformativoydeagradecimiento.pdf'
+    label: 'Bandoinformativoydeagradecimiento.pdf'
 ---
 
 BANDO INFORMATIVO Y DE AGRADECIMIENTO DEL AYUNTAMIENTO DE PALOMARES DEL CAMPO A TODAS LA PERSONAS QUE, DE MANERA COMPLETAMENTE DESINTERESADA, SE HAN VOLCADO EN LAS LABORES DE BÚSQUEDA DURANTE ESTOS DÍAS.

@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1342465/0'
 sourceId: '1342465'
+attachments: []
 ---
 
 El próximo lunes 9 de Junio viene el servicio de dentista "RURALDENTMOVIL", sobre las 11'00 horas.

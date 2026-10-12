@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1413699/0'
 sourceId: '1413699'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/wc/wceh3COLOCARVALLASENCIERROS.PNG'
+    label: 'wceh3COLOCARVALLASENCIERROS.PNG'
+    alt: 'wceh3COLOCARVALLASENCIERROS.PNG'
 ---
 
 Se colocarán las vallas el sábado 20 de septiembre a las 8:00 de la mañana.

@@ -7,6 +7,11 @@ category: 'Cultura'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1612801/0'
 sourceId: '1612801'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/Bk/BkidcLibroCantemosalamordelosAmores.jpg'
+    label: 'BkidcLibroCantemosalamordelosAmores.jpg'
+    alt: 'BkidcLibroCantemosalamordelosAmores.jpg'
 ---
 
 A la venta el libro "Cantemos al amor de los amores" de nuestro paisano Miguel Ruiz Bricio.

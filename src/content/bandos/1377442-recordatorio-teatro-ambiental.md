@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1377442/0'
 sourceId: '1377442'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/1h/1hoQpTeatroAmbiental2025.jpg'
+    label: '1hoQpTeatroAmbiental2025.jpg'
+    alt: '1hoQpTeatroAmbiental2025.jpg'
 ---
 
 RECORDATORIO:

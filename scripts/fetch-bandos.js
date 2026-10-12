@@ -11,6 +11,9 @@ export const SOURCE_NAME = 'Palomares del Campo Informa';
 export const TARGET_YEARS = new Set([2025, 2026]);
 const REQUEST_TIMEOUT_MS = 30_000;
 const DETAIL_CONCURRENCY = 6;
+const IMAGE_EXTENSIONS = /\.(?:avif|gif|jpe?g|png|webp)(?:$|[?#])/i;
+const VIDEO_EXTENSIONS = /\.(?:mp4|m4v|mov|webm)(?:$|[?#])/i;
+const DOCUMENT_EXTENSIONS = /\.(?:docx?|pdf|pptx?|xlsx?|zip)(?:$|[?#])/i;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.join(__dirname, '..');
@@ -22,6 +25,7 @@ export function parseRSSItems(xmlText) {
     title: extractXMLContent(itemXml, 'title'),
     link: extractXMLContent(itemXml, 'link'),
     description: extractXMLContent(itemXml, 'description'),
+    attachments: extractAttachments(extractXMLContent(itemXml, 'description')),
     category: extractXMLContent(itemXml, 'category') || 'Info General',
     pubDate: extractXMLContent(itemXml, 'pubDate'),
     guid: extractXMLContent(itemXml, 'guid'),
@@ -56,6 +60,79 @@ export function parseBandomovilDate(value) {
   );
 }
 
+export function extractAttachments(html) {
+  const attachments = [];
+  const seenUrls = new Set();
+
+  const addAttachment = (rawUrl, fallbackLabel, alt = '') => {
+    const url = resolveAttachmentUrl(rawUrl);
+    const type = url ? classifyAttachment(url) : undefined;
+    if (!url || !type || seenUrls.has(url)) return;
+
+    const label = attachmentLabel(url, fallbackLabel);
+    attachments.push({
+      type,
+      url,
+      label,
+      ...(type === 'image' ? { alt: alt.trim() || label } : {}),
+    });
+    seenUrls.add(url);
+  };
+
+  for (const match of html.matchAll(/<img\b[^>]*>/gi)) {
+    const tag = match[0];
+    addAttachment(
+      readHTMLAttribute(tag, 'src'),
+      readHTMLAttribute(tag, 'alt'),
+      readHTMLAttribute(tag, 'alt'),
+    );
+  }
+
+  for (const match of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
+    const attributes = match[1];
+    addAttachment(readHTMLAttribute(attributes, 'href'), htmlToMarkdown(match[2]));
+  }
+
+  return attachments;
+}
+
+function readHTMLAttribute(tag, attribute) {
+  return tag.match(new RegExp(`\\b${attribute}\\s*=\\s*["']([^"']+)["']`, 'i'))?.[1] ?? '';
+}
+
+function resolveAttachmentUrl(value) {
+  if (!value) return '';
+
+  try {
+    const url = new URL(value, ARCHIVE_ORIGIN);
+    if (
+      url.hostname !== new URL(ARCHIVE_ORIGIN).hostname ||
+      !url.pathname.includes('/userFiles/')
+    ) {
+      return '';
+    }
+    return sanitizeHttpsUrl(url.href);
+  } catch {
+    return '';
+  }
+}
+
+function classifyAttachment(url) {
+  const pathname = new URL(url).pathname;
+  if (IMAGE_EXTENSIONS.test(pathname)) return 'image';
+  if (VIDEO_EXTENSIONS.test(pathname)) return 'video';
+  if (DOCUMENT_EXTENSIONS.test(pathname)) return 'document';
+  return undefined;
+}
+
+function attachmentLabel(url, fallbackLabel) {
+  const label = htmlToMarkdown(fallbackLabel).trim();
+  if (label) return label;
+
+  const filename = decodeURIComponent(new URL(url).pathname.split('/').pop() ?? '').trim();
+  return filename || 'Archivo adjunto';
+}
+
 export function parseArchiveItems(html) {
   const itemPattern =
     /<li\b[\s\S]*?href="\/palomaresdelcampo\/(\d+)\/\d+"[\s\S]*?<h3[^>]*>([\s\S]*?)<\/h3>[\s\S]*?<div class="post-publication"[^>]*>[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>[\s\S]*?<span class="badge"[^>]*>([\s\S]*?)<\/span>[\s\S]*?<div class="comunicadobody"[^>]*>([\s\S]*?)<\/div>/gi;
@@ -64,6 +141,7 @@ export function parseArchiveItems(html) {
     title: htmlToMarkdown(match[2]),
     link: `${ARCHIVE_ORIGIN}/palomaresdelcampo/${match[1]}/0`,
     description: match[5].trim(),
+    attachments: extractAttachments(match[5]),
     category: htmlToMarkdown(match[4]) || 'Info General',
     pubDate: parseBandomovilDate(htmlToMarkdown(match[3])).toISOString(),
     guid: `${ARCHIVE_ORIGIN}/palomaresdelcampo/${match[1]}/0`,
@@ -87,6 +165,20 @@ export function generateFilename(title, guid) {
   const id = guid.match(/[?&]id=(\d+)/i)?.[1] ?? guid.match(/\/palomaresdelcampo\/(\d+)\//i)?.[1];
   const slug = slugify(title);
   return id ? `${id}-${slug}` : slug;
+}
+
+function serializeAttachments(attachments = []) {
+  if (attachments.length === 0) return 'attachments: []';
+
+  return [
+    'attachments:',
+    ...attachments.flatMap((attachment) => [
+      `  - type: '${escapeYaml(attachment.type)}'`,
+      `    url: '${escapeYaml(attachment.url)}'`,
+      `    label: '${escapeYaml(attachment.label)}'`,
+      ...(attachment.alt ? [`    alt: '${escapeYaml(attachment.alt)}'`] : []),
+    ]),
+  ].join('\n');
 }
 
 export function createBandoMarkdown(item) {
@@ -116,6 +208,7 @@ category: '${escapeYaml(item.category || 'Info General')}'
 sourceName: '${SOURCE_NAME}'
 sourceUrl: '${escapeYaml(sourceUrl)}'
 sourceId: '${escapeYaml(sourceId)}'
+${serializeAttachments(item.attachments)}
 ---
 
 ${htmlToMarkdown(item.description)}

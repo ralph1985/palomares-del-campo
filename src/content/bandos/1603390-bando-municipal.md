@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1603390/0'
 sourceId: '1603390'
+attachments: []
 ---
 
 El ayuntamiento recuerda a todos los vecinos, la obligación de depositar correctamente los residuos en el interior de los contenedores.

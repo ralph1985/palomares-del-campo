@@ -7,6 +7,11 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1371340/0'
 sourceId: '1371340'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/QP/QPiwICARTELACTIVIDADESVERANO2025.jpg'
+    label: 'QPiwICARTELACTIVIDADESVERANO2025.jpg'
+    alt: 'QPiwICARTELACTIVIDADESVERANO2025.jpg'
 ---
 
 CARTEL ACTIVIDADES VERANO 2025

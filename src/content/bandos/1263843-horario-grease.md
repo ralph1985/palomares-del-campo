@@ -7,6 +7,11 @@ category: 'Cultura'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1263843/0'
 sourceId: '1263843'
+attachments:
+  - type: 'image'
+    url: 'https://www.bandomovil.com/userFiles/ND/ND0CyHorariosalidaycomienzomusicalGrease.PNG'
+    label: 'ND0CyHorariosalidaycomienzomusicalGrease.PNG'
+    alt: 'ND0CyHorariosalidaycomienzomusicalGrease.PNG'
 ---
 
 Horario salida y comienzo del musical

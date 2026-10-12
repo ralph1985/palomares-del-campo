@@ -7,6 +7,7 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1433708/0'
 sourceId: '1433708'
+attachments: []
 ---
 
 Se cancela el curso de "Inteligencia Artificial al alcance de tu mano" programado para esta tarde. Disculpen las molestias.

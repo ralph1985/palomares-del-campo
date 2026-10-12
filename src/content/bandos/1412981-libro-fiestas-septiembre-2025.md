@@ -7,6 +7,10 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1412981/0'
 sourceId: '1412981'
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/f1/f19FWFIESTAS2025-09PALOMARESDELCAMPO.pdf'
+    label: 'FIESTAS2025-09PALOMARESDELCAMPO.pdf'
 ---
 
 LIBRO DE FIESTAS PATRONALES EN HONOR AL SANTO CRISTO DE LA PAZ (Del 25 al 28 de septiembre de 2025)
