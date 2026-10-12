@@ -181,15 +181,15 @@ const formatDate = (date: string) =>
 
   .routes-hero {
     padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 9vw, 7rem);
-    color: #eff5ed;
-    background: #19342d;
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
   }
 
   .eyebrow {
     margin: 0 0 1.2rem;
-    color: #e5b77e;
-    font-size: 0.72rem;
-    font-weight: 750;
+    color: var(--color-ochre);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
@@ -198,7 +198,7 @@ const formatDate = (date: string) =>
   h2,
   h3 {
     margin: 0;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-weight: 500;
     letter-spacing: -0.06em;
     line-height: 0.95;
@@ -206,21 +206,21 @@ const formatDate = (date: string) =>
 
   h1 {
     max-width: 10ch;
-    color: #fff;
+    color: var(--color-surface-soft);
     font-size: clamp(4rem, 12vw, 9rem);
   }
 
   .routes-hero p:last-child {
     max-width: 35rem;
     margin: 2rem 0 0;
-    color: #b7d0bc;
+    color: var(--color-sage-light);
     font-size: clamp(1rem, 1.6vw, 1.2rem);
     line-height: 1.7;
   }
 
   .routes-section {
     padding: clamp(4.5rem, 10vw, 8rem) 0;
-    background: #d8e6d6;
+    background: var(--color-sage);
   }
 
   .routes-heading {
@@ -232,7 +232,7 @@ const formatDate = (date: string) =>
   }
 
   .routes-heading .eyebrow {
-    color: #a05c32;
+    color: var(--color-clay);
   }
 
   h2 {
@@ -243,7 +243,7 @@ const formatDate = (date: string) =>
   .routes-heading > p {
     max-width: 35rem;
     margin: 0;
-    color: #527066;
+    color: var(--color-muted);
     line-height: 1.7;
   }
 
@@ -258,7 +258,7 @@ const formatDate = (date: string) =>
     gap: 2rem;
     padding: clamp(1.5rem, 5vw, 3rem);
     border-radius: 1.5rem;
-    background: #f4f1e9;
+    background: var(--color-paper);
   }
 
   .route-card-header {
@@ -270,10 +270,10 @@ const formatDate = (date: string) =>
     margin: 0 0 1rem;
     padding: 0.45rem 0.65rem;
     border-radius: 999px;
-    color: #19342d;
-    background: #e5b77e;
-    font-size: 0.72rem;
-    font-weight: 750;
+    color: var(--color-ink);
+    background: var(--color-ochre);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
@@ -286,7 +286,7 @@ const formatDate = (date: string) =>
   .route-summary {
     max-width: 37rem;
     margin: 1.5rem 0 0;
-    color: #527066;
+    color: var(--color-muted);
     line-height: 1.7;
   }
 
@@ -303,23 +303,23 @@ const formatDate = (date: string) =>
   }
 
   .route-facts dt {
-    color: #a05c32;
-    font-size: 0.7rem;
-    font-weight: 750;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   .route-facts dd {
     margin: 0.45rem 0 0;
-    color: #19342d;
-    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--color-ink);
+    font-family: var(--font-serif);
     font-size: 1.5rem;
   }
 
   .route-accessibility {
     margin: 0;
-    color: #527066;
+    color: var(--color-muted);
     line-height: 1.7;
   }
 
@@ -328,13 +328,13 @@ const formatDate = (date: string) =>
     gap: 0.4rem;
     grid-column: 1 / -1;
     padding: 1rem 1.2rem;
-    border-left: 0.25rem solid #a05c32;
-    color: #19342d;
+    border-left: 0.25rem solid var(--color-clay);
+    color: var(--color-ink);
     background: #f0dfc9;
   }
 
   .route-disclaimer span {
-    color: #527066;
+    color: var(--color-muted);
     line-height: 1.5;
   }
 
@@ -344,12 +344,12 @@ const formatDate = (date: string) =>
     gap: 0.4rem;
     padding: 1rem 1.2rem;
     border: 1px solid rgb(25 52 45 / 22%);
-    color: #19342d;
+    color: var(--color-ink);
     background: #e8eee5;
   }
 
   .route-trace-status span {
-    color: #527066;
+    color: var(--color-muted);
     line-height: 1.5;
   }
 
@@ -370,7 +370,7 @@ const formatDate = (date: string) =>
   .route-map-heading span,
   .route-map-note,
   .route-map-status {
-    color: #527066;
+    color: var(--color-muted);
     font-size: 0.88rem;
     line-height: 1.5;
   }
@@ -392,7 +392,7 @@ const formatDate = (date: string) =>
   }
 
   :global(.route-map .leaflet-control-attribution) {
-    font-size: 0.65rem;
+    font-size: var(--font-size-label);
   }
 
   .route-links {
@@ -404,31 +404,31 @@ const formatDate = (date: string) =>
   }
 
   .route-links a {
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     text-underline-offset: 0.25em;
   }
 
   .route-primary-link {
-    color: #19342d;
+    color: var(--color-ink);
   }
 
   .route-context-link {
-    color: #a05c32;
+    color: var(--color-clay);
     font-size: 0.9rem;
   }
 
   .route-review {
     grid-column: 1 / -1;
     margin: 0;
-    color: #527066;
+    color: var(--color-muted);
     font-size: 0.78rem;
     line-height: 1.5;
   }
 
   .routes-note {
     padding: 1.5rem 0;
-    color: #527066;
-    background: #f4f1e9;
+    color: var(--color-muted);
+    background: var(--color-paper);
   }
 
   .routes-note p {

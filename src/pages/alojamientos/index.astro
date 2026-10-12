@@ -187,15 +187,15 @@ const formatDate = (date: string) =>
 
   .accommodation-hero {
     padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 9vw, 7rem);
-    background: #d8e6d6;
+    background: var(--color-sage);
   }
 
   .eyebrow,
   .accommodation-category {
     margin: 0 0 1.25rem;
-    color: #a05c32;
-    font-size: 0.7rem;
-    font-weight: 750;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.16em;
     text-transform: uppercase;
   }
@@ -204,7 +204,7 @@ const formatDate = (date: string) =>
   h2,
   h3 {
     margin: 0;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-weight: 500;
     letter-spacing: -0.06em;
     line-height: 0.98;
@@ -223,7 +223,7 @@ const formatDate = (date: string) =>
   .accommodation-hero > .accommodation-shell > p:last-child {
     max-width: 38rem;
     margin: 2rem 0 0;
-    color: #527066;
+    color: var(--color-muted);
     font-size: 1.1rem;
     line-height: 1.7;
   }
@@ -243,7 +243,7 @@ const formatDate = (date: string) =>
 
   .criteria-copy {
     max-width: 39rem;
-    color: #527066;
+    color: var(--color-muted);
     font-size: 1.05rem;
     line-height: 1.7;
   }
@@ -271,7 +271,7 @@ const formatDate = (date: string) =>
   .section-heading > p:last-child {
     max-width: 30rem;
     margin: 0;
-    color: #527066;
+    color: var(--color-muted);
     line-height: 1.65;
   }
 
@@ -288,12 +288,12 @@ const formatDate = (date: string) =>
     padding: clamp(1.5rem, 3vw, 2.25rem);
     border: 1px solid rgb(25 52 45 / 15%);
     border-radius: 1.25rem;
-    background: #fbfaf5;
+    background: var(--color-surface);
   }
 
   .accommodation-category {
     margin-bottom: 1rem;
-    font-size: 0.65rem;
+    font-size: var(--font-size-label);
   }
 
   .accommodation-card h3 {
@@ -303,13 +303,13 @@ const formatDate = (date: string) =>
 
   .accommodation-location {
     margin: 0.7rem 0 0;
-    color: #a05c32;
-    font-weight: 750;
+    color: var(--color-clay);
+    font-weight: var(--font-weight-strong);
   }
 
   .accommodation-summary {
     margin: 1.2rem 0 0;
-    color: #527066;
+    color: var(--color-muted);
     line-height: 1.6;
   }
 
@@ -328,15 +328,15 @@ const formatDate = (date: string) =>
   }
 
   .accommodation-facts dt {
-    color: #527066;
-    font-size: 0.7rem;
+    color: var(--color-muted);
+    font-size: var(--font-size-label);
     line-height: 1.3;
   }
 
   .accommodation-facts dd {
     margin: 0.35rem 0 0;
     font-size: 0.9rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     line-height: 1.35;
   }
 
@@ -348,39 +348,39 @@ const formatDate = (date: string) =>
   }
 
   .accommodation-links a {
-    color: #2f6652;
+    color: var(--color-forest);
     font-size: 0.88rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     text-underline-offset: 0.25em;
   }
 
   .accommodation-links a:hover,
   .accommodation-links a:focus-visible {
-    color: #a05c32;
+    color: var(--color-clay);
   }
 
   .nearby-section {
-    color: #eff5ed;
-    background: #19342d;
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
   }
 
   .nearby-section .eyebrow,
   .nearby-section .section-heading > p:last-child {
-    color: #e5b77e;
+    color: var(--color-ochre);
   }
 
   .nearby-section h2 {
-    color: #fff;
+    color: var(--color-surface-soft);
   }
 
   .nearby-section .accommodation-card {
     border-color: rgb(239 245 237 / 18%);
-    color: #19342d;
+    color: var(--color-ink);
   }
 
   .source-section {
-    color: #527066;
-    background: #f4f1e9;
+    color: var(--color-muted);
+    background: var(--color-paper);
   }
 
   .source-inner {

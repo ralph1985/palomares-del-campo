@@ -164,14 +164,14 @@ const transportPublishedAt = new Date(
 
   .practical-hero {
     padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 9vw, 7rem);
-    background: #d8e6d6;
+    background: var(--color-sage);
   }
 
   .eyebrow {
     margin: 0 0 1.25rem;
-    color: #a05c32;
-    font-size: 0.7rem;
-    font-weight: 750;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.16em;
     text-transform: uppercase;
   }
@@ -179,7 +179,7 @@ const transportPublishedAt = new Date(
   h1,
   h2 {
     margin: 0;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-weight: 500;
     letter-spacing: -0.06em;
     line-height: 0.98;
@@ -200,7 +200,7 @@ const transportPublishedAt = new Date(
   .transport-grid p:not(.eyebrow) {
     max-width: 35rem;
     margin: 2rem 0 0;
-    color: #527066;
+    color: var(--color-muted);
     font-size: 1.05rem;
     line-height: 1.7;
   }
@@ -225,8 +225,8 @@ const transportPublishedAt = new Date(
     margin: 0;
     padding: clamp(1.75rem, 5vw, 3rem);
     border-radius: 1.5rem;
-    color: #eff5ed;
-    background: #2f6652;
+    color: var(--color-surface-soft);
+    background: var(--color-forest);
     font-style: normal;
     line-height: 1.6;
   }
@@ -236,8 +236,8 @@ const transportPublishedAt = new Date(
   }
 
   .contact-name {
-    color: #fff;
-    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--color-surface-soft);
+    font-family: var(--font-serif);
     font-size: clamp(1.7rem, 3vw, 2.5rem);
     line-height: 1.05;
   }
@@ -253,15 +253,15 @@ const transportPublishedAt = new Date(
   .text-link,
   .source-link {
     color: inherit;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     text-underline-offset: 0.25em;
   }
 
   .button-link {
     padding: 0.85rem 1.1rem;
     border-radius: 999px;
-    color: #19342d;
-    background: #e5b77e;
+    color: var(--color-ink);
+    background: var(--color-ochre);
     text-decoration: none;
   }
 
@@ -270,7 +270,7 @@ const transportPublishedAt = new Date(
   }
 
   .services-section {
-    color: #19342d;
+    color: var(--color-ink);
     background: #e9eee7;
   }
 
@@ -291,39 +291,39 @@ const transportPublishedAt = new Date(
     gap: 1rem;
     align-items: center;
     padding: 1.1rem 0;
-    color: #19342d;
+    color: var(--color-ink);
     font-weight: 700;
     text-decoration: none;
   }
 
   .service-list a:focus-visible,
   .service-list a:hover {
-    color: #a05c32;
+    color: var(--color-clay);
   }
 
   .service-index {
-    color: #a05c32;
-    font-size: 0.72rem;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
     letter-spacing: 0.12em;
   }
 
   .service-arrow {
-    color: #a05c32;
+    color: var(--color-clay);
   }
 
   .transport-section {
     padding: clamp(4.5rem, 10vw, 8rem) 0;
-    color: #eff5ed;
-    background: #19342d;
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
   }
 
   .transport-section .eyebrow,
   .transport-section .source-link {
-    color: #e5b77e;
+    color: var(--color-ochre);
   }
 
   .transport-section h2 {
-    color: #fff;
+    color: var(--color-surface-soft);
   }
 
   .transport-section p:not(.eyebrow) {
@@ -346,8 +346,8 @@ const transportPublishedAt = new Date(
 
   .transport-route h3 {
     margin: 0 0 0.75rem;
-    color: #fff;
-    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--color-surface-soft);
+    font-family: var(--font-serif);
     font-size: 1.25rem;
     font-weight: 500;
   }
@@ -355,7 +355,7 @@ const transportPublishedAt = new Date(
   .transport-route table {
     width: 100%;
     border-collapse: collapse;
-    color: #eff5ed;
+    color: var(--color-surface-soft);
     font-size: 0.95rem;
   }
 
@@ -367,8 +367,8 @@ const transportPublishedAt = new Date(
   }
 
   .transport-route thead th {
-    color: #e5b77e;
-    font-size: 0.72rem;
+    color: var(--color-ochre);
+    font-size: var(--font-size-label);
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
@@ -384,13 +384,13 @@ const transportPublishedAt = new Date(
 
   .transport-note {
     margin-bottom: 1rem !important;
-    color: #b7d0bc !important;
+    color: var(--color-sage-light) !important;
     font-size: 0.85rem;
   }
 
   .review-section {
-    color: #527066;
-    background: #f4f1e9;
+    color: var(--color-muted);
+    background: var(--color-paper);
   }
 
   .review-inner {
