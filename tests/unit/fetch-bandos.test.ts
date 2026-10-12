@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   createBandoMarkdown,
   generateFilename,
+  parseArchiveItems,
+  parseBandomovilDate,
   parseRSSItems,
 } from '../../scripts/fetch-bandos.js';
 
@@ -19,6 +21,17 @@ const rss = `<?xml version="1.0"?>
   </channel>
 </rss>`;
 
+const archivePage = `
+  <li>
+    <a href="/palomaresdelcampo/1641085/0" class="external">
+      <div class="post-category"><h3>Aviso de agua</h3></div>
+      <div class="post-publication"><p>11-Septiembre-2026 11:28</p></div>
+      <span class="badge">Info General</span>
+      <div class="comunicadobody"><div>Aviso corte de agua.<br><a href="https://www.bandomovil.com/userFiles/5r/aviso.pdf">aviso.pdf</a></div></div>
+    </a>
+  </li>
+`;
+
 describe('fetch bandos', () => {
   it('parses RSS items and decodes their source fields', () => {
     const [item] = parseRSSItems(rss);
@@ -32,6 +45,20 @@ describe('fetch bandos', () => {
     expect(item.description).toContain('<br>');
   });
 
+  it('parses archive entries and their Spanish publication dates', () => {
+    const [item] = parseArchiveItems(archivePage);
+
+    expect(item).toMatchObject({
+      title: 'Aviso de agua',
+      category: 'Info General',
+      sourceId: '1641085',
+      link: 'https://www.bandomovil.com/palomaresdelcampo/1641085/0',
+    });
+    expect(item.description).toContain('aviso.pdf');
+    expect(parseBandomovilDate('11-Septiembre-2026 11:28').toISOString()).toBe(
+      '2026-09-11T11:28:00.000Z',
+    );
+  });
   it('creates a stable id-based filename', () => {
     expect(generateFilename('Aviso de agua', '')).toBe('aviso-de-agua');
     expect(

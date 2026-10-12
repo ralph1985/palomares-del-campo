@@ -1,0 +1,21 @@
+---
+title: 'RECORDATORIO TEATRO AMBIENTAL'
+description: 'RECORDATORIO: Mañana, sábado 26 a las 11:00h tendrá lugar el teatro ambiental "LA ACADEMIA DEL MUSGO VERDE Y LA MAGIA DE RECICLAR" en el Polideportivo de la Plaza de Toros. SINOPSI…'
+author: 'Ayuntamiento de Palomares del Campo'
+date: 2025-07-25T10:28:00.000Z
+category: 'Info General'
+sourceName: 'Palomares del Campo Informa'
+sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1377442/0'
+sourceId: '1377442'
+---
+
+RECORDATORIO:
+
+Mañana, sábado 26 a las 11:00h tendrá lugar el teatro ambiental "LA ACADEMIA DEL MUSGO VERDE Y LA MAGIA DE RECICLAR" en el Polideportivo de la Plaza de Toros.
+
+SINOPSIS:
+
+¡Es el día de la gran graduación en la Academia del Musgo Verde! Todo está listo: los hechizos, las capas, los diplomas, pero algo va terriblemente mal. Los conjuros fallan, los profesores se han vuelto majaretas y la magia natural está desapareciendo. Luna, una aprendiz de maga, tan torpe(...)
+
+...Haga click para ver completo.
+Archivo adjunto:

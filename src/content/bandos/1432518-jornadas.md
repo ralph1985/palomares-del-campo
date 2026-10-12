@@ -1,0 +1,13 @@
+---
+title: 'JORNADAS'
+description: 'JORNADAS "NUESTROS MAYORES, NUESTRA MEMORIA VIVA" EL PRÓXIMO 24 DE OCTUBRE DE 2025 EN EL POLIDEPORTIVO MUNICIPAL. Archivos adjuntos:'
+author: 'Ayuntamiento de Palomares del Campo'
+date: 2025-10-17T09:43:00.000Z
+category: 'Info General'
+sourceName: 'Palomares del Campo Informa'
+sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1432518/0'
+sourceId: '1432518'
+---
+
+JORNADAS "NUESTROS MAYORES, NUESTRA MEMORIA VIVA" EL PRÓXIMO 24 DE OCTUBRE DE 2025 EN EL POLIDEPORTIVO MUNICIPAL.
+Archivos adjuntos:
