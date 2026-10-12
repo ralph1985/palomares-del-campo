@@ -53,6 +53,14 @@ test.describe('current affairs sections', () => {
     expect(widths.article).toBeLessThanOrEqual(widths.articleClient);
   });
 
+  test('does not repeat the bando summary in the detail body', async ({ page }) => {
+    await page.goto('/bandos/1659178-horarios-autobus-de-linea/');
+
+    await expect(page.locator('.article-description')).toHaveCount(0);
+    await expect(page.locator('.article-content')).toContainText(
+      'NUEVOS HORARIOS DE AUTOBÚS DE LÍNEA',
+    );
+  });
   test('shows sourced municipal bandos and keeps the old path compatible', async ({ page }) => {
     await page.goto('/bandos/');
 

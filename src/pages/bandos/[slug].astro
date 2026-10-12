@@ -41,7 +41,6 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
         <header class="article-header">
           <p class="eyebrow">{category}</p>
           <h1>{title}</h1>
-          <p class="article-description">{description}</p>
           <div class="article-meta">
             <span>{author}</span>
             <span aria-hidden="true">·</span>
@@ -139,15 +138,6 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     font-weight: 500;
     letter-spacing: -0.06em;
     line-height: 0.96;
-  }
-
-  .article-description {
-    max-width: 42rem;
-    margin: 2rem 0 1.5rem;
-    overflow-wrap: anywhere;
-    color: #527066;
-    font-size: 1.15rem;
-    line-height: 1.65;
   }
 
   .article-meta {
