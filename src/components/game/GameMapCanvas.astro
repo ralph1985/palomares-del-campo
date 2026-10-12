@@ -1,0 +1,226 @@
+---
+import ExternalLink from '../ui/ExternalLink.astro';
+---
+
+<div class="map-card">
+  <div class="map-hud" aria-label="Estado del tablero">
+    <span class="map-hud-live">
+      <span aria-hidden="true"></span>En directo
+    </span>
+    <span data-game-ball-version>Bola activa · versión local</span>
+    <button
+      class="game-immersive-toggle"
+      type="button"
+      data-game-immersive-toggle
+      aria-pressed="false"
+    >
+      <span aria-hidden="true">⛶</span>
+      <span data-game-immersive-label>Inmersivo</span>
+    </button>
+  </div>
+  <div
+    id="game-map"
+    class="game-map"
+    role="application"
+    aria-label="Mapa interactivo de Palomares del Campo con lugares de juego"
+  ></div>
+  <div class="map-attribution-note">
+    Mapa © <ExternalLink href="https://www.openstreetmap.org/copyright">OpenStreetMap</ExternalLink>
+  </div>
+</div>
+
+<script>
+  import '../../scripts/game-map.ts';
+</script>
+
+<style>
+  :global(.game-ball-icon-wrapper),
+  :global(.game-user-icon-wrapper) {
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: transparent;
+  }
+
+  :global(.game-ball-icon) {
+    display: block;
+    width: 1.35rem;
+    height: 1.35rem;
+    border: 3px solid var(--color-surface-soft);
+    border-radius: 50%;
+    background: var(--color-clay);
+    box-shadow:
+      0 0 0 0.35rem var(--color-game-ball-ring),
+      0 0.3rem 0.8rem var(--color-game-shadow);
+    animation: game-ball-pulse 1.8s ease-in-out infinite;
+  }
+
+  :global(.game-user-icon) {
+    display: block;
+    width: 0.9rem;
+    height: 0.9rem;
+    border: 3px solid var(--color-surface-soft);
+    border-radius: 50%;
+    background: var(--color-forest);
+    box-shadow: 0 0 0 0.25rem var(--color-game-user-ring);
+  }
+
+  :global(.game-player-marker-wrapper) {
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: transparent;
+  }
+
+  :global(.game-player-marker) {
+    display: block;
+    width: 0.75rem;
+    height: 0.75rem;
+    border: 2px solid var(--color-surface-soft);
+    border-radius: 50%;
+    background: var(--color-game-marker);
+    box-shadow: 0 0 0 0.25rem var(--color-game-player-ring);
+  }
+
+  :global(.game-player-tooltip) {
+    padding: 0.22rem 0.42rem;
+    border: 1px solid var(--color-game-tooltip-border);
+    border-radius: 0.35rem;
+    color: var(--color-ink);
+    background: var(--color-game-tooltip-surface);
+    box-shadow: 0 0.3rem 0.7rem var(--color-game-tooltip-shadow);
+    font-size: 0.68rem;
+    font-weight: var(--font-weight-emphasis);
+  }
+
+  @keyframes game-ball-pulse {
+    0%,
+    100% {
+      transform: scale(0.92);
+    }
+
+    50% {
+      transform: scale(1.08);
+    }
+  }
+
+  .map-card {
+    position: relative;
+    min-height: 39rem;
+    overflow: hidden;
+    border: 1px solid var(--color-game-map-border);
+    border-radius: 1.25rem;
+    background: var(--color-game-map);
+    box-shadow: 0 1rem 2rem var(--color-game-map-shadow);
+  }
+
+  .game-map {
+    width: 100%;
+    height: 100%;
+    min-height: 39rem;
+  }
+
+  .map-hud {
+    position: absolute;
+    z-index: 500;
+    top: 0.85rem;
+    right: 0.85rem;
+    left: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--color-game-hud-border);
+    border-radius: 0.65rem;
+    color: var(--color-ink);
+    background: var(--color-game-hud-surface);
+    box-shadow: 0 0.5rem 1rem var(--color-game-hud-shadow);
+    font-size: 0.68rem;
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .map-hud-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--color-forest);
+  }
+
+  .map-hud-live span {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--color-game-capture);
+    box-shadow: 0 0 0 0.25rem var(--color-game-live-ring);
+  }
+
+  .game-immersive-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 1.9rem;
+    padding: 0.35rem 0.55rem;
+    border: 1px solid var(--color-game-toggle-border);
+    border-radius: 0.45rem;
+    color: var(--color-ink);
+    background: var(--color-game-toggle-surface);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.62rem;
+    font-weight: var(--font-weight-emphasis);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .game-immersive-toggle:hover,
+  .game-immersive-toggle[aria-pressed='true'] {
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
+  }
+
+  .game-immersive-toggle:focus-visible {
+    outline: 3px solid var(--color-ochre);
+    outline-offset: 2px;
+  }
+
+  .map-attribution-note {
+    position: absolute;
+    z-index: 500;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    padding: 0.25rem 0.45rem;
+    border-radius: 0.35rem;
+    color: var(--color-ink);
+    background: var(--color-game-attribution-surface);
+    font-size: 0.65rem;
+  }
+
+  .map-attribution-note a {
+    color: inherit;
+  }
+
+  @media (max-width: 38rem) {
+    .map-card,
+    .game-map {
+      min-height: 27rem;
+    }
+
+    .map-hud {
+      flex-wrap: wrap;
+    }
+
+    .map-hud > [data-game-ball-version] {
+      flex: 1 1 auto;
+      min-width: 8rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.game-ball-icon) {
+      animation: none;
+    }
+  }
+</style>

@@ -1,0 +1,150 @@
+---
+import ExternalLink from '../ui/ExternalLink.astro';
+import type { RuralAccommodation } from '../../data/accommodations';
+
+interface Props {
+  accommodation: RuralAccommodation;
+  variant?: 'light' | 'dark';
+}
+
+const { accommodation, variant = 'light' } = Astro.props;
+---
+
+<article
+  class:list={['accommodation-card', { 'accommodation-card--dark': variant === 'dark' }]}
+  data-accommodation-card
+>
+  <p class="accommodation-category">{accommodation.category}</p>
+  <h3>{accommodation.name}</h3>
+  <p class="accommodation-location">{accommodation.location}</p>
+  <p class="accommodation-summary">{accommodation.summary}</p>
+  <dl class="accommodation-facts">
+    <div>
+      <dt>Capacidad</dt>
+      <dd>{accommodation.capacity}</dd>
+    </div>
+    {accommodation.rooms && (
+      <div>
+        <dt>Distribución</dt>
+        <dd>{accommodation.rooms}</dd>
+      </div>
+    )}
+    {accommodation.bathrooms && (
+      <div>
+        <dt>Baños</dt>
+        <dd>{accommodation.bathrooms}</dd>
+      </div>
+    )}
+  </dl>
+  <div class="accommodation-links">
+    <ExternalLink href={accommodation.source.href}>
+      {accommodation.source.label} <span aria-hidden="true">↗</span>
+    </ExternalLink>
+    {accommodation.officialSource && (
+      <ExternalLink href={accommodation.officialSource.href}>
+        {accommodation.officialSource.label} <span aria-hidden="true">↗</span>
+      </ExternalLink>
+    )}
+  </div>
+</article>
+
+<style>
+  .accommodation-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border: 1px solid var(--color-accommodation-border);
+    border-radius: 1.25rem;
+    background: var(--color-surface);
+  }
+
+  .accommodation-category {
+    margin: 0 0 1rem;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .accommodation-card h3 {
+    max-width: 18ch;
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -0.06em;
+    line-height: 0.98;
+  }
+
+  .accommodation-location {
+    margin: 0.7rem 0 0;
+    color: var(--color-clay);
+    font-weight: var(--font-weight-strong);
+  }
+
+  .accommodation-summary {
+    margin: 1.2rem 0 0;
+    color: var(--color-muted);
+    line-height: 1.6;
+  }
+
+  .accommodation-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.7rem;
+    margin: 1.5rem 0 0;
+    padding: 1rem 0;
+    border-top: 1px solid var(--color-accommodation-divider);
+    border-bottom: 1px solid var(--color-accommodation-divider);
+  }
+
+  .accommodation-facts div {
+    min-width: 0;
+  }
+
+  .accommodation-facts dt {
+    color: var(--color-muted);
+    font-size: var(--font-size-label);
+    line-height: 1.3;
+  }
+
+  .accommodation-facts dd {
+    margin: 0.35rem 0 0;
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-strong);
+    line-height: 1.35;
+  }
+
+  .accommodation-links {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
+  }
+
+  .accommodation-links a {
+    color: var(--color-forest);
+    font-size: 0.88rem;
+    font-weight: var(--font-weight-strong);
+    text-underline-offset: 0.25em;
+  }
+
+  .accommodation-links a:hover,
+  .accommodation-links a:focus-visible {
+    color: var(--color-clay);
+  }
+
+  .accommodation-card--dark {
+    border-color: var(--color-accommodation-nearby-border);
+    color: var(--color-ink);
+  }
+
+  @media (max-width: 38rem) {
+    .accommodation-facts {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+  }
+</style>

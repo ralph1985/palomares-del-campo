@@ -1,8 +1,8 @@
 # Inventario de arquitectura CSS
 
-Fecha de referencia: 2026-10-12 19:54 CEST.
+Fecha de referencia: 2026-10-12 20:15 CEST.
 
-Este inventario pertenece a la Fase 1 del plan de arquitectura CSS. Describe responsabilidades; no ordena eliminar todos los bloques `<style>`.
+Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refactorización posteriores. Describe responsabilidades; no ordena eliminar todos los bloques `<style>`.
 
 ## Resumen
 
@@ -10,22 +10,23 @@ Este inventario pertenece a la Fase 1 del plan de arquitectura CSS. Describe res
 - 20 componentes Astro contienen un bloque `<style>` scoped.
 - Hay una hoja CSS externa específica de página: `src/styles/pages/sobre-el-pueblo.css`.
 - Los estilos compartidos de layout, UI, archivo y tarjetas permanecen junto a sus componentes porque Astro los encapsula.
+- La Fase 2 extrajo responsabilidades independientes del juego y la tarjeta de alojamiento repetida sin crear una hoja global monolítica.
 - `/juego/` mantiene un tema independiente y no debe mezclarse con la paleta clara general.
 
 ## Páginas
 
-| Archivo                                | Clasificación                 | Decisión de Fase 1                                                                                |
-| -------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------- |
-| `src/pages/index.astro`                | Composición de portada        | Mantener local mientras la composición sea exclusiva; revisar sus secciones antes de extraer CSS. |
-| `src/pages/agenda/index.astro`         | Composición editorial         | Mantener local; extraer solo patrones que aparezcan en otras rutas.                               |
-| `src/pages/bandos/index.astro`         | Composición de archivo        | Mantener local; compartir comportamiento mediante componentes existentes.                         |
-| `src/pages/bandos/[slug].astro`        | Detalle editorial             | Mantener local; no mezclarlo con la ficha de noticias.                                            |
-| `src/pages/noticias/index.astro`       | Composición de archivo        | Mantener local; compartir solo patrones reales con bandos.                                        |
-| `src/pages/noticias/[slug].astro`      | Detalle editorial             | Mantener local; conservar la diferencia entre noticia y bando.                                    |
-| `src/pages/informacion-practica.astro` | Página informativa grande     | Revisar responsabilidades y posibles secciones; no mover CSS por obligación.                      |
-| `src/pages/rutas/index.astro`          | Página de rutas grande        | Revisar composición de metadatos, mapa y limitaciones; mantener el mapa aislado.                  |
-| `src/pages/alojamientos/index.astro`   | Directorio informativo grande | Revisar si las tarjetas o filtros merecen componentes; no añadir fotografías ni datos.            |
-| `src/pages/juego/index.astro`          | Tema independiente del juego  | Mantener local y oscuro; no migrar a la paleta clara.                                             |
+| Archivo                                | Clasificación                 | Decisión de Fase 1                                                                                             |
+| -------------------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `src/pages/index.astro`                | Composición de portada        | Mantener local mientras la composición sea exclusiva; revisar sus secciones antes de extraer CSS.              |
+| `src/pages/agenda/index.astro`         | Composición editorial         | Mantener local; extraer solo patrones que aparezcan en otras rutas.                                            |
+| `src/pages/bandos/index.astro`         | Composición de archivo        | Mantener local; compartir comportamiento mediante componentes existentes.                                      |
+| `src/pages/bandos/[slug].astro`        | Detalle editorial             | Mantener local; no mezclarlo con la ficha de noticias.                                                         |
+| `src/pages/noticias/index.astro`       | Composición de archivo        | Mantener local; compartir solo patrones reales con bandos.                                                     |
+| `src/pages/noticias/[slug].astro`      | Detalle editorial             | Mantener local; conservar la diferencia entre noticia y bando.                                                 |
+| `src/pages/informacion-practica.astro` | Página informativa grande     | Revisar responsabilidades y posibles secciones; no mover CSS por obligación.                                   |
+| `src/pages/rutas/index.astro`          | Página de rutas grande        | Revisar composición de metadatos, mapa y limitaciones; mantener el mapa aislado.                               |
+| `src/pages/alojamientos/index.astro`   | Directorio informativo grande | Compone la página y la rejilla; las tarjetas viven en `src/components/accommodations/AccommodationCard.astro`. |
+| `src/pages/juego/index.astro`          | Tema independiente del juego  | Mantener local y oscuro; no migrar a la paleta clara.                                                          |
 
 `src/pages/sobre-el-pueblo.astro` no tiene un bloque `<style>` propio: importa la hoja específica `src/styles/pages/sobre-el-pueblo.css`.
 
@@ -49,20 +50,24 @@ Este inventario pertenece a la Fase 1 del plan de arquitectura CSS. Describe res
 
 ## Componentes específicos de página
 
-| Archivo                                        | Clasificación                | Decisión de Fase 1                                                         |
-| ---------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------- |
-| `src/components/home/HomeAudienceCards.astro`  | Sección exclusiva de portada | Mantener junto a la sección; extraer patrones solo con reutilización real. |
-| `src/components/home/HomeEditorialGuide.astro` | Sección exclusiva de portada | Mantener junto a la sección y conservar su jerarquía editorial.            |
-| `src/components/about/HeritageCard.astro`      | Tarjeta de patrimonio        | Mantener scoped; no crear una tarjeta genérica sin segundo consumidor.     |
+| Archivo                                                 | Clasificación                | Decisión de Fase 1                                                               |
+| ------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------- |
+| `src/components/home/HomeAudienceCards.astro`           | Sección exclusiva de portada | Mantener junto a la sección; extraer patrones solo con reutilización real.       |
+| `src/components/home/HomeEditorialGuide.astro`          | Sección exclusiva de portada | Mantener junto a la sección y conservar su jerarquía editorial.                  |
+| `src/components/about/HeritageCard.astro`               | Tarjeta de patrimonio        | Mantener scoped; no crear una tarjeta genérica sin segundo consumidor.           |
+| `src/components/accommodations/AccommodationCard.astro` | Tarjeta de alojamiento       | Mantener scoped; expone la variante oscura de alrededores sin duplicar la ficha. |
 
 ## Tema independiente del juego
 
-| Archivo                                       | Clasificación                | Decisión de Fase 1                                                                         |
-| --------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------ |
-| `src/components/game/GameMap.astro`           | Mapa y HUD del juego         | Revisar responsabilidades por tamaño; conservar estados oscuros, Leaflet y accesibilidad.  |
-| `src/components/game/GameStatusPanel.astro`   | Estado y controles del juego | Revisar responsabilidades por tamaño; no separar CSS sin separar una responsabilidad real. |
-| `src/components/game/GameRules.astro`         | Reglas del juego             | Mantener scoped y usar tokens nocturnos.                                                   |
-| `src/components/game/GamePrivacyNotice.astro` | Privacidad del juego         | Mantener scoped y conservar su contenido explícito.                                        |
+| Archivo                                              | Clasificación                | Decisión de Fase 1                                                                                       |
+| ---------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `src/components/game/GameMap.astro`                  | Composición del mapa         | Mantener el layout, encabezado y modo inmersivo; delegar la superficie del mapa a `GameMapCanvas.astro`. |
+| `src/components/game/GameMapCanvas.astro`            | Superficie del mapa y HUD    | Mantener junto al script Leaflet, atribución, marcadores y responsive del mapa.                          |
+| `src/components/game/GameStatusPanel.astro`          | Estado y controles del juego | Mantener el panel de jugador; delegar el simulador de desarrollo y el ranking.                           |
+| `src/components/game/GameDevelopmentSimulator.astro` | Herramienta de desarrollo    | Renderizar solo en desarrollo y conservar sus selectores `data-game-*`.                                  |
+| `src/components/game/GameRanking.astro`              | Ranking de la partida        | Mantener el marcado y estilos del ranking; los adaptadores siguen actualizando sus selectores globales.  |
+| `src/components/game/GameRules.astro`                | Reglas del juego             | Mantener scoped y usar tokens nocturnos.                                                                 |
+| `src/components/game/GamePrivacyNotice.astro`        | Privacidad del juego         | Mantener scoped y conservar su contenido explícito.                                                      |
 
 ## Hoja CSS específica de página
 
@@ -79,6 +84,8 @@ Estos patrones merecen revisión posterior, pero no se extraen automáticamente 
 - cabeceras de sección, metadatos y bloques de archivo;
 - restricciones de ancho, separación vertical y rejillas en páginas informativas;
 - estados nocturnos, bordes y halos del juego.
+
+La Fase 2 materializó tres responsabilidades independientes: `GameMapCanvas` agrupa el mapa interactivo y su HUD, `GameRanking` separa el ranking del panel de jugador y `GameDevelopmentSimulator` aísla la herramienta exclusiva de desarrollo. `AccommodationCard` elimina la duplicación de las fichas locales y cercanas mediante una variante explícita. `rutas/index.astro`, `informacion-practica.astro` y `SiteFooter.astro` se mantienen cohesionados: sus secciones son composiciones únicas y no tienen un segundo consumidor claro.
 
 La repetición de una declaración no basta para crear una abstracción. En la Fase 3 solo se extraerán patrones que tengan más de un consumidor con la misma semántica y estados compatibles.
 

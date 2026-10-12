@@ -1,5 +1,5 @@
 ---
-import ExternalLink from '../ui/ExternalLink.astro';
+import GameMapCanvas from './GameMapCanvas.astro';
 import GameStatusPanel from './GameStatusPanel.astro';
 const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
 ---
@@ -25,113 +25,13 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
   </div>
 
   <div class="game-map-layout">
-    <div class="map-card">
-      <div class="map-hud" aria-label="Estado del tablero">
-        <span class="map-hud-live">
-          <span aria-hidden="true"></span>En directo
-        </span>
-        <span data-game-ball-version>Bola activa · versión local</span>
-        <button
-          class="game-immersive-toggle"
-          type="button"
-          data-game-immersive-toggle
-          aria-pressed="false"
-        >
-          <span aria-hidden="true">⛶</span>
-          <span data-game-immersive-label>Inmersivo</span>
-        </button>
-      </div>
-      <div
-        id="game-map"
-        class="game-map"
-        role="application"
-        aria-label="Mapa interactivo de Palomares del Campo con lugares de juego"
-      ></div>
-      <div class="map-attribution-note">
-        Mapa ©{' '}
-        <ExternalLink href="https://www.openstreetmap.org/copyright">OpenStreetMap</ExternalLink>
-      </div>
-    </div>
+    <GameMapCanvas />
 
     <GameStatusPanel />
   </div>
 </section>
 
-<script>
-  import '../../scripts/game-map.ts';
-</script>
-
 <style>
-  :global(.game-ball-icon-wrapper),
-  :global(.game-user-icon-wrapper) {
-    display: grid;
-    place-items: center;
-    border: 0;
-    background: transparent;
-  }
-
-  :global(.game-ball-icon) {
-    display: block;
-    width: 1.35rem;
-    height: 1.35rem;
-    border: 3px solid var(--color-surface-soft);
-    border-radius: 50%;
-    background: var(--color-clay);
-    box-shadow:
-      0 0 0 0.35rem rgb(160 92 50 / 24%),
-      0 0.3rem 0.8rem rgb(25 52 45 / 35%);
-    animation: game-ball-pulse 1.8s ease-in-out infinite;
-  }
-
-  :global(.game-user-icon) {
-    display: block;
-    width: 0.9rem;
-    height: 0.9rem;
-    border: 3px solid var(--color-surface-soft);
-    border-radius: 50%;
-    background: var(--color-forest);
-    box-shadow: 0 0 0 0.25rem rgb(47 102 82 / 24%);
-  }
-
-  :global(.game-player-marker-wrapper) {
-    display: grid;
-    place-items: center;
-    border: 0;
-    background: transparent;
-  }
-
-  :global(.game-player-marker) {
-    display: block;
-    width: 0.75rem;
-    height: 0.75rem;
-    border: 2px solid var(--color-surface-soft);
-    border-radius: 50%;
-    background: var(--color-game-marker);
-    box-shadow: 0 0 0 0.25rem rgb(198 132 85 / 22%);
-  }
-
-  :global(.game-player-tooltip) {
-    padding: 0.22rem 0.42rem;
-    border: 1px solid rgb(25 52 45 / 18%);
-    border-radius: 0.35rem;
-    color: var(--color-ink);
-    background: rgb(244 241 233 / 94%);
-    box-shadow: 0 0.3rem 0.7rem rgb(25 52 45 / 18%);
-    font-size: 0.68rem;
-    font-weight: var(--font-weight-emphasis);
-  }
-
-  @keyframes game-ball-pulse {
-    0%,
-    100% {
-      transform: scale(0.92);
-    }
-
-    50% {
-      transform: scale(1.08);
-    }
-  }
-
   .game-map-section {
     position: relative;
     z-index: 0;
@@ -219,104 +119,6 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
     display: grid;
     grid-template-columns: minmax(0, 1.55fr) minmax(19rem, 0.75fr);
     gap: 1rem;
-  }
-
-  .map-card {
-    position: relative;
-    min-height: 39rem;
-    overflow: hidden;
-    border: 1px solid rgb(239 245 237 / 14%);
-    border-radius: 1.25rem;
-    background: var(--color-game-map);
-    box-shadow: 0 1rem 2rem rgb(0 0 0 / 18%);
-  }
-
-  .game-map {
-    width: 100%;
-    height: 100%;
-    min-height: 39rem;
-  }
-
-  .map-hud {
-    position: absolute;
-    z-index: 500;
-    top: 0.85rem;
-    right: 0.85rem;
-    left: 0.85rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    padding: 0.6rem 0.75rem;
-    border: 1px solid rgb(25 52 45 / 14%);
-    border-radius: 0.65rem;
-    color: var(--color-ink);
-    background: rgb(244 241 233 / 90%);
-    box-shadow: 0 0.5rem 1rem rgb(25 52 45 / 12%);
-    font-size: 0.68rem;
-    font-weight: var(--font-weight-strong);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .map-hud-live {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    color: var(--color-forest);
-  }
-
-  .map-hud-live span {
-    width: 0.45rem;
-    height: 0.45rem;
-    border-radius: 50%;
-    background: var(--color-game-capture);
-    box-shadow: 0 0 0 0.25rem rgb(63 155 105 / 16%);
-  }
-
-  .game-immersive-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    min-height: 1.9rem;
-    padding: 0.35rem 0.55rem;
-    border: 1px solid rgb(25 52 45 / 22%);
-    border-radius: 0.45rem;
-    color: var(--color-ink);
-    background: rgb(255 255 255 / 44%);
-    cursor: pointer;
-    font: inherit;
-    font-size: 0.62rem;
-    font-weight: var(--font-weight-emphasis);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  .game-immersive-toggle:hover,
-  .game-immersive-toggle[aria-pressed='true'] {
-    color: var(--color-surface-soft);
-    background: var(--color-ink);
-  }
-
-  .game-immersive-toggle:focus-visible {
-    outline: 3px solid var(--color-ochre);
-    outline-offset: 2px;
-  }
-
-  .map-attribution-note {
-    position: absolute;
-    z-index: 500;
-    right: 0.6rem;
-    bottom: 0.6rem;
-    padding: 0.25rem 0.45rem;
-    border-radius: 0.35rem;
-    color: var(--color-ink);
-    background: rgb(244 241 233 / 88%);
-    font-size: 0.65rem;
-  }
-
-  .map-attribution-note a {
-    color: inherit;
   }
 
   :global(body.game-immersive-mode) {
@@ -515,30 +317,14 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
       flex-direction: column;
     }
 
-    .map-card,
-    .game-map {
-      min-height: 27rem;
-    }
-
-    .map-hud {
-      flex-wrap: wrap;
-    }
-
-    .map-hud > [data-game-ball-version] {
-      flex: 1 1 auto;
-      min-width: 8rem;
-    }
-
     :global(body.game-immersive-mode .map-hud) {
       align-items: stretch;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .game-button,
-    :global(.game-ball-icon) {
+    .game-button {
       transition-duration: 0.01ms;
-      animation: none;
     }
   }
 </style>

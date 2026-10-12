@@ -1,6 +1,7 @@
 ---
-import { gameLocations } from '../../data/game-locations';
 import Button from '../ui/Button.astro';
+import GameDevelopmentSimulator from './GameDevelopmentSimulator.astro';
+import GameRanking from './GameRanking.astro';
 ---
 
 <aside class="game-panel" aria-labelledby="game-status-title">
@@ -74,44 +75,9 @@ import Button from '../ui/Button.astro';
     Pulsa «Obtener ubicación» cuando estés preparado.
   </p>
 
-  {import.meta.env.DEV && (
-    <div class="game-simulator" aria-labelledby="simulator-title">
-      <span class="stat-label" id="simulator-title">
-        Simulador de desarrollo
-      </span>
-      <select data-game-simulator aria-label="Elegir ubicación simulada">
-        <option value="">Elegir un punto del mapa</option>
-        {gameLocations.map((location) => (
-          <option value={location.id}>{location.shortName}</option>
-        ))}
-      </select>
-      <select data-game-scenario aria-label="Elegir escenario de posición simulada">
-        <option value="exact">Posición exacta</option>
-        <option value="edge">Cerca del límite</option>
-        <option value="outside">Fuera del radio</option>
-        <option value="low-accuracy">Precisión insuficiente</option>
-      </select>
-      <Button variant="simulator" type="button" data-game-simulate disabled>
-        Simular posición
-      </Button>
-    </div>
-  )}
+  <GameDevelopmentSimulator />
 
-  <section class="game-ranking" aria-labelledby="game-ranking-title">
-    <div class="game-ranking-heading">
-      <div>
-        <span class="stat-label">Puntuación compartida</span>
-        <h4 id="game-ranking-title">Ranking de la partida</h4>
-      </div>
-      <span class="game-ranking-status" data-game-ranking-status role="status">
-        Conectando…
-      </span>
-    </div>
-    <ol class="game-ranking-list" data-game-ranking aria-live="polite"></ol>
-    <p class="game-ranking-empty" data-game-ranking-empty>
-      Aún no hay jugadores con puntos.
-    </p>
-  </section>
+  <GameRanking />
 </aside>
 
 <style>
@@ -232,7 +198,7 @@ import Button from '../ui/Button.astro';
     background: rgb(239 245 237 / 5%);
   }
 
-  .stat-label {
+  :global(.stat-label) {
     display: block;
     margin-bottom: 0.35rem;
     color: var(--color-night-muted);
@@ -274,135 +240,6 @@ import Button from '../ui/Button.astro';
     margin: 1rem 0 0;
     color: var(--color-ochre);
     font-size: 0.82rem;
-    line-height: 1.5;
-  }
-
-  .game-simulator {
-    display: grid;
-    gap: 0.55rem;
-    margin-top: 0.5rem;
-    padding: 0.9rem;
-    border: 1px dashed rgb(229 183 126 / 48%);
-    border-radius: 0.8rem;
-    background: rgb(229 183 126 / 7%);
-  }
-
-  .game-simulator select {
-    width: 100%;
-    min-height: 2.7rem;
-    padding: 0.55rem 0.7rem;
-    border: 1px solid rgb(239 245 237 / 22%);
-    border-radius: 0.55rem;
-    color: var(--color-surface-soft);
-    background: var(--color-night-panel);
-    font: inherit;
-    font-size: 0.8rem;
-  }
-
-  .game-simulator select:focus-visible {
-    outline: 3px solid var(--color-ochre);
-    outline-offset: 2px;
-  }
-
-  .game-ranking {
-    margin-top: auto;
-    padding-top: 1.4rem;
-    border-top: 1px solid rgb(239 245 237 / 13%);
-  }
-
-  .game-ranking-heading {
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .game-ranking h4 {
-    margin: 0.2rem 0 0;
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-    font-weight: 500;
-  }
-
-  .game-ranking-status {
-    color: var(--color-sage-light);
-    font-size: var(--font-size-label);
-  }
-
-  .game-ranking-list {
-    display: grid;
-    gap: 0.45rem;
-    margin: 0.9rem 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  :global(.game-ranking-entry) {
-    display: grid;
-    grid-template-columns: 1.8rem minmax(0, 1fr) auto auto;
-    align-items: center;
-    gap: 0.6rem;
-    min-height: 2.65rem;
-    padding: 0.45rem 0.55rem;
-    border: 1px solid rgb(239 245 237 / 8%);
-    border-radius: 0.7rem;
-    background: rgb(239 245 237 / 5%);
-    font-size: 0.82rem;
-  }
-
-  :global(.game-ranking-entry:first-child) {
-    border: 1px solid rgb(229 183 126 / 38%);
-    background: linear-gradient(100deg, rgb(229 183 126 / 16%), rgb(239 245 237 / 6%));
-  }
-
-  :global(.game-ranking-entry[data-current]) {
-    box-shadow: inset 0 0 0 1px rgb(169 220 185 / 38%);
-  }
-
-  :global(.game-ranking-entry[data-current]::after) {
-    content: 'Tú';
-    color: var(--color-night-text);
-    font-size: 0.62rem;
-    font-weight: var(--font-weight-strong);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  :global(.game-ranking-position) {
-    display: grid;
-    width: 1.7rem;
-    height: 1.7rem;
-    place-items: center;
-    border: 1px solid rgb(229 183 126 / 32%);
-    border-radius: 50%;
-    color: var(--color-ochre);
-    background: rgb(229 183 126 / 8%);
-    font-size: 0.68rem;
-    font-variant-numeric: tabular-nums;
-  }
-
-  :global(.game-ranking-nickname) {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  :global(.game-ranking-score) {
-    padding: 0.25rem 0.45rem;
-    border: 1px solid rgb(229 183 126 / 24%);
-    border-radius: 0.45rem;
-    color: var(--color-ochre);
-    background: rgb(229 183 126 / 8%);
-    font-size: var(--font-size-label);
-    font-variant-numeric: tabular-nums;
-    font-weight: var(--font-weight-strong);
-  }
-
-  .game-ranking-empty {
-    margin: 0.8rem 0 0;
-    color: var(--color-sage-light);
-    font-size: 0.76rem;
     line-height: 1.5;
   }
 

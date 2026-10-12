@@ -1,0 +1,56 @@
+---
+import Button from '../ui/Button.astro';
+import { gameLocations } from '../../data/game-locations';
+---
+
+{import.meta.env.DEV && (
+  <div class="game-simulator" aria-labelledby="simulator-title">
+    <span class="stat-label" id="simulator-title">
+      Simulador de desarrollo
+    </span>
+    <select data-game-simulator aria-label="Elegir ubicación simulada">
+      <option value="">Elegir un punto del mapa</option>
+      {gameLocations.map((location) => (
+        <option value={location.id}>{location.shortName}</option>
+      ))}
+    </select>
+    <select data-game-scenario aria-label="Elegir escenario de posición simulada">
+      <option value="exact">Posición exacta</option>
+      <option value="edge">Cerca del límite</option>
+      <option value="outside">Fuera del radio</option>
+      <option value="low-accuracy">Precisión insuficiente</option>
+    </select>
+    <Button variant="simulator" type="button" data-game-simulate disabled>
+      Simular posición
+    </Button>
+  </div>
+)}
+
+<style>
+  .game-simulator {
+    display: grid;
+    gap: 0.55rem;
+    margin-top: 0.5rem;
+    padding: 0.9rem;
+    border: 1px dashed var(--color-game-simulator-border);
+    border-radius: 0.8rem;
+    background: var(--color-game-simulator-surface);
+  }
+
+  .game-simulator select {
+    width: 100%;
+    min-height: 2.7rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--color-game-control-border);
+    border-radius: 0.55rem;
+    color: var(--color-surface-soft);
+    background: var(--color-night-panel);
+    font: inherit;
+    font-size: 0.8rem;
+  }
+
+  .game-simulator select:focus-visible {
+    outline: 3px solid var(--color-ochre);
+    outline-offset: 2px;
+  }
+</style>
