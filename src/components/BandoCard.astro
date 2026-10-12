@@ -7,7 +7,10 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { title, description, date, category, sourceName, sourceUrl } = post.data;
+const { title, description, date, category, sourceName, sourceUrl, sourceId, attachments } =
+  post.data;
+const attachmentSearchText = attachments.map((attachment) => attachment.label).join(' ');
+const bodySearchText = post.body ?? '';
 const formattedDate = new Intl.DateTimeFormat('es-ES', {
   day: 'numeric',
   month: 'long',
@@ -19,6 +22,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   class="bando-card"
   data-bando-card
   data-bando-title={title.toLocaleLowerCase('es-ES')}
+  data-bando-search={`${title} ${description} ${category} ${sourceId} ${bodySearchText} ${attachmentSearchText}`}
   data-bando-category={category}
 >
   <div class="bando-card-meta">

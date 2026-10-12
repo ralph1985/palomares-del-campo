@@ -94,11 +94,31 @@ test.describe('current affairs sections', () => {
       page.getByRole('link', { name: /Ver comunicado original/ }).first(),
     ).toHaveAttribute('href', /https:\/\/www\.bandomovil\.com\//);
 
-    await page.getByLabel('Buscar por título').fill('autobús');
+    const search = page.getByRole('searchbox', { name: 'Buscar en bandos' });
+    await search.fill('autobus linea');
     await expect(page.locator('[data-bando-card]:visible')).not.toHaveCount(0);
-    await page.getByLabel('Buscar por título').fill('texto que no existe');
+    expect(new URL(page.url()).searchParams.get('q')).toBe('autobus linea');
+
+    await search.fill('autobús');
+    const accentedQueryMatches = await page.locator('[data-bando-card]:visible').count();
+    await search.fill('autobus');
+    await expect(page.locator('[data-bando-card]:visible')).toHaveCount(accentedQueryMatches);
+
+    await search.fill('plaza de toros');
+    await expect(page.locator('[data-bando-card]:visible')).not.toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Limpiar' })).toBeVisible();
+
+    await page.getByRole('button', { name: 'Limpiar' }).click();
+    await expect(search).toHaveValue('');
+    expect(new URL(page.url()).searchParams.has('q')).toBe(false);
+
+    await page.goto('/bandos/?q=autobus');
+    await expect(search).toHaveValue('autobus');
+    await expect(page.locator('[data-bando-card]:visible')).not.toHaveCount(0);
+
+    await search.fill('texto que no existe');
     await expect(page.getByText('No hay bandos que coincidan con estos filtros.')).toBeVisible();
-    await page.getByLabel('Buscar por título').fill('autobús');
+    await search.fill('autobús');
 
     await page.locator('[data-bando-card] h2 a').first().click();
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();

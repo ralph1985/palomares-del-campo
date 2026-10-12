@@ -50,10 +50,32 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort((a
             </p>
           </div>
 
-          <form class="filters" data-bando-filters role="search">
+          <form
+            class="filters"
+            data-bando-filters
+            role="search"
+            aria-label="Buscar en bandos"
+            action="/bandos/"
+            method="get"
+          >
             <div class="filter-field">
-              <label for="bando-search">Buscar por título</label>
-              <input id="bando-search" name="search" type="search" placeholder="Ej. autobús" />
+              <label for="bando-search">Buscar en bandos</label>
+              <div class="search-control">
+                <input
+                  id="bando-search"
+                  name="q"
+                  type="search"
+                  placeholder="Ej. autobús, piscina o dentista"
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+                <div class="search-actions">
+                  <button type="submit">Buscar</button>
+                  <button type="button" data-bando-clear hidden>
+                    Limpiar
+                  </button>
+                </div>
+              </div>
             </div>
             <div class="filter-field">
               <label for="bando-category">Categoría</label>
@@ -64,7 +86,7 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort((a
                 ))}
               </select>
             </div>
-            <p class="filter-results" data-bando-results aria-live="polite">
+            <p class="filter-results" data-bando-results role="status" aria-live="polite">
               {posts.length} resultados
             </p>
           </form>
@@ -198,6 +220,57 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort((a
     gap: 0.45rem;
   }
 
+  .search-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .search-control input {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .search-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .search-actions button {
+    min-height: 2.75rem;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid #2f6652;
+    border-radius: 0.55rem;
+    color: #fffdf8;
+    background: #2f6652;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 750;
+    cursor: pointer;
+  }
+
+  .search-actions button[data-bando-clear] {
+    color: #2f6652;
+    background: transparent;
+  }
+
+  .search-actions button:hover,
+  .search-actions button:focus-visible {
+    border-color: #a05c32;
+    background: #a05c32;
+  }
+
+  .search-actions button[data-bando-clear]:hover,
+  .search-actions button[data-bando-clear]:focus-visible {
+    color: #fffdf8;
+  }
+
+  .search-actions button:focus-visible {
+    outline: 3px solid rgb(160 92 50 / 28%);
+    outline-offset: 2px;
+  }
+
   .filter-field label {
     color: #527066;
     font-size: 0.78rem;
@@ -273,21 +346,33 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort((a
   if (filters) {
     const search = filters.querySelector<HTMLInputElement>('#bando-search');
     const category = filters.querySelector<HTMLSelectElement>('#bando-category');
-    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-bando-card]'));
+    const clearSearch = filters.querySelector<HTMLButtonElement>('[data-bando-clear]');
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-bando-card]')).map(
+      (card) => ({
+        element: card,
+        searchText: normaliseSearchText(card.dataset.bandoSearch ?? ''),
+      }),
+    );
     const results = filters.querySelector<HTMLElement>('[data-bando-results]');
     const noResults = document.querySelector<HTMLElement>('[data-bando-no-results]');
+    const params = new URLSearchParams(window.location.search);
 
-    const updateResults = () => {
-      const query = search?.value.trim().toLocaleLowerCase('es-ES') ?? '';
+    const queryFromUrl = params.get('q');
+    if (search && queryFromUrl) search.value = queryFromUrl;
+    if (category && params.has('category')) category.value = params.get('category') ?? '';
+
+    const updateResults = ({ syncUrl = true } = {}) => {
+      const query = normaliseSearchText(search?.value ?? '');
+      const queryTokens = query ? query.split(' ') : [];
       const selectedCategory = category?.value ?? '';
       let visibleCount = 0;
 
-      cards.forEach((card) => {
-        const matchesQuery = !query || (card.dataset.bandoTitle ?? '').includes(query);
+      cards.forEach(({ element, searchText }) => {
+        const matchesQuery = queryTokens.every((token) => searchText.includes(token));
         const matchesCategory =
-          !selectedCategory || card.dataset.bandoCategory === selectedCategory;
+          !selectedCategory || element.dataset.bandoCategory === selectedCategory;
         const visible = matchesQuery && matchesCategory;
-        card.hidden = !visible;
+        element.hidden = !visible;
         if (visible) visibleCount += 1;
       });
 
@@ -297,9 +382,43 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort((a
       if (noResults) {
         noResults.hidden = visibleCount !== 0;
       }
+      if (clearSearch) {
+        clearSearch.hidden = !search?.value;
+      }
+
+      if (syncUrl) {
+        const url = new URL(window.location.href);
+        const rawQuery = search?.value.trim() ?? '';
+        if (rawQuery) url.searchParams.set('q', rawQuery);
+        else url.searchParams.delete('q');
+        if (selectedCategory) url.searchParams.set('category', selectedCategory);
+        else url.searchParams.delete('category');
+        window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+      }
     };
 
-    search?.addEventListener('input', updateResults);
-    category?.addEventListener('change', updateResults);
+    filters.addEventListener('submit', (event) => {
+      event.preventDefault();
+      updateResults();
+    });
+    search?.addEventListener('input', () => updateResults());
+    category?.addEventListener('change', () => updateResults());
+    clearSearch?.addEventListener('click', () => {
+      if (!search) return;
+      search.value = '';
+      updateResults();
+      search.focus();
+    });
+
+    updateResults({ syncUrl: false });
+  }
+
+  function normaliseSearchText(value: string) {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLocaleLowerCase('es-ES')
+      .replace(/[^\p{L}\p{N}]+/gu, ' ')
+      .trim();
   }
 </script>
