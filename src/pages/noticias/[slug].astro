@@ -95,9 +95,9 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    color: #19342d;
+    color: var(--color-ink);
     font-size: 0.95rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     text-decoration: none;
   }
 
@@ -107,18 +107,18 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     height: 2.35rem;
     place-items: center;
     border-radius: 0.8rem;
-    color: #f4f1e9;
-    background: #2f6652;
-    font-family: Georgia, serif;
+    color: var(--color-paper);
+    background: var(--color-forest);
+    font-family: var(--font-serif);
     font-size: 1.3rem;
   }
 
   .home-link,
   .back-link,
   .article-source a {
-    color: #2f6652;
+    color: var(--color-forest);
     font-size: 0.85rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     text-decoration: none;
   }
 
@@ -129,7 +129,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   .article-source a:hover,
   .article-source a:focus-visible,
   .brand:focus-visible {
-    color: #a05c32;
+    color: var(--color-clay);
     text-decoration: underline;
     text-underline-offset: 0.25rem;
   }
@@ -152,9 +152,9 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 
   .eyebrow {
     margin: 0 0 1.25rem;
-    color: #a05c32;
-    font-size: 0.72rem;
-    font-weight: 750;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
@@ -162,7 +162,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   h1 {
     max-width: 18ch;
     margin: 0;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-size: clamp(2.8rem, 7vw, 5.7rem);
     font-weight: 500;
     letter-spacing: -0.06em;
@@ -172,7 +172,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   .article-description {
     max-width: 42rem;
     margin: 2rem 0 1.5rem;
-    color: #527066;
+    color: var(--color-muted);
     font-size: 1.15rem;
     line-height: 1.65;
   }
@@ -181,16 +181,16 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    color: #a05c32;
+    color: var(--color-clay);
     font-size: 0.78rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     text-transform: uppercase;
   }
 
   .article-content {
     padding: 3rem 0;
     color: #294a40;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-size: 1.15rem;
     line-height: 1.75;
   }

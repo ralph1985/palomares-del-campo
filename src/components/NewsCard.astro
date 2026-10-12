@@ -48,7 +48,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     padding: clamp(1.35rem, 3vw, 2rem);
     border: 1px solid rgb(25 52 45 / 14%);
     border-radius: 1.15rem;
-    background: #fffdf8;
+    background: var(--color-surface);
     box-shadow: 0 0.75rem 2rem rgb(25 52 45 / 7%);
     transition:
       transform 220ms ease,
@@ -68,36 +68,36 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     display: flex;
     flex-wrap: wrap;
     gap: 0.45rem;
-    color: #a05c32;
-    font-size: 0.72rem;
-    font-weight: 750;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
 
   .news-card h3 {
     margin: 1.25rem 0 0.8rem;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.35rem, 2.4vw, 1.8rem);
     letter-spacing: -0.035em;
     line-height: 1.05;
   }
 
   .news-card h3 a {
-    color: #19342d;
+    color: var(--color-ink);
     text-decoration: none;
   }
 
   .news-card h3 a:hover,
   .news-card h3 a:focus-visible {
-    color: #a05c32;
+    color: var(--color-clay);
     text-decoration: underline;
     text-underline-offset: 0.2rem;
   }
 
   .news-card p {
     margin: 0;
-    color: #527066;
+    color: var(--color-muted);
     line-height: 1.6;
   }
 
@@ -113,15 +113,15 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   }
 
   .news-card-link {
-    color: #2f6652;
-    font-weight: 750;
+    color: var(--color-forest);
+    font-weight: var(--font-weight-strong);
     text-decoration: none;
     white-space: nowrap;
   }
 
   .news-card-link:hover,
   .news-card-link:focus-visible {
-    color: #a05c32;
+    color: var(--color-clay);
     text-decoration: underline;
     text-underline-offset: 0.2rem;
   }

@@ -84,9 +84,9 @@ const formatDate = (date: string) =>
 
   .eyebrow {
     margin: 0 0 1.2rem;
-    color: #a05c32;
-    font-size: 0.72rem;
-    font-weight: 750;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
@@ -94,7 +94,7 @@ const formatDate = (date: string) =>
   h1,
   h2 {
     margin: 0;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-weight: 500;
     letter-spacing: -0.06em;
     line-height: 0.95;
@@ -115,7 +115,7 @@ const formatDate = (date: string) =>
     gap: 0.8rem;
     padding: clamp(1.5rem, 4vw, 2.5rem);
     border-radius: 1.25rem;
-    background: #f4f1e9;
+    background: var(--color-paper);
   }
 
   .agenda-card h2 {
@@ -125,23 +125,23 @@ const formatDate = (date: string) =>
   .agenda-card p {
     max-width: 42rem;
     margin: 0;
-    color: #527066;
+    color: var(--color-muted);
     line-height: 1.6;
   }
 
   .agenda-card .agenda-date,
   .agenda-card .agenda-meta {
-    color: #a05c32;
+    color: var(--color-clay);
     font-size: 0.78rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   .agenda-card a {
     width: fit-content;
-    color: #19342d;
-    font-weight: 750;
+    color: var(--color-ink);
+    font-weight: var(--font-weight-strong);
     text-underline-offset: 0.25em;
   }
 </style>

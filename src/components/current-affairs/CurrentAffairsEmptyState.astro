@@ -31,8 +31,8 @@ const { section, eyebrow, title, description, emptyMessage } = Astro.props;
   .current-affairs-empty {
     min-height: calc(100vh - 10.5rem);
     padding: clamp(5rem, 14vw, 10rem) 0;
-    color: #eff5ed;
-    background: #19342d;
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
   }
 
   .empty-shell {
@@ -42,9 +42,9 @@ const { section, eyebrow, title, description, emptyMessage } = Astro.props;
 
   .eyebrow {
     margin: 0 0 1.2rem;
-    color: #e5b77e;
-    font-size: 0.72rem;
-    font-weight: 750;
+    color: var(--color-ochre);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
@@ -53,7 +53,7 @@ const { section, eyebrow, title, description, emptyMessage } = Astro.props;
     max-width: 10ch;
     margin: 0;
     color: #fff;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-size: clamp(4rem, 12vw, 9rem);
     font-weight: 500;
     letter-spacing: -0.07em;
@@ -63,7 +63,7 @@ const { section, eyebrow, title, description, emptyMessage } = Astro.props;
   .empty-description {
     max-width: 34rem;
     margin: 2rem 0 0;
-    color: #b7d0bc;
+    color: var(--color-sage-light);
     font-size: clamp(1rem, 1.6vw, 1.2rem);
     line-height: 1.7;
   }
@@ -82,8 +82,8 @@ const { section, eyebrow, title, description, emptyMessage } = Astro.props;
   .back-link {
     display: inline-block;
     margin-top: 2rem;
-    color: #e5b77e;
-    font-weight: 750;
+    color: var(--color-ochre);
+    font-weight: var(--font-weight-strong);
     text-underline-offset: 0.25em;
   }
 

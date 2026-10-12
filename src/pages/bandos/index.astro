@@ -70,24 +70,24 @@ const years = [...new Set(posts.map((post) => post.data.date.getFullYear()))].so
 <style>
   .bandos-hero {
     padding: clamp(5rem, 13vw, 10rem) 0 clamp(4rem, 9vw, 7rem);
-    background: #19342d;
+    background: var(--color-ink);
   }
   .bandos-hero-inner {
     width: min(100% - 2.5rem, 72rem);
     margin: 0 auto;
-    color: #eff5ed;
+    color: var(--color-surface-soft);
   }
   .eyebrow {
     margin: 0 0 1rem;
-    color: #e5b77e;
-    font-size: 0.72rem;
-    font-weight: 750;
+    color: var(--color-ochre);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
   h1 {
     margin: 0;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-size: clamp(4rem, 11vw, 8rem);
     font-weight: 500;
     letter-spacing: -0.06em;
@@ -96,7 +96,7 @@ const years = [...new Set(posts.map((post) => post.data.date.getFullYear()))].so
   .bandos-hero p:last-child {
     max-width: 36rem;
     margin: 2rem 0 0;
-    color: #b7d0bc;
+    color: var(--color-sage-light);
     font-size: clamp(1rem, 1.6vw, 1.2rem);
     line-height: 1.65;
   }

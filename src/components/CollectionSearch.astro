@@ -119,29 +119,29 @@ const yearId = `${scope}-year`;
   .search-actions button {
     min-height: 2.75rem;
     padding: 0.65rem 0.8rem;
-    border: 1px solid #2f6652;
+    border: 1px solid var(--color-forest);
     border-radius: 0.55rem;
-    color: #2f6652;
+    color: var(--color-forest);
     background: transparent;
     font: inherit;
     font-size: 0.82rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     cursor: pointer;
   }
   .search-actions button:hover,
   .search-actions button:focus-visible {
-    border-color: #a05c32;
-    color: #fffdf8;
-    background: #a05c32;
+    border-color: var(--color-clay);
+    color: var(--color-surface);
+    background: var(--color-clay);
   }
   .search-actions button:focus-visible {
     outline: 3px solid rgb(160 92 50 / 28%);
     outline-offset: 2px;
   }
   .filter-field label {
-    color: #527066;
+    color: var(--color-muted);
     font-size: 0.78rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
   }
   .filter-field input,
   .filter-field select {
@@ -149,8 +149,8 @@ const yearId = `${scope}-year`;
     padding: 0.65rem 0.75rem;
     border: 1px solid rgb(25 52 45 / 20%);
     border-radius: 0.55rem;
-    color: #19342d;
-    background: #fffdf8;
+    color: var(--color-ink);
+    background: var(--color-surface);
     font: inherit;
   }
   .filter-field input:focus-visible,
@@ -160,14 +160,14 @@ const yearId = `${scope}-year`;
   }
   .filter-results {
     margin: 0 0 0.7rem;
-    color: #527066;
+    color: var(--color-muted);
     font-size: 0.82rem;
     white-space: nowrap;
   }
   .search-empty {
     padding: 2rem;
     border: 1px dashed rgb(25 52 45 / 22%);
-    color: #527066;
+    color: var(--color-muted);
   }
   .search-empty[hidden] {
     display: none;

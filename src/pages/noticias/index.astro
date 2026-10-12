@@ -95,9 +95,9 @@ const years = [...new Set(posts.map((post) => post.data.date.getFullYear()))].so
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    color: #19342d;
+    color: var(--color-ink);
     font-size: 0.95rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     text-decoration: none;
   }
   .brand-mark {
@@ -106,42 +106,42 @@ const years = [...new Set(posts.map((post) => post.data.date.getFullYear()))].so
     height: 2.35rem;
     place-items: center;
     border-radius: 0.8rem;
-    color: #f4f1e9;
-    background: #2f6652;
-    font-family: Georgia, serif;
+    color: var(--color-paper);
+    background: var(--color-forest);
+    font-family: var(--font-serif);
     font-size: 1.3rem;
   }
   .home-link {
-    color: #2f6652;
+    color: var(--color-forest);
     font-size: 0.85rem;
-    font-weight: 750;
+    font-weight: var(--font-weight-strong);
     text-decoration: none;
   }
   .home-link:hover,
   .home-link:focus-visible,
   .brand:focus-visible {
-    color: #a05c32;
+    color: var(--color-clay);
     text-decoration: underline;
     text-underline-offset: 0.25rem;
   }
   .news-hero {
     padding: clamp(5rem, 13vw, 10rem) 0 clamp(4rem, 9vw, 7rem);
-    background: #19342d;
+    background: var(--color-ink);
   }
   .news-hero-inner {
-    color: #eff5ed;
+    color: var(--color-surface-soft);
   }
   .eyebrow {
     margin: 0 0 1rem;
-    color: #e5b77e;
-    font-size: 0.72rem;
-    font-weight: 750;
+    color: var(--color-ochre);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
   h1 {
     margin: 0;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-size: clamp(4rem, 11vw, 8rem);
     font-weight: 500;
     letter-spacing: -0.06em;
@@ -150,7 +150,7 @@ const years = [...new Set(posts.map((post) => post.data.date.getFullYear()))].so
   .news-hero p:last-child {
     max-width: 34rem;
     margin: 2rem 0 0;
-    color: #b7d0bc;
+    color: var(--color-sage-light);
     font-size: clamp(1rem, 1.6vw, 1.2rem);
     line-height: 1.65;
   }

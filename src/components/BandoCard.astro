@@ -53,7 +53,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     padding: clamp(1.35rem, 3vw, 2rem);
     border: 1px solid rgb(25 52 45 / 14%);
     border-radius: 1.15rem;
-    background: #fffdf8;
+    background: var(--color-surface);
     box-shadow: 0 0.75rem 2rem rgb(25 52 45 / 7%);
   }
 
@@ -61,9 +61,9 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     display: flex;
     flex-wrap: wrap;
     gap: 0.45rem;
-    color: #a05c32;
-    font-size: 0.72rem;
-    font-weight: 750;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
@@ -74,20 +74,20 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 
   .bando-card h2 {
     margin: 1.25rem 0 0.8rem;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.35rem, 2.4vw, 1.8rem);
     letter-spacing: -0.035em;
     line-height: 1.05;
   }
 
   .bando-card h2 a {
-    color: #19342d;
+    color: var(--color-ink);
     text-decoration: none;
   }
 
   .bando-card h2 a:hover,
   .bando-card h2 a:focus-visible {
-    color: #a05c32;
+    color: var(--color-clay);
     text-decoration: underline;
     text-underline-offset: 0.2rem;
   }
@@ -95,7 +95,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   .bando-card p {
     margin: 0;
     overflow-wrap: anywhere;
-    color: #527066;
+    color: var(--color-muted);
     line-height: 1.6;
   }
 
@@ -111,15 +111,15 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   }
 
   .bando-card-footer a {
-    color: #2f6652;
-    font-weight: 750;
+    color: var(--color-forest);
+    font-weight: var(--font-weight-strong);
     text-decoration: none;
     white-space: nowrap;
   }
 
   .bando-card-footer a:hover,
   .bando-card-footer a:focus-visible {
-    color: #a05c32;
+    color: var(--color-clay);
     text-decoration: underline;
     text-underline-offset: 0.2rem;
   }
