@@ -46,7 +46,7 @@ Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refac
 | `src/components/CollectionArchive.astro`                        | Archivo compartido | Mantener scoped; conserva filtros y estados vacíos de las colecciones.                     |
 | `src/components/BandoCard.astro`                                | Tarjeta editorial  | Mantener separado de `NewsCard.astro`; consume `CollectionCardMeta` para el patrón común.  |
 | `src/components/NewsCard.astro`                                 | Tarjeta editorial  | Mantener separado de `BandoCard.astro`; consume `CollectionCardMeta` para el patrón común. |
-| `src/components/CollectionCardMeta.astro`                       | Metadata editorial | Compartir fecha y contexto visual entre las dos colecciones sin mezclar sus contratos.     |
+| `src/components/ui/CollectionCardMeta.astro`                    | Metadata editorial | Compartir fecha y contexto visual entre las dos colecciones sin mezclar sus contratos.     |
 | `src/components/NewsSection.astro`                              | Sección editorial  | Mantener scoped; candidato a revisar si aparece un segundo consumidor.                     |
 | `src/components/current-affairs/CurrentAffairsEmptyState.astro` | Estado editorial   | Mantener scoped; extraer solo si aparece en varias colecciones.                            |
 

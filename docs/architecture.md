@@ -114,6 +114,10 @@ Los estilos propios de un componente permanecen en su `<style>` scoped. Los esti
 
 No se adopta `@layer` por defecto. Solo debe introducirse ante un conflicto de precedencia reproducible entre CSS global, hojas de página o dependencias externas.
 
+### Revisión visual reproducible
+
+Todo cambio de estilos debe ejecutar `pnpm qa:visual` con el servidor Astro disponible. La comprobación cubre las rutas representativas en escritorio (`1440×900`) y móvil (`375×812`) y revisa HTTP 200, overflow horizontal, foco visible, contraste aproximado WCAG y errores de consola. Si el cambio afecta a una interacción, debe añadirse además una prueba E2E específica.
+
 ### Tokens
 
 Los valores repetidos deben expresarse como variables semánticas:
