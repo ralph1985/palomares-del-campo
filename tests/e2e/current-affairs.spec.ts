@@ -96,16 +96,17 @@ test.describe('current affairs sections', () => {
 
     const search = page.getByRole('searchbox', { name: 'Buscar en bandos' });
     await search.fill('autobus linea');
-    await expect(page.locator('[data-bando-card]:visible')).not.toHaveCount(0);
+    await expect(page.locator('[data-bando-card]:visible')).toHaveCount(2);
     expect(new URL(page.url()).searchParams.get('q')).toBe('autobus linea');
 
     await search.fill('autobús');
     const accentedQueryMatches = await page.locator('[data-bando-card]:visible').count();
+    expect(accentedQueryMatches).toBe(2);
     await search.fill('autobus');
     await expect(page.locator('[data-bando-card]:visible')).toHaveCount(accentedQueryMatches);
 
     await search.fill('plaza de toros');
-    await expect(page.locator('[data-bando-card]:visible')).not.toHaveCount(0);
+    await expect(page.locator('[data-bando-card]:visible')).toHaveCount(6);
     await expect(page.getByRole('button', { name: 'Limpiar búsqueda' })).toBeVisible();
 
     await page.getByRole('button', { name: 'Limpiar búsqueda' }).click();
