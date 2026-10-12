@@ -56,9 +56,8 @@ const formatDate = (date: string) =>
               en localidades cercanas como Carrascosa del Campo, El Hito, Saelices, Uclés y Huete.
             </p>
             <p>
-              Los datos resumidos proceden de las fichas enlazadas. No mostramos precios ni
-              prometemos disponibilidad: conviene confirmar directamente cada condición antes de
-              reservar.
+              Las cuatro imágenes incorporadas son fotografías del entorno con licencia Creative
+              Commons; no representan ninguno de los alojamientos.
             </p>
           </div>
         </div>
@@ -73,6 +72,27 @@ const formatDate = (date: string) =>
           <div class="accommodation-grid">
             {localAccommodations.map((accommodation) => (
               <article class="accommodation-card" data-accommodation-card>
+                {accommodation.image && (
+                  <figure class="accommodation-image">
+                    <img
+                      src={accommodation.image.src}
+                      alt={accommodation.image.alt}
+                      width="1600"
+                      height="1200"
+                      loading="lazy"
+                    />
+                    <figcaption>
+                      Entorno, no el alojamiento · Foto:
+                      <ExternalLink href={accommodation.image.sourceHref}>
+                        {accommodation.image.credit}
+                      </ExternalLink>
+                      ·
+                      <ExternalLink href={accommodation.image.licenseHref}>
+                        {accommodation.image.licenseLabel}
+                      </ExternalLink>
+                    </figcaption>
+                  </figure>
+                )}
                 <p class="accommodation-category">{accommodation.category}</p>
                 <h3>{accommodation.name}</h3>
                 <p class="accommodation-location">{accommodation.location}</p>
@@ -124,6 +144,27 @@ const formatDate = (date: string) =>
           <div class="accommodation-grid">
             {nearbyAccommodations.map((accommodation) => (
               <article class="accommodation-card" data-accommodation-card>
+                {accommodation.image && (
+                  <figure class="accommodation-image">
+                    <img
+                      src={accommodation.image.src}
+                      alt={accommodation.image.alt}
+                      width="1600"
+                      height="1200"
+                      loading="lazy"
+                    />
+                    <figcaption>
+                      Entorno, no el alojamiento · Foto:
+                      <ExternalLink href={accommodation.image.sourceHref}>
+                        {accommodation.image.credit}
+                      </ExternalLink>
+                      ·
+                      <ExternalLink href={accommodation.image.licenseHref}>
+                        {accommodation.image.licenseLabel}
+                      </ExternalLink>
+                    </figcaption>
+                  </figure>
+                )}
                 <p class="accommodation-category">{accommodation.category}</p>
                 <h3>{accommodation.name}</h3>
                 <p class="accommodation-location">{accommodation.location}</p>
@@ -307,6 +348,35 @@ const formatDate = (date: string) =>
     border: 1px solid rgb(25 52 45 / 15%);
     border-radius: 1.25rem;
     background: #fbfaf5;
+  }
+
+  .accommodation-image {
+    margin: 0 0 1.5rem;
+  }
+
+  .accommodation-image img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 0.8rem;
+    object-fit: cover;
+  }
+
+  .accommodation-image figcaption {
+    margin-top: 0.55rem;
+    color: #527066;
+    font-size: 0.7rem;
+    line-height: 1.45;
+  }
+
+  .accommodation-image figcaption a {
+    color: inherit;
+    text-underline-offset: 0.2em;
+  }
+
+  .accommodation-image figcaption a:hover,
+  .accommodation-image figcaption a:focus-visible {
+    color: #a05c32;
   }
 
   .accommodation-category {

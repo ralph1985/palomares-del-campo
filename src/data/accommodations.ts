@@ -3,6 +3,15 @@ export interface AccommodationSource {
   href: string;
 }
 
+export interface AccommodationImage {
+  src: string;
+  alt: string;
+  sourceHref: string;
+  credit: string;
+  licenseLabel: string;
+  licenseHref: string;
+}
+
 export interface RuralAccommodation {
   name: string;
   location: string;
@@ -14,6 +23,7 @@ export interface RuralAccommodation {
   summary: string;
   source: AccommodationSource;
   officialSource?: AccommodationSource;
+  image?: AccommodationImage;
 }
 
 export const accommodationReviewedAt = '2026-10-12';
@@ -35,6 +45,14 @@ export const ruralAccommodations: RuralAccommodation[] = [
     officialSource: {
       label: 'Sitio propio de Casa Rural San Cristóbal',
       href: 'https://www.casaruralsancristobalcuenca.es/',
+    },
+    image: {
+      src: '/media/accommodations/palomares-plaza.jpg',
+      alt: 'Plaza de Palomares del Campo',
+      sourceHref: 'https://commons.wikimedia.org/wiki/File:Fotos_de_Palomares_del_Campo_01.jpg',
+      credit: '19Tarrestnom65',
+      licenseLabel: 'CC BY-SA 4.0',
+      licenseHref: 'https://creativecommons.org/licenses/by-sa/4.0/',
     },
   },
   {
@@ -91,6 +109,14 @@ export const ruralAccommodations: RuralAccommodation[] = [
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/las-grullas-f3285.htm',
+    },
+    image: {
+      src: '/media/accommodations/el-hito-laguna.jpg',
+      alt: 'Laguna de El Hito',
+      sourceHref: 'https://commons.wikimedia.org/wiki/File:Foto_de_la_Laguna_de_El_Hito_01.jpg',
+      credit: '19Tarrestnom65',
+      licenseLabel: 'CC BY-SA 4.0',
+      licenseHref: 'https://creativecommons.org/licenses/by-sa/4.0/',
     },
   },
   {
@@ -152,6 +178,14 @@ export const ruralAccommodations: RuralAccommodation[] = [
       label: 'Sitio propio de Puerta del Agua',
       href: 'https://puertadelagua.com/en/la-casa',
     },
+    image: {
+      src: '/media/accommodations/ucles-iglesia.jpg',
+      alt: 'Iglesia de Santa María y San Andrés de Uclés',
+      sourceHref: 'https://commons.wikimedia.org/wiki/File:Ucl%C3%A9s_iglesia.JPG',
+      credit: 'Cruccone',
+      licenseLabel: 'CC BY 3.0',
+      licenseHref: 'https://creativecommons.org/licenses/by/3.0/',
+    },
   },
   {
     name: 'Casa Rural Ciudad de Luna',
@@ -165,6 +199,14 @@ export const ruralAccommodations: RuralAccommodation[] = [
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/casa-rural-ciudad-de-luna-f21143.htm',
+    },
+    image: {
+      src: '/media/accommodations/huete-campos.jpg',
+      alt: 'Campos de Huete vistos desde el convento de Jesús y María',
+      sourceHref: 'https://commons.wikimedia.org/wiki/File:Huete_campos.JPG',
+      credit: 'B25es',
+      licenseLabel: 'CC BY-SA 3.0',
+      licenseHref: 'https://creativecommons.org/licenses/by-sa/3.0/',
     },
   },
 ];
