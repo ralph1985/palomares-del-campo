@@ -1,11 +1,5 @@
 ---
 import ActionLink from '../ui/ActionLink.astro';
-import ExternalLink from '../ui/ExternalLink.astro';
-import { footerOfficialLinks } from '../../data/site-footer';
-
-const residentLinks = footerOfficialLinks.filter(({ label }) =>
-  ['Sede electrónica', 'Tablón de anuncios', 'Buzón electrónico'].includes(label),
-);
 ---
 
 <section class="audience-section" aria-labelledby="audience-title">
@@ -23,8 +17,8 @@ const residentLinks = footerOfficialLinks.filter(({ label }) =>
           Encuentra los accesos municipales y la información que necesitas sin perderte entre
           trámites.
         </p>
-        <ActionLink variant="solid" href="/#vecinos">
-          Información para vecinos <span aria-hidden="true">↓</span>
+        <ActionLink variant="solid" href="/informacion-practica/">
+          Ver servicios municipales <span aria-hidden="true">→</span>
         </ActionLink>
       </article>
 
@@ -40,30 +34,6 @@ const residentLinks = footerOfficialLinks.filter(({ label }) =>
   </div>
 </section>
 
-<section class="resident-section" id="vecinos" aria-labelledby="resident-title">
-  <div class="resident-shell">
-    <div>
-      <p class="audience-eyebrow">Servicios municipales</p>
-      <h2 id="resident-title">Información para vecinos</h2>
-    </div>
-    <div class="resident-copy">
-      <p>
-        Los trámites se realizan en los portales oficiales del Ayuntamiento. Desde aquí puedes
-        acceder directamente a los servicios más consultados.
-      </p>
-      <ul class="resident-links">
-        {residentLinks.map((link) => (
-          <li>
-            <ExternalLink href={link.href}>
-              {link.label} <span aria-hidden="true">↗</span>
-            </ExternalLink>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
-</section>
-
 <style>
   .audience-section {
     padding: clamp(4.5rem, 10vw, 8rem) 0;
@@ -71,8 +41,7 @@ const residentLinks = footerOfficialLinks.filter(({ label }) =>
     background: var(--color-sage);
   }
 
-  .audience-shell,
-  .resident-shell {
+  .audience-shell {
     width: min(100% - 2.5rem, 72rem);
     margin: 0 auto;
   }
@@ -161,61 +130,15 @@ const residentLinks = footerOfficialLinks.filter(({ label }) =>
     color: var(--color-ochre);
   }
 
-  .resident-section {
-    padding: clamp(4rem, 8vw, 7rem) 0;
-    color: var(--color-ink);
-    background: var(--color-paper);
-  }
-
-  .resident-shell {
-    display: grid;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-    gap: 3rem;
-  }
-
-  .resident-copy {
-    max-width: 34rem;
-  }
-
-  .resident-copy > p {
-    margin-bottom: 1.5rem;
-    color: var(--color-muted);
-    line-height: 1.7;
-  }
-
-  .resident-links {
-    display: grid;
-    gap: 0.8rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .resident-links a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    color: var(--color-ink);
-    font-weight: var(--font-weight-strong);
-    text-decoration-thickness: 0.1em;
-    text-underline-offset: 0.25em;
-  }
-
-  .resident-links a span {
-    color: var(--color-clay);
-  }
-
   @media (max-width: 50rem) {
-    .audience-heading,
-    .resident-shell {
+    .audience-heading {
       grid-template-columns: 1fr;
       gap: 1.25rem;
     }
   }
 
   @media (max-width: 38rem) {
-    .audience-shell,
-    .resident-shell {
+    .audience-shell {
       width: min(100% - 2rem, 72rem);
     }
 

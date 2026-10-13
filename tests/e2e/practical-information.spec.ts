@@ -52,7 +52,7 @@ test.describe('practical municipal information', () => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Explorar' }).click();
     await expect(
-      page.locator('#site-menu').getByRole('link', { name: /Información práctica/ }),
+      page.locator('#site-menu').getByRole('link', { name: /Servicios municipales/ }),
     ).toHaveAttribute('href', '/informacion-practica/');
 
     await page.setViewportSize({ width: 375, height: 812 });

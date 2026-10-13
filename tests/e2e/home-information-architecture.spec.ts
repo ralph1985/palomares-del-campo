@@ -6,10 +6,11 @@ test.describe('home information architecture', () => {
 
     await expect(page.getByRole('heading', { name: 'Soy vecino' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Descubre Palomares' })).toBeVisible();
-    await expect(page.getByRole('link', { name: /Información para vecinos/ })).toHaveAttribute(
+    await expect(page.getByRole('link', { name: /Ver servicios municipales/ })).toHaveAttribute(
       'href',
-      '/#vecinos',
+      '/informacion-practica/',
     );
+    await expect(page.locator('#vecinos')).toHaveCount(0);
     await expect(page.getByRole('link', { name: /Conocer el pueblo/ })).toHaveAttribute(
       'href',
       '/sobre-el-pueblo/',
@@ -25,7 +26,7 @@ test.describe('home information architecture', () => {
     await expect(menu.getByRole('heading', { name: 'Visita' })).toBeVisible();
     await expect(menu.getByRole('link', { name: 'Servicios municipales' })).toHaveAttribute(
       'href',
-      '/#vecinos',
+      '/informacion-practica/',
     );
     await expect(menu.getByRole('link', { name: 'Sobre el pueblo' })).toHaveAttribute(
       'href',
