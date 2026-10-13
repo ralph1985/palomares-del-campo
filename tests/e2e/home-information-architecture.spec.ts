@@ -24,6 +24,7 @@ test.describe('home information architecture', () => {
     const menu = page.locator('#site-menu');
     await expect(menu.getByRole('heading', { name: 'Vecinos' })).toBeVisible();
     await expect(menu.getByRole('heading', { name: 'Visita' })).toBeVisible();
+    await expect(menu.getByRole('link', { name: 'Paisaje y patrimonio' })).toHaveCount(0);
     await expect(menu.getByRole('link', { name: 'Servicios municipales' })).toHaveAttribute(
       'href',
       '/informacion-practica/',
