@@ -1,7 +1,7 @@
 ---
 import ConquenseCredit from './ConquenseCredit.astro';
 import ExternalLink from '../ui/ExternalLink.astro';
-import { footerExploreLinks, footerOfficialLinks, municipalContact } from '../../data/site-footer';
+import { footerExploreLinks, footerQuickLinks, municipalContact } from '../../data/site-footer';
 
 const currentYear = new Date().getFullYear();
 ---
@@ -37,9 +37,9 @@ const currentYear = new Date().getFullYear();
     </nav>
 
     <nav class="footer-group" aria-labelledby="footer-official-title">
-      <h2 id="footer-official-title">Servicios municipales</h2>
+      <h2 id="footer-official-title">Enlaces oficiales</h2>
       <ul>
-        {footerOfficialLinks.map((link) => (
+        {footerQuickLinks.map((link) => (
           <li>
             <ExternalLink href={link.href}>
               {link.label}
@@ -47,6 +47,9 @@ const currentYear = new Date().getFullYear();
             </ExternalLink>
           </li>
         ))}
+        <li>
+          <a href="/informacion-practica/">Ver todos los servicios municipales</a>
+        </li>
       </ul>
     </nav>
 

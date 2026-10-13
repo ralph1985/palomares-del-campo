@@ -41,6 +41,10 @@ export const footerOfficialLinks: FooterLink[] = [
   },
 ];
 
+export const footerQuickLinks = footerOfficialLinks.filter(({ label }) =>
+  ['Portal municipal', 'Sede electrónica', 'Tablón de anuncios'].includes(label),
+);
+
 export const municipalContact = {
   name: 'Ayuntamiento de Palomares del Campo',
   address: 'Plaza del Coso, 1',

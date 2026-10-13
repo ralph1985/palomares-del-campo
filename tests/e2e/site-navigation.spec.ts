@@ -61,6 +61,11 @@ test.describe('web navigation', () => {
     const footer = page.getByRole('contentinfo');
     await expect(footer.getByText('Información municipal')).toBeVisible();
     await expect(footer.getByText('Web editorial')).toHaveCount(0);
+    await expect(footer.getByRole('heading', { name: 'Enlaces oficiales' })).toBeVisible();
+    await expect(footer.getByRole('link', { name: 'Portal municipal' })).toHaveAttribute(
+      'href',
+      'https://palomaresdelcampo.dipucuenca.es/',
+    );
     await expect(footer.getByRole('link', { name: 'Sede electrónica' })).toHaveAttribute(
       'href',
       'https://palomaresdelcampo.sedelectronica.es/info.0',
@@ -69,14 +74,11 @@ test.describe('web navigation', () => {
       'href',
       'https://palomaresdelcampo.sedelectronica.es/board',
     );
-    await expect(footer.getByRole('link', { name: 'Portal de transparencia' })).toHaveAttribute(
-      'href',
-      'https://palomaresdelcampo.sedelectronica.es/transparency',
-    );
-    await expect(footer.getByRole('link', { name: 'Buzón electrónico' })).toHaveAttribute(
-      'href',
-      'https://palomaresdelcampo.sedelectronica.es/enotifications',
-    );
+    await expect(
+      footer.getByRole('link', { name: 'Ver todos los servicios municipales' }),
+    ).toHaveAttribute('href', '/informacion-practica/');
+    await expect(footer.getByRole('link', { name: 'Portal de transparencia' })).toHaveCount(0);
+    await expect(footer.getByRole('link', { name: 'Buzón electrónico' })).toHaveCount(0);
   });
 
   test('loads the optional 3D scene only after opening the menu', async ({ page }) => {
