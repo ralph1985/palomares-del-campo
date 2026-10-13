@@ -123,6 +123,10 @@ h2 {
   content: '';
 }
 
+.hero-emblem-scene {
+  pointer-events: none;
+}
+
 .hero-photo {
   position: relative;
   z-index: 1;

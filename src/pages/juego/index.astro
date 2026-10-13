@@ -1,6 +1,7 @@
 ---
 import ActionLink from '../../components/ui/ActionLink.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import GameBallVisual from '../../components/game/GameBallVisual.astro';
 import GameMap from '../../components/game/GameMap.astro';
 import GamePrivacyNotice from '../../components/game/GamePrivacyNotice.astro';
 import GameRules from '../../components/game/GameRules.astro';
@@ -39,6 +40,7 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
             </span>
             <span>EU · 01</span>
           </div>
+          <GameBallVisual />
           <strong>LA BOLA</strong>
           <p>El objetivo cambia de punto cuando alguien captura.</p>
           <div class="match-card-stats">
