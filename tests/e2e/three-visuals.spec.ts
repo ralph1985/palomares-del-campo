@@ -17,6 +17,16 @@ test.describe('optional Three.js visuals', () => {
     );
     await expect(emblem.locator('canvas')).toHaveCount(1);
     await expect.poll(() => threeRequests.length).toBeGreaterThan(0);
+
+    const layerOrder = await page.evaluate(() => {
+      const scene = document.querySelector('[data-about-emblem]');
+      const photo = document.querySelector('.hero-photo');
+      return {
+        sceneZIndex: Number.parseInt(scene ? getComputedStyle(scene).zIndex : '0', 10),
+        photoZIndex: Number.parseInt(photo ? getComputedStyle(photo).zIndex : '0', 10),
+      };
+    });
+    expect(layerOrder.sceneZIndex).toBeGreaterThan(layerOrder.photoZIndex);
   });
 
   test('enhances the game card without changing the game surface', async ({ page }) => {
