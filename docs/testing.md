@@ -1,6 +1,13 @@
 # Estrategia de pruebas de la web
 
-La infraestructura de calidad es transversal a toda la web. El juego de la bola es el primer vertical slice porque contiene la lógica nueva, pero las mismas capas deben proteger portada, noticias, navegación, menú, pie, accesibilidad y responsive.
+La estrategia actual protege la web editorial, el shell compartido y el juego. Las pruebas implementadas se distinguen de las validaciones todavía pendientes contra infraestructura remota.
+
+## Configuración
+
+- `vitest.config.ts` usa el entorno `node` e incluye `tests/unit/**/*.test.ts` y `tests/integration/**/*.test.ts`.
+- `playwright.config.ts` ejecuta `tests/e2e/` en Chromium, arranca `pnpm exec astro dev --host 127.0.0.1 --port 4321` y usa `http://127.0.0.1:4321` como `baseURL`.
+- En CI Playwright prohíbe `test.only`, usa un worker y hasta dos reintentos. Localmente no reintenta.
+- `tests/features/` contiene escenarios Gherkin de referencia. No hay Cucumber ni un ejecutor de steps conectado a esos archivos.
 
 ## Comandos
 
@@ -8,27 +15,62 @@ La infraestructura de calidad es transversal a toda la web. El juego de la bola 
 pnpm test
 pnpm test:watch
 pnpm test:e2e
-pnpm run build
+pnpm build
+pnpm qa:visual
+pnpm check:css:architecture
+pnpm check:seo
+pnpm lint
+pnpm format:check
 ```
 
-## Capas
+`pnpm check:seo` necesita que exista un `dist/` generado por `pnpm build`. `pnpm qa:visual` necesita un servidor disponible en `VISUAL_QA_BASE_URL` o en `http://127.0.0.1:4321`; no arranca Astro por sí mismo. No hay un script explícito de `typecheck` ni de cobertura.
 
-- `tests/unit/`: Vitest para reglas puras y helpers sin navegador.
-- `tests/integration/`: adapters y Convex cuando exista backend.
-- `tests/e2e/`: Playwright contra la web real en un navegador.
-- `tests/features/`: especificaciones Gherkin canónicas; no se introduce Cucumber de momento.
+## Vitest: pruebas unitarias e integración
 
-## TDD
+La suite cubre actualmente:
 
-Cada comportamiento nuevo sigue RED → GREEN → REFACTOR: test enfocado que falla por la razón esperada, implementación mínima, suite relevante, refactor con todo en verde. La compilación y la comprobación de navegador no sustituyen los tests automatizados.
+- `src/game/`: distancia Haversine, precisión GPS, reglas de puntuación, decaimiento local, avance de ubicación y sesión;
+- `convex/`: validación geográfica del servidor, decaimiento del score, normalización de nick y TTL/redondeo de presencia;
+- `src/scripts/convex-game.ts`: adaptación de queries, mutations, presencia, callbacks reactivos, suscripciones e idempotencia del payload;
+- importación y política de sincronización de bandos;
+- construcción de notificaciones SMTP;
+- alineación segura de `main`;
+- tokens y guardas de arquitectura CSS.
 
-## BDD
+La ejecución verificada de `pnpm test` contiene 14 archivos y 48 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
 
-Los escenarios Gherkin expresan comportamientos de usuario y se enlazan por nombre o etiqueta con las pruebas Playwright. No se debe crear una segunda lógica en los steps: las reglas puras pertenecen a `src/game/` y la aceptación verifica el flujo visible.
+## Playwright: E2E
 
-## Convenciones E2E
+Los escenarios E2E prueban la aplicación Astro real en Chromium y cubren:
 
-- Usar contextos de navegador independientes para jugadores distintos.
-- Esperar estados asentados, no juzgar la aplicación durante una carga transitoria.
-- Comprobar estados visibles, nombres accesibles, enlaces, rutas y desbordamiento móvil.
-- Cuando exista Convex, leer también el estado autoritativo y probar capturas simultáneas.
+- navegación global, menú lateral, `Escape`, `inert`, nombres accesibles y pie;
+- portada, páginas informativas, alojamientos y rutas con mapa GPX;
+- archivo y detalle de noticias;
+- bandos, filtros por texto/categoría/año, adjuntos, fuente y redirección `/avisos/`;
+- estado vacío de agenda;
+- canonical, Open Graph, idioma y JSON-LD;
+- juego local, simulador, captura, puntuación, modo inmersivo y límites de precisión;
+- fallbacks y carga diferida de escenas Three.js;
+- responsive, overflow horizontal y controles de vuelta arriba.
+
+Las pruebas del juego usan `astro dev` y el simulador disponible en `import.meta.env.DEV`. No constituyen una prueba E2E contra un deployment remoto de Convex, ni prueban dos jugadores reales compitiendo por la misma versión de la bola.
+
+## Validaciones de calidad
+
+### QA visual
+
+`scripts/visual-qa.mjs`, ejecutado mediante `pnpm qa:visual`, recorre nueve rutas en `1440×900` y `375×812`. Comprueba HTTP 200, overflow horizontal, foco visible, contraste aproximado y errores de consola. No genera snapshots ni realiza comparación de píxeles pese a su nombre.
+
+### CSS
+
+`scripts/check-css-architecture.js`, ejecutado mediante `pnpm check:css:architecture`, inspecciona el diff de `src/` y bloquea nuevos colores, funciones de color, familias tipográficas o pesos literales no autorizados. `tests/unit/css-architecture.test.ts` cubre la política; las excepciones de Leaflet y el mapa del juego están expresamente delimitadas.
+
+### SEO y build
+
+`pnpm build` valida indirectamente las Content Collections y genera `dist/`. `scripts/verify-seo.mjs`, ejecutado con `pnpm check:seo`, inspecciona las páginas generadas, metadatos obligatorios, JSON-LD, `sitemap-index.xml` y `robots.txt`.
+
+## Convenciones
+
+Los cambios funcionales deben conservar o ampliar una prueba de comportamiento relevante. Las reglas puras deben permanecer comprobables sin navegador; las pruebas E2E deben verificar el resultado visible, los nombres accesibles y los estados asentados, no detalles transitorios de carga.
+
+La validación de producción, dos navegadores conectados a Convex, spoofing de GPS, revisión física de ubicaciones y observabilidad de la automatización de bandos quedan fuera de la cobertura actual y requieren tareas independientes.
