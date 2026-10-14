@@ -213,9 +213,13 @@ const pageDescription =
 
   .legal-copy,
   .legal-reading {
-    color: var(--color-night-text);
+    color: var(--color-ink);
     font-size: 1rem;
     line-height: 1.7;
+  }
+
+  .legal-section-dark .legal-reading {
+    color: var(--color-night-text);
   }
 
   .legal-data {
@@ -240,7 +244,11 @@ const pageDescription =
     margin: 0;
   }
 
-  .legal-copy a,
+  .legal-copy a {
+    color: var(--color-forest);
+    text-underline-offset: 0.15em;
+  }
+
   .legal-reading a {
     color: var(--color-ochre);
     text-underline-offset: 0.15em;

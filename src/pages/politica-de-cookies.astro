@@ -189,9 +189,13 @@ const pageDescription =
   .cookies-copy,
   .cookies-details {
     max-width: 48rem;
-    color: var(--color-night-text);
+    color: var(--color-ink);
     font-size: 1rem;
     line-height: 1.7;
+  }
+
+  .cookies-section-dark .cookies-details {
+    color: var(--color-night-text);
   }
 
   .cookies-details {
@@ -230,7 +234,11 @@ const pageDescription =
     margin-top: 0.45rem;
   }
 
-  .cookies-copy a,
+  .cookies-copy a {
+    color: var(--color-forest);
+    text-underline-offset: 0.15em;
+  }
+
   .cookies-details a {
     color: var(--color-ochre);
     text-underline-offset: 0.15em;

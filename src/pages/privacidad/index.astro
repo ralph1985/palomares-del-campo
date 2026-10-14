@@ -254,7 +254,7 @@ const pageDescription =
   .privacy-copy,
   .privacy-details {
     max-width: 48rem;
-    color: var(--color-night-text);
+    color: var(--color-ink);
     font-size: 1rem;
     line-height: 1.7;
   }
@@ -268,7 +268,11 @@ const pageDescription =
     font-style: normal;
   }
 
-  .privacy-copy a,
+  .privacy-copy a {
+    color: var(--color-forest);
+    text-underline-offset: 0.15em;
+  }
+
   .privacy-details a {
     color: var(--color-ochre);
     text-underline-offset: 0.15em;
