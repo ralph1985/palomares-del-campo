@@ -15,7 +15,20 @@ test.describe('Palomareños por el mundo', () => {
     await expect(page.getByRole('textbox', { name: 'País' })).toBeVisible();
     await expect(page.getByRole('textbox', { name: /Email de contacto/ })).toBeVisible();
     await expect(page.getByRole('textbox', { name: 'Tu historia' })).toBeVisible();
-    await expect(page.getByLabel(/Acepto que esta historia/)).toBeVisible();
+    await expect(
+      page.getByRole('checkbox', { name: /He leído la información básica/ }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: 'Leer la información completa sobre privacidad' }),
+    ).toHaveAttribute('href', '/privacidad/#palomarenos-por-el-mundo');
+  });
+
+  test('exposes the detailed privacy information page', async ({ page }) => {
+    await page.goto('/privacidad/');
+
+    await expect(page.locator('#page-title')).toHaveText('Privacidad y protección de datos');
+    await expect(page.getByRole('heading', { name: 'Palomareños por el mundo' })).toBeVisible();
+    await expect(page.getByText('Email de contacto, que se mantiene privado.')).toBeVisible();
   });
 
   test('renders the simulated Turnstile widget and enables the submission control', async ({

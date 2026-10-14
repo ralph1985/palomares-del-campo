@@ -1,0 +1,325 @@
+---
+import ExternalLink from '../../components/ui/ExternalLink.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { municipalContact } from '../../data/site-footer';
+
+const pageTitle = 'Privacidad y protección de datos';
+const pageDescription =
+  'Información sobre el tratamiento de datos personales en Palomares del Campo y en el formulario Palomareños por el mundo.';
+---
+
+<BaseLayout title={`${pageTitle} · Palomares del Campo`} description={pageDescription}>
+  <main>
+    <section class="privacy-hero" aria-labelledby="page-title">
+      <div class="privacy-shell">
+        <p class="eyebrow">Información transparente</p>
+        <h1 id="page-title">{pageTitle}</h1>
+        <p class="hero-intro">
+          Explicamos qué datos tratamos, para qué los usamos y qué puedes hacer con ellos.
+        </p>
+      </div>
+    </section>
+
+    <section class="privacy-section" aria-labelledby="general-title">
+      <div class="privacy-shell privacy-grid">
+        <div class="section-intro">
+          <p class="eyebrow">Resumen</p>
+          <h2 id="general-title">Quién trata tus datos</h2>
+        </div>
+        <div class="privacy-copy">
+          <p>
+            El responsable del tratamiento es el{' '}
+            <strong>Ayuntamiento de Palomares del Campo</strong>.
+          </p>
+          <address>
+            {municipalContact.address}
+            <br />
+            {municipalContact.locality}
+            <br />
+            <a href={`mailto:${municipalContact.email}`}>{municipalContact.email}</a>
+          </address>
+          <p>
+            Esta página describe especialmente el tratamiento asociado al formulario
+            <a href="#palomarenos-por-el-mundo">Palomareños por el mundo</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="palomarenos-por-el-mundo"
+      class="privacy-section privacy-section-dark"
+      aria-labelledby="world-title"
+    >
+      <div class="privacy-shell">
+        <p class="eyebrow">Formulario de historias</p>
+        <h2 id="world-title">Palomareños por el mundo</h2>
+        <div class="privacy-details">
+          <section aria-labelledby="purpose-title">
+            <h3 id="purpose-title">Finalidad y base jurídica</h3>
+            <p>
+              Usamos los datos para recibir la propuesta, contactar contigo si es necesario,
+              revisarla manualmente y, si se aprueba, publicar la historia en el mapa y en la página
+              de la sección.
+            </p>
+            <p>
+              La base jurídica es el consentimiento que prestas al enviar el formulario. Puedes
+              retirarlo y pedir que dejemos de publicar la historia; la retirada no afecta a los
+              tratamientos realizados lícitamente antes de solicitarla.
+            </p>
+          </section>
+
+          <section aria-labelledby="data-title">
+            <h3 id="data-title">Qué datos tratamos</h3>
+            <ul>
+              <li>Nombre que quieres mostrar.</li>
+              <li>Ciudad y país de residencia.</li>
+              <li>Texto de la historia.</li>
+              <li>Email de contacto, que se mantiene privado.</li>
+              <li>Datos técnicos necesarios para proteger el formulario frente a abusos.</li>
+            </ul>
+            <p>
+              No solicitamos una dirección exacta ni publicamos coordenadas de una vivienda. El mapa
+              usa una posición aproximada de la ciudad asignada durante la moderación.
+            </p>
+          </section>
+
+          <section aria-labelledby="publication-title">
+            <h3 id="publication-title">Qué se publica</h3>
+            <p>
+              Solo se publican las propuestas aprobadas. El mapa muestra el nombre, la ciudad, el
+              país y el texto de la historia. No muestra el email, las notas internas de moderación
+              ni los datos técnicos de seguridad.
+            </p>
+            <p>
+              La publicación no es automática: cada propuesta queda pendiente de revisión manual.
+            </p>
+          </section>
+
+          <section aria-labelledby="retention-title">
+            <h3 id="retention-title">Conservación</h3>
+            <p>
+              Conservamos la propuesta mientras sea necesario para gestionarla y, si se aprueba,
+              mientras la historia permanezca publicada. Tras un rechazo, una retirada o el fin de
+              la finalidad, eliminaremos o anonimizaremos los datos cuando ya no sean necesarios
+              para gestionar la solicitud, atender derechos o cumplir responsabilidades legales.
+            </p>
+          </section>
+
+          <section aria-labelledby="recipients-title">
+            <h3 id="recipients-title">Proveedores y destinatarios</h3>
+            <p>
+              Para prestar el servicio usamos proveedores técnicos que actúan según la configuración
+              y los acuerdos aplicables:
+            </p>
+            <ul>
+              <li>
+                <strong>Convex:</strong> almacenamiento y lógica del formulario y la moderación.
+              </li>
+              <li>
+                <strong>Resend:</strong> envío de avisos por correo electrónico.
+              </li>
+              <li>
+                <strong>Cloudflare Turnstile:</strong> protección frente a envíos automatizados.
+              </li>
+            </ul>
+            <p>
+              Algunos proveedores pueden prestar servicios desde fuera del Espacio Económico
+              Europeo. Cuando exista una transferencia internacional, se aplicarán las garantías
+              exigidas por la normativa de protección de datos.
+            </p>
+          </section>
+
+          <section aria-labelledby="automated-title">
+            <h3 id="automated-title">Decisiones automatizadas</h3>
+            <p>
+              Turnstile solo ayuda a comprobar que el envío no procede de un bot. No decide si una
+              historia se publica. La aprobación o el rechazo corresponden a una revisión manual.
+            </p>
+          </section>
+
+          <section aria-labelledby="rights-title">
+            <h3 id="rights-title">Tus derechos</h3>
+            <p>
+              Puedes solicitar acceso, rectificación, supresión, oposición, limitación del
+              tratamiento y, cuando proceda, portabilidad. También puedes retirar el consentimiento
+              y pedir la retirada de una historia publicada.
+            </p>
+            <p>
+              Para ejercer tus derechos, escribe a
+              <a href={`mailto:${municipalContact.email}`}>{municipalContact.email}</a> o utiliza la
+              dirección postal indicada arriba. Si consideras que el tratamiento no cumple la
+              normativa, puedes reclamar ante la Agencia Española de Protección de Datos.
+            </p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="privacy-section" aria-labelledby="sources-title">
+      <div class="privacy-shell privacy-grid">
+        <div class="section-intro">
+          <p class="eyebrow">Más información</p>
+          <h2 id="sources-title">Normativa y proveedores</h2>
+        </div>
+        <div class="privacy-copy privacy-links">
+          <ul>
+            <li>
+              <ExternalLink href="https://www.aepd.es/derechos-y-deberes/conoce-tus-derechos/derecho-de-informacion">
+                Derecho de información · AEPD
+              </ExternalLink>
+            </li>
+            <li>
+              <ExternalLink href="https://www.aepd.es/derechos-y-deberes/conoce-tus-derechos">
+                Derechos de protección de datos · AEPD
+              </ExternalLink>
+            </li>
+            <li>
+              <ExternalLink href="https://developers.cloudflare.com/turnstile/get-started/">
+                Información técnica de Turnstile · Cloudflare
+              </ExternalLink>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .privacy-hero,
+  .privacy-section {
+    padding: clamp(3.5rem, 8vw, 7rem) 0;
+  }
+
+  .privacy-hero {
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
+  }
+
+  .privacy-shell {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .privacy-hero h1,
+  .privacy-section h2 {
+    max-width: 16ch;
+    margin: 0;
+    color: inherit;
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.96;
+  }
+
+  .hero-intro {
+    max-width: 36rem;
+    margin: 1.5rem 0 0;
+    color: var(--color-night-text);
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    line-height: 1.6;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.9rem;
+    color: var(--color-ochre);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .privacy-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+    gap: clamp(2rem, 7vw, 7rem);
+  }
+
+  .privacy-section h2 {
+    color: var(--color-ink);
+    font-size: clamp(2.2rem, 5vw, 4rem);
+  }
+
+  .privacy-section-dark {
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
+  }
+
+  .privacy-section-dark h2 {
+    color: var(--color-surface-soft);
+  }
+
+  .privacy-copy,
+  .privacy-details {
+    max-width: 48rem;
+    color: var(--color-night-text);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .privacy-section-dark .privacy-details {
+    color: var(--color-night-text);
+  }
+
+  .privacy-copy address {
+    margin: 1.25rem 0;
+    font-style: normal;
+  }
+
+  .privacy-copy a,
+  .privacy-details a {
+    color: var(--color-ochre);
+    text-underline-offset: 0.15em;
+  }
+
+  .privacy-details {
+    display: grid;
+    gap: 2.25rem;
+    margin-top: 2.5rem;
+  }
+
+  .privacy-details section {
+    border-top: 1px solid rgb(239 245 237 / 18%);
+    padding-top: 1.25rem;
+  }
+
+  .privacy-details h3 {
+    margin: 0 0 0.75rem;
+    color: var(--color-surface-soft);
+    font-family: var(--font-serif);
+    font-size: 1.65rem;
+    font-weight: 500;
+  }
+
+  .privacy-details p {
+    margin: 0 0 0.9rem;
+  }
+
+  .privacy-details p:last-child {
+    margin-bottom: 0;
+  }
+
+  .privacy-details ul,
+  .privacy-links ul {
+    margin: 0.75rem 0;
+    padding-left: 1.25rem;
+  }
+
+  .privacy-details li + li,
+  .privacy-links li + li {
+    margin-top: 0.45rem;
+  }
+
+  .privacy-links ul {
+    padding-left: 1.25rem;
+  }
+
+  @media (max-width: 48rem) {
+    .privacy-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>
