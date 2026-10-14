@@ -22,6 +22,10 @@ export type PalomarenoRecord = {
   notifiedAt?: number;
   notificationError?: string;
   notificationExternalId?: string;
+  creatorNotificationStatus?: 'pending' | 'sending' | 'sent' | 'failed';
+  creatorNotifiedAt?: number;
+  creatorNotificationError?: string;
+  creatorNotificationExternalId?: string;
 };
 
 export type PublicPalomareno = {
@@ -170,6 +174,79 @@ export const markNotificationFailed = internalMutation({
   },
 });
 
+export const getCreatorNotificationStatus = internalQuery({
+  args: { id: v.id('palomarenos') },
+  handler: async (ctx, args) => {
+    const record = await ctx.db.get(args.id);
+    if (!record) return null;
+    return {
+      status: record.creatorNotificationStatus ?? 'pending',
+      notifiedAt: record.creatorNotifiedAt,
+      externalId: record.creatorNotificationExternalId,
+      error: record.creatorNotificationError,
+    };
+  },
+});
+
+export const claimCreatorNotification = internalMutation({
+  args: { id: v.id('palomarenos') },
+  handler: async (ctx, args) => {
+    const record = await ctx.db.get(args.id);
+    if (!record) return { status: 'missing' as const };
+    if (record.status !== 'approved') return { status: 'not-approved' as const };
+    if (
+      record.creatorNotificationStatus === 'sent' ||
+      record.creatorNotificationStatus === 'sending'
+    ) {
+      return { status: 'skipped' as const };
+    }
+
+    await ctx.db.patch(args.id, {
+      creatorNotificationStatus: 'sending',
+      creatorNotificationError: undefined,
+    });
+    return { status: 'claimed' as const };
+  },
+});
+
+export const markCreatorNotificationSent = internalMutation({
+  args: {
+    id: v.id('palomarenos'),
+    externalId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const record = await ctx.db.get(args.id);
+    if (!record) return { status: 'missing' as const };
+    if (record.creatorNotificationStatus === 'sent') return { status: 'sent' as const };
+
+    const creatorNotifiedAt = Date.now();
+    await ctx.db.patch(args.id, {
+      creatorNotificationStatus: 'sent',
+      creatorNotifiedAt,
+      creatorNotificationError: undefined,
+      creatorNotificationExternalId: args.externalId,
+    });
+    return { status: 'sent' as const, creatorNotifiedAt };
+  },
+});
+
+export const markCreatorNotificationFailed = internalMutation({
+  args: {
+    id: v.id('palomarenos'),
+    error: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const record = await ctx.db.get(args.id);
+    if (!record) return { status: 'missing' as const };
+
+    await ctx.db.patch(args.id, {
+      creatorNotificationStatus: 'failed',
+      creatorNotificationError: args.error.slice(0, 240),
+    });
+    return { status: 'failed' as const };
+  },
+});
+
 export const reject = internalMutation({
   args: {
     id: v.id('palomarenos'),
@@ -212,6 +289,9 @@ export const approve = internalMutation({
       status: 'approved',
       reviewedAt,
       reviewNote: args.reviewNote,
+    });
+    await ctx.scheduler.runAfter(0, internal.palomarenos_notifications.notifyApproved, {
+      submissionId: args.id,
     });
 
     return { status: 'approved' as const, reviewedAt };

@@ -25,6 +25,7 @@ describe('normalizePalomarenoSubmission', () => {
       createdAt: 1_700_000_000_000,
       status: 'pending',
       notificationStatus: 'pending',
+      creatorNotificationStatus: 'pending',
     });
   });
 
@@ -127,6 +128,7 @@ describe('normalizePalomarenoSubmission', () => {
         createdAt: 1_700_000_000_000,
         status: 'pending',
         notificationStatus: 'pending',
+        creatorNotificationStatus: 'pending',
       }),
     ).toBeNull();
 

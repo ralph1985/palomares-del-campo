@@ -66,3 +66,48 @@ export const buildPalomarenoNotification = (
     html,
   };
 };
+
+export type ApprovedPalomarenoData = {
+  displayName: string;
+  city: string;
+  country: string;
+};
+
+export const buildApprovedPalomarenoNotification = (
+  palomareno: ApprovedPalomarenoData,
+): PalomarenoNotification => {
+  const place = `${palomareno.city}, ${palomareno.country}`;
+  const text = [
+    'Tu historia ya está publicada en Palomareños por el mundo.',
+    '',
+    `Nombre: ${palomareno.displayName}`,
+    `Lugar: ${place}`,
+    '',
+    'Ya aparece en el mapa con una posición aproximada de la ciudad.',
+    'Si quieres corregirla o retirarla, responde a este correo.',
+  ].join('\n');
+  const html = `<!doctype html>
+<html lang="es">
+  <body style="margin: 0; padding: 24px; background: #f4f1e9; color: #19342d; font-family: Arial, sans-serif;">
+    <main style="max-width: 640px; margin: 0 auto; background: #fffdf8; border-radius: 12px; overflow: hidden;">
+      <header style="padding: 28px 32px; background: #19342d; color: #fffdf8;">
+        <p style="margin: 0 0 8px; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase;">Palomares del Campo</p>
+        <h1 style="margin: 0; font-size: 26px; line-height: 1.2;">Tu historia ya está publicada</h1>
+      </header>
+      <section style="padding: 28px 32px; line-height: 1.5;">
+        <p>Hola, ${escapeHtml(palomareno.displayName)}:</p>
+        <p>Tu historia ya aparece en el mapa de <strong>Palomareños por el mundo</strong>.</p>
+        <p><strong>Lugar:</strong> ${escapeHtml(place)}</p>
+        <p>La posición mostrada es aproximada y corresponde a la ciudad.</p>
+        <p>Si quieres corregirla o retirarla, responde a este correo.</p>
+      </section>
+    </main>
+  </body>
+</html>`;
+
+  return {
+    subject: 'Palomareños por el mundo: tu historia ya está publicada',
+    text,
+    html,
+  };
+};

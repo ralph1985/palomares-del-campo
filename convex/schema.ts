@@ -85,6 +85,12 @@ export default defineSchema({
     notifiedAt: v.optional(v.number()),
     notificationError: v.optional(v.string()),
     notificationExternalId: v.optional(v.string()),
+    creatorNotificationStatus: v.optional(
+      v.union(v.literal('pending'), v.literal('sending'), v.literal('sent'), v.literal('failed')),
+    ),
+    creatorNotifiedAt: v.optional(v.number()),
+    creatorNotificationError: v.optional(v.string()),
+    creatorNotificationExternalId: v.optional(v.string()),
   })
     .index('by_status', ['status'])
     .index('by_status_created', ['status', 'createdAt']),

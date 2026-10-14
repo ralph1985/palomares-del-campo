@@ -25,6 +25,7 @@ export type PendingPalomareno = {
   createdAt: number;
   status: 'pending';
   notificationStatus: 'pending';
+  creatorNotificationStatus: 'pending';
 };
 
 const trimRequired = (value: string, errorCode: string): string => {
@@ -73,5 +74,6 @@ export const normalizePalomarenoSubmission = (
     createdAt: now,
     status: 'pending',
     notificationStatus: 'pending',
+    creatorNotificationStatus: 'pending',
   };
 };

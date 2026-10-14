@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { buildPalomarenoNotification } from '../../convex/palomarenos_notification_content';
+import {
+  buildApprovedPalomarenoNotification,
+  buildPalomarenoNotification,
+} from '../../convex/palomarenos_notification_content';
 
 const submission = {
   id: 'palomareno-test',
@@ -21,6 +24,19 @@ describe('buildPalomarenoNotification', () => {
     expect(notification.text).toContain('Vuelvo al pueblo & hablo de <Palomares>.');
     expect(notification.text).toContain('ana@example.com');
     expect(notification.text).toContain('pendiente de moderación');
+  });
+
+  it('builds the approval notification for the creator', () => {
+    const notification = buildApprovedPalomarenoNotification({
+      displayName: 'Ana López',
+      city: 'Madrid',
+      country: 'España',
+    });
+
+    expect(notification.subject).toBe('Palomareños por el mundo: tu historia ya está publicada');
+    expect(notification.text).toContain('Ana López');
+    expect(notification.text).toContain('Madrid, España');
+    expect(notification.text).toContain('Ya aparece en el mapa');
   });
 
   it('escapes user content in the HTML notification', () => {
