@@ -31,6 +31,18 @@ test.describe('Palomareños por el mundo', () => {
     await expect(page.getByText('Email de contacto, que se mantiene privado.')).toBeVisible();
   });
 
+  test('exposes the cookie information page', async ({ page }) => {
+    await page.goto('/politica-de-cookies/');
+
+    await expect(page.locator('#page-title')).toHaveText('Política de cookies');
+    await expect(
+      page.getByRole('heading', { name: 'No usamos analítica publicitaria' }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: 'política de privacidad', exact: true }),
+    ).toHaveAttribute('href', '/privacidad/#palomarenos-por-el-mundo');
+  });
+
   test('renders the simulated Turnstile widget and enables the submission control', async ({
     page,
   }) => {
