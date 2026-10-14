@@ -108,6 +108,10 @@ const loadTurnstile = (): Promise<TurnstileApi> => {
 const bindForm = (form: HTMLFormElement): void => {
   const convexUrl = form.dataset.convexUrl?.trim();
   const siteKey = form.dataset.turnstileSiteKey?.trim();
+  const allowedHostnames = (form.dataset.turnstileHostnames ?? '')
+    .split(',')
+    .map((hostname) => hostname.trim().toLowerCase())
+    .filter(Boolean);
   const statusElement = form.querySelector<HTMLElement>('[data-form-status]');
   const turnstileStatusElement = form.querySelector<HTMLElement>('[data-turnstile-status]');
   const turnstileContainer = form.querySelector<HTMLElement>('[data-turnstile-widget]');
@@ -124,6 +128,24 @@ const bindForm = (form: HTMLFormElement): void => {
     submitButton.disabled = true;
     statusElement.textContent =
       'El formulario estará disponible cuando se configure la protección anti-bots.';
+    return;
+  }
+  const hasInjectedTurnstile = typeof window !== 'undefined' && Boolean(window.turnstile);
+  const currentHostname =
+    typeof window !== 'undefined' ? window.location.hostname.toLowerCase() : '';
+  if (
+    !hasInjectedTurnstile &&
+    allowedHostnames.length > 0 &&
+    !allowedHostnames.includes(currentHostname)
+  ) {
+    submitButton.disabled = true;
+    statusElement.textContent =
+      'Abre esta página mediante el dominio público para enviar una propuesta.';
+    if (turnstileStatusElement) {
+      turnstileStatusElement.dataset.state = 'error';
+      turnstileStatusElement.textContent =
+        'La protección anti-bots está disponible en el dominio público.';
+    }
     return;
   }
 

@@ -51,6 +51,15 @@ test.describe('Palomareños por el mundo', () => {
     await expect(page.getByText('P0000000X · DATO DE PRUEBA — SUSTITUIR')).toBeVisible();
   });
 
+  test('does not load real Turnstile on an unauthorized development hostname', async ({ page }) => {
+    await page.goto('/palomarenos-por-el-mundo/');
+
+    await expect(page.locator('[data-turnstile-status]')).toHaveText(
+      'La protección anti-bots está disponible en el dominio público.',
+    );
+    await expect(page.locator('#cloudflare-turnstile')).toHaveCount(0);
+  });
+
   test('renders the simulated Turnstile widget and enables the submission control', async ({
     page,
   }) => {
