@@ -9,6 +9,17 @@ test.describe('home editorial entry points', () => {
     await expect(page.getByRole('heading', { name: 'Celebrar' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Jugar' })).toBeVisible();
 
+    const firstCard = page.locator('.editorial-card').first();
+    const sectionBackground = await page
+      .locator('.editorial-section')
+      .evaluate((section) => getComputedStyle(section).backgroundColor);
+    const firstCardBackground = await firstCard.evaluate(
+      (card) => getComputedStyle(card).backgroundColor,
+    );
+
+    expect(firstCardBackground).not.toBe(sectionBackground);
+    await expect(firstCard).toHaveCSS('border-radius', '24px');
+
     await expect(page.getByRole('link', { name: /Ver el paisaje/ })).toHaveAttribute(
       'href',
       '/sobre-el-pueblo/#paisaje',
