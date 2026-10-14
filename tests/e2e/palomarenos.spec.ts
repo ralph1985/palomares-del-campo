@@ -43,6 +43,14 @@ test.describe('Palomareños por el mundo', () => {
     ).toHaveAttribute('href', '/privacidad/#palomarenos-por-el-mundo');
   });
 
+  test('exposes the legal notice with development data warnings', async ({ page }) => {
+    await page.goto('/aviso-legal/');
+
+    await expect(page.locator('#page-title')).toHaveText('Aviso legal');
+    await expect(page.getByRole('note')).toContainText('datos de prueba');
+    await expect(page.getByText('P0000000X · DATO DE PRUEBA — SUSTITUIR')).toBeVisible();
+  });
+
   test('renders the simulated Turnstile widget and enables the submission control', async ({
     page,
   }) => {

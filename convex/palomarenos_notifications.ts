@@ -23,7 +23,7 @@ const responseError = async (response: Response): Promise<string> => {
 
 export const notifySubmission = internalAction({
   args: { submissionId: v.id('palomarenos') },
-  handler: async (ctx, { submissionId }) => {
+  handler: async (ctx, { submissionId }): Promise<unknown> => {
     const submission = await ctx.runQuery(internal.palomarenos.getForNotification, {
       id: submissionId,
     });
@@ -93,7 +93,7 @@ export const notifySubmission = internalAction({
 
 export const notifyApproved = internalAction({
   args: { submissionId: v.id('palomarenos') },
-  handler: async (ctx, { submissionId }) => {
+  handler: async (ctx, { submissionId }): Promise<unknown> => {
     const submission = await ctx.runQuery(internal.palomarenos.getForNotification, {
       id: submissionId,
     });

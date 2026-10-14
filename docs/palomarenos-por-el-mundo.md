@@ -108,6 +108,17 @@ El operador debe verificar la identidad de la persona solicitante antes de aplic
 - AEPD: derechos de las personas.
 - Cloudflare Turnstile: integración, validación server-side y privacidad del widget.
 
+## Aviso legal
+
+La ruta pública `/aviso-legal/` se ha creado con una franja visible de borrador y datos de prueba para completar la estructura durante el desarrollo. Antes de publicar debe sustituirse, como mínimo:
+
+- `P0000000X` por el NIF/CIF oficial.
+- `L00000000` por el DIR3 o dato registral que corresponda.
+- `dpd-prueba@example.invalid` por el contacto real del DPD, si procede.
+- La fecha y cualquier dato institucional pendiente.
+
+No presentar esta página como definitiva mientras conserve la marca `DATO DE PRUEBA — SUSTITUIR`.
+
 ## Pendientes antes de producción
 
 - Confirmar responsable jurídico y contacto del DPD, si corresponde.

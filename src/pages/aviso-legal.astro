@@ -1,0 +1,288 @@
+---
+import ExternalLink from '../components/ui/ExternalLink.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { municipalContact } from '../data/site-footer';
+
+const pageTitle = 'Aviso legal';
+const pageDescription =
+  'Información sobre la titularidad, condiciones de uso y responsabilidades del sitio web de Palomares del Campo.';
+---
+
+<BaseLayout title={`${pageTitle} · Palomares del Campo`} description={pageDescription}>
+  <main>
+    <section class="legal-hero" aria-labelledby="page-title">
+      <div class="legal-shell">
+        <p class="eyebrow">Información jurídica</p>
+        <h1 id="page-title">{pageTitle}</h1>
+        <p class="draft-warning" role="note">
+          Borrador de desarrollo: contiene datos de prueba que deben sustituirse por los datos
+          oficiales antes de publicar este aviso.
+        </p>
+      </div>
+    </section>
+
+    <section class="legal-section" aria-labelledby="identification-title">
+      <div class="legal-shell legal-grid">
+        <div class="section-intro">
+          <p class="eyebrow">Titularidad</p>
+          <h2 id="identification-title">Identificación del titular</h2>
+        </div>
+        <div class="legal-copy">
+          <p>
+            Este sitio web es titularidad del <strong>Ayuntamiento de Palomares del Campo</strong>.
+          </p>
+          <dl class="legal-data">
+            <div>
+              <dt>Domicilio</dt>
+              <dd>
+                {municipalContact.address}, {municipalContact.locality}
+              </dd>
+            </div>
+            <div>
+              <dt>Teléfono</dt>
+              <dd>
+                <a href={`tel:${municipalContact.phoneHref}`}>{municipalContact.phone}</a>
+              </dd>
+            </div>
+            <div>
+              <dt>Correo</dt>
+              <dd>
+                <a href={`mailto:${municipalContact.email}`}>{municipalContact.email}</a>
+              </dd>
+            </div>
+            <div>
+              <dt>NIF/CIF</dt>
+              <dd>
+                <strong class="test-data">P0000000X · DATO DE PRUEBA — SUSTITUIR</strong>
+              </dd>
+            </div>
+            <div>
+              <dt>DIR3 / registro</dt>
+              <dd>
+                <strong class="test-data">L00000000 · DATO DE PRUEBA — SUSTITUIR</strong>
+              </dd>
+            </div>
+            <div>
+              <dt>DPD</dt>
+              <dd>
+                <strong class="test-data">
+                  dpd-prueba@example.invalid · DATO DE PRUEBA — SUSTITUIR
+                </strong>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="legal-section legal-section-dark" aria-labelledby="use-title">
+      <div class="legal-shell legal-reading">
+        <section>
+          <h2 id="use-title">Condiciones de uso</h2>
+          <p>
+            El acceso y la navegación por este sitio implican el conocimiento de este aviso legal.
+            La información se ofrece con finalidad divulgativa y de orientación; los trámites
+            administrativos formales deben realizarse a través de los canales oficiales del
+            Ayuntamiento.
+          </p>
+          <p>
+            La persona usuaria se compromete a utilizar el sitio de forma lícita, respetuosa y
+            compatible con su finalidad. No está permitido introducir contenido malicioso, suplantar
+            identidades o intentar eludir los controles de seguridad.
+          </p>
+        </section>
+
+        <section aria-labelledby="property-title">
+          <h2 id="property-title">Propiedad intelectual</h2>
+          <p>
+            Los textos, diseños, logotipos y elementos gráficos del sitio pertenecen al Ayuntamiento
+            o se utilizan con la autorización correspondiente, salvo que se indique otra cosa. Los
+            contenidos de terceros conservan la autoría y las condiciones de uso que les
+            correspondan.
+          </p>
+        </section>
+
+        <section aria-labelledby="responsibility-title">
+          <h2 id="responsibility-title">Responsabilidad y enlaces</h2>
+          <p>
+            Se procura que la información esté actualizada, pero pueden existir errores, omisiones o
+            cambios posteriores a su publicación. Los enlaces externos llevan a servicios de
+            terceros y se ofrecen como orientación; sus contenidos y políticas son responsabilidad
+            de sus titulares.
+          </p>
+        </section>
+
+        <section aria-labelledby="privacy-title">
+          <h2 id="privacy-title">Protección de datos y cookies</h2>
+          <p>
+            El tratamiento de datos personales se explica en la
+            <a href="/privacidad/">política de privacidad</a>. La información sobre cookies,
+            almacenamiento local y servicios técnicos de terceros está disponible en la
+            <a href="/politica-de-cookies/">política de cookies</a>.
+          </p>
+        </section>
+
+        <section aria-labelledby="contact-title">
+          <h2 id="contact-title">Contacto y reclamaciones</h2>
+          <p>
+            Para incidencias sobre el sitio puedes utilizar los datos de contacto del Ayuntamiento.
+            Para trámites administrativos, utiliza la
+            <ExternalLink href="https://palomaresdelcampo.sedelectronica.es/info.0">
+              sede electrónica oficial
+            </ExternalLink>
+            .
+          </p>
+          <p>
+            La información sobre derechos de protección de datos y reclamaciones ante la Agencia
+            Española de Protección de Datos se encuentra en la política de privacidad.
+          </p>
+        </section>
+
+        <section aria-labelledby="updates-title">
+          <h2 id="updates-title">Actualizaciones</h2>
+          <p>
+            Este aviso se revisará cuando cambien la titularidad, los canales oficiales, la
+            normativa o los servicios ofrecidos. La versión siguiente deberá sustituir todos los
+            datos marcados como prueba.
+          </p>
+        </section>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .legal-hero,
+  .legal-section {
+    padding: clamp(3.5rem, 8vw, 7rem) 0;
+  }
+
+  .legal-hero,
+  .legal-section-dark {
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
+  }
+
+  .legal-shell {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .legal-hero h1,
+  .legal-section h2 {
+    max-width: 18ch;
+    margin: 0;
+    color: inherit;
+    font-family: var(--font-serif);
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.96;
+  }
+
+  .legal-section:not(.legal-section-dark) h2 {
+    color: var(--color-ink);
+  }
+
+  .eyebrow {
+    margin: 0 0 0.9rem;
+    color: var(--color-ochre);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .draft-warning {
+    max-width: 52rem;
+    margin: 1.75rem 0 0;
+    border: 2px solid #f2bf61;
+    border-radius: 0.75rem;
+    padding: 1rem 1.1rem;
+    color: #fff2cc;
+    background: rgb(242 191 97 / 12%);
+    font-weight: var(--font-weight-strong);
+    line-height: 1.5;
+  }
+
+  .legal-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+    gap: clamp(2rem, 7vw, 7rem);
+  }
+
+  .legal-copy,
+  .legal-reading {
+    color: var(--color-night-text);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .legal-data {
+    display: grid;
+    gap: 0.8rem;
+    margin: 1.5rem 0 0;
+  }
+
+  .legal-data > div {
+    display: grid;
+    grid-template-columns: minmax(7rem, 0.4fr) minmax(0, 1fr);
+    gap: 1rem;
+    border-top: 1px solid rgb(25 52 45 / 16%);
+    padding-top: 0.8rem;
+  }
+
+  .legal-data dt {
+    font-weight: var(--font-weight-strong);
+  }
+
+  .legal-data dd {
+    margin: 0;
+  }
+
+  .legal-copy a,
+  .legal-reading a {
+    color: var(--color-ochre);
+    text-underline-offset: 0.15em;
+  }
+
+  .test-data {
+    color: #9b3d2b;
+  }
+
+  .legal-reading {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .legal-reading section {
+    border-top: 1px solid rgb(239 245 237 / 18%);
+    padding-top: 1.25rem;
+  }
+
+  .legal-reading h2 {
+    margin-bottom: 0.8rem;
+    color: var(--color-surface-soft);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+  }
+
+  .legal-reading p {
+    margin: 0 0 0.9rem;
+  }
+
+  .legal-reading p:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 48rem) {
+    .legal-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .legal-data > div {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+  }
+</style>

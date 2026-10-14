@@ -59,7 +59,13 @@ const isValidCoordinate = (latitude: number | undefined, longitude: number | und
   longitude <= 180;
 
 export const toPublicPalomareno = (record: PalomarenoRecord): PublicPalomareno | null => {
-  if (record.status !== 'approved' || !isValidCoordinate(record.latitude, record.longitude)) {
+  if (record.status !== 'approved') {
+    return null;
+  }
+  if (!isValidCoordinate(record.latitude, record.longitude)) {
+    return null;
+  }
+  if (record.latitude === undefined || record.longitude === undefined) {
     return null;
   }
 
@@ -127,7 +133,7 @@ export const submitWithTurnstile = action({
     longitude: v.optional(v.number()),
     turnstileToken: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<unknown> => {
     if (!args.turnstileToken.trim()) throw new Error('turnstile-token-missing');
 
     const secret = process.env.TURNSTILE_SECRET_KEY;
