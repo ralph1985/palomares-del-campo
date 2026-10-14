@@ -160,7 +160,8 @@ const bindForm = (form: HTMLFormElement): void => {
           setTurnstileState('La verificación ha caducado. Vuelve a intentarlo.', 'error');
         },
         'error-callback': () => {
-          resetTurnstile();
+          turnstileToken = '';
+          submitButton.disabled = true;
           setTurnstileState('No se ha podido cargar la protección anti-bots.', 'error');
         },
       });

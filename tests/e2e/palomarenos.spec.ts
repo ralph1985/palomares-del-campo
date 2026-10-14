@@ -78,6 +78,44 @@ test.describe('Palomareños por el mundo', () => {
     await expect(page.getByRole('button', { name: 'Enviar propuesta' })).toBeEnabled();
   });
 
+  test('does not reset Turnstile repeatedly after a widget error', async ({ page }) => {
+    await page.addInitScript(() => {
+      type TestTurnstileOptions = {
+        'error-callback': () => void;
+      };
+      type TestTurnstile = {
+        render: (container: HTMLElement, options: TestTurnstileOptions) => string;
+        reset: () => void;
+      };
+      (window as Window & { __turnstileResetCount?: number }).__turnstileResetCount = 0;
+      Object.defineProperty(window, 'turnstile', {
+        configurable: true,
+        value: {
+          render: (_container: HTMLElement, options: TestTurnstileOptions) => {
+            window.setTimeout(() => options['error-callback'](), 0);
+            return 'e2e-error-widget';
+          },
+          reset: () => {
+            const browserWindow = window as Window & { __turnstileResetCount?: number };
+            browserWindow.__turnstileResetCount = (browserWindow.__turnstileResetCount ?? 0) + 1;
+          },
+        } satisfies TestTurnstile,
+      });
+    });
+    await page.goto('/palomarenos-por-el-mundo/');
+
+    await expect(page.locator('[data-turnstile-status]')).toHaveText(
+      'No se ha podido cargar la protección anti-bots.',
+    );
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () => (window as Window & { __turnstileResetCount?: number }).__turnstileResetCount,
+        ),
+      )
+      .toBe(0);
+  });
+
   test('keeps the sticky header above Leaflet layers', async ({ page }) => {
     await page.goto('/palomarenos-por-el-mundo/');
     await expect(page.locator('[data-palomarenos-map] .leaflet-top.leaflet-left')).toBeVisible();
@@ -93,6 +131,26 @@ test.describe('Palomareños por el mundo', () => {
     }));
 
     expect(stacking.header).toBeGreaterThan(stacking.leaflet);
+  });
+
+  test('keeps the back-to-top control above Leaflet layers', async ({ page }) => {
+    await page.goto('/palomarenos-por-el-mundo/');
+    await page.evaluate(() => window.scrollTo(0, 600));
+
+    const stacking = await page.evaluate(() => ({
+      backToTop: Number.parseInt(
+        getComputedStyle(document.querySelector('[data-back-to-top]')!).zIndex,
+        10,
+      ),
+      leaflet: Number.parseInt(
+        getComputedStyle(
+          document.querySelector('[data-palomarenos-map] .leaflet-top.leaflet-left')!,
+        ).zIndex,
+        10,
+      ),
+    }));
+
+    expect(stacking.backToTop).toBeGreaterThan(stacking.leaflet);
   });
 
   test('keeps the page within a narrow viewport', async ({ page }) => {
