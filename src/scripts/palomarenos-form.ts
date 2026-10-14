@@ -8,6 +8,7 @@ export type PalomarenoFormInput = {
   story: string;
   contactEmail: string;
   consent: boolean;
+  website: string;
 };
 
 type MutationClient = {
@@ -31,6 +32,7 @@ export const submitPalomareno = async (
     story: input.story,
     contactEmail: input.contactEmail,
     consent: input.consent,
+    website: input.website,
   })) as PalomarenoSubmissionResult;
 
 const getFieldValue = (formData: FormData, name: string): string =>
@@ -43,6 +45,8 @@ const getErrorMessage = (error: unknown): string => {
     return 'Necesitamos tu consentimiento para revisar la propuesta.';
   if (message.includes('coordinates-not-accepted'))
     return 'La ubicación se asigna durante la revisión.';
+  if (message.includes('submission-rate-limited'))
+    return 'Espera un poco antes de enviar otra propuesta.';
   return 'No se ha podido enviar la propuesta. Inténtalo de nuevo más tarde.';
 };
 
@@ -65,12 +69,6 @@ const bindForm = (form: HTMLFormElement): void => {
     if (submitButton.disabled) return;
 
     const formData = new FormData(form);
-    const honeypot = getFieldValue(formData, 'website');
-    if (honeypot) {
-      statusElement.textContent = 'La propuesta ha sido recibida para revisión.';
-      form.reset();
-      return;
-    }
 
     submitButton.disabled = true;
     statusElement.dataset.state = 'submitting';
@@ -84,6 +82,7 @@ const bindForm = (form: HTMLFormElement): void => {
         story: getFieldValue(formData, 'story'),
         contactEmail: getFieldValue(formData, 'contactEmail'),
         consent: formData.get('consent') === 'on',
+        website: getFieldValue(formData, 'website'),
       });
       statusElement.dataset.state = 'success';
       statusElement.textContent = result.message;

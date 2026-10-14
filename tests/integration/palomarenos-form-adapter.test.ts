@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest';
 import { submitPalomareno } from '../../src/scripts/palomarenos-form';
 
-it('submits only the public form fields to Convex', async () => {
+it('submits public fields and forwards the honeypot for server validation', async () => {
   const calls: Array<{ reference: unknown; args: Record<string, unknown> }> = [];
   const client = {
     mutation: async (reference: unknown, args: Record<string, unknown>) => {
@@ -21,6 +21,7 @@ it('submits only the public form fields to Convex', async () => {
     story: 'Vuelvo al pueblo siempre que puedo.',
     contactEmail: 'ana@example.com',
     consent: true,
+    website: 'filled-by-bot',
   });
 
   expect(result.status).toBe('submitted');
@@ -32,6 +33,7 @@ it('submits only the public form fields to Convex', async () => {
     story: 'Vuelvo al pueblo siempre que puedo.',
     contactEmail: 'ana@example.com',
     consent: true,
+    website: 'filled-by-bot',
   });
   expect(calls[0]?.args).not.toHaveProperty('latitude');
   expect(calls[0]?.args).not.toHaveProperty('longitude');

@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { normalizePalomarenoSubmission } from '../../convex/palomarenos_validation';
+import {
+  isSubmissionRateLimited,
+  normalizePalomarenoSubmission,
+} from '../../convex/palomarenos_validation';
 import { toPublicPalomareno } from '../../convex/palomarenos';
 
 const validInput = {
@@ -21,12 +24,37 @@ describe('normalizePalomarenoSubmission', () => {
       country: 'España',
       story: 'Vivo fuera, pero vuelvo al pueblo siempre que puedo.',
       contactEmail: 'ana@example.com',
+      contactEmailKey: 'ana@example.com',
       consentGivenAt: 1_700_000_000_000,
       createdAt: 1_700_000_000_000,
       status: 'pending',
       notificationStatus: 'pending',
       creatorNotificationStatus: 'pending',
     });
+  });
+
+  it('normalizes the retained email and builds a private rate-limit key', () => {
+    const result = normalizePalomarenoSubmission(
+      { ...validInput, contactEmail: ' Ana@Example.COM ' },
+      1_700_000_000_000,
+    );
+
+    expect(result.contactEmail).toBe('Ana@Example.COM');
+    expect(result.contactEmailKey).toBe('ana@example.com');
+  });
+
+  it('rejects a filled honeypot server-side', () => {
+    expect(() =>
+      normalizePalomarenoSubmission(
+        { ...validInput, website: 'https://bot.example' },
+        1_700_000_000_000,
+      ),
+    ).toThrow('honeypot-filled');
+  });
+
+  it('rate-limits after the configured number of recent submissions', () => {
+    expect(isSubmissionRateLimited(2)).toBe(false);
+    expect(isSubmissionRateLimited(3)).toBe(true);
   });
 
   it('rejects a submission without consent', () => {

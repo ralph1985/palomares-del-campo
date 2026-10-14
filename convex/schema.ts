@@ -66,6 +66,7 @@ export default defineSchema({
     longitude: v.optional(v.number()),
     story: v.string(),
     contactEmail: v.string(),
+    contactEmailKey: v.optional(v.string()),
     consentGivenAt: v.number(),
     status: v.union(
       v.literal('pending'),
@@ -93,5 +94,6 @@ export default defineSchema({
     creatorNotificationExternalId: v.optional(v.string()),
   })
     .index('by_status', ['status'])
-    .index('by_status_created', ['status', 'createdAt']),
+    .index('by_status_created', ['status', 'createdAt'])
+    .index('by_contact_email_created', ['contactEmailKey', 'createdAt']),
 });

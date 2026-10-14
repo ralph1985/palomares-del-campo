@@ -1,7 +1,11 @@
 import { v } from 'convex/values';
 import { internal } from './_generated/api';
 import { internalMutation, internalQuery, mutation, query } from './_generated/server';
-import { normalizePalomarenoSubmission } from './palomarenos_validation';
+import {
+  isSubmissionRateLimited,
+  normalizePalomarenoSubmission,
+  SUBMISSION_RATE_WINDOW_MS,
+} from './palomarenos_validation';
 
 export type PalomarenoRecord = {
   _id: string;
@@ -13,6 +17,7 @@ export type PalomarenoRecord = {
   longitude?: number;
   story: string;
   contactEmail: string;
+  contactEmailKey?: string;
   consentGivenAt: number;
   status: 'pending' | 'approved' | 'rejected' | 'withdrawn';
   notificationStatus: 'pending' | 'sending' | 'sent' | 'failed';
@@ -72,11 +77,25 @@ export const submit = mutation({
     story: v.string(),
     contactEmail: v.string(),
     consent: v.boolean(),
+    website: v.optional(v.string()),
     latitude: v.optional(v.number()),
     longitude: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    const pendingRecord = normalizePalomarenoSubmission(args, Date.now());
+    const now = Date.now();
+    const pendingRecord = normalizePalomarenoSubmission(args, now);
+    const recentSubmissions = await ctx.db
+      .query('palomarenos')
+      .withIndex('by_contact_email_created', (index) =>
+        index
+          .eq('contactEmailKey', pendingRecord.contactEmailKey)
+          .gt('createdAt', now - SUBMISSION_RATE_WINDOW_MS),
+      )
+      .collect();
+    if (isSubmissionRateLimited(recentSubmissions.length)) {
+      throw new Error('submission-rate-limited');
+    }
+
     const submissionId = await ctx.db.insert('palomarenos', pendingRecord);
     await ctx.scheduler.runAfter(0, internal.palomarenos_notifications.notifySubmission, {
       submissionId,
