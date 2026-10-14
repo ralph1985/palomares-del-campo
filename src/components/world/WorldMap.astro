@@ -1,0 +1,164 @@
+---
+import ExternalLink from '../ui/ExternalLink.astro';
+---
+
+<section class="world-map-card" aria-labelledby="world-map-title">
+  <div class="world-map-heading">
+    <div>
+      <p class="eyebrow">Mapa vivo</p>
+      <h2 id="world-map-title">Palomareños por el mundo</h2>
+      <p>
+        Cada punto representa una historia aprobada. La posición corresponde a la ciudad, no a una
+        dirección personal.
+      </p>
+    </div>
+    <span class="world-map-badge">Leaflet · OpenStreetMap</span>
+  </div>
+
+  <div
+    class="world-map"
+    data-palomarenos-map
+    data-convex-url={import.meta.env.CONVEX_URL ?? ''}
+    data-map-status="loading"
+    role="application"
+    aria-label="Mapa interactivo de palomareños que viven fuera de Palomares del Campo"
+    aria-busy="true"
+  ></div>
+  <noscript>
+    <p class="world-map-noscript">
+      El mapa interactivo requiere JavaScript. Las historias aprobadas se irán mostrando aquí.
+    </p>
+  </noscript>
+  <p class="world-map-status" data-palomarenos-map-status aria-live="polite">
+    Cargando mapa…
+  </p>
+  <p class="world-map-attribution">
+    Cartografía:{' '}
+    <ExternalLink href="https://www.openstreetmap.org/copyright">OpenStreetMap</ExternalLink>
+  </p>
+</section>
+
+<script>
+  import '../../scripts/palomarenos-map.ts';
+</script>
+
+<style>
+  .world-map-card {
+    position: relative;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    border: 1px solid var(--color-border);
+    border-radius: 1.25rem;
+    background: var(--color-surface);
+    box-shadow: 0 1rem 2rem rgb(25 52 45 / 10%);
+  }
+
+  .world-map-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.45rem;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    color: var(--color-ink);
+    font-size: clamp(1.65rem, 4vw, 2.8rem);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .world-map-heading p:not(.eyebrow) {
+    max-width: 42rem;
+    margin: 0.7rem 0 0;
+    color: var(--color-muted);
+    line-height: 1.55;
+  }
+
+  .world-map-badge {
+    flex: none;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-forest);
+    font-size: 0.68rem;
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.04em;
+  }
+
+  .world-map {
+    min-height: 30rem;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: 0.9rem;
+    background: #dfe9e2;
+  }
+
+  .world-map[data-map-status='config'],
+  .world-map[data-map-status='error'] {
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    color: var(--color-muted);
+    text-align: center;
+  }
+
+  .world-map-status {
+    margin: 0.7rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .world-map-attribution {
+    margin: 0.45rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.75rem;
+  }
+
+  .world-map-attribution a {
+    color: inherit;
+  }
+
+  :global(.world-map-popup) {
+    min-width: 12rem;
+    max-width: 18rem;
+  }
+
+  :global(.world-map-popup h3) {
+    margin: 0;
+    color: var(--color-ink);
+    font-size: 1rem;
+  }
+
+  :global(.world-map-popup p) {
+    margin: 0.35rem 0 0;
+    color: var(--color-muted);
+    line-height: 1.45;
+  }
+
+  :global(.world-map-popup .world-map-popup-story) {
+    margin-top: 0.65rem;
+    color: var(--color-ink);
+  }
+
+  @media (max-width: 38rem) {
+    .world-map-heading {
+      align-items: start;
+      flex-direction: column;
+    }
+
+    .world-map {
+      min-height: 24rem;
+    }
+  }
+</style>

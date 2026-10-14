@@ -18,6 +18,7 @@ describe('design tokens', () => {
       '--color-paper',
       '--color-surface',
       '--color-surface-soft',
+      '--color-border',
       '--color-sage',
       '--color-sage-light',
       '--color-clay',

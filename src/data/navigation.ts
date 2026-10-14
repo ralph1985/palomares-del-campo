@@ -33,6 +33,10 @@ export const navigationGroups: NavigationGroup[] = [
     ],
   },
   {
+    label: 'Comunidad',
+    links: [{ label: 'Palomareños por el mundo', href: '/palomarenos-por-el-mundo/' }],
+  },
+  {
     label: 'Juego',
     links: [{ label: 'La bola', href: '/juego/' }],
   },

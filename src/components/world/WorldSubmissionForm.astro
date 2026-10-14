@@ -1,0 +1,234 @@
+<section class="world-form-card" aria-labelledby="world-form-title">
+  <div class="world-form-intro">
+    <p class="eyebrow">Comparte tu historia</p>
+    <h2 id="world-form-title">¿Vives lejos de Palomares?</h2>
+    <p>
+      Cuéntanos dónde estás y qué vínculo mantienes con el pueblo. Revisaremos la propuesta antes de
+      mostrarla en el mapa.
+    </p>
+  </div>
+
+  <form data-palomarenos-form data-convex-url={import.meta.env.CONVEX_URL ?? ''}>
+    <div class="world-form-grid">
+      <label>
+        <span>Nombre que quieres mostrar</span>
+        <input name="displayName" type="text" maxlength="80" required autocomplete="name" />
+      </label>
+      <label>
+        <span>Ciudad</span>
+        <input name="city" type="text" maxlength="80" required autocomplete="address-level2" />
+      </label>
+      <label>
+        <span>País</span>
+        <input name="country" type="text" maxlength="80" required autocomplete="country-name" />
+      </label>
+      <label>
+        <span>
+          Email de contacto <small>(no se publicará)</small>
+        </span>
+        <input name="contactEmail" type="email" maxlength="254" required autocomplete="email" />
+      </label>
+    </div>
+
+    <label>
+      <span>Tu historia</span>
+      <textarea
+        name="story"
+        rows="6"
+        maxlength="1200"
+        required
+        placeholder="Qué te llevó allí, qué echas de menos o cómo sigues conectado con Palomares…"
+      ></textarea>
+    </label>
+
+    <label class="world-form-consent">
+      <input name="consent" type="checkbox" required />
+      <span>
+        Acepto que esta historia se revise y, si se aprueba, se publique con el nombre, ciudad, país
+        y texto indicados. La posición del mapa será aproximada.
+      </span>
+    </label>
+
+    <label class="world-form-honeypot" aria-hidden="true">
+      <span>Deja este campo vacío</span>
+      <input name="website" type="text" tabindex="-1" autocomplete="off" />
+    </label>
+
+    <div class="world-form-actions">
+      <button type="submit">Enviar propuesta</button>
+      <p data-form-status aria-live="polite">
+        La propuesta quedará pendiente de revisión.
+      </p>
+    </div>
+  </form>
+</section>
+
+<script>
+  import '../../scripts/palomarenos-form.ts';
+</script>
+
+<style>
+  .world-form-card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    padding: clamp(1.25rem, 4vw, 2.5rem);
+    border-radius: 1.25rem;
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
+  }
+
+  .eyebrow {
+    margin: 0 0 0.75rem;
+    color: var(--color-ochre);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    max-width: 12ch;
+    margin: 0;
+    color: var(--color-surface-soft);
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.98;
+  }
+
+  .world-form-intro > p:last-child {
+    max-width: 28rem;
+    margin: 1.25rem 0 0;
+    color: var(--color-night-text);
+    line-height: 1.65;
+  }
+
+  form {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .world-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.4rem;
+    color: var(--color-night-soft);
+    font-size: 0.82rem;
+    font-weight: var(--font-weight-strong);
+  }
+
+  label small {
+    color: var(--color-night-muted);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-regular);
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid rgb(239 245 237 / 22%);
+    border-radius: 0.5rem;
+    padding: 0.75rem 0.8rem;
+    color: var(--color-surface-soft);
+    background: rgb(239 245 237 / 7%);
+    font: inherit;
+    font-weight: var(--font-weight-regular);
+  }
+
+  textarea {
+    min-height: 8rem;
+    resize: vertical;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  button:focus-visible {
+    outline: 3px solid var(--color-ochre);
+    outline-offset: 2px;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-night-muted);
+  }
+
+  .world-form-consent {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 0.65rem;
+    color: var(--color-night-text);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.5;
+  }
+
+  .world-form-consent input {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.15rem;
+    accent-color: var(--color-ochre);
+  }
+
+  .world-form-honeypot {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .world-form-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  button {
+    min-height: 2.8rem;
+    border: 1px solid var(--color-ochre);
+    border-radius: 999px;
+    padding: 0.7rem 1rem;
+    color: var(--color-ink);
+    background: var(--color-ochre);
+    cursor: pointer;
+    font: inherit;
+    font-weight: var(--font-weight-strong);
+  }
+
+  button:disabled {
+    cursor: wait;
+    opacity: 0.6;
+  }
+
+  [data-form-status] {
+    flex: 1 1 12rem;
+    margin: 0;
+    color: var(--color-night-text);
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  [data-form-status][data-state='error'] {
+    color: #f5b4a1;
+  }
+
+  [data-form-status][data-state='success'] {
+    color: #b7e0bd;
+  }
+
+  @media (max-width: 48rem) {
+    .world-form-card,
+    .world-form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

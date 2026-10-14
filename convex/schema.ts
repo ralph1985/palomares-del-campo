@@ -58,4 +58,34 @@ export default defineSchema({
   })
     .index('by_season_idempotency', ['seasonId', 'idempotencyKey'])
     .index('by_season_created', ['seasonId', 'createdAt']),
+  palomarenos: defineTable({
+    displayName: v.string(),
+    city: v.string(),
+    country: v.string(),
+    latitude: v.optional(v.number()),
+    longitude: v.optional(v.number()),
+    story: v.string(),
+    contactEmail: v.string(),
+    consentGivenAt: v.number(),
+    status: v.union(
+      v.literal('pending'),
+      v.literal('approved'),
+      v.literal('rejected'),
+      v.literal('withdrawn'),
+    ),
+    notificationStatus: v.union(
+      v.literal('pending'),
+      v.literal('sending'),
+      v.literal('sent'),
+      v.literal('failed'),
+    ),
+    createdAt: v.number(),
+    reviewedAt: v.optional(v.number()),
+    reviewNote: v.optional(v.string()),
+    notifiedAt: v.optional(v.number()),
+    notificationError: v.optional(v.string()),
+    notificationExternalId: v.optional(v.string()),
+  })
+    .index('by_status', ['status'])
+    .index('by_status_created', ['status', 'createdAt']),
 });

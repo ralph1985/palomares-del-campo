@@ -12,6 +12,10 @@ import type * as game from "../game.js";
 import type * as geo from "../geo.js";
 import type * as identity from "../identity.js";
 import type * as leaderboard from "../leaderboard.js";
+import type * as palomarenos from "../palomarenos.js";
+import type * as palomarenos_notification_content from "../palomarenos_notification_content.js";
+import type * as palomarenos_notifications from "../palomarenos_notifications.js";
+import type * as palomarenos_validation from "../palomarenos_validation.js";
 import type * as presence from "../presence.js";
 import type * as score from "../score.js";
 
@@ -26,6 +30,10 @@ declare const fullApi: ApiFromModules<{
   geo: typeof geo;
   identity: typeof identity;
   leaderboard: typeof leaderboard;
+  palomarenos: typeof palomarenos;
+  palomarenos_notification_content: typeof palomarenos_notification_content;
+  palomarenos_notifications: typeof palomarenos_notifications;
+  palomarenos_validation: typeof palomarenos_validation;
   presence: typeof presence;
   score: typeof score;
 }>;
