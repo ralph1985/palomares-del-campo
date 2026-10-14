@@ -33,6 +33,7 @@ type TurnstileApi = {
 declare global {
   interface Window {
     turnstile?: TurnstileApi;
+    __PALOMARENOS_TURNSTILE_TEST__?: boolean;
   }
 }
 
@@ -130,14 +131,10 @@ const bindForm = (form: HTMLFormElement): void => {
       'El formulario estará disponible cuando se configure la protección anti-bots.';
     return;
   }
-  const hasInjectedTurnstile = typeof window !== 'undefined' && Boolean(window.turnstile);
+  const isTestWidget = import.meta.env.DEV && Boolean(window.__PALOMARENOS_TURNSTILE_TEST__);
   const currentHostname =
     typeof window !== 'undefined' ? window.location.hostname.toLowerCase() : '';
-  if (
-    !hasInjectedTurnstile &&
-    allowedHostnames.length > 0 &&
-    !allowedHostnames.includes(currentHostname)
-  ) {
+  if (!isTestWidget && allowedHostnames.length > 0 && !allowedHostnames.includes(currentHostname)) {
     submitButton.disabled = true;
     statusElement.textContent =
       'Abre esta página mediante el dominio público para enviar una propuesta.';

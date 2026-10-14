@@ -64,6 +64,7 @@ test.describe('Palomareños por el mundo', () => {
     page,
   }) => {
     await page.addInitScript(() => {
+      window.__PALOMARENOS_TURNSTILE_TEST__ = true;
       type TestTurnstile = {
         render: (container: HTMLElement, options: { callback: (token: string) => void }) => string;
         reset: () => void;
@@ -89,6 +90,7 @@ test.describe('Palomareños por el mundo', () => {
 
   test('does not reset Turnstile repeatedly after a widget error', async ({ page }) => {
     await page.addInitScript(() => {
+      window.__PALOMARENOS_TURNSTILE_TEST__ = true;
       type TestTurnstileOptions = {
         'error-callback': () => void;
       };
