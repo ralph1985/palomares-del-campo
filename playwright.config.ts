@@ -24,5 +24,9 @@ export default defineConfig({
     url: 'http://127.0.0.1:4321',
     reuseExistingServer: true,
     timeout: 120_000,
+    env: {
+      ...process.env,
+      PUBLIC_TURNSTILE_SITE_KEY: 'e2e-test-site-key',
+    },
   },
 });

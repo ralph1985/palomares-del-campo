@@ -18,6 +18,33 @@ test.describe('Palomareños por el mundo', () => {
     await expect(page.getByLabel(/Acepto que esta historia/)).toBeVisible();
   });
 
+  test('renders the simulated Turnstile widget and enables the submission control', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      type TestTurnstile = {
+        render: (container: HTMLElement, options: { callback: (token: string) => void }) => string;
+        reset: () => void;
+      };
+      Object.defineProperty(window, 'turnstile', {
+        configurable: true,
+        value: {
+          render: (_container: HTMLElement, options: { callback: (token: string) => void }) => {
+            window.setTimeout(() => options.callback('e2e-turnstile-token'), 0);
+            return 'e2e-widget';
+          },
+          reset: () => undefined,
+        } satisfies TestTurnstile,
+      });
+    });
+    await page.goto('/palomarenos-por-el-mundo/');
+
+    await expect(page.locator('[data-turnstile-status]')).toHaveText(
+      'Protección anti-bots verificada.',
+    );
+    await expect(page.getByRole('button', { name: 'Enviar propuesta' })).toBeEnabled();
+  });
+
   test('keeps the sticky header above Leaflet layers', async ({ page }) => {
     await page.goto('/palomarenos-por-el-mundo/');
     await expect(page.locator('[data-palomarenos-map] .leaflet-top.leaflet-left')).toBeVisible();
