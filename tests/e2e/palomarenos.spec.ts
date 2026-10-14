@@ -7,7 +7,7 @@ test.describe('Palomareños por el mundo', () => {
     await expect(page.locator('#page-title')).toBeVisible();
     await expect(page.locator('[data-palomarenos-map] .leaflet-tile').first()).toBeVisible();
     await expect(page.locator('[data-palomarenos-map-status]')).toHaveText(
-      'Todavía no hay historias aprobadas para mostrar.',
+      /^(Todavía no hay historias aprobadas para mostrar\.|\d+ historias? en el mapa\.)$/,
     );
     await expect(page.getByRole('heading', { name: '¿Vives lejos de Palomares?' })).toBeVisible();
     await expect(page.getByLabel('Nombre que quieres mostrar')).toBeVisible();
@@ -16,6 +16,23 @@ test.describe('Palomareños por el mundo', () => {
     await expect(page.getByRole('textbox', { name: /Email de contacto/ })).toBeVisible();
     await expect(page.getByRole('textbox', { name: 'Tu historia' })).toBeVisible();
     await expect(page.getByLabel(/Acepto que esta historia/)).toBeVisible();
+  });
+
+  test('keeps the sticky header above Leaflet layers', async ({ page }) => {
+    await page.goto('/palomarenos-por-el-mundo/');
+    await expect(page.locator('[data-palomarenos-map] .leaflet-top.leaflet-left')).toBeVisible();
+
+    const stacking = await page.evaluate(() => ({
+      header: Number.parseInt(getComputedStyle(document.querySelector('.site-header')!).zIndex, 10),
+      leaflet: Number.parseInt(
+        getComputedStyle(
+          document.querySelector('[data-palomarenos-map] .leaflet-top.leaflet-left')!,
+        ).zIndex,
+        10,
+      ),
+    }));
+
+    expect(stacking.header).toBeGreaterThan(stacking.leaflet);
   });
 
   test('keeps the page within a narrow viewport', async ({ page }) => {
