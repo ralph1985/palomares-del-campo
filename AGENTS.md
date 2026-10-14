@@ -82,7 +82,7 @@ Si una carpeta aún no existe, créala solo cuando el primer cambio que la neces
 - No repetir valores de diseño en varios componentes cuando puedan ser un token semántico.
 - Diseñar primero para móvil y comprobar los estados de foco, teclado, `prefers-reduced-motion` y contraste.
 - En cambios de UI, ejecutar también `pnpm qa:visual` cuando el servidor de desarrollo esté disponible, además de la validación general indicada abajo.
-- La hoja de ruta vigente para esta arquitectura es `.hermes/plans/2026-10-12_194547-palomares-css-architecture.md`; actualizarla en lugar de crear planes paralelos.
+- La arquitectura CSS vigente está documentada en `docs/architecture.md` y `docs/design-system.md`; mantener esas fuentes actualizadas en lugar de crear planes paralelos.
 
 ## Menú y Three.js
 
