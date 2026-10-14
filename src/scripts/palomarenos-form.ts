@@ -9,11 +9,32 @@ export type PalomarenoFormInput = {
   contactEmail: string;
   consent: boolean;
   website: string;
+  turnstileToken: string;
 };
 
-type MutationClient = {
-  mutation: (reference: unknown, args: Record<string, unknown>) => Promise<unknown>;
+type ActionClient = {
+  action: (reference: unknown, args: Record<string, unknown>) => Promise<unknown>;
 };
+
+type TurnstileApi = {
+  render: (
+    container: HTMLElement,
+    options: {
+      sitekey: string;
+      action: string;
+      callback: (token: string) => void;
+      'expired-callback': () => void;
+      'error-callback': () => void;
+    },
+  ) => string;
+  reset: (widgetId?: string) => void;
+};
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+  }
+}
 
 export type PalomarenoSubmissionResult = {
   status: 'submitted';
@@ -22,10 +43,10 @@ export type PalomarenoSubmissionResult = {
 };
 
 export const submitPalomareno = async (
-  client: MutationClient,
+  client: ActionClient,
   input: PalomarenoFormInput,
 ): Promise<PalomarenoSubmissionResult> =>
-  (await client.mutation(api.palomarenos.submit, {
+  (await client.action(api.palomarenos.submitWithTurnstile, {
     displayName: input.displayName,
     city: input.city,
     country: input.country,
@@ -33,6 +54,7 @@ export const submitPalomareno = async (
     contactEmail: input.contactEmail,
     consent: input.consent,
     website: input.website,
+    turnstileToken: input.turnstileToken,
   })) as PalomarenoSubmissionResult;
 
 const getFieldValue = (formData: FormData, name: string): string =>
@@ -47,12 +69,48 @@ const getErrorMessage = (error: unknown): string => {
     return 'La ubicación se asigna durante la revisión.';
   if (message.includes('submission-rate-limited'))
     return 'Espera un poco antes de enviar otra propuesta.';
+  if (message.includes('turnstile-not-configured'))
+    return 'La protección anti-bots todavía no está configurada.';
+  if (message.includes('turnstile-token-missing')) return 'Completa la verificación anti-bots.';
+  if (message.includes('turnstile-invalid'))
+    return 'No se ha podido verificar la protección anti-bots.';
+  if (message.includes('turnstile-provider-unavailable'))
+    return 'La protección anti-bots no está disponible. Inténtalo más tarde.';
   return 'No se ha podido enviar la propuesta. Inténtalo de nuevo más tarde.';
+};
+
+const loadTurnstile = (): Promise<TurnstileApi> => {
+  if (typeof window === 'undefined') return Promise.reject(new Error('turnstile-unavailable'));
+  if (window.turnstile) return Promise.resolve(window.turnstile);
+
+  return new Promise((resolve, reject) => {
+    const existingScript = document.querySelector<HTMLScriptElement>('#cloudflare-turnstile');
+    const script = existingScript ?? document.createElement('script');
+    const onLoad = () => {
+      if (window.turnstile) resolve(window.turnstile);
+      else reject(new Error('turnstile-unavailable'));
+    };
+    script.addEventListener('load', onLoad, { once: true });
+    script.addEventListener('error', () => reject(new Error('turnstile-unavailable')), {
+      once: true,
+    });
+
+    if (!existingScript) {
+      script.id = 'cloudflare-turnstile';
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+  });
 };
 
 const bindForm = (form: HTMLFormElement): void => {
   const convexUrl = form.dataset.convexUrl?.trim();
+  const siteKey = form.dataset.turnstileSiteKey?.trim();
   const statusElement = form.querySelector<HTMLElement>('[data-form-status]');
+  const turnstileStatusElement = form.querySelector<HTMLElement>('[data-turnstile-status]');
+  const turnstileContainer = form.querySelector<HTMLElement>('[data-turnstile-widget]');
   const submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
 
   if (!statusElement || !submitButton) return;
@@ -62,13 +120,69 @@ const bindForm = (form: HTMLFormElement): void => {
       'El formulario estará disponible cuando se configure el servicio de datos.';
     return;
   }
+  if (!siteKey || !turnstileContainer) {
+    submitButton.disabled = true;
+    statusElement.textContent =
+      'El formulario estará disponible cuando se configure la protección anti-bots.';
+    return;
+  }
 
   const client = new ConvexClient(convexUrl);
+  let turnstileToken = '';
+  let widgetId: string | undefined;
+
+  const setTurnstileState = (message: string, state: 'loading' | 'ready' | 'error'): void => {
+    if (turnstileStatusElement) {
+      turnstileStatusElement.dataset.state = state;
+      turnstileStatusElement.textContent = message;
+    }
+  };
+
+  const resetTurnstile = (): void => {
+    turnstileToken = '';
+    submitButton.disabled = true;
+    if (widgetId && window.turnstile) window.turnstile.reset(widgetId);
+  };
+
+  setTurnstileState('Cargando protección anti-bots…', 'loading');
+  void loadTurnstile()
+    .then((turnstile) => {
+      widgetId = turnstile.render(turnstileContainer, {
+        sitekey: siteKey,
+        action: 'submit-story',
+        callback: (token) => {
+          turnstileToken = token;
+          submitButton.disabled = false;
+          setTurnstileState('Protección anti-bots verificada.', 'ready');
+        },
+        'expired-callback': () => {
+          resetTurnstile();
+          setTurnstileState('La verificación ha caducado. Vuelve a intentarlo.', 'error');
+        },
+        'error-callback': () => {
+          resetTurnstile();
+          setTurnstileState('No se ha podido cargar la protección anti-bots.', 'error');
+        },
+      });
+    })
+    .catch(() => {
+      submitButton.disabled = true;
+      setTurnstileState('No se ha podido cargar la protección anti-bots.', 'error');
+      statusElement.dataset.state = 'error';
+      statusElement.textContent =
+        'La protección anti-bots no está disponible. Inténtalo más tarde.';
+    });
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (submitButton.disabled) return;
 
     const formData = new FormData(form);
+    if (!turnstileToken) {
+      statusElement.dataset.state = 'error';
+      statusElement.textContent = 'Completa la verificación anti-bots.';
+      return;
+    }
 
     submitButton.disabled = true;
     statusElement.dataset.state = 'submitting';
@@ -83,15 +197,17 @@ const bindForm = (form: HTMLFormElement): void => {
         contactEmail: getFieldValue(formData, 'contactEmail'),
         consent: formData.get('consent') === 'on',
         website: getFieldValue(formData, 'website'),
+        turnstileToken,
       });
       statusElement.dataset.state = 'success';
       statusElement.textContent = result.message;
       form.reset();
+      resetTurnstile();
+      setTurnstileState('Verificación lista para otro envío.', 'loading');
     } catch (error) {
       statusElement.dataset.state = 'error';
       statusElement.textContent = getErrorMessage(error);
-    } finally {
-      submitButton.disabled = false;
+      submitButton.disabled = !turnstileToken;
     }
   });
 };

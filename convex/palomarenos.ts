@@ -1,6 +1,11 @@
 import { v } from 'convex/values';
 import { internal } from './_generated/api';
-import { internalMutation, internalQuery, mutation, query } from './_generated/server';
+import { action, internalMutation, internalQuery, query } from './_generated/server';
+import {
+  isAcceptedTurnstileVerification,
+  parseTurnstileHostnames,
+  verifyTurnstileToken,
+} from './turnstile';
 import {
   isSubmissionRateLimited,
   normalizePalomarenoSubmission,
@@ -69,7 +74,7 @@ export const toPublicPalomareno = (record: PalomarenoRecord): PublicPalomareno |
   };
 };
 
-export const submit = mutation({
+export const createSubmission = internalMutation({
   args: {
     displayName: v.string(),
     city: v.string(),
@@ -106,6 +111,58 @@ export const submit = mutation({
       submissionId,
       message: 'Tu propuesta queda pendiente de revisión.',
     };
+  },
+});
+
+export const submitWithTurnstile = action({
+  args: {
+    displayName: v.string(),
+    city: v.string(),
+    country: v.string(),
+    story: v.string(),
+    contactEmail: v.string(),
+    consent: v.boolean(),
+    website: v.optional(v.string()),
+    latitude: v.optional(v.number()),
+    longitude: v.optional(v.number()),
+    turnstileToken: v.string(),
+  },
+  handler: async (ctx, args) => {
+    if (!args.turnstileToken.trim()) throw new Error('turnstile-token-missing');
+
+    const secret = process.env.TURNSTILE_SECRET_KEY;
+    const allowedHostnames = parseTurnstileHostnames(process.env.TURNSTILE_ALLOWED_HOSTNAMES);
+    if (!secret || allowedHostnames.length === 0) {
+      throw new Error('turnstile-not-configured');
+    }
+
+    let verification;
+    try {
+      verification = await verifyTurnstileToken(args.turnstileToken, secret);
+    } catch {
+      throw new Error('turnstile-provider-unavailable');
+    }
+
+    if (
+      !isAcceptedTurnstileVerification(verification, {
+        allowedHostnames,
+        expectedAction: process.env.TURNSTILE_EXPECTED_ACTION?.trim() || undefined,
+      })
+    ) {
+      throw new Error('turnstile-invalid');
+    }
+
+    return ctx.runMutation(internal.palomarenos.createSubmission, {
+      displayName: args.displayName,
+      city: args.city,
+      country: args.country,
+      story: args.story,
+      contactEmail: args.contactEmail,
+      consent: args.consent,
+      website: args.website,
+      latitude: args.latitude,
+      longitude: args.longitude,
+    });
   },
 });
 

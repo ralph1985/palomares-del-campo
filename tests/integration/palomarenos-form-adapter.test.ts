@@ -4,7 +4,7 @@ import { submitPalomareno } from '../../src/scripts/palomarenos-form';
 it('submits public fields and forwards the honeypot for server validation', async () => {
   const calls: Array<{ reference: unknown; args: Record<string, unknown> }> = [];
   const client = {
-    mutation: async (reference: unknown, args: Record<string, unknown>) => {
+    action: async (reference: unknown, args: Record<string, unknown>) => {
       calls.push({ reference, args });
       return {
         status: 'submitted',
@@ -22,6 +22,7 @@ it('submits public fields and forwards the honeypot for server validation', asyn
     contactEmail: 'ana@example.com',
     consent: true,
     website: 'filled-by-bot',
+    turnstileToken: 'turnstile-token',
   });
 
   expect(result.status).toBe('submitted');
@@ -34,6 +35,7 @@ it('submits public fields and forwards the honeypot for server validation', asyn
     contactEmail: 'ana@example.com',
     consent: true,
     website: 'filled-by-bot',
+    turnstileToken: 'turnstile-token',
   });
   expect(calls[0]?.args).not.toHaveProperty('latitude');
   expect(calls[0]?.args).not.toHaveProperty('longitude');

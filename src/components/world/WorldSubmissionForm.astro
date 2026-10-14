@@ -8,7 +8,11 @@
     </p>
   </div>
 
-  <form data-palomarenos-form data-convex-url={import.meta.env.CONVEX_URL ?? ''}>
+  <form
+    data-palomarenos-form
+    data-convex-url={import.meta.env.CONVEX_URL ?? ''}
+    data-turnstile-site-key={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''}
+  >
     <div class="world-form-grid">
       <label>
         <span>Nombre que quieres mostrar</span>
@@ -53,6 +57,13 @@
       <span>Deja este campo vacío</span>
       <input name="website" type="text" tabindex="-1" autocomplete="off" />
     </label>
+
+    <div class="world-form-turnstile">
+      <div data-turnstile-widget aria-label="Protección anti-bots"></div>
+      <p data-turnstile-status aria-live="polite">
+        Preparando protección anti-bots…
+      </p>
+    </div>
 
     <div class="world-form-actions">
       <button type="submit">Enviar propuesta</button>
@@ -183,6 +194,28 @@
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
+  }
+
+  .world-form-turnstile {
+    display: grid;
+    gap: 0.35rem;
+    min-height: 4.5rem;
+    justify-items: start;
+  }
+
+  [data-turnstile-status] {
+    margin: 0;
+    color: var(--color-night-muted);
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  [data-turnstile-status][data-state='error'] {
+    color: #f5b4a1;
+  }
+
+  [data-turnstile-status][data-state='ready'] {
+    color: #b7e0bd;
   }
 
   .world-form-actions {

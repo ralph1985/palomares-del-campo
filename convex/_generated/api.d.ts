@@ -18,6 +18,7 @@ import type * as palomarenos_notifications from "../palomarenos_notifications.js
 import type * as palomarenos_validation from "../palomarenos_validation.js";
 import type * as presence from "../presence.js";
 import type * as score from "../score.js";
+import type * as turnstile from "../turnstile.js";
 
 import type {
   ApiFromModules,
@@ -36,6 +37,7 @@ declare const fullApi: ApiFromModules<{
   palomarenos_validation: typeof palomarenos_validation;
   presence: typeof presence;
   score: typeof score;
+  turnstile: typeof turnstile;
 }>;
 
 /**
