@@ -3,7 +3,7 @@ import {
   isSubmissionRateLimited,
   normalizePalomarenoSubmission,
 } from '../../convex/palomarenos_validation';
-import { toPublicPalomareno } from '../../convex/palomarenos';
+import { buildPalomarenoWithdrawalPatch, toPublicPalomareno } from '../../convex/palomarenos';
 
 const validInput = {
   displayName: '  Ana López  ',
@@ -13,6 +13,16 @@ const validInput = {
   contactEmail: 'ana@example.com',
   consent: true,
 };
+
+describe('withdrawPalomareno', () => {
+  it('builds an internal withdrawal update with its review timestamp and note', () => {
+    expect(buildPalomarenoWithdrawalPatch(1_700_000_100_000, 'Retirada solicitada.')).toEqual({
+      status: 'withdrawn',
+      reviewedAt: 1_700_000_100_000,
+      reviewNote: 'Retirada solicitada.',
+    });
+  });
+});
 
 describe('normalizePalomarenoSubmission', () => {
   it('normalizes text and creates a pending record without coordinates', () => {
@@ -172,6 +182,24 @@ describe('normalizePalomarenoSubmission', () => {
         consentGivenAt: 1_700_000_000_000,
         createdAt: 1_700_000_000_000,
         status: 'approved',
+        notificationStatus: 'sent',
+      }),
+    ).toBeNull();
+
+    expect(
+      toPublicPalomareno({
+        _id: 'palomareno-withdrawn',
+        _creationTime: 1_700_000_000_000,
+        displayName: 'Ana López',
+        city: 'Madrid',
+        country: 'España',
+        latitude: 40.4168,
+        longitude: -3.7038,
+        story: 'Historia retirada.',
+        contactEmail: 'ana@example.com',
+        consentGivenAt: 1_700_000_000_000,
+        createdAt: 1_700_000_000_000,
+        status: 'withdrawn',
         notificationStatus: 'sent',
       }),
     ).toBeNull();

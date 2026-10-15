@@ -80,6 +80,12 @@ export const toPublicPalomareno = (record: PalomarenoRecord): PublicPalomareno |
   };
 };
 
+export const buildPalomarenoWithdrawalPatch = (reviewedAt: number, reviewNote?: string) => ({
+  status: 'withdrawn' as const,
+  reviewedAt,
+  reviewNote,
+});
+
 export const createSubmission = internalMutation({
   args: {
     displayName: v.string(),
@@ -185,6 +191,11 @@ export const listApproved = query({
       return publicRecord ? [publicRecord] : [];
     });
   },
+});
+
+export const getById = internalQuery({
+  args: { id: v.id('palomarenos') },
+  handler: async (ctx, args) => ctx.db.get(args.id),
 });
 
 export const getForNotification = internalQuery({
@@ -346,6 +357,21 @@ export const reject = internalMutation({
       reviewNote: args.reviewNote,
     });
     return { status: 'rejected' as const, reviewedAt };
+  },
+});
+export const withdraw = internalMutation({
+  args: {
+    id: v.id('palomarenos'),
+    reviewNote: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const record = await ctx.db.get(args.id);
+    if (!record) throw new Error('palomareno-not-found');
+    if (record.status === 'withdrawn') throw new Error('palomareno-already-withdrawn');
+
+    const reviewedAt = Date.now();
+    await ctx.db.patch(args.id, buildPalomarenoWithdrawalPatch(reviewedAt, args.reviewNote));
+    return { status: 'withdrawn' as const, reviewedAt };
   },
 });
 export const approve = internalMutation({
