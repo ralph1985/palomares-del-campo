@@ -43,16 +43,23 @@ const initializeCredit = async (credit: HTMLElement) => {
       logo.add(layer);
     }
 
+    scene.add(new THREE.AmbientLight(0xffffff, 0.72));
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.1);
+    keyLight.position.set(0, 0, 4);
+    scene.add(keyLight);
+
     const face = new THREE.Mesh(
       geometry,
-      new THREE.MeshBasicMaterial({
+      new THREE.MeshStandardMaterial({
         map: texture,
         displacementMap: heightTexture,
         displacementScale: 0.055,
         displacementBias: -0.018,
         transparent: true,
+        roughness: 0.82,
+        metalness: 0,
         side: THREE.DoubleSide,
-      } as unknown as import('three').MeshBasicMaterialParameters),
+      }),
     );
     logo.add(face);
     scene.add(logo);
