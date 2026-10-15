@@ -247,7 +247,7 @@ if [[ "$(/usr/bin/git rev-list --left-right --count main...origin/main)" != $'0\
 fi
 
 PHASE='notificación de la sincronización'
-if ! "$NODE_BIN" scripts/notify-bando-sync.js "$MERGE_COMMIT"; then
+if ! "$PNPM_BIN" exec tsx scripts/notify-bando-sync.ts "$MERGE_COMMIT"; then
   echo "Aviso de sincronización no enviado; la PR sí quedó fusionada en $MERGE_COMMIT." >&2
 fi
 

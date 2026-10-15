@@ -266,7 +266,7 @@ scripts/
 ├── fetch-bandos.ts
 ├── sync-bandos-cron.sh
 ├── bandos-sync-policy.ts
-├── notify-bando-sync.js
+├── notify-bando-sync.ts
 ├── ensure-main-synced.ts
 ├── verify-seo.ts
 ├── visual-qa.ts
@@ -480,7 +480,7 @@ El importador convierte HTML a Markdown, valida URLs HTTPS, restringe los adjunt
 
 El flujo implementado bloquea ejecuciones concurrentes, alinea `main` con `origin/main` mediante `ensure-main-synced.ts`, trabaja desde un worktree de `origin/main`, ejecuta el importador RSS y valida formato, lint, Vitest y build. Si hay cambios, limita la rama y la Pull Request a `src/content/bandos/*.md`, espera los checks obligatorios, fusiona la PR y vuelve a alinear `main`.
 
-`SYNC_BANDOS_DRY_RUN=1` detiene el flujo antes de crear la rama de bandos, la PR, la fusión y las notificaciones. No equivale a un dry-run completamente no destructivo del checkout: `ensure-main-synced.ts` se ejecuta antes de comprobar la variable y puede crear una rama de respaldo y alinear `main` con `origin/main` si detecta divergencia. Tras una fusión normal, `notify-bando-sync.js` puede enviar un correo SMTP con Nodemailer; si falta la configuración o falla el envío, la PR ya fusionada no se deshace.
+`SYNC_BANDOS_DRY_RUN=1` detiene el flujo antes de crear la rama de bandos, la PR, la fusión y las notificaciones. No equivale a un dry-run completamente no destructivo del checkout: `ensure-main-synced.ts` se ejecuta antes de comprobar la variable y puede crear una rama de respaldo y alinear `main` con `origin/main` si detecta divergencia. Tras una fusión normal, `notify-bando-sync.ts` puede enviar un correo SMTP con Nodemailer; si falta la configuración o falla el envío, la PR ya fusionada no se deshace.
 
 ## Rendimiento y carga de cliente
 

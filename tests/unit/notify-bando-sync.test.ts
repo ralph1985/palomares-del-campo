@@ -3,7 +3,7 @@ import {
   buildNotificationHtml,
   buildNotificationText,
   escapeHtml,
-} from '../../scripts/notify-bando-sync.js';
+} from '../../scripts/notify-bando-sync.ts';
 
 describe('bando synchronization notification', () => {
   const bandos = [

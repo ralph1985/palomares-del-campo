@@ -7,7 +7,14 @@ import nodemailer from 'nodemailer';
 
 const execFileAsync = promisify(execFile);
 
-export function escapeHtml(value) {
+type NotificationBando = { title: string; url: string };
+type NotificationContent = {
+  commit: string;
+  bandos: NotificationBando[];
+  siteUrl: string;
+};
+
+export function escapeHtml(value: string): string {
   return value
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
@@ -16,24 +23,24 @@ export function escapeHtml(value) {
     .replaceAll("'", '&#39;');
 }
 
-export function getBandoTitle(filePath) {
+export function getBandoTitle(filePath: string): string {
   const content = fs.readFileSync(filePath, 'utf8');
   const match = content.match(/^title:\s+'(.*)'$/m);
   return match ? match[1].replaceAll("''", "'") : path.basename(filePath, path.extname(filePath));
 }
 
-export function getBandoSourceUrl(filePath) {
+export function getBandoSourceUrl(filePath: string): string {
   const content = fs.readFileSync(filePath, 'utf8');
   const match = content.match(/^sourceUrl:\s+'(.*)'$/m);
   return match ? match[1].replaceAll("''", "'") : '';
 }
 
-export function buildBandoUrl(filePath, siteUrl) {
+export function buildBandoUrl(filePath: string, siteUrl: string): string {
   const slug = path.basename(filePath, path.extname(filePath));
   return new URL(`/bandos/${slug}/`, siteUrl).toString();
 }
 
-export function buildNotificationText({ commit, bandos, siteUrl }) {
+export function buildNotificationText({ commit, bandos, siteUrl }: NotificationContent): string {
   const label = bandos.length === 1 ? 'bando nuevo' : 'bandos nuevos';
   const list = bandos.map((bando) => `- ${bando.title}\n  ${bando.url}`).join('\n');
   const archiveLink = siteUrl ? `\n\nConsulta todos los bandos: ${siteUrl}/bandos/` : '';
@@ -41,7 +48,7 @@ export function buildNotificationText({ commit, bandos, siteUrl }) {
   return `Se han publicado ${bandos.length} ${label} en la web de Palomares del Campo.\n\n${list}${archiveLink}\n\nActualización automática · Commit ${commit}`;
 }
 
-export function buildNotificationHtml({ commit, bandos, siteUrl }) {
+export function buildNotificationHtml({ commit, bandos, siteUrl }: NotificationContent): string {
   const label = bandos.length === 1 ? 'bando nuevo' : 'bandos nuevos';
   const rows = bandos
     .map(
@@ -72,7 +79,7 @@ export function buildNotificationHtml({ commit, bandos, siteUrl }) {
 </html>`;
 }
 
-export async function getChangedBandoFiles(commit) {
+export async function getChangedBandoFiles(commit: string): Promise<string[]> {
   const { stdout } = await execFileAsync('git', [
     'diff-tree',
     '--no-commit-id',
@@ -89,7 +96,7 @@ export async function getChangedBandoFiles(commit) {
     .filter((file) => file.endsWith('.md'));
 }
 
-export async function getChangedBandos(commit, siteUrl = '') {
+export async function getChangedBandos(commit: string, siteUrl = ''): Promise<NotificationBando[]> {
   const files = await getChangedBandoFiles(commit);
   return files.map((file) => ({
     title: getBandoTitle(file),
@@ -97,7 +104,9 @@ export async function getChangedBandos(commit, siteUrl = '') {
   }));
 }
 
-export async function notifyBandoSync(commit) {
+export async function notifyBandoSync(
+  commit: string,
+): Promise<{ sent: true; skipped: false; count: number }> {
   const required = [
     'BANDOS_SMTP_HOST',
     'BANDOS_SMTP_USER',
@@ -117,19 +126,19 @@ export async function notifyBandoSync(commit) {
   }
 
   const transporter = nodemailer.createTransport({
-    host: process.env.BANDOS_SMTP_HOST,
+    host: process.env.BANDOS_SMTP_HOST!,
     port: Number(process.env.BANDOS_SMTP_PORT ?? '587'),
     secure: process.env.BANDOS_SMTP_SECURE === 'true',
     requireTLS: true,
     auth: {
-      user: process.env.BANDOS_SMTP_USER,
-      pass: process.env.BANDOS_SMTP_PASSWORD,
+      user: process.env.BANDOS_SMTP_USER!,
+      pass: process.env.BANDOS_SMTP_PASSWORD!,
     },
   });
 
   await transporter.sendMail({
-    from: process.env.BANDOS_NOTIFY_FROM,
-    to: process.env.BANDOS_NOTIFY_TO,
+    from: process.env.BANDOS_NOTIFY_FROM!,
+    to: process.env.BANDOS_NOTIFY_TO!,
     subject: `Palomares: ${bandos.length} bando${bandos.length === 1 ? '' : 's'} publicado${bandos.length === 1 ? '' : 's'}`,
     text: buildNotificationText({ commit, bandos, siteUrl }),
     html: buildNotificationHtml({ commit, bandos, siteUrl }),
@@ -138,7 +147,7 @@ export async function notifyBandoSync(commit) {
   return { sent: true, skipped: false, count: bandos.length };
 }
 
-if (process.argv[1]?.endsWith('notify-bando-sync.js')) {
+if (process.argv[1]?.endsWith('notify-bando-sync.ts')) {
   const commit = process.env.BANDOS_SYNC_COMMIT ?? process.argv[2];
   if (!commit) throw new Error('Provide BANDOS_SYNC_COMMIT or a commit SHA argument');
   const result = await notifyBandoSync(commit);
