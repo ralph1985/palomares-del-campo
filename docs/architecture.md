@@ -31,8 +31,8 @@ No hay CMS, servidor Astro, API editorial, cuentas de usuario ni una base de dat
 
 Las versiones son las declaradas en `package.json`; las dependencias están fijadas sin rangos:
 
-- **Astro 7.3.8**, con salida `static` y configuración de `site` en `astro.config.mjs`.
-- **TypeScript** para el código de aplicación y las funciones de Convex. El repositorio no declara una dependencia directa `typescript` en `package.json`.
+- **Astro 7.3.8**, con salida `static` y configuración de `site` en `astro.config.ts`.
+- **TypeScript** para el código de aplicación, las configuraciones verificadas y las funciones de Convex; está fijado como dependencia de desarrollo directa en `package.json`.
 - **CSS nativo** con estilos scoped de Astro y tokens compartidos.
 - **Leaflet 1.9.4** y `@types/leaflet` 1.9.20 para los mapas.
 - **Three.js 0.186.1** y `@types/three` 0.186.0 para las escenas decorativas.
@@ -81,7 +81,7 @@ tests/
 scripts/
 docs/
 public/
-astro.config.mjs
+astro.config.ts
 package.json
 playwright.config.ts
 vitest.config.ts
@@ -327,7 +327,7 @@ La regla efectiva es CSS nativo:
 
 Las páginas de detalle pasan `author`, `authorType`, fecha, sección y fuente original al schema `Article`. Los bandos pueden aportar una imagen adjunta como imagen social. No se fabrica una imagen social cuando no existe.
 
-`astro.config.mjs` fija el sitio canónico en `https://palomaresdelcampo.conquense.dev` y configura `@astrojs/sitemap`, excluyendo `/avisos/`. `public/robots.txt` permite el rastreo y referencia `sitemap-index.xml`. `scripts/verify-seo.ts`, ejecutado por `pnpm check:seo` después del build, comprueba metadatos, idioma, canonical, JSON-LD, sitemap y robots.
+`astro.config.ts` fija el sitio canónico en `https://palomaresdelcampo.conquense.dev` y configura `@astrojs/sitemap`, excluyendo `/avisos/`. `public/robots.txt` permite el rastreo y referencia `sitemap-index.xml`. `scripts/verify-seo.ts`, ejecutado por `pnpm check:seo` después del build, comprueba metadatos, idioma, canonical, JSON-LD, sitemap y robots.
 
 ## Arquitectura del juego
 
@@ -668,7 +668,7 @@ No existe una ADR separada porque las decisiones relevantes ya están expresadas
 
 La auditoría se contrastó con:
 
-- `package.json`, `astro.config.mjs`, `playwright.config.ts` y `vitest.config.ts`;
+- `package.json`, `astro.config.ts`, `playwright.config.ts` y `vitest.config.ts`;
 - todas las rutas de `src/pages/` y el layout `BaseLayout.astro`;
 - `src/content.config.ts`, componentes, scripts de cliente, `src/game/` y `src/data/`;
 - `convex/schema.ts` y las funciones de `convex/`;

@@ -9,6 +9,8 @@ La estrategia actual protege la web editorial, el shell compartido y el juego. L
 - En CI Playwright prohíbe `test.only`, usa un worker y hasta dos reintentos. Localmente no reintenta.
 - `tests/features/` contiene escenarios Gherkin de referencia. No hay Cucumber ni un ejecutor de steps conectado a esos archivos.
 
+`astro.config.ts` se incluye en el `tsconfig.json` raíz y se comprueba con `pnpm typecheck:astro`. `eslint.config.mjs` y `prettier.config.mjs` son excepciones deliberadas: cargar configuración TypeScript en ESLint requeriría añadir el loader `jiti` o depender de flags experimentales de Node; la configuración TypeScript de Prettier exige Node 22.6 o posterior (y versiones anteriores a 24.3 necesitan `--experimental-strip-types`). Como el proyecto no declara una versión mínima de Node y los archivos MJS son configuraciones estáticas, se conservan para no añadir un loader ni elevar implícitamente el runtime requerido.
+
 ## Comandos
 
 ```bash
@@ -25,7 +27,7 @@ pnpm lint
 pnpm format:check
 ```
 
-`pnpm check:seo` necesita que exista un `dist/` generado por `pnpm build`. `pnpm qa:visual` necesita un servidor disponible en `VISUAL_QA_BASE_URL` o en `http://127.0.0.1:4321`; no arranca Astro por sí mismo. `pnpm typecheck:astro` ejecuta `astro check` sobre `.astro` y los módulos incluidos de `src/`, `tests/` y `scripts/`. `pnpm typecheck:convex` ejecuta `tsc --noEmit -p convex/tsconfig.json` sobre la configuración independiente de Convex, sin sincronizar un deployment remoto. Los scripts JavaScript que aún no se migren a TypeScript no quedan cubiertos por el typecheck Astro.
+`pnpm check:seo` necesita que exista un `dist/` generado por `pnpm build`. `pnpm qa:visual` necesita un servidor disponible en `VISUAL_QA_BASE_URL` o en `http://127.0.0.1:4321`; no arranca Astro por sí mismo. `pnpm typecheck:astro` ejecuta `astro check` sobre `.astro`, `astro.config.ts` y los módulos incluidos de `src/`, `tests/` y `scripts/`. `pnpm typecheck:convex` ejecuta `tsc --noEmit -p convex/tsconfig.json` sobre la configuración independiente de Convex, sin sincronizar un deployment remoto. Los scripts JavaScript que aún no se migren a TypeScript no quedan cubiertos por el typecheck Astro.
 
 ## Vitest: pruebas unitarias e integración
 
