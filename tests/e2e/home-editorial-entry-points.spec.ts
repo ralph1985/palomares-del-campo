@@ -17,7 +17,13 @@ test.describe('home editorial entry points', () => {
       (card) => getComputedStyle(card).backgroundColor,
     );
 
+    const secondCardBackground = await page
+      .locator('.editorial-card')
+      .nth(1)
+      .evaluate((card) => getComputedStyle(card).backgroundColor);
+
     expect(firstCardBackground).not.toBe(sectionBackground);
+    expect(firstCardBackground).not.toBe(secondCardBackground);
     await expect(firstCard).toHaveCSS('border-radius', '24px');
 
     await expect(page.getByRole('link', { name: /Ver el paisaje/ })).toHaveAttribute(
