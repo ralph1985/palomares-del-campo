@@ -3,9 +3,9 @@ import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
-const failures = [];
+const failures: string[] = [];
 
-async function walk(directory) {
+async function walk(directory: string): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });
   const files = [];
 
@@ -21,11 +21,11 @@ async function walk(directory) {
   return files;
 }
 
-function count(text, pattern) {
+function count(text: string, pattern: RegExp): number {
   return [...text.matchAll(pattern)].length;
 }
 
-function firstMatch(text, pattern, label) {
+function firstMatch(text: string, pattern: RegExp, label: string): string {
   const match = text.match(pattern);
   if (!match) {
     failures.push(`Missing ${label}`);
@@ -34,7 +34,7 @@ function firstMatch(text, pattern, label) {
   return match[1];
 }
 
-const htmlFiles = (await walk(root)).filter((path) => path.endsWith('.html'));
+const htmlFiles = (await walk(root)).filter((path: string) => path.endsWith('.html'));
 for (const path of htmlFiles) {
   const route = `/${relative(root, path)
     .replaceAll('\\', '/')
@@ -45,13 +45,14 @@ for (const path of htmlFiles) {
     continue;
   }
 
-  for (const [label, pattern] of [
+  const requiredMetadata: Array<[string, RegExp]> = [
     ['title', /<title>/g],
     ['description', /<meta name="description"/g],
     ['robots', /<meta name="robots"/g],
     ['canonical', /<link rel="canonical"/g],
     ['Open Graph URL', /property="og:url"/g],
-  ]) {
+  ];
+  for (const [label, pattern] of requiredMetadata) {
     if (count(html, pattern) !== 1) {
       failures.push(`${route}: expected exactly one ${label}`);
     }
@@ -74,11 +75,12 @@ for (const path of htmlFiles) {
 
   for (const jsonLd of html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)) {
     try {
-      const parsed = JSON.parse(jsonLd[1]);
-      const entries = Array.isArray(parsed) ? parsed : [parsed];
+      const parsed = JSON.parse(jsonLd[1]!) as JsonLdItem | JsonLdItem[];
+      const entries: JsonLdItem[] = Array.isArray(parsed) ? parsed : [parsed];
       for (const entry of entries) {
         if (entry['@type'] === 'Article') {
-          if (!entry.author || !['Person', 'Organization'].includes(entry.author['@type'])) {
+          const authorType = entry.author?.['@type'];
+          if (!entry.author || (authorType !== 'Person' && authorType !== 'Organization')) {
             failures.push(`${route}: Article author must be a Person or Organization node`);
           }
           if (!entry.author?.name) {
@@ -94,7 +96,7 @@ for (const path of htmlFiles) {
 
 const sitemapIndex = await readFile(join(root, 'sitemap-index.xml'), 'utf8');
 const childSitemaps = [...sitemapIndex.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) =>
-  join(root, match[1].split('/').pop()),
+  join(root, match[1]!.split('/').pop()!),
 );
 const sitemapUrls = [];
 for (const sitemap of childSitemaps) {
@@ -131,3 +133,8 @@ if (failures.length > 0) {
 console.log(
   `SEO verification passed: ${htmlFiles.length - 1} indexable HTML pages and ${sitemapUrls.length} sitemap URLs.`,
 );
+
+type JsonLdItem = {
+  '@type'?: string;
+  author?: { '@type'?: string; name?: string };
+};

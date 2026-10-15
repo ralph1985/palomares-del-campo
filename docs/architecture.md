@@ -268,8 +268,8 @@ scripts/
 ├── bandos-sync-policy.ts
 ├── notify-bando-sync.js
 ├── ensure-main-synced.ts
-├── verify-seo.mjs
-├── visual-qa.mjs
+├── verify-seo.ts
+├── visual-qa.ts
 └── check-css-architecture.ts
 ```
 
@@ -327,7 +327,7 @@ La regla efectiva es CSS nativo:
 
 Las páginas de detalle pasan `author`, `authorType`, fecha, sección y fuente original al schema `Article`. Los bandos pueden aportar una imagen adjunta como imagen social. No se fabrica una imagen social cuando no existe.
 
-`astro.config.mjs` fija el sitio canónico en `https://palomaresdelcampo.conquense.dev` y configura `@astrojs/sitemap`, excluyendo `/avisos/`. `public/robots.txt` permite el rastreo y referencia `sitemap-index.xml`. `scripts/verify-seo.mjs`, ejecutado por `pnpm check:seo` después del build, comprueba metadatos, idioma, canonical, JSON-LD, sitemap y robots.
+`astro.config.mjs` fija el sitio canónico en `https://palomaresdelcampo.conquense.dev` y configura `@astrojs/sitemap`, excluyendo `/avisos/`. `public/robots.txt` permite el rastreo y referencia `sitemap-index.xml`. `scripts/verify-seo.ts`, ejecutado por `pnpm check:seo` después del build, comprueba metadatos, idioma, canonical, JSON-LD, sitemap y robots.
 
 ## Arquitectura del juego
 
@@ -528,13 +528,13 @@ Las pruebas Vitest cubren:
 - tokens y guardas de arquitectura CSS;
 - alineación segura de `main`.
 
-La ejecución verificada durante esta auditoría fue de 14 archivos y 48 pruebas Vitest, todas correctas. No hay informe de cobertura configurado.
+La ejecución verificada actual contiene 19 archivos y 68 pruebas Vitest, todas correctas. No hay informe de cobertura configurado.
 
 Playwright cubre navegación, menú accesible, portada, noticias, bandos, agenda vacía, información práctica, alojamientos, rutas, SEO, juego local, modo inmersivo, simulador, presencia visual de Three.js y responsive. Las pruebas del juego usan el servidor Astro de desarrollo y el simulador local; no constituyen una prueba E2E contra un deployment remoto de Convex ni un flujo de dos jugadores.
 
-`scripts/visual-qa.mjs` recorre nueve rutas en dos viewports y comprueba HTTP 200, overflow horizontal, foco, contraste aproximado y errores de consola. Es una comprobación reproducible de calidad visual, no un sistema de snapshots de imagen.
+`scripts/visual-qa.ts` recorre nueve rutas en dos viewports y comprueba HTTP 200, overflow horizontal, foco, contraste aproximado y errores de consola. Es una comprobación reproducible de calidad visual, no un sistema de snapshots de imagen.
 
-`scripts/check-css-architecture.ts` inspecciona cambios en `src/` y aplica las excepciones de arquitectura CSS. `scripts/verify-seo.mjs` inspecciona el contenido generado de `dist/` y el sitemap.
+`scripts/check-css-architecture.ts` inspecciona cambios en `src/` y aplica las excepciones de arquitectura CSS. `scripts/verify-seo.ts` inspecciona el contenido generado de `dist/` y el sitemap.
 
 ### Comandos disponibles
 

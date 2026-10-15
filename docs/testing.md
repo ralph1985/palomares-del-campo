@@ -61,7 +61,7 @@ Las pruebas del juego usan `astro dev` y el simulador disponible en `import.meta
 
 ### QA visual
 
-`scripts/visual-qa.mjs`, ejecutado mediante `pnpm qa:visual`, recorre nueve rutas en `1440×900` y `375×812`. Comprueba HTTP 200, overflow horizontal, foco visible, contraste aproximado y errores de consola. No genera snapshots ni realiza comparación de píxeles pese a su nombre.
+`scripts/visual-qa.ts`, ejecutado mediante `pnpm qa:visual`, recorre nueve rutas en `1440×900` y `375×812`. Comprueba HTTP 200, overflow horizontal, foco visible, contraste aproximado y errores de consola. No genera snapshots ni realiza comparación de píxeles pese a su nombre.
 
 ### CSS
 
@@ -69,7 +69,7 @@ Las pruebas del juego usan `astro dev` y el simulador disponible en `import.meta
 
 ### SEO y build
 
-`pnpm build` valida indirectamente las Content Collections y genera `dist/`. `scripts/verify-seo.mjs`, ejecutado con `pnpm check:seo`, inspecciona las páginas generadas, metadatos obligatorios, JSON-LD, `sitemap-index.xml` y `robots.txt`.
+`pnpm build` valida indirectamente las Content Collections y genera `dist/`. `scripts/verify-seo.ts`, ejecutado con `pnpm check:seo`, inspecciona las páginas generadas, metadatos obligatorios, JSON-LD, `sitemap-index.xml` y `robots.txt`.
 
 ## Convenciones
 
