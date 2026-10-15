@@ -263,7 +263,7 @@ tests/
 
 ```text
 scripts/
-├── fetch-bandos.js
+├── fetch-bandos.ts
 ├── sync-bandos-cron.sh
 ├── bandos-sync-policy.ts
 ├── notify-bando-sync.js
@@ -467,7 +467,7 @@ La página de detalle renderiza imágenes, documentos y vídeos según el tipo v
 
 ### Importación externa
 
-`scripts/fetch-bandos.js` implementa dos modos:
+`scripts/fetch-bandos.ts` implementa dos modos:
 
 - `rss` es el modo por defecto e importa de forma incremental el RSS oficial de Bandomovil. Añade o actualiza entradas y conserva Markdown históricos y adjuntos ya presentes que no aparezcan en la ventana del RSS.
 - `archive` recorre el archivo de Bandomovil, limita la importación a los años configurados en `TARGET_YEARS` (actualmente 2025 y 2026) y reconcilia el directorio, eliminando archivos que ya no formen parte del conjunto descargado.

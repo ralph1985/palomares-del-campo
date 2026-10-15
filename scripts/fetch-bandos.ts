@@ -15,12 +15,33 @@ const IMAGE_EXTENSIONS = /\.(?:avif|gif|jpe?g|png|webp)(?:$|[?#])/i;
 const VIDEO_EXTENSIONS = /\.(?:mp4|m4v|mov|webm)(?:$|[?#])/i;
 const DOCUMENT_EXTENSIONS = /\.(?:docx?|pdf|pptx?|xlsx?|zip)(?:$|[?#])/i;
 
+type AttachmentType = 'image' | 'document' | 'video';
+type BandoAttachment = {
+  type: string;
+  url: string;
+  label: string;
+  alt?: string;
+};
+type BandoItem = {
+  title: string;
+  link: string;
+  description: string;
+  attachments?: BandoAttachment[];
+  category: string;
+  pubDate: string;
+  guid: string;
+  sourceId?: string;
+};
+type ImportedBandoItem = BandoItem & { attachments: BandoAttachment[] };
+type ArchiveBandoItem = ImportedBandoItem & { sourceId: string };
+type ImportMode = 'rss' | 'archive';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.join(__dirname, '..');
 const contentDirectory = path.join(projectRoot, 'src', 'content', 'bandos');
 const execFileAsync = promisify(execFile);
 
-export function parseRSSItems(xmlText) {
+export function parseRSSItems(xmlText: string): ImportedBandoItem[] {
   return [...xmlText.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi)].map(([, itemXml]) => ({
     title: extractXMLContent(itemXml, 'title'),
     link: extractXMLContent(itemXml, 'link'),
@@ -47,7 +68,7 @@ const MONTHS = new Map([
   ['diciembre', 11],
 ]);
 
-export function parseBandomovilDate(value) {
+export function parseBandomovilDate(value: string): Date {
   const match = value.trim().match(/^(\d{1,2})-([A-Za-zÁÉÍÓÚáéíóú]+)-(\d{4})\s+(\d{1,2}):(\d{2})$/);
   const month = match ? MONTHS.get(match[2].toLocaleLowerCase('es-ES')) : undefined;
 
@@ -60,11 +81,11 @@ export function parseBandomovilDate(value) {
   );
 }
 
-export function extractAttachments(html) {
-  const attachments = [];
+export function extractAttachments(html: string): BandoAttachment[] {
+  const attachments: BandoAttachment[] = [];
   const seenUrls = new Set();
 
-  const addAttachment = (rawUrl, fallbackLabel, alt = '') => {
+  const addAttachment = (rawUrl: string, fallbackLabel: string, alt = ''): void => {
     const url = resolveAttachmentUrl(rawUrl);
     const type = url ? classifyAttachment(url) : undefined;
     if (!url || !type || seenUrls.has(url)) return;
@@ -96,11 +117,11 @@ export function extractAttachments(html) {
   return attachments;
 }
 
-function readHTMLAttribute(tag, attribute) {
+function readHTMLAttribute(tag: string, attribute: string): string {
   return tag.match(new RegExp(`\\b${attribute}\\s*=\\s*["']([^"']+)["']`, 'i'))?.[1] ?? '';
 }
 
-function resolveAttachmentUrl(value) {
+function resolveAttachmentUrl(value: string): string {
   if (!value) return '';
 
   try {
@@ -117,7 +138,7 @@ function resolveAttachmentUrl(value) {
   }
 }
 
-function classifyAttachment(url) {
+function classifyAttachment(url: string): AttachmentType | undefined {
   const pathname = new URL(url).pathname;
   if (IMAGE_EXTENSIONS.test(pathname)) return 'image';
   if (VIDEO_EXTENSIONS.test(pathname)) return 'video';
@@ -125,7 +146,7 @@ function classifyAttachment(url) {
   return undefined;
 }
 
-function attachmentLabel(url, fallbackLabel) {
+function attachmentLabel(url: string, fallbackLabel: string): string {
   const label = htmlToMarkdown(fallbackLabel).trim();
   if (label) return label;
 
@@ -133,7 +154,7 @@ function attachmentLabel(url, fallbackLabel) {
   return filename || 'Archivo adjunto';
 }
 
-export function parseArchiveItems(html) {
+export function parseArchiveItems(html: string): ArchiveBandoItem[] {
   const itemPattern =
     /<li\b[\s\S]*?href="\/palomaresdelcampo\/(\d+)\/\d+"[\s\S]*?<h3[^>]*>([\s\S]*?)<\/h3>[\s\S]*?<div class="post-publication"[^>]*>[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>[\s\S]*?<span class="badge"[^>]*>([\s\S]*?)<\/span>[\s\S]*?<div class="comunicadobody"[^>]*>([\s\S]*?)<\/div>/gi;
 
@@ -149,7 +170,7 @@ export function parseArchiveItems(html) {
   }));
 }
 
-export function extractXMLContent(xml, tag) {
+export function extractXMLContent(xml: string, tag: string): string {
   const match = xml.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'));
   if (!match) return '';
 
@@ -161,13 +182,13 @@ export function extractXMLContent(xml, tag) {
   return decodeXmlEntities(content);
 }
 
-export function generateFilename(title, guid) {
+export function generateFilename(title: string, guid: string): string {
   const id = guid.match(/[?&]id=(\d+)/i)?.[1] ?? guid.match(/\/palomaresdelcampo\/(\d+)\//i)?.[1];
   const slug = slugify(title);
   return id ? `${id}-${slug}` : slug;
 }
 
-function serializeAttachments(attachments = []) {
+function serializeAttachments(attachments: BandoAttachment[] = []): string {
   if (attachments.length === 0) return 'attachments: []';
 
   return [
@@ -181,7 +202,7 @@ function serializeAttachments(attachments = []) {
   ].join('\n');
 }
 
-export function createBandoMarkdown(item) {
+export function createBandoMarkdown(item: BandoItem): string {
   const date = new Date(item.pubDate);
   if (Number.isNaN(date.valueOf())) {
     throw new Error(`Invalid publication date for bando: ${item.title}`);
@@ -215,12 +236,12 @@ ${htmlToMarkdown(item.description)}
 `;
 }
 
-export function cleanHTML(html) {
+export function cleanHTML(html: string): string {
   const text = htmlToMarkdown(html).replaceAll(/\s+/g, ' ').trim();
   return text.length > 180 ? `${text.slice(0, 180).trimEnd()}…` : text;
 }
 
-export function htmlToMarkdown(html) {
+export function htmlToMarkdown(html: string): string {
   let content = decodeXmlEntities(html ?? '');
   content = stripDangerousBlocks(content)
     .replaceAll(/<br\s*\/?>(?=\s*)/gi, '\n')
@@ -239,11 +260,11 @@ export function htmlToMarkdown(html) {
   return content;
 }
 
-export function generateFrontmatter(item) {
+export function generateFrontmatter(item: BandoItem): string {
   return createBandoMarkdown(item).split('---\n').slice(1, 2)[0];
 }
 
-export function slugify(value) {
+export function slugify(value: string): string {
   return value
     .normalize('NFD')
     .replaceAll(/[\u0300-\u036f]/g, '')
@@ -254,8 +275,8 @@ export function slugify(value) {
     .replace(/-$/, '');
 }
 
-export function decodeXmlEntities(value) {
-  const namedEntities = {
+export function decodeXmlEntities(value: string): string {
+  const namedEntities: Record<string, string> = {
     amp: '&',
     apos: "'",
     gt: '>',
@@ -264,7 +285,7 @@ export function decodeXmlEntities(value) {
     quot: '"',
   };
 
-  return value.replaceAll(/&(#x[\da-f]+|#\d+|[a-z]+);/gi, (match, entity) => {
+  return value.replaceAll(/&(#x[\da-f]+|#\d+|[a-z]+);/gi, (match: string, entity: string) => {
     if (entity.startsWith('#x')) {
       return String.fromCodePoint(Number.parseInt(entity.slice(2), 16));
     }
@@ -275,11 +296,11 @@ export function decodeXmlEntities(value) {
   });
 }
 
-export function stripDangerousBlocks(value) {
+export function stripDangerousBlocks(value: string): string {
   return value.replaceAll(/<(script|style|iframe|object|embed|svg)[^>]*>[\s\S]*?<\/\1>/gi, '');
 }
 
-export function sanitizeHttpsUrl(value) {
+export function sanitizeHttpsUrl(value: string): string {
   try {
     const url = new URL(value);
     return url.protocol === 'https:' ? url.href : '';
@@ -288,7 +309,7 @@ export function sanitizeHttpsUrl(value) {
   }
 }
 
-export function escapeYaml(value) {
+export function escapeYaml(value: string): string {
   return value
     .replaceAll('\\', '\\\\')
     .replaceAll("'", "''")
@@ -296,7 +317,7 @@ export function escapeYaml(value) {
     .replaceAll('\r', '\\r');
 }
 
-async function fetchText(url) {
+async function fetchText(url: string): Promise<string> {
   const response = await fetch(url, { signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
   if (!response.ok) {
     throw new Error(`Bandomovil request failed with HTTP ${response.status}: ${url}`);
@@ -304,22 +325,26 @@ async function fetchText(url) {
   return response.text();
 }
 
-function parseArchivePageCount(html) {
+function parseArchivePageCount(html: string): number {
   const pages = [
     ...html.matchAll(/web\.php\?municipio=palomaresdelcampo(?:&amp;|&)pag=(\d+)/gi),
   ].map(([, page]) => Number(page));
   return Math.max(0, ...pages) + 1;
 }
 
-function deduplicateItems(items) {
-  return [...new Map(items.map((item) => [item.sourceId, item])).values()];
+function deduplicateItems(items: ArchiveBandoItem[]): ArchiveBandoItem[] {
+  return [...new Map(items.map((item) => [item.sourceId, item] as const)).values()];
 }
 
-async function mapWithConcurrency(items, limit, callback) {
-  const results = new Array(items.length);
+async function mapWithConcurrency<Item, Result>(
+  items: Item[],
+  limit: number,
+  callback: (item: Item) => Promise<Result>,
+): Promise<Result[]> {
+  const results: Result[] = new Array(items.length);
   let nextIndex = 0;
 
-  async function worker() {
+  async function worker(): Promise<void> {
     while (nextIndex < items.length) {
       const index = nextIndex;
       nextIndex += 1;
@@ -331,7 +356,7 @@ async function mapWithConcurrency(items, limit, callback) {
   return results;
 }
 
-async function fetchArchiveItems() {
+async function fetchArchiveItems(): Promise<{ items: ArchiveBandoItem[]; pageCount: number }> {
   const firstPage = await fetchText(`${ARCHIVE_URL}0`);
   const pageCount = parseArchivePageCount(firstPage);
   const pages = await Promise.all([
@@ -347,7 +372,7 @@ async function fetchArchiveItems() {
   return { items, pageCount };
 }
 
-async function fetchArchiveDetail(item) {
+async function fetchArchiveDetail(item: ArchiveBandoItem): Promise<ArchiveBandoItem> {
   const detailPage = await fetchText(item.link);
   const detail = parseArchiveItems(detailPage).find(
     (candidate) => candidate.sourceId === item.sourceId,
@@ -355,7 +380,7 @@ async function fetchArchiveDetail(item) {
   return detail ?? item;
 }
 
-async function fetchRSSItems() {
+async function fetchRSSItems(): Promise<ImportedBandoItem[]> {
   const xml = await fetchText(RSS_URL);
   const items = parseRSSItems(xml);
 
@@ -366,11 +391,13 @@ async function fetchRSSItems() {
   return items;
 }
 
-export function getImportMode(value = process.env.BANDOS_IMPORT_MODE) {
+export function getImportMode(value = process.env.BANDOS_IMPORT_MODE): ImportMode {
   return value === 'archive' ? 'archive' : 'rss';
 }
 
-async function loadImportItems(mode) {
+async function loadImportItems(
+  mode: ImportMode,
+): Promise<{ items: ImportedBandoItem[]; pageCount: number }> {
   if (mode === 'archive') {
     const { items: archiveItems, pageCount } = await fetchArchiveItems();
     const inScope = archiveItems.filter((item) =>
@@ -383,7 +410,10 @@ async function loadImportItems(mode) {
   return { items: await fetchRSSItems(), pageCount: 0 };
 }
 
-export function mergeExistingAttachments(item, previousMarkdown) {
+export function mergeExistingAttachments<Item extends { attachments?: BandoAttachment[] }>(
+  item: Item,
+  previousMarkdown: string | undefined,
+): Item {
   if (!previousMarkdown) return item;
 
   const previousAttachments = extractSerializedAttachments(previousMarkdown);
@@ -398,11 +428,11 @@ export function mergeExistingAttachments(item, previousMarkdown) {
     }
   }
 
-  return { ...item, attachments };
+  return { ...item, attachments } as Item;
 }
 
-function extractSerializedAttachments(markdown) {
-  const attachments = [];
+function extractSerializedAttachments(markdown: string): BandoAttachment[] {
+  const attachments: BandoAttachment[] = [];
   const attachmentPattern =
     / {2}- type: '((?:''|[^'])*)'\n {4}url: '((?:''|[^'])*)'\n {4}label: '((?:''|[^'])*)'(?:\n {4}alt: '((?:''|[^'])*)')?/g;
 
@@ -418,7 +448,7 @@ function extractSerializedAttachments(markdown) {
   return attachments;
 }
 
-export async function fetchBandos({ mode = getImportMode() } = {}) {
+export async function fetchBandos({ mode = getImportMode() }: { mode?: string } = {}) {
   const importMode = getImportMode(mode);
   const { items, pageCount } = await loadImportItems(importMode);
 
@@ -435,8 +465,8 @@ export async function fetchBandos({ mode = getImportMode() } = {}) {
     let previous = '';
     try {
       previous = await fs.readFile(filePath, 'utf8');
-    } catch (error) {
-      if (error.code !== 'ENOENT') throw error;
+    } catch (error: unknown) {
+      if (!(error instanceof Error) || !('code' in error) || error.code !== 'ENOENT') throw error;
     }
 
     const itemWithPreservedAttachments =

@@ -7,7 +7,7 @@ import {
   parseArchiveItems,
   parseBandomovilDate,
   parseRSSItems,
-} from '../../scripts/fetch-bandos.js';
+} from '../../scripts/fetch-bandos.ts';
 
 const rss = `<?xml version="1.0"?>
 <rss version="2.0">

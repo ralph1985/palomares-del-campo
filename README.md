@@ -83,7 +83,7 @@ Las variables de entorno se mantienen en archivos locales ignorados por Git. No 
 
 ### Sincronización automática de bandos
 
-`pnpm fetch-bandos` usa por defecto el RSS oficial de Bandomovil como fuente incremental. Añade y actualiza comunicados, conserva los Markdown históricos que no aparezcan en la ventana del RSS y mantiene los adjuntos externos de Bandomovil. Para ejecutar manualmente el backfill histórico ya existente, usa `BANDOS_IMPORT_MODE=archive pnpm fetch-bandos`; ese modo está restringido a los años configurados en `scripts/fetch-bandos.js` y sí reconcilia el directorio generado.
+`pnpm fetch-bandos` usa por defecto el RSS oficial de Bandomovil como fuente incremental. Añade y actualiza comunicados, conserva los Markdown históricos que no aparezcan en la ventana del RSS y mantiene los adjuntos externos de Bandomovil. Para ejecutar manualmente el backfill histórico ya existente, usa `BANDOS_IMPORT_MODE=archive pnpm fetch-bandos`; ese modo está restringido a los años configurados en `scripts/fetch-bandos.ts` y sí reconcilia el directorio generado.
 
 `pnpm sync-bandos` está diseñado para ejecutarse desde cron en un host con `pnpm`, Node.js y una sesión válida de GitHub CLI. Bloquea ejecuciones concurrentes, alinea `main`, trabaja en un worktree temporal, ejecuta el importador incremental, valida el contenido y crea una Pull Request limitada a `src/content/bandos/*.md`. No publica directamente en `main`.
 

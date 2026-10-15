@@ -7,7 +7,7 @@
     "build": "astro build",
     "typecheck:astro": "astro check",
     "typecheck:convex": "tsc --noEmit -p convex/tsconfig.json",
-    "fetch-bandos": "node scripts/fetch-bandos.js",
+    "fetch-bandos": "tsx scripts/fetch-bandos.ts",
     "sync-bandos": "bash scripts/sync-bandos-cron.sh",
     "preview": "astro preview",
     "test": "vitest run",
