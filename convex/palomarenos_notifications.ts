@@ -5,6 +5,7 @@ import {
   buildApprovedPalomarenoNotification,
   buildPalomarenoNotification,
 } from './palomarenos_notification_content';
+import { parseResendEmailId, parseResendErrorBody } from './resend_response';
 
 const readRecipients = (): string[] =>
   (process.env.REPORT_TO ?? '')
@@ -14,8 +15,7 @@ const readRecipients = (): string[] =>
 
 const responseError = async (response: Response): Promise<string> => {
   try {
-    const body = (await response.json()) as { message?: string; error?: string };
-    return body.message ?? body.error ?? `resend-http-${response.status}`;
+    return parseResendErrorBody(await response.json(), response.status);
   } catch {
     return `resend-http-${response.status}`;
   }
@@ -72,14 +72,13 @@ export const notifySubmission = internalAction({
       });
       if (!response.ok) throw new Error(await responseError(response));
 
-      const body = (await response.json()) as { id?: string };
-      if (!body.id) throw new Error('resend-response-missing-id');
+      const externalId = parseResendEmailId(await response.json());
 
       await ctx.runMutation(internal.palomarenos.markNotificationSent, {
         id: submissionId,
-        externalId: body.id,
+        externalId,
       });
-      return { status: 'sent' as const, externalId: body.id };
+      return { status: 'sent' as const, externalId };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'unknown-error';
       await ctx.runMutation(internal.palomarenos.markNotificationFailed, {
@@ -139,14 +138,13 @@ export const notifyApproved = internalAction({
       });
       if (!response.ok) throw new Error(await responseError(response));
 
-      const body = (await response.json()) as { id?: string };
-      if (!body.id) throw new Error('resend-response-missing-id');
+      const externalId = parseResendEmailId(await response.json());
 
       await ctx.runMutation(internal.palomarenos.markCreatorNotificationSent, {
         id: submissionId,
-        externalId: body.id,
+        externalId,
       });
-      return { status: 'sent' as const, externalId: body.id };
+      return { status: 'sent' as const, externalId };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'unknown-error';
       await ctx.runMutation(internal.palomarenos.markCreatorNotificationFailed, {
