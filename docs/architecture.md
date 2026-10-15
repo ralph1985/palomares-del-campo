@@ -31,8 +31,8 @@ No hay CMS, servidor Astro, API editorial, cuentas de usuario ni una base de dat
 
 Las versiones son las declaradas en `package.json`; las dependencias están fijadas sin rangos:
 
-- **Astro 7.3.8**, con salida `static` y configuración de `site` en `astro.config.ts`.
-- **TypeScript** para el código de aplicación, las configuraciones verificadas y las funciones de Convex; está fijado como dependencia de desarrollo directa en `package.json`.
+- **Astro 7.3.8**, con salida `static` y configuración de `site` en `astro.config.ts`; el proyecto requiere Node.js `>=22.12.0`.
+- **TypeScript** para el código de aplicación, la configuración de Astro y las funciones de Convex; está fijado como dependencia de desarrollo directa en `package.json`.
 - **CSS nativo** con estilos scoped de Astro y tokens compartidos.
 - **Leaflet 1.9.4** y `@types/leaflet` 1.9.20 para los mapas.
 - **Three.js 0.186.1** y `@types/three` 0.186.0 para las escenas decorativas.

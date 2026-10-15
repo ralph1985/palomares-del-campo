@@ -9,11 +9,12 @@ La estrategia actual protege la web editorial, el shell compartido y el juego. L
 - En CI Playwright prohíbe `test.only`, usa un worker y hasta dos reintentos. Localmente no reintenta.
 - `tests/features/` contiene escenarios Gherkin de referencia. No hay Cucumber ni un ejecutor de steps conectado a esos archivos.
 
-`astro.config.ts` se incluye en el `tsconfig.json` raíz y se comprueba con `pnpm typecheck:astro`. `eslint.config.mjs` y `prettier.config.mjs` son excepciones deliberadas: cargar configuración TypeScript en ESLint requeriría añadir el loader `jiti` o depender de flags experimentales de Node; la configuración TypeScript de Prettier exige Node 22.6 o posterior (y versiones anteriores a 24.3 necesitan `--experimental-strip-types`). Como el proyecto no declara una versión mínima de Node y los archivos MJS son configuraciones estáticas, se conservan para no añadir un loader ni elevar implícitamente el runtime requerido.
+`astro.config.ts` se incluye en el `tsconfig.json` raíz y se comprueba con `pnpm typecheck:astro`. `eslint.config.mjs` y `prettier.config.mjs` son excepciones deliberadas: la configuración TypeScript de ESLint en Node requiere `jiti >=2.2.0` o las opciones nativas experimentales; Prettier requiere Node `>=22.6.0` y `--experimental-strip-types` antes de Node 24.3. Como el rango soportado por Astro empieza en Node `22.12.0`, mantener Prettier en MJS evita exigir una bandera experimental en parte del runtime soportado; mantener ESLint en MJS evita añadir un loader solo para su configuración estática.
 
 ## Comandos
 
 ```bash
+pnpm typecheck
 pnpm typecheck:astro
 pnpm typecheck:convex
 pnpm test

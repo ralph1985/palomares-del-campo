@@ -15,7 +15,7 @@ El proyecto combina contenido editorial estático —portada, noticias y patrimo
 
 ## Requisitos
 
-- Node.js compatible con Astro 7.
+- Node.js `>=22.12.0` (Astro 7).
 - `pnpm` 10.25.0.
 - Chromium instalado para ejecutar Playwright E2E.
 - Convex solo es necesario para probar el modo multijugador remoto; la web puede arrancar en modo local sin él.
@@ -67,19 +67,20 @@ Las variables de entorno se mantienen en archivos locales ignorados por Git. No 
 
 ## Comandos
 
-| Comando             | Uso                                                                       |
-| ------------------- | ------------------------------------------------------------------------- |
-| `pnpm dev`          | Servidor Astro con recarga en desarrollo.                                 |
-| `pnpm build`        | Genera el sitio estático en `dist/`.                                      |
-| `pnpm preview`      | Sirve localmente el build generado.                                       |
-| `pnpm test`         | Ejecuta las pruebas unitarias y de integración con Vitest.                |
-| `pnpm test:watch`   | Ejecuta Vitest en modo observación.                                       |
-| `pnpm test:e2e`     | Ejecuta Playwright contra la aplicación en un navegador.                  |
-| `pnpm lint`         | Ejecuta ESLint sobre el repositorio.                                      |
-| `pnpm format`       | Formatea el código con Prettier.                                          |
-| `pnpm format:check` | Comprueba que el formato sea correcto sin modificar archivos.             |
-| `pnpm fetch-bandos` | Importa los comunicados nuevos del RSS oficial sin eliminar históricos.   |
-| `pnpm sync-bandos`  | Ejecuta el sincronizador aislado; requiere `gh` y está pensado para cron. |
+| Comando             | Uso                                                                         |
+| ------------------- | --------------------------------------------------------------------------- |
+| `pnpm dev`          | Servidor Astro con recarga en desarrollo.                                   |
+| `pnpm build`        | Genera el sitio estático en `dist/`.                                        |
+| `pnpm typecheck`    | Comprueba Astro, scripts, tests y Convex con sus configuraciones separadas. |
+| `pnpm preview`      | Sirve localmente el build generado.                                         |
+| `pnpm test`         | Ejecuta las pruebas unitarias y de integración con Vitest.                  |
+| `pnpm test:watch`   | Ejecuta Vitest en modo observación.                                         |
+| `pnpm test:e2e`     | Ejecuta Playwright contra la aplicación en un navegador.                    |
+| `pnpm lint`         | Ejecuta ESLint sobre el repositorio.                                        |
+| `pnpm format`       | Formatea el código con Prettier.                                            |
+| `pnpm format:check` | Comprueba que el formato sea correcto sin modificar archivos.               |
+| `pnpm fetch-bandos` | Importa los comunicados nuevos del RSS oficial sin eliminar históricos.     |
+| `pnpm sync-bandos`  | Ejecuta el sincronizador aislado; requiere `gh` y está pensado para cron.   |
 
 ### Sincronización automática de bandos
 
@@ -114,6 +115,7 @@ Validación completa antes de publicar cambios:
 ```bash
 pnpm format:check
 pnpm lint
+pnpm typecheck
 pnpm test
 CI=1 pnpm test:e2e
 pnpm build

@@ -8,6 +8,9 @@ pnpm format:check
 echo '→ Ejecutando ESLint...'
 pnpm lint
 
+echo '→ Comprobando tipos...'
+pnpm typecheck
+
 echo '→ Ejecutando tests unitarios...'
 pnpm test
 
