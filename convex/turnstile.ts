@@ -11,14 +11,36 @@ export type TurnstileAcceptanceOptions = {
   expectedAction?: string;
 };
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+export const parseTurnstileVerification = (value: unknown): TurnstileVerification => {
+  if (
+    !isRecord(value) ||
+    typeof value.success !== 'boolean' ||
+    (value.hostname !== undefined && typeof value.hostname !== 'string') ||
+    (value.action !== undefined && typeof value.action !== 'string')
+  ) {
+    throw new Error('turnstile-provider-invalid-response');
+  }
+
+  return {
+    success: value.success,
+    ...(typeof value.hostname === 'string' ? { hostname: value.hostname } : {}),
+    ...(typeof value.action === 'string' ? { action: value.action } : {}),
+  };
+};
+
 export const isAcceptedTurnstileVerification = (
   verification: TurnstileVerification,
   options: TurnstileAcceptanceOptions,
-): boolean =>
-  verification.success &&
-  Boolean(verification.hostname) &&
-  options.allowedHostnames.includes(verification.hostname as string) &&
-  (options.expectedAction === undefined || verification.action === options.expectedAction);
+): boolean => {
+  if (!verification.success || !verification.hostname) return false;
+  return (
+    options.allowedHostnames.includes(verification.hostname) &&
+    (options.expectedAction === undefined || verification.action === options.expectedAction)
+  );
+};
 
 export const verifyTurnstileToken = async (
   token: string,
@@ -31,11 +53,7 @@ export const verifyTurnstileToken = async (
   });
   if (!response.ok) throw new Error('turnstile-provider-unavailable');
 
-  const verification = (await response.json()) as TurnstileVerification;
-  if (typeof verification.success !== 'boolean') {
-    throw new Error('turnstile-provider-invalid-response');
-  }
-  return verification;
+  return parseTurnstileVerification(await response.json());
 };
 
 export const parseTurnstileHostnames = (value: string | undefined): string[] =>
