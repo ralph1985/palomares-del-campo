@@ -1,4 +1,3 @@
-// @ts-expect-error Vitest ejecuta esta prueba en Node, pero el proyecto no declara @types/node.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 

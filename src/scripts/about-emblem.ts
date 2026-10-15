@@ -1,3 +1,5 @@
+export {};
+
 const roots = Array.from(document.querySelectorAll<HTMLElement>('[data-about-emblem]'));
 
 if (roots.length > 0) {

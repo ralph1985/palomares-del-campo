@@ -12,9 +12,7 @@ export type PalomarenoFormInput = {
   turnstileToken: string;
 };
 
-type ActionClient = {
-  action: (reference: unknown, args: Record<string, unknown>) => Promise<unknown>;
-};
+type ActionClient = Pick<ConvexClient, 'action'>;
 
 type TurnstileApi = {
   render: (

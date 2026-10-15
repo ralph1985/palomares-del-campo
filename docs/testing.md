@@ -12,6 +12,8 @@ La estrategia actual protege la web editorial, el shell compartido y el juego. L
 ## Comandos
 
 ```bash
+pnpm typecheck:astro
+pnpm typecheck:convex
 pnpm test
 pnpm test:watch
 pnpm test:e2e
@@ -23,7 +25,7 @@ pnpm lint
 pnpm format:check
 ```
 
-`pnpm check:seo` necesita que exista un `dist/` generado por `pnpm build`. `pnpm qa:visual` necesita un servidor disponible en `VISUAL_QA_BASE_URL` o en `http://127.0.0.1:4321`; no arranca Astro por sí mismo. No hay un script explícito de `typecheck` ni de cobertura.
+`pnpm check:seo` necesita que exista un `dist/` generado por `pnpm build`. `pnpm qa:visual` necesita un servidor disponible en `VISUAL_QA_BASE_URL` o en `http://127.0.0.1:4321`; no arranca Astro por sí mismo. `pnpm typecheck:astro` ejecuta `astro check` sobre `.astro` y los módulos incluidos de `src/`, `tests/` y `scripts/`. `pnpm typecheck:convex` ejecuta `tsc --noEmit -p convex/tsconfig.json` sobre la configuración independiente de Convex, sin sincronizar un deployment remoto. Los scripts JavaScript que aún no se migren a TypeScript no quedan cubiertos por el typecheck Astro.
 
 ## Vitest: pruebas unitarias e integración
 
@@ -37,7 +39,7 @@ La suite cubre actualmente:
 - alineación segura de `main`;
 - tokens y guardas de arquitectura CSS.
 
-La ejecución verificada de `pnpm test` contiene 14 archivos y 48 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
+La ejecución verificada actual de `pnpm test` contiene 19 archivos y 68 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
 
 ## Playwright: E2E
 

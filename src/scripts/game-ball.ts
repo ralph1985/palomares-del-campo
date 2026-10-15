@@ -1,3 +1,5 @@
+export {};
+
 const roots = Array.from(document.querySelectorAll<HTMLElement>('[data-game-ball]'));
 
 if (roots.length > 0) {

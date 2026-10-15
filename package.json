@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "typecheck:astro": "astro check",
+    "typecheck:convex": "tsc --noEmit -p convex/tsconfig.json",
     "fetch-bandos": "node scripts/fetch-bandos.js",
     "sync-bandos": "bash scripts/sync-bandos-cron.sh",
     "preview": "astro preview",
@@ -29,6 +31,7 @@
     "three": "0.186.1"
   },
   "devDependencies": {
+    "@astrojs/check": "0.9.10",
     "@astrojs/sitemap": "3.7.4",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.64.0",

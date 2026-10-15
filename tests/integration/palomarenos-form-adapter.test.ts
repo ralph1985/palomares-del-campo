@@ -1,5 +1,6 @@
 import { expect, it } from 'vitest';
 import { submitPalomareno } from '../../src/scripts/palomarenos-form';
+import type { ConvexClient } from 'convex/browser';
 
 it('submits public fields and forwards the honeypot for server validation', async () => {
   const calls: Array<{ reference: unknown; args: Record<string, unknown> }> = [];
@@ -12,7 +13,7 @@ it('submits public fields and forwards the honeypot for server validation', asyn
         message: 'Tu propuesta queda pendiente de revisión.',
       };
     },
-  };
+  } as unknown as Pick<ConvexClient, 'action'>;
 
   const result = await submitPalomareno(client, {
     displayName: 'Ana López',
