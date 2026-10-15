@@ -1,6 +1,26 @@
 export const bandosPullRequestTitle = 'chore: actualizar bandos';
 
-export function buildBandosBranchName(date = new Date()) {
+type BandosPullRequest = {
+  number: number;
+  title: string;
+  headRefName: string;
+  url: string;
+  state: string;
+};
+
+type CheckRun = {
+  name: string;
+  status?: string | null;
+  conclusion?: string | null;
+};
+
+type RequiredChecksResult = {
+  missing: string[];
+  pending: string[];
+  failed: string[];
+};
+
+export function buildBandosBranchName(date: Date = new Date()): string {
   const timestamp = date
     .toISOString()
     .replace(/[-:]/g, '')
@@ -11,7 +31,9 @@ export function buildBandosBranchName(date = new Date()) {
   return `chore/bandos-sync-${timestamp}`;
 }
 
-export function findOpenBandosPullRequest(pullRequests) {
+export function findOpenBandosPullRequest(
+  pullRequests: BandosPullRequest[],
+): BandosPullRequest | null {
   return (
     pullRequests.find(
       (pullRequest) =>
@@ -21,13 +43,16 @@ export function findOpenBandosPullRequest(pullRequests) {
   );
 }
 
-export function evaluateRequiredChecks(requiredContexts, checkRuns) {
-  const latestByName = new Map();
+export function evaluateRequiredChecks(
+  requiredContexts: string[] | null | undefined,
+  checkRuns: CheckRun[] | null | undefined,
+): RequiredChecksResult {
+  const latestByName = new Map<string, CheckRun>();
   for (const checkRun of checkRuns ?? []) {
     latestByName.set(checkRun.name, checkRun);
   }
 
-  const result = { missing: [], pending: [], failed: [] };
+  const result: RequiredChecksResult = { missing: [], pending: [], failed: [] };
   for (const context of requiredContexts ?? []) {
     const checkRun = latestByName.get(context);
     if (!checkRun) {
@@ -42,6 +67,6 @@ export function evaluateRequiredChecks(requiredContexts, checkRuns) {
   return result;
 }
 
-export function isAllowedBandoPath(filePath) {
+export function isAllowedBandoPath(filePath: string): boolean {
   return /^src\/content\/bandos\/[^/]+\.md$/.test(filePath);
 }

@@ -58,7 +58,7 @@ fi
 cd "$PROJECT_ROOT"
 
 PHASE='alineación de main antes de leer el RSS'
-"$NODE_BIN" scripts/ensure-main-synced.js
+"$PNPM_BIN" exec tsx scripts/ensure-main-synced.ts
 
 PHASE='autenticación de GitHub'
 "$GH_BIN" auth status >/dev/null
@@ -72,9 +72,9 @@ open_pr_json="$("$GH_BIN" pr list \
   --base main \
   --json number,title,headRefName,url,state \
   --limit 100)"
-open_pr="$(printf '%s' "$open_pr_json" | "$NODE_BIN" --input-type=module -e '
+open_pr="$(printf '%s' "$open_pr_json" | "$PNPM_BIN" exec tsx --eval '
   import fs from "node:fs";
-  import { findOpenBandosPullRequest } from "./scripts/bandos-sync-policy.js";
+  import { findOpenBandosPullRequest } from "./scripts/bandos-sync-policy.ts";
 
   const pullRequest = findOpenBandosPullRequest(JSON.parse(fs.readFileSync(0, "utf8")));
   if (pullRequest) {
@@ -131,8 +131,8 @@ else
   fi
 
   PHASE='preparación de la rama de la PR'
-  WORKTREE_BRANCH="$("$NODE_BIN" --input-type=module -e '
-    import { buildBandosBranchName } from "./scripts/bandos-sync-policy.js";
+  WORKTREE_BRANCH="$("$PNPM_BIN" exec tsx --eval '
+    import { buildBandosBranchName } from "./scripts/bandos-sync-policy.ts";
     process.stdout.write(buildBandosBranchName());
   ')"
   /usr/bin/git -C "$WORKTREE_DIR" switch -c "$WORKTREE_BRANCH"
@@ -187,9 +187,9 @@ wait_for_required_checks() {
     head_sha="$("$GH_BIN" pr view "$PR_NUMBER" --json headRefOid --jq '.headRefOid')"
     check_runs="$("$GH_BIN" api \
       "repos/$REPOSITORY/commits/$head_sha/check-runs?per_page=100")"
-    evaluation="$(printf '{"required":%s,"checks":%s}' "$required_contexts" "$check_runs" | "$NODE_BIN" --input-type=module -e '
+    evaluation="$(printf '{"required":%s,"checks":%s}' "$required_contexts" "$check_runs" | "$PNPM_BIN" exec tsx --eval '
       import fs from "node:fs";
-      import { evaluateRequiredChecks } from "./scripts/bandos-sync-policy.js";
+      import { evaluateRequiredChecks } from "./scripts/bandos-sync-policy.ts";
 
       const payload = JSON.parse(fs.readFileSync(0, "utf8"));
       const result = evaluateRequiredChecks(payload.required, payload.checks.check_runs);
@@ -240,7 +240,7 @@ echo "Pull Request fusionada: $MERGE_COMMIT"
 
 PHASE='realineación local de main tras la fusión'
 /usr/bin/git fetch origin main
-"$NODE_BIN" scripts/ensure-main-synced.js
+"$PNPM_BIN" exec tsx scripts/ensure-main-synced.ts
 if [[ "$(/usr/bin/git rev-list --left-right --count main...origin/main)" != $'0\t0' ]]; then
   echo 'main local no ha quedado alineada con origin/main.' >&2
   exit 1

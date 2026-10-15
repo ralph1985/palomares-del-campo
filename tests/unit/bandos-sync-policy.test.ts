@@ -4,7 +4,7 @@ import {
   evaluateRequiredChecks,
   findOpenBandosPullRequest,
   isAllowedBandoPath,
-} from '../../scripts/bandos-sync-policy.js';
+} from '../../scripts/bandos-sync-policy.ts';
 
 const pullRequest = {
   number: 12,

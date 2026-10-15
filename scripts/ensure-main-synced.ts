@@ -2,16 +2,30 @@ import { execFileSync } from 'node:child_process';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
 
-function runGit(args, cwd) {
+type MainAlignmentOptions = {
+  branch: string;
+  status: string;
+  ahead: number;
+  behind: number;
+  backupBranch: string;
+  fetched?: boolean;
+};
+
+type Divergence = { ahead: number; behind: number };
+type AlignmentResult = { aligned: true; backupBranch: string };
+
+function runGit(args: string[], cwd: string): string {
   try {
     return execFileSync('git', args, {
       cwd,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     }).trim();
-  } catch (error) {
-    const stderr = error?.stderr?.toString().trim();
-    throw new Error(stderr || error.message, { cause: error });
+  } catch (error: unknown) {
+    const stderr =
+      error instanceof Error && 'stderr' in error ? String(error.stderr ?? '').trim() : '';
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(stderr || message, { cause: error });
   }
 }
 
@@ -22,7 +36,7 @@ export function buildMainAlignmentCommands({
   behind,
   backupBranch,
   fetched = false,
-}) {
+}: MainAlignmentOptions): string[][] {
   if (status.trim()) {
     throw new Error('El árbol de trabajo no está limpio; se cancela la alineación de main.');
   }
@@ -37,7 +51,7 @@ export function buildMainAlignmentCommands({
   return commands;
 }
 
-function getDivergence(cwd) {
+function getDivergence(cwd: string): Divergence {
   const output = runGit(['rev-list', '--left-right', '--count', 'main...origin/main'], cwd);
   const [ahead, behind] = output.split(/\s+/).map(Number);
   if (!Number.isInteger(ahead) || !Number.isInteger(behind)) {
@@ -46,7 +60,7 @@ function getDivergence(cwd) {
   return { ahead, behind };
 }
 
-function uniqueBackupBranch(cwd, now = new Date()) {
+function uniqueBackupBranch(cwd: string, now: Date = new Date()): string {
   const stamp = now
     .toISOString()
     .replace(/[-:]/g, '')
@@ -54,7 +68,7 @@ function uniqueBackupBranch(cwd, now = new Date()) {
   const prefix = `backup/automation-main-divergence-${stamp}-${process.pid}`;
   let candidate = prefix;
   let suffix = 2;
-  const branchExists = (name) => {
+  const branchExists = (name: string): boolean => {
     try {
       runGit(['show-ref', '--verify', '--quiet', `refs/heads/${name}`], cwd);
       return true;
@@ -69,7 +83,10 @@ function uniqueBackupBranch(cwd, now = new Date()) {
   return candidate;
 }
 
-export function ensureMainSynced({ cwd = process.cwd(), now = new Date() } = {}) {
+export function ensureMainSynced({
+  cwd = process.cwd(),
+  now = new Date(),
+}: { cwd?: string; now?: Date } = {}): AlignmentResult {
   const branch = runGit(['branch', '--show-current'], cwd);
   const status = runGit(['status', '--porcelain'], cwd);
   const initialCommands = buildMainAlignmentCommands({

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildMainAlignmentCommands } from '../../scripts/ensure-main-synced.js';
+import { buildMainAlignmentCommands } from '../../scripts/ensure-main-synced.ts';
 
 describe('main alignment policy', () => {
   it('refuses to realign a dirty checkout', () => {
