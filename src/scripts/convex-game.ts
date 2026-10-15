@@ -1,4 +1,5 @@
 import { ConvexClient } from 'convex/browser';
+import type { FunctionReturnType } from 'convex/server';
 import { api } from '../../convex/_generated/api';
 
 export type PlayerIdentity = {
@@ -6,53 +7,17 @@ export type PlayerIdentity = {
   nickname: string;
 };
 
-export type RemoteGameState = {
-  season: {
-    id: string;
-    slug: string;
-    name: string;
-    status: string;
-    capturePoints: number;
-  };
-  ball: {
-    version: number;
-    locationId: string;
-    locationName: string;
-    latitude: number;
-    longitude: number;
-    radiusMeters: number;
-  };
-  playerCount: number;
-  players: RemotePlayerPresence[];
-};
+export type RemoteGameState = NonNullable<FunctionReturnType<typeof api.game.getActiveSeason>>;
 
-export type RemotePlayerPresence = {
-  id: string;
-  nickname: string;
-  latitude: number;
-  longitude: number;
-  lastSeenAt: number;
-};
+export type RemotePlayerPresence = RemoteGameState['players'][number];
 
-export type RemotePlayerSummary = {
-  nickname: string;
-  score: number;
-  captures: number;
-};
+export type RemotePlayerSummary = NonNullable<FunctionReturnType<typeof api.game.getPlayerSummary>>;
 
-export type RemoteLeaderboardEntry = RemotePlayerSummary & {
-  position: number;
-};
+export type RemoteLeaderboardEntry = FunctionReturnType<
+  typeof api.leaderboard.getLeaderboard
+>[number];
 
-export type RemoteCaptureResult = {
-  status: string;
-  duplicate?: boolean;
-  points?: number;
-  score?: number;
-  ballVersion?: number;
-  activeLocationId?: string;
-  distanceMeters?: number;
-};
+export type RemoteCaptureResult = FunctionReturnType<typeof api.game.captureBall>;
 
 const PLAYER_STORAGE_KEY = 'palomares-player-v1';
 
@@ -105,7 +70,10 @@ export type RemoteGameAdapter = {
     },
     expectedBallVersion: number,
   ) => Promise<RemoteCaptureResult>;
-  updatePresence: (position: { latitude: number; longitude: number }) => Promise<unknown>;
+  updatePresence: (position: {
+    latitude: number;
+    longitude: number;
+  }) => Promise<FunctionReturnType<typeof api.game.updatePresence>>;
   dispose: () => void;
 };
 
@@ -113,16 +81,7 @@ export type RemoteLeaderboardAdapter = {
   dispose: () => void;
 };
 
-export type RemoteConvexClient = {
-  query: (reference: unknown, args: Record<string, unknown>) => Promise<unknown>;
-  mutation: (reference: unknown, args: Record<string, unknown>) => Promise<unknown>;
-  onUpdate: (
-    reference: unknown,
-    args: Record<string, unknown>,
-    callback: (value: unknown) => void,
-  ) => () => void;
-  close: () => void;
-};
+export type RemoteConvexClient = Pick<ConvexClient, 'query' | 'mutation' | 'onUpdate' | 'close'>;
 
 export const connectRemoteLeaderboard = async (
   url: string,
@@ -132,11 +91,9 @@ export const connectRemoteLeaderboard = async (
   const state = await client.query(api.game.getActiveSeason, {});
   if (!state) throw new Error('no-active-season');
   const seasonId = state.season.id;
-  onLeaderboard(
-    (await client.query(api.leaderboard.getLeaderboard, { seasonId })) as RemoteLeaderboardEntry[],
-  );
+  onLeaderboard(await client.query(api.leaderboard.getLeaderboard, { seasonId }));
   const stop = client.onUpdate(api.leaderboard.getLeaderboard, { seasonId }, (entries) =>
-    onLeaderboard(entries as RemoteLeaderboardEntry[]),
+    onLeaderboard(entries),
   );
   return {
     dispose: () => {
@@ -154,35 +111,33 @@ export const createRemoteGameAdapter = async (
   const state = await client.query(api.game.getActiveSeason, {});
   if (!state) throw new Error('no-active-season');
 
-  const seasonId = (state as RemoteGameState).season.id;
-  const joined = (await client.mutation(api.game.joinSeason, {
+  const seasonId = state.season.id;
+  const joined = await client.mutation(api.game.joinSeason, {
     seasonId,
     deviceId: identity.deviceId,
     displayName: identity.nickname,
-  })) as { status: string };
+  });
   if (joined.status !== 'joined') throw new Error(joined.status);
 
-  callbacks.onState(state as RemoteGameState);
+  callbacks.onState(state);
   callbacks.onPlayer(
-    (await client.query(api.game.getPlayerSummary, {
+    await client.query(api.game.getPlayerSummary, {
       seasonId,
       deviceId: identity.deviceId,
-    })) as RemotePlayerSummary | null,
+    }),
   );
-  callbacks.onLeaderboard(
-    (await client.query(api.leaderboard.getLeaderboard, { seasonId })) as RemoteLeaderboardEntry[],
-  );
+  callbacks.onLeaderboard(await client.query(api.leaderboard.getLeaderboard, { seasonId }));
 
   const stopState = client.onUpdate(api.game.getSeasonState, { seasonId }, (nextState) => {
-    if (nextState) callbacks.onState(nextState as RemoteGameState);
+    if (nextState) callbacks.onState(nextState);
   });
   const stopPlayer = client.onUpdate(
     api.game.getPlayerSummary,
     { seasonId, deviceId: identity.deviceId },
-    (player) => callbacks.onPlayer(player as RemotePlayerSummary | null),
+    (player) => callbacks.onPlayer(player),
   );
   const stopLeaderboard = client.onUpdate(api.leaderboard.getLeaderboard, { seasonId }, (entries) =>
-    callbacks.onLeaderboard(entries as RemoteLeaderboardEntry[]),
+    callbacks.onLeaderboard(entries),
   );
 
   return {
@@ -194,10 +149,10 @@ export const createRemoteGameAdapter = async (
         deviceId: identity.deviceId,
         latitude: position.latitude,
         longitude: position.longitude,
-        accuracy: position.accuracy,
+        ...(position.accuracy === undefined ? {} : { accuracy: position.accuracy }),
         expectedBallVersion,
         idempotencyKey: createRandomId(),
-      }) as Promise<RemoteCaptureResult>,
+      }),
     updatePresence: (position) =>
       client.mutation(api.game.updatePresence, {
         seasonId,
@@ -219,8 +174,4 @@ export const connectRemoteGame = async (
   identity: PlayerIdentity,
   callbacks: RemoteGameCallbacks,
 ): Promise<RemoteGameAdapter> =>
-  createRemoteGameAdapter(
-    new ConvexClient(url) as unknown as RemoteConvexClient,
-    identity,
-    callbacks,
-  );
+  createRemoteGameAdapter(new ConvexClient(url), identity, callbacks);

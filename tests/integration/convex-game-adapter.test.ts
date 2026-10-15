@@ -1,13 +1,35 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, expectTypeOf, it } from 'vitest';
+
+import type { FunctionReturnType } from 'convex/server';
+import { api } from '../../convex/_generated/api';
+import type { Id } from '../../convex/_generated/dataModel';
 import {
   createRemoteGameAdapter,
+  type RemoteCaptureResult,
   type RemoteConvexClient,
   type RemoteGameState,
+  type RemoteLeaderboardEntry,
+  type RemotePlayerSummary,
 } from '../../src/scripts/convex-game';
+
+it('keeps adapter contracts aligned with generated Convex result types', () => {
+  expectTypeOf<RemoteGameState>().toEqualTypeOf<
+    NonNullable<FunctionReturnType<typeof api.game.getActiveSeason>>
+  >();
+  expectTypeOf<RemotePlayerSummary>().toEqualTypeOf<
+    NonNullable<FunctionReturnType<typeof api.game.getPlayerSummary>>
+  >();
+  expectTypeOf<RemoteLeaderboardEntry>().toEqualTypeOf<
+    FunctionReturnType<typeof api.leaderboard.getLeaderboard>[number]
+  >();
+  expectTypeOf<RemoteCaptureResult>().toEqualTypeOf<
+    FunctionReturnType<typeof api.game.captureBall>
+  >();
+});
 
 const seasonState: RemoteGameState = {
   season: {
-    id: 'season-test',
+    id: 'season-test' as Id<'seasons'>,
     slug: 'temporada-test',
     name: 'Temporada de prueba',
     status: 'active',
@@ -33,15 +55,15 @@ const createClientFixture = () => {
   let closeCalls = 0;
   let queryNumber = 0;
 
-  const client: RemoteConvexClient = {
-    query: async (reference, args) => {
+  const client = {
+    query: async (reference: unknown, args: Record<string, unknown>) => {
       queryCalls.push({ reference, args });
       queryNumber += 1;
       if (queryNumber === 1) return seasonState;
       if (queryNumber === 2) return { nickname: 'Pájaro Verde', score: 10, captures: 1 };
       return [{ nickname: 'Pájaro Verde', score: 10, captures: 1, position: 1 }];
     },
-    mutation: async (reference, args) => {
+    mutation: async (reference: unknown, args: Record<string, unknown>) => {
       mutationCalls.push({ reference, args });
       if (mutationCalls.length === 1) {
         return {
@@ -54,7 +76,11 @@ const createClientFixture = () => {
       if (mutationCalls.length === 2) return { status: 'updated', presenceAt: 1234 };
       return { status: 'accepted', points: 10, score: 20, ballVersion: 4 };
     },
-    onUpdate: (_reference, _args, callback) => {
+    onUpdate: (
+      _reference: unknown,
+      _args: Record<string, unknown>,
+      callback: (value: unknown) => void,
+    ) => {
       updateCallbacks.push(callback);
       const subscriptionNumber = updateCallbacks.length;
       return () => unsubscribeCalls.push(subscriptionNumber);
@@ -62,7 +88,7 @@ const createClientFixture = () => {
     close: () => {
       closeCalls += 1;
     },
-  };
+  } as unknown as RemoteConvexClient;
 
   return {
     client,
@@ -156,6 +182,9 @@ describe('remote Convex game adapter', () => {
     });
     expect(fixture.mutationCalls[2]?.args.idempotencyKey).toMatch(/^[a-f0-9]{32}$/);
     expect(captureResult).toEqual({ status: 'accepted', points: 10, score: 20, ballVersion: 4 });
+
+    await adapter.capture({ latitude: 39.9463, longitude: -2.5988 }, 4);
+    expect(fixture.mutationCalls[3]?.args).not.toHaveProperty('accuracy');
 
     adapter.dispose();
   });
