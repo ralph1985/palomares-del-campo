@@ -15,15 +15,17 @@ const allowedHexByPath = new Map([
   ['src/styles/pages/sobre-el-pueblo.css', new Set(['#315f4e', '#efe6d6'])],
 ]);
 
-function isTokenSource(path) {
+function isTokenSource(path: string): boolean {
   return path === 'src/styles/tokens.css';
 }
 
-function hasExplicitException(line) {
+function hasExplicitException(line: string): boolean {
   return /css-architecture:\s*allow\b/i.test(line);
 }
 
-function findArchitectureViolations(diffText) {
+function findArchitectureViolations(
+  diffText: string,
+): Array<{ path: string; line: string; reason: string }> {
   const violations = [];
   let currentPath = null;
 
@@ -71,7 +73,7 @@ function findArchitectureViolations(diffText) {
   return violations;
 }
 
-function buildUntrackedDiff(root) {
+function buildUntrackedDiff(root: string): string {
   let files;
   try {
     files = execFileSync('git', ['ls-files', '--others', '--exclude-standard', '--', 'src'], {
@@ -92,7 +94,7 @@ function buildUntrackedDiff(root) {
     .join('\n');
 }
 
-function run() {
+function run(): void {
   const root = resolve(new URL('.', import.meta.url).pathname, '..');
   const trackedDiff = execFileSync('git', ['diff', '--unified=0', '--', 'src'], {
     cwd: root,

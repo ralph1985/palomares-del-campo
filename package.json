@@ -14,7 +14,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "qa:visual": "node scripts/visual-qa.mjs",
-    "check:css:architecture": "node scripts/check-css-architecture.js",
+    "check:css:architecture": "tsx scripts/check-css-architecture.ts",
     "check:seo": "node scripts/verify-seo.mjs",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -44,6 +44,7 @@
     "husky": "9.1.7",
     "prettier": "3.9.10",
     "prettier-plugin-astro": "1.1.1",
+    "tsx": "4.23.15",
     "typescript": "6.0.3",
     "typescript-eslint": "8.71.1",
     "vitest": "5.0.3"

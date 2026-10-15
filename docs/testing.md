@@ -65,7 +65,7 @@ Las pruebas del juego usan `astro dev` y el simulador disponible en `import.meta
 
 ### CSS
 
-`scripts/check-css-architecture.js`, ejecutado mediante `pnpm check:css:architecture`, inspecciona el diff de `src/` y bloquea nuevos colores, funciones de color, familias tipográficas o pesos literales no autorizados. `tests/unit/css-architecture.test.ts` cubre la política; las excepciones de Leaflet y el mapa del juego están expresamente delimitadas.
+`scripts/check-css-architecture.ts`, ejecutado mediante `pnpm check:css:architecture`, inspecciona el diff de `src/` y bloquea nuevos colores, funciones de color, familias tipográficas o pesos literales no autorizados. `tests/unit/css-architecture.test.ts` cubre la política; las excepciones de Leaflet y el mapa del juego están expresamente delimitadas.
 
 ### SEO y build
 

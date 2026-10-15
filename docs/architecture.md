@@ -270,7 +270,7 @@ scripts/
 ├── ensure-main-synced.js
 ├── verify-seo.mjs
 ├── visual-qa.mjs
-└── check-css-architecture.js
+└── check-css-architecture.ts
 ```
 
 ## Arquitectura Astro
@@ -534,7 +534,7 @@ Playwright cubre navegación, menú accesible, portada, noticias, bandos, agenda
 
 `scripts/visual-qa.mjs` recorre nueve rutas en dos viewports y comprueba HTTP 200, overflow horizontal, foco, contraste aproximado y errores de consola. Es una comprobación reproducible de calidad visual, no un sistema de snapshots de imagen.
 
-`scripts/check-css-architecture.js` inspecciona cambios en `src/` y aplica las excepciones de arquitectura CSS. `scripts/verify-seo.mjs` inspecciona el contenido generado de `dist/` y el sitemap.
+`scripts/check-css-architecture.ts` inspecciona cambios en `src/` y aplica las excepciones de arquitectura CSS. `scripts/verify-seo.mjs` inspecciona el contenido generado de `dist/` y el sitemap.
 
 ### Comandos disponibles
 

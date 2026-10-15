@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { findArchitectureViolations } from '../../scripts/check-css-architecture.js';
+import { findArchitectureViolations } from '../../scripts/check-css-architecture.ts';
 
 describe('CSS architecture guard', () => {
   it('rejects new raw colors outside the token source', () => {
