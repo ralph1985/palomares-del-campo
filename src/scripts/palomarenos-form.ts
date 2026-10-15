@@ -41,11 +41,11 @@ export type PalomarenoSubmissionResult = {
   message: string;
 };
 
-export const submitPalomareno = async (
+export const submitPalomareno = (
   client: ActionClient,
   input: PalomarenoFormInput,
 ): Promise<PalomarenoSubmissionResult> =>
-  (await client.action(api.palomarenos.submitWithTurnstile, {
+  client.action(api.palomarenos.submitWithTurnstile, {
     displayName: input.displayName,
     city: input.city,
     country: input.country,
@@ -54,7 +54,7 @@ export const submitPalomareno = async (
     consent: input.consent,
     website: input.website,
     turnstileToken: input.turnstileToken,
-  })) as PalomarenoSubmissionResult;
+  });
 
 const getFieldValue = (formData: FormData, name: string): string =>
   String(formData.get(name) ?? '');

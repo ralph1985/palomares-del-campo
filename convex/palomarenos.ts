@@ -139,7 +139,10 @@ export const submitWithTurnstile = action({
     longitude: v.optional(v.number()),
     turnstileToken: v.string(),
   },
-  handler: async (ctx, args): Promise<unknown> => {
+  handler: async (
+    ctx,
+    args,
+  ): Promise<{ status: 'submitted'; submissionId: string; message: string }> => {
     if (!args.turnstileToken.trim()) throw new Error('turnstile-token-missing');
 
     const secret = process.env.TURNSTILE_SECRET_KEY;
