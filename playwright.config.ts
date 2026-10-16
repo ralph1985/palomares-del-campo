@@ -28,6 +28,7 @@ export default defineConfig({
     timeout: 120_000,
     env: {
       ...process.env,
+      DISABLE_ASTRO_DEV_TOOLBAR_FOR_E2E: 'true',
       PUBLIC_TURNSTILE_SITE_KEY: 'e2e-test-site-key',
     },
   },
