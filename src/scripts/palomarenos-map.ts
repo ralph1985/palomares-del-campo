@@ -3,8 +3,14 @@ import L from 'leaflet';
 import { ConvexClient } from 'convex/browser';
 import { api } from '../../convex/_generated/api';
 import { selectMapMarkers, type PalomarenoMapMarker } from './palomarenos-map-data';
+import { isE2EFixtureMode } from './e2e-fixture-mode';
 
 type MapStatus = 'loading' | 'ready' | 'empty' | 'config' | 'error';
+
+const isE2EFixture = isE2EFixtureMode({
+  development: import.meta.env.DEV,
+  flag: import.meta.env.PUBLIC_E2E_TEST_MODE,
+});
 
 const setMapState = (element: HTMLElement, status: MapStatus, message: string): void => {
   element.dataset.mapStatus = status;
@@ -36,8 +42,8 @@ const createPopupContent = (marker: PalomarenoMapMarker): HTMLElement => {
 };
 
 const initialiseMap = async (element: HTMLElement): Promise<void> => {
-  const convexUrl = element.dataset.convexUrl?.trim();
-  if (!convexUrl) {
+  const convexUrl = isE2EFixture ? '' : element.dataset.convexUrl?.trim();
+  if (!convexUrl && !isE2EFixture) {
     element.textContent = 'El mapa estará disponible cuando se configure el servicio de datos.';
     setMapState(element, 'config', 'Mapa pendiente de configuración.');
     return;
@@ -60,8 +66,8 @@ const initialiseMap = async (element: HTMLElement): Promise<void> => {
       attribution: '&copy; OpenStreetMap contributors',
     }).addTo(activeMap);
 
-    client = new ConvexClient(convexUrl);
-    const records = await client.query(api.palomarenos.listApproved, {});
+    client = convexUrl ? new ConvexClient(convexUrl) : undefined;
+    const records = client ? await client.query(api.palomarenos.listApproved, {}) : [];
     const markers = selectMapMarkers(records);
 
     if (markers.length === 0) {

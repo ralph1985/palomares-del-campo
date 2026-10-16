@@ -6,7 +6,8 @@ La estrategia actual protege la web editorial, el shell compartido y el juego. L
 
 - `vitest.config.ts` usa el entorno `node` e incluye `tests/unit/**/*.test.ts` y `tests/integration/**/*.test.ts`.
 - `playwright.config.ts` ejecuta `tests/e2e/` en Chromium. Por defecto arranca `pnpm exec astro dev --host 127.0.0.1 --port 4321` y usa `http://127.0.0.1:4321`; `PLAYWRIGHT_BASE_URL` permite apuntar a un servidor ya activo, que se reutiliza si responde. No arrancar una segunda instancia del mismo proyecto sobre una Astro dev existente.
-- El servidor aislado de Playwright establece `DISABLE_ASTRO_DEV_TOOLBAR_FOR_E2E=true`; `astro.config.ts` desactiva la barra solo en ese proceso. La barra sigue activa en `pnpm dev` normal. El test de infraestructura `tests/e2e/test-harness.spec.ts` verifica que el toolbar no se inyecta en el servidor de la suite.
+- El servidor aislado de Playwright establece `DISABLE_ASTRO_DEV_TOOLBAR_FOR_E2E=true`; `astro.config.ts` desactiva la barra solo en ese proceso. También vacía `CONVEX_URL` y activa `PUBLIC_E2E_TEST_MODE=true`: los mapas usan un estado vacío determinista y el juego/formulario no conectan con Convex. Ese modo solo se reconoce con `import.meta.env.DEV`; el frontend de producción no puede activarlo con la variable pública. La barra sigue activa en `pnpm dev` normal. El test de infraestructura `tests/e2e/test-harness.spec.ts` verifica que el toolbar no se inyecta en el servidor de la suite.
+- El hook `.husky/pre-push` y el workflow CI ejecutan `pnpm typecheck` antes de `pnpm lint`, porque `astro check` genera `.astro/types.d.ts`, necesario para resolver los módulos virtuales de Astro desde un checkout limpio.
 - `tests/e2e/fixtures.ts` intercepta los tiles de OpenStreetMap y las imágenes adjuntas de Bandomovil en las pruebas correspondientes, y sirve SVGs inocuos. Los tests comprueban la integración de Leaflet y la presencia de adjuntos; no validan el proveedor externo ni la fidelidad de los recursos reales.
 - En CI Playwright prohíbe `test.only`, usa un worker y hasta dos reintentos. Localmente no reintenta.
 - `tests/features/` contiene escenarios Gherkin de referencia. No hay Cucumber ni un ejecutor de steps conectado a esos archivos.
@@ -48,7 +49,7 @@ La suite cubre actualmente:
 - reintento único de navegación de QA visual cuando `astro dev` aborta una ruta con `net::ERR_ABORTED`;
 - tokens y guardas de arquitectura CSS.
 
-La ejecución verificada actual de `pnpm test` contiene 24 archivos y 109 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
+La ejecución verificada actual de `pnpm test` contiene 25 archivos y 113 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
 
 ## Playwright: E2E
 

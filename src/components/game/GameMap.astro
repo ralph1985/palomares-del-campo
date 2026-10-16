@@ -1,14 +1,16 @@
 ---
 import GameMapCanvas from './GameMapCanvas.astro';
 import GameStatusPanel from './GameStatusPanel.astro';
-const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
+import { isE2EFixtureMode } from '../../scripts/e2e-fixture-mode';
+const isE2EFixture = isE2EFixtureMode({
+  development: import.meta.env.DEV,
+  flag: import.meta.env.PUBLIC_E2E_TEST_MODE,
+});
+const convexUrl = isE2EFixture ? '' : (import.meta.env.CONVEX_URL ?? '');
+const hasRemoteGame = Boolean(convexUrl);
 ---
 
-<section
-  class="game-map-section"
-  aria-labelledby="game-map-title"
-  data-convex-url={import.meta.env.CONVEX_URL ?? ''}
->
+<section class="game-map-section" aria-labelledby="game-map-title" data-convex-url={convexUrl}>
   <div class="game-map-heading">
     <div>
       <p class="eyebrow">01 / Tablero de juego</p>

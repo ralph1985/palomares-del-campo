@@ -15,7 +15,7 @@ test.describe('local ball game', () => {
     await expect(page.locator('#game-map path.leaflet-interactive')).not.toHaveCount(0);
     await expect(page.getByLabel('Elegir ubicación simulada')).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Ranking de la partida' })).toBeVisible();
-    await expect(page.locator('[data-game-ranking]')).toBeVisible();
+    await expect(page.getByText('Modo local de prueba')).toBeVisible();
     await expect(
       page.getByRole('heading', { name: 'Privacidad y estado del juego' }),
     ).toBeVisible();

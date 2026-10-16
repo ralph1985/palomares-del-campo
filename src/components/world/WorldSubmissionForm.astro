@@ -1,3 +1,12 @@
+---
+import { isE2EFixtureMode } from '../../scripts/e2e-fixture-mode';
+const isE2EFixture = isE2EFixtureMode({
+  development: import.meta.env.DEV,
+  flag: import.meta.env.PUBLIC_E2E_TEST_MODE,
+});
+const convexUrl = isE2EFixture ? '' : (import.meta.env.CONVEX_URL ?? '');
+---
+
 <section class="world-form-card" aria-labelledby="world-form-title">
   <div class="world-form-intro">
     <p class="eyebrow">Comparte tu historia</p>
@@ -10,7 +19,7 @@
 
   <form
     data-palomarenos-form
-    data-convex-url={import.meta.env.CONVEX_URL ?? ''}
+    data-convex-url={convexUrl}
     data-turnstile-site-key={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''}
     data-turnstile-hostnames={
       import.meta.env.PUBLIC_TURNSTILE_HOSTNAMES ?? 'palomaresdelcampo.conquense.dev'

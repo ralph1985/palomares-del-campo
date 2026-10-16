@@ -1,5 +1,6 @@
 import { ConvexClient } from 'convex/browser';
 import { api } from '../../convex/_generated/api';
+import { isE2EFixtureMode } from './e2e-fixture-mode';
 
 export type PalomarenoFormInput = {
   displayName: string;
@@ -108,7 +109,11 @@ const loadTurnstile = (): Promise<TurnstileApi> => {
 };
 
 const bindForm = (form: HTMLFormElement): void => {
-  const convexUrl = form.dataset.convexUrl?.trim();
+  const e2eFixtureMode = isE2EFixtureMode({
+    development: import.meta.env.DEV,
+    flag: import.meta.env.PUBLIC_E2E_TEST_MODE,
+  });
+  const convexUrl = e2eFixtureMode ? '' : form.dataset.convexUrl?.trim();
   const siteKey = form.dataset.turnstileSiteKey?.trim();
   const allowedHostnames = (form.dataset.turnstileHostnames ?? '')
     .split(',')
@@ -121,7 +126,7 @@ const bindForm = (form: HTMLFormElement): void => {
   const testSubmit = import.meta.env.DEV ? window.__PALOMARENOS_FORM_TEST__ : undefined;
 
   if (!statusElement || !submitButton) return;
-  if (!convexUrl && !testSubmit) {
+  if (!convexUrl && !testSubmit && !e2eFixtureMode) {
     submitButton.disabled = true;
     statusElement.textContent =
       'El formulario estará disponible cuando se configure el servicio de datos.';
