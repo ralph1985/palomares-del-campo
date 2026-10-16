@@ -11,9 +11,11 @@ if (toggle && closeButton && menu && backdrop) {
   const loadScene = () => {
     if (!sceneCanvas || !menu) return Promise.resolve();
 
-    sceneInitialization ??= import('./menu-scene').then(({ initializeMenuScene }) =>
-      initializeMenuScene(sceneCanvas, menu),
-    );
+    sceneInitialization ??= import('./menu-scene')
+      .then(({ initializeMenuScene }) => initializeMenuScene(sceneCanvas, menu))
+      .catch(() => {
+        sceneCanvas.hidden = true;
+      });
     return sceneInitialization;
   };
 

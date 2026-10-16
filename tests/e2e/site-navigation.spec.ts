@@ -93,6 +93,26 @@ test.describe('web navigation', () => {
     await expect.poll(() => threeRequests.length).toBeGreaterThan(0);
   });
 
+  test('falls back gracefully when the optional 3D scene fails to load', async ({ page }) => {
+    const pageErrors: string[] = [];
+    page.on('pageerror', (error) => pageErrors.push(error.message));
+    await page.route('**/src/scripts/menu-scene.ts', (route) => route.abort());
+    await page.goto('/');
+
+    const failedSceneRequest = page.waitForEvent('requestfailed', (request) =>
+      request.url().includes('/src/scripts/menu-scene.ts'),
+    );
+    const menu = page.locator('#site-menu');
+    await page.getByRole('button', { name: 'Explorar' }).click();
+    await expect(menu).toHaveAttribute('aria-hidden', 'false');
+    await expect(menu.getByRole('link', { name: 'La bola' })).toBeVisible();
+    await failedSceneRequest;
+    await page.waitForTimeout(50);
+
+    expect(pageErrors).toEqual([]);
+    await expect(page.locator('#menu-scene')).toBeHidden();
+  });
+
   test('opens and closes the accessible side menu', async ({ page }) => {
     await page.goto('/');
 
