@@ -18,6 +18,26 @@ export type ServerCaptureEvaluation = {
 
 export const MIN_GPS_ACCURACY_METERS = 100;
 
+export const isValidCoordinates = (latitude: number, longitude: number): boolean =>
+  Number.isFinite(latitude) &&
+  Number.isFinite(longitude) &&
+  latitude >= -90 &&
+  latitude <= 90 &&
+  longitude >= -180 &&
+  longitude <= 180;
+
+export const isValidAccuracy = (accuracy: number | undefined): boolean =>
+  accuracy === undefined || (Number.isFinite(accuracy) && accuracy >= 0);
+
+export const nextLocationInSequence = <T extends { _id: string }>(
+  locations: readonly T[],
+  currentLocationId: string,
+): T | null => {
+  const currentIndex = locations.findIndex((location) => location._id === currentLocationId);
+  if (currentIndex < 0) return null;
+  return locations[currentIndex + 1] ?? locations[0] ?? null;
+};
+
 export const distanceInMeters = (
   from: Pick<ServerCapturePosition, 'latitude' | 'longitude'>,
   to: Pick<ServerCaptureLocation, 'latitude' | 'longitude'>,

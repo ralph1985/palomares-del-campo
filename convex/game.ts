@@ -1,7 +1,12 @@
 import { v } from 'convex/values';
 import { mutation, query, type MutationCtx, type QueryCtx } from './_generated/server';
-import type { Id } from './_generated/dataModel';
-import { evaluateServerCapture } from './geo';
+import type { Doc, Id } from './_generated/dataModel';
+import {
+  evaluateServerCapture,
+  isValidAccuracy,
+  isValidCoordinates,
+  nextLocationInSequence,
+} from './geo';
 import { normalizeNickname } from './identity';
 import { effectiveScore } from './score';
 import { isPresenceActive, roundPresenceCoordinate } from './presence';
@@ -19,6 +24,15 @@ const getIdentitySubject = async (ctx: QueryCtx | MutationCtx): Promise<string> 
   if (!identity?.subject) throw new Error('auth-required');
   return identity.subject;
 };
+
+type ActivePresencePlayer = Doc<'players'> &
+  Required<Pick<Doc<'players'>, 'presenceAt' | 'presenceLatitude' | 'presenceLongitude'>>;
+
+const hasActivePresence = (player: Doc<'players'>): player is ActivePresencePlayer =>
+  player.presenceAt !== undefined &&
+  player.presenceLatitude !== undefined &&
+  player.presenceLongitude !== undefined &&
+  isPresenceActive(player.presenceAt, Date.now());
 
 const readBallState = async (ctx: QueryCtx | MutationCtx, seasonId: Id<'seasons'>) => {
   return ctx.db
@@ -41,21 +55,13 @@ const readSeasonState = async (ctx: QueryCtx | MutationCtx, seasonId: Id<'season
     .query('players')
     .withIndex('by_season_subject', (query) => query.eq('seasonId', seasonId))
     .collect();
-  const activePlayers = players
-    .filter(
-      (player) =>
-        player.presenceAt !== undefined &&
-        player.presenceLatitude !== undefined &&
-        player.presenceLongitude !== undefined &&
-        isPresenceActive(player.presenceAt, Date.now()),
-    )
-    .map((player) => ({
-      id: player._id,
-      nickname: player.displayName,
-      latitude: player.presenceLatitude as number,
-      longitude: player.presenceLongitude as number,
-      lastSeenAt: player.presenceAt as number,
-    }));
+  const activePlayers = players.filter(hasActivePresence).map((player) => ({
+    id: player._id,
+    nickname: player.displayName,
+    latitude: player.presenceLatitude,
+    longitude: player.presenceLongitude,
+    lastSeenAt: player.presenceAt,
+  }));
 
   return {
     season: {
@@ -94,6 +100,9 @@ export const createSeason = mutation({
       if (!Number.isFinite(location.radiusMeters) || location.radiusMeters <= 0) {
         throw new Error('invalid-location-radius');
       }
+      if (!isValidCoordinates(location.latitude, location.longitude)) {
+        throw new Error('invalid-location-coordinates');
+      }
       locationIds.add(location.locationId);
     }
 
@@ -119,20 +128,20 @@ export const createSeason = mutation({
       createdAt: now,
     });
 
-    const locations = [];
+    let firstLocationId: Id<'locations'> | undefined;
     for (const [sortOrder, location] of args.locations.entries()) {
-      locations.push(
-        await ctx.db.insert('locations', {
-          seasonId,
-          ...location,
-          sortOrder,
-        }),
-      );
+      const locationDocumentId = await ctx.db.insert('locations', {
+        seasonId,
+        ...location,
+        sortOrder,
+      });
+      if (firstLocationId === undefined) firstLocationId = locationDocumentId;
     }
+    if (firstLocationId === undefined) throw new Error('locations-required');
 
     await ctx.db.insert('ballState', {
       seasonId,
-      locationId: locations[0],
+      locationId: firstLocationId,
       version: 0,
       updatedAt: now,
     });
@@ -219,14 +228,7 @@ export const updatePresence = mutation({
     const season = await ctx.db.get(args.seasonId);
     if (!season) return { status: 'season-not-found' as const };
     if (season.status !== 'active') return { status: 'game-not-active' as const };
-    if (
-      !Number.isFinite(args.latitude) ||
-      !Number.isFinite(args.longitude) ||
-      args.latitude < -90 ||
-      args.latitude > 90 ||
-      args.longitude < -180 ||
-      args.longitude > 180
-    ) {
+    if (!isValidCoordinates(args.latitude, args.longitude)) {
       return { status: 'invalid-position' as const };
     }
 
@@ -309,6 +311,9 @@ export const captureBall = mutation({
       )
       .unique();
     if (!player) return { status: 'player-not-found' as const };
+    if (!isValidCoordinates(args.latitude, args.longitude) || !isValidAccuracy(args.accuracy)) {
+      return { status: 'invalid-position' as const };
+    }
     const currentScore = effectiveScore(player.score, player.lastCaptureAt, now);
 
     const requestFingerprint = JSON.stringify({
@@ -353,7 +358,11 @@ export const captureBall = mutation({
     if (!location) return { status: 'location-not-found' as const };
 
     const evaluation = evaluateServerCapture(
-      { latitude: args.latitude, longitude: args.longitude, accuracy: args.accuracy },
+      {
+        latitude: args.latitude,
+        longitude: args.longitude,
+        ...(args.accuracy === undefined ? {} : { accuracy: args.accuracy }),
+      },
       location,
     );
     if (evaluation.reason === 'low-accuracy') {
@@ -367,8 +376,8 @@ export const captureBall = mutation({
       .query('locations')
       .withIndex('by_season_sort', (query) => query.eq('seasonId', args.seasonId))
       .collect();
-    const currentIndex = locations.findIndex((candidate) => candidate._id === location._id);
-    const nextLocation = locations[(currentIndex + 1) % locations.length];
+    const nextLocation = nextLocationInSequence(locations, location._id);
+    if (!nextLocation) return { status: 'location-not-found' as const };
 
     await ctx.db.insert('captures', {
       seasonId: args.seasonId,

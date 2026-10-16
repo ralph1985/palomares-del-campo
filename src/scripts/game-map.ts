@@ -106,8 +106,16 @@ let locationWatchId: number | undefined;
 let remoteBallVersion = 0;
 let playerIdentity: PlayerIdentity = loadPlayerIdentity();
 
-const activeLocation = (): GameLocation =>
-  gameLocations.find((location) => location.id === gameState.activeLocationId) ?? gameLocations[0];
+const activeLocation = (): GameLocation => {
+  const currentLocation = gameLocations.find(
+    (location) => location.id === gameState.activeLocationId,
+  );
+  if (currentLocation) return currentLocation;
+
+  const fallbackLocation = gameLocations[0];
+  if (!fallbackLocation) throw new Error('No hay ubicaciones de juego configuradas.');
+  return fallbackLocation;
+};
 
 const formatDistance = (distance: number): string =>
   distance < 1000 ? `${Math.round(distance)} m` : `${(distance / 1000).toFixed(1)} km`;
@@ -579,6 +587,8 @@ const captureLocally = async (): Promise<void> => {
             ? 'La captura ya estaba registrada.'
             : `Captura confirmada. +${result.points ?? 0} puntos.`,
         );
+      } else if (result.status === 'invalid-position') {
+        setFeedback('Convex ha rechazado la captura: la posición o precisión no son válidas.');
       } else if (result.status === 'stale-ball') {
         setFeedback('Otro jugador se ha adelantado. La bola ha cambiado de lugar.');
       } else if (result.status === 'low-accuracy') {
