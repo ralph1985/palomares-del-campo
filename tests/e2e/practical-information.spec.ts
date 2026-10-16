@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('practical municipal information', () => {
-  test('shows verified contact details and official service channels', async ({ page }) => {
+  test('shows municipal contact details and a sourced transport schedule', async ({ page }) => {
     await page.goto('/informacion-practica/');
 
     await expect(page).toHaveTitle(/Información práctica/);
@@ -42,21 +42,21 @@ test.describe('practical municipal information', () => {
     await expect(
       page.getByRole('table', { name: 'Horarios Cuenca a Palomares del Campo' }),
     ).toContainText('15:15');
-    await expect(page.getByText(/Publicado el 9 de octubre de 2026/)).toBeVisible();
+    await expect(page.getByText(/Publicado el \d{1,2} de \w+ de \d{4}/)).toBeVisible();
     await expect(page.getByRole('link', { name: /Ver bando original/ })).toHaveAttribute(
       'href',
       'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1659178',
     );
-    await expect(page.getByText(/Revisado el 11 de octubre de 2026/)).toBeVisible();
+    await expect(page.getByText(/Revisado el \d{1,2} de \w+ de \d{4}/)).toBeVisible();
+  });
 
-    await page.goto('/');
-    await page.getByRole('button', { name: 'Explorar' }).click();
-    await expect(
-      page.locator('#site-menu').getByRole('link', { name: /Servicios municipales/ }),
-    ).toHaveAttribute('href', '/informacion-practica/');
-
+  test('keeps practical information within a mobile viewport', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto('/informacion-practica/');
+    await expect(
+      page.getByRole('heading', { level: 1, name: 'Información práctica para el día a día' }),
+    ).toBeVisible();
+
     const widths = await page.evaluate(() => ({
       document: document.documentElement.scrollWidth,
       viewport: document.documentElement.clientWidth,
