@@ -54,7 +54,7 @@ Los tokens de ritmo (`--line-height-body`, `--line-height-heading`, `--tracking-
 
 ## QA visual y excepciones
 
-La comprobación reproducible se ejecuta con `pnpm qa:visual` mientras el servidor Astro esté disponible. Recorre nueve rutas en escritorio (`1440×900`) y móvil (`375×812`) y verifica HTTP 200, ausencia de overflow horizontal, focus visible, contraste aproximado WCAG y errores de consola.
+La comprobación reproducible se ejecuta con `pnpm qa:visual` mientras el servidor Astro esté disponible. Recorre once rutas en escritorio (`1440×900`) y móvil (`375×812`), incluidos el directorio de alojamientos, el formulario del mapa mundial y un bando con URL larga. Verifica HTTP 200, ausencia de overflow horizontal, focus visible, contraste aproximado WCAG y errores de consola.
 
 Se conservan dos familias de excepciones documentadas:
 

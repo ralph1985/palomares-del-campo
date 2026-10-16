@@ -530,9 +530,9 @@ Las pruebas Vitest cubren:
 
 La ejecución verificada actual contiene 19 archivos y 68 pruebas Vitest, todas correctas. No hay informe de cobertura configurado.
 
-Playwright cubre navegación, menú accesible, portada, noticias, bandos, agenda vacía, información práctica, alojamientos, rutas, SEO, juego local, modo inmersivo, simulador, presencia visual de Three.js y responsive. Las pruebas del juego usan el servidor Astro de desarrollo y el simulador local; no constituyen una prueba E2E contra un deployment remoto de Convex ni un flujo de dos jugadores.
+Playwright cubre navegación, menú accesible, portada, noticias, bandos, agenda vacía, información práctica, alojamientos, rutas, juego local, modo inmersivo, simulador, presencia visual de Three.js y responsive. La cobertura SEO estática corresponde a `check:seo`. Las pruebas del juego usan el servidor Astro de desarrollo y el simulador local; no constituyen una prueba E2E contra un deployment remoto de Convex ni un flujo de dos jugadores reales.
 
-`scripts/visual-qa.ts` recorre nueve rutas en dos viewports y comprueba HTTP 200, overflow horizontal, foco, contraste aproximado y errores de consola. Es una comprobación reproducible de calidad visual, no un sistema de snapshots de imagen.
+`scripts/visual-qa.ts` recorre once rutas en dos viewports y comprueba HTTP 200, overflow horizontal, foco, contraste aproximado y errores de consola. Incluye alojamientos, el mapa mundial de Palomareños y un detalle de bando; sus assets externos se interceptan con fixtures compartidos con Playwright E2E. Es una comprobación reproducible de calidad visual, no un sistema de snapshots de imagen.
 
 `scripts/check-css-architecture.ts` inspecciona cambios en `src/` y aplica las excepciones de arquitectura CSS. `scripts/verify-seo.ts` inspecciona el contenido generado de `dist/` y el sitemap.
 

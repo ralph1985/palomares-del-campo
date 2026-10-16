@@ -1,15 +1,18 @@
 import { chromium } from '@playwright/test';
+import { registerExternalAssetFixtures } from './e2e-network-fixtures';
 
 const baseUrl = process.env.VISUAL_QA_BASE_URL ?? 'http://127.0.0.1:4321';
 const routes = [
   '/',
   '/sobre-el-pueblo/',
   '/bandos/',
+  '/bandos/1646075-visita-virgen-de-lourdes-a-nuestro-pueblo/',
   '/noticias/',
   '/agenda/',
   '/informacion-practica/',
   '/rutas/',
   '/alojamientos/',
+  '/palomarenos-por-el-mundo/',
   '/juego/',
 ];
 const viewports = [
@@ -164,6 +167,7 @@ function inspectViewport() {
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
+await registerExternalAssetFixtures(page);
 const failures: string[] = [];
 const consoleErrors: string[] = [];
 
@@ -176,7 +180,7 @@ for (const viewport of viewports) {
   await page.setViewportSize({ width: viewport.width, height: viewport.height });
 
   for (const route of routes) {
-    const response = await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded' });
+    const response = await page.goto(`${baseUrl}${route}`, { waitUntil: 'load' });
     const status = response?.status() ?? 0;
     if (status !== 200) failures.push(`${viewport.name} ${route}: HTTP ${status}`);
 
