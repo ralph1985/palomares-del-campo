@@ -45,7 +45,7 @@ La suite cubre actualmente:
 - validación de identidad recuperada de `localStorage`, configuración SMTP y JSON-LD generado;
 - tokens y guardas de arquitectura CSS.
 
-La ejecución verificada actual de `pnpm test` contiene 22 archivos y 100 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
+La ejecución verificada actual de `pnpm test` contiene 23 archivos y 106 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
 
 ## Playwright: E2E
 
@@ -56,7 +56,7 @@ Los escenarios E2E prueban la aplicación Astro real en Chromium y cubren:
 - archivo y detalle de noticias;
 - bandos, filtros por texto/categoría/año, adjuntos, fuente y redirección `/avisos/`;
 - estado vacío de agenda;
-- canonical, Open Graph, idioma y JSON-LD;
+- canonical, Open Graph, idioma y JSON-LD en todas las páginas generadas mediante `pnpm check:seo`; incluye contratos específicos de portada, noticias y página «Sobre el pueblo» que antes se comprobaban en E2E;
 - juego local, simulador, captura, puntuación, modo inmersivo y límites de precisión;
 - fallbacks y carga diferida de escenas Three.js;
 - responsive, overflow horizontal y controles de vuelta arriba.
@@ -77,7 +77,7 @@ Para reutilizar un servidor ya activo (por ejemplo, uno accesible por Tailnet), 
 
 ### SEO y build
 
-`pnpm build` valida indirectamente las Content Collections y genera `dist/`. `scripts/verify-seo.ts`, ejecutado con `pnpm check:seo`, inspecciona las páginas generadas, metadatos obligatorios, JSON-LD, `sitemap-index.xml` y `robots.txt`.
+`pnpm build` valida indirectamente las Content Collections y genera `dist/`. `scripts/verify-seo.ts`, ejecutado con `pnpm check:seo`, inspecciona las páginas generadas, metadatos obligatorios, JSON-LD, `sitemap-index.xml` y `robots.txt`. `scripts/seo-metadata.ts` comprueba además la coherencia URL/canonical y WebSite JSON-LD de portada, el tipo/fecha/canonical/Article/BreadcrumbList de cada noticia y la tarjeta social de «Sobre el pueblo».
 
 ## Convenciones
 

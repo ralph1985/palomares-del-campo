@@ -2,6 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateJsonLdContent } from './seo-json-ld';
+import { validateRouteSpecificSeo } from './seo-metadata';
 
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
 const failures: string[] = [];
@@ -49,6 +50,10 @@ for (const path of htmlFiles) {
 
   if (route === '/avisos/') {
     continue;
+  }
+
+  for (const error of validateRouteSpecificSeo(route, html)) {
+    failures.push(`${route}: ${error}`);
   }
 
   const requiredMetadata: Array<[string, RegExp]> = [
