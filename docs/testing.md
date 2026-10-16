@@ -45,9 +45,10 @@ La suite cubre actualmente:
 - construcción de notificaciones SMTP;
 - alineación segura de `main`;
 - validación de identidad recuperada de `localStorage`, configuración SMTP y JSON-LD generado;
+- reintento único de navegación de QA visual cuando `astro dev` aborta una ruta con `net::ERR_ABORTED`;
 - tokens y guardas de arquitectura CSS.
 
-La ejecución verificada actual de `pnpm test` contiene 23 archivos y 106 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
+La ejecución verificada actual de `pnpm test` contiene 24 archivos y 109 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
 
 ## Playwright: E2E
 
@@ -73,7 +74,7 @@ Para reutilizar un servidor ya activo (por ejemplo, uno accesible por Tailnet), 
 
 ### QA visual
 
-`scripts/visual-qa.ts`, ejecutado mediante `pnpm qa:visual`, recorre once rutas en `1440×900` y `375×812`, incluidos alojamientos, «Palomareños por el mundo» y un detalle de bando. Comprueba HTTP 200, overflow horizontal, foco visible, contraste aproximado y errores de consola. Los tiles de OpenStreetMap y adjuntos de Bandomovil se sustituyen por fixtures SVG compartidos con E2E. No genera snapshots ni realiza comparación de píxeles pese a su nombre. Este comando no forma parte de `.husky/pre-push`; hasta integrarlo en ese gate, se mantienen en Playwright las regresiones responsive de las rutas críticas.
+`scripts/visual-qa.ts`, ejecutado mediante `pnpm qa:visual`, recorre once rutas en `1440×900` y `375×812`, incluidos alojamientos, «Palomareños por el mundo» y un detalle de bando. Comprueba HTTP 200, overflow horizontal, foco visible, contraste aproximado y errores de consola. Los tiles de OpenStreetMap y adjuntos de Bandomovil se sustituyen por fixtures SVG compartidos con E2E. No genera snapshots ni realiza comparación de píxeles pese a su nombre. Reintenta una sola vez solo si Astro dev aborta la navegación con `net::ERR_ABORTED`; otros errores siguen fallando. Este comando no forma parte de `.husky/pre-push`; hasta integrarlo en ese gate, se mantienen en Playwright las regresiones responsive de las rutas críticas.
 
 ### CSS
 

@@ -1,5 +1,6 @@
 import { chromium } from '@playwright/test';
 import { registerExternalAssetFixtures } from './e2e-network-fixtures';
+import { retryAfterDevNavigationAbort } from './visual-qa-navigation';
 
 const baseUrl = process.env.VISUAL_QA_BASE_URL ?? 'http://127.0.0.1:4321';
 const routes = [
@@ -176,11 +177,17 @@ page.on('console', (message) => {
   if (message.type() === 'error') consoleErrors.push(message.text());
 });
 
+const navigateVisualQaRoute = (url: string) =>
+  retryAfterDevNavigationAbort(
+    () => page.goto(url, { waitUntil: 'load' }),
+    () => console.warn(`[visual-qa] Dev-server navigation aborted for ${url}; retrying once.`),
+  );
+
 for (const viewport of viewports) {
   await page.setViewportSize({ width: viewport.width, height: viewport.height });
 
   for (const route of routes) {
-    const response = await page.goto(`${baseUrl}${route}`, { waitUntil: 'load' });
+    const response = await navigateVisualQaRoute(`${baseUrl}${route}`);
     const status = response?.status() ?? 0;
     if (status !== 200) failures.push(`${viewport.name} ${route}: HTTP ${status}`);
 
