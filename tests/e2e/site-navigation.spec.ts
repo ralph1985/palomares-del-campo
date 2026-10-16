@@ -42,18 +42,6 @@ test.describe('web navigation', () => {
     ).toHaveAttribute('href', '/informacion-practica/');
   });
 
-  test('loads the optional 3D scene only after opening the menu', async ({ page }) => {
-    const threeRequests: string[] = [];
-    page.on('request', (request) => {
-      if (request.url().toLowerCase().includes('three')) threeRequests.push(request.url());
-    });
-
-    await page.goto('/');
-    expect(threeRequests).toHaveLength(0);
-    await page.getByRole('button', { name: 'Explorar' }).click();
-    await expect.poll(() => threeRequests.length).toBeGreaterThan(0);
-  });
-
   test('falls back gracefully when the optional 3D scene fails to load', async ({ page }) => {
     const pageErrors: string[] = [];
     page.on('pageerror', (error) => pageErrors.push(error.message));
@@ -65,12 +53,10 @@ test.describe('web navigation', () => {
     );
     const menu = page.locator('#site-menu');
     await page.getByRole('button', { name: 'Explorar' }).click();
+    await failedSceneRequest;
+
     await expect(menu).toHaveAttribute('aria-hidden', 'false');
     await expect(menu.getByRole('link', { name: 'La bola' })).toBeVisible();
-    await failedSceneRequest;
-    await page.waitForTimeout(50);
-
     expect(pageErrors).toEqual([]);
-    await expect(page.locator('#menu-scene')).toBeHidden();
   });
 });

@@ -62,7 +62,7 @@ Los escenarios E2E prueban la aplicación Astro real en Chromium y cubren:
 - juego local, simulador, captura, puntuación, modo inmersivo y límites de precisión;
 - formulario de Palomareños: envío aceptado/error recuperable con respuestas simuladas en `astro dev`, sin escritura a Convex; páginas de privacidad/cookies/aviso legal, guardia de Turnstile por hostname y error visible del widget;
 - controles sobre el mapa de Palomareños: menú operable con el mapa bajo el encabezado y regreso al inicio desde esa ruta;
-- fallbacks y carga diferida de escenas Three.js;
+- fallbacks de WebGL para el emblema y la bola, y fallback del menú cuando falla su escena 3D;
 - responsive, overflow horizontal y controles de vuelta arriba.
 
 Las pruebas del juego usan `astro dev` y el simulador disponible en `import.meta.env.DEV`. No constituyen una prueba E2E contra un deployment remoto de Convex, ni prueban dos jugadores reales compitiendo por la misma versión de la bola.
