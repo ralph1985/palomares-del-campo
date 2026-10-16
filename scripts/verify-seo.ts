@@ -1,6 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateJsonLdContent } from './seo-json-ld';
 
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
 const failures: string[] = [];
@@ -31,7 +32,12 @@ function firstMatch(text: string, pattern: RegExp, label: string): string {
     failures.push(`Missing ${label}`);
     return '';
   }
-  return match[1];
+  const value = match[1];
+  if (value === undefined) {
+    failures.push(`Malformed ${label}`);
+    return '';
+  }
+  return value;
 }
 
 const htmlFiles = (await walk(root)).filter((path: string) => path.endsWith('.html'));
@@ -68,40 +74,47 @@ for (const path of htmlFiles) {
   }
 
   for (const image of html.matchAll(/property="og:image" content="([^"]+)"/g)) {
-    if (!image[1].startsWith('https://')) {
+    const imageUrl = image[1];
+    if (imageUrl === undefined || !imageUrl.startsWith('https://')) {
       failures.push(`${route}: Open Graph image is not absolute`);
     }
   }
 
   for (const jsonLd of html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)) {
-    try {
-      const parsed = JSON.parse(jsonLd[1]!) as JsonLdItem | JsonLdItem[];
-      const entries: JsonLdItem[] = Array.isArray(parsed) ? parsed : [parsed];
-      for (const entry of entries) {
-        if (entry['@type'] === 'Article') {
-          const authorType = entry.author?.['@type'];
-          if (!entry.author || (authorType !== 'Person' && authorType !== 'Organization')) {
-            failures.push(`${route}: Article author must be a Person or Organization node`);
-          }
-          if (!entry.author?.name) {
-            failures.push(`${route}: Article author node has no name`);
-          }
-        }
-      }
-    } catch {
+    const content = jsonLd[1];
+    if (content === undefined) {
       failures.push(`${route}: invalid JSON-LD`);
+      continue;
+    }
+    for (const error of validateJsonLdContent(content)) {
+      failures.push(`${route}: ${error}`);
     }
   }
 }
 
 const sitemapIndex = await readFile(join(root, 'sitemap-index.xml'), 'utf8');
-const childSitemaps = [...sitemapIndex.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) =>
-  join(root, match[1]!.split('/').pop()!),
-);
-const sitemapUrls = [];
+const childSitemaps: string[] = [];
+for (const match of sitemapIndex.matchAll(/<loc>(.*?)<\/loc>/g)) {
+  const location = match[1];
+  const fileName = location?.split('/').at(-1);
+  if (!fileName) {
+    failures.push('Sitemap index contains an invalid location');
+    continue;
+  }
+  childSitemaps.push(join(root, fileName));
+}
+
+const sitemapUrls: string[] = [];
 for (const sitemap of childSitemaps) {
   const content = await readFile(sitemap, 'utf8');
-  sitemapUrls.push(...[...content.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]));
+  for (const match of content.matchAll(/<loc>(.*?)<\/loc>/g)) {
+    const url = match[1];
+    if (url === undefined) {
+      failures.push('Sitemap contains an invalid URL');
+      continue;
+    }
+    sitemapUrls.push(url);
+  }
 }
 
 if (sitemapUrls.length === 0) {
@@ -133,8 +146,3 @@ if (failures.length > 0) {
 console.log(
   `SEO verification passed: ${htmlFiles.length - 1} indexable HTML pages and ${sitemapUrls.length} sitemap URLs.`,
 );
-
-type JsonLdItem = {
-  '@type'?: string;
-  author?: { '@type'?: string; name?: string };
-};
