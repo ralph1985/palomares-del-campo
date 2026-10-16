@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test.describe('Palomareños por el mundo', () => {
   test('loads the empty Leaflet map and the public proposal form', async ({ page }) => {

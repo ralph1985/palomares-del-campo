@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test.describe('local routes', () => {
   test('shows a sourced external route without presenting it as municipal', async ({ page }) => {

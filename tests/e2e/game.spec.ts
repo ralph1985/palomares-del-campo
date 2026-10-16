@@ -1,13 +1,18 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test.describe('local ball game', () => {
   test('loads the map, locations and development simulator', async ({ page }) => {
+    const tileResponse = page.waitForResponse(
+      (response) => response.url().includes('.tile.openstreetmap.org'),
+      { timeout: 2_000 },
+    );
     await page.goto('/juego/');
 
     await expect(page.getByRole('heading', { name: 'La bola está en juego.' })).toBeVisible();
     await expect(page.getByText(/(LIVE|LOCAL) MATCH/)).toBeVisible();
     await expect(page.getByRole('link', { name: 'Entrar en la partida' })).toBeVisible();
     await expect(page.locator('#game-map .leaflet-tile').first()).toBeVisible();
+    expect((await tileResponse).headers()['x-e2e-map-tile']).toBe('fixture');
     await expect(page.locator('#game-map path.leaflet-interactive')).toHaveCount(6);
     await expect(page.locator('[data-game-simulator]')).toBeVisible();
     await expect(page.locator('[data-game-scenario] option')).toHaveCount(4);

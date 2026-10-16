@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test.describe('responsive and accessible web shell', () => {
   test('keeps the game page within a narrow viewport', async ({ page }) => {

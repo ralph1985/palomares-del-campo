@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test.describe('optional Three.js visuals', () => {
   test('enhances the about hero without replacing its real fallback', async ({ page }) => {
