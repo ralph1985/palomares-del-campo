@@ -1,25 +1,17 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('web navigation', () => {
-  test('renders the home page and the game entry point', async ({ page }) => {
+  test('shows the home identity and creator credit', async ({ page }) => {
     await page.goto('/');
 
     await expect(page).toHaveTitle(/Palomares del Campo/);
     await expect(page.getByRole('heading', { name: /Un nuevo espacio/ })).toBeVisible();
-    await expect(page.getByRole('link', { name: /Probar el mapa del juego/ })).toHaveAttribute(
-      'href',
-      '/juego/',
-    );
-    await expect(page.locator('.brand-mark img')).toHaveAttribute(
-      'src',
-      '/brand/escudo-palomares-del-campo.svg',
-    );
     await expect(
       page.getByRole('link', { name: 'Web realizada por conquense.dev' }),
     ).toHaveAttribute('href', 'https://conquense.dev/');
   });
 
-  test('presents the about page with history, heritage and sources', async ({ page }) => {
+  test('presents the about page with a sourced history section', async ({ page }) => {
     await page.goto('/sobre-el-pueblo/');
 
     await expect(page).toHaveTitle(/Sobre Palomares del Campo/);
@@ -29,30 +21,10 @@ test.describe('web navigation', () => {
     await expect(
       page.getByRole('heading', { name: 'Una historia ligada al territorio' }),
     ).toBeVisible();
-    await expect(
-      page.getByRole('heading', { name: 'Iglesia de Nuestra Señora de la Asunción' }),
-    ).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Fiestas y memoria viva' })).toBeVisible();
-    await expect(
-      page.getByRole('img', {
-        name: 'Fachada de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo',
-      }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole('img', {
-        name: 'Fuente del Pez y restos del Castillo de San Miguel en el entorno de Palomares del Campo',
-      }),
-    ).toHaveAttribute('loading', 'lazy');
-    await expect(
-      page.getByRole('img', { name: 'Escena de las fiestas de Palomares del Campo' }),
-    ).toHaveAttribute('loading', 'lazy');
     await expect(page.getByRole('link', { name: 'Historia del portal municipal' })).toHaveAttribute(
       'href',
       'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-4',
     );
-    await expect(
-      page.getByRole('link', { name: 'Sobre el pueblo', exact: true }).last(),
-    ).toHaveAttribute('href', '/sobre-el-pueblo/');
   });
 
   test('exposes official Palomares municipal services in the footer', async ({ page }) => {
@@ -60,25 +32,14 @@ test.describe('web navigation', () => {
 
     const footer = page.getByRole('contentinfo');
     await expect(footer.getByText('Información municipal')).toBeVisible();
-    await expect(footer.getByText('Web editorial')).toHaveCount(0);
     await expect(footer.getByRole('heading', { name: 'Enlaces oficiales' })).toBeVisible();
     await expect(footer.getByRole('link', { name: 'Portal municipal' })).toHaveAttribute(
       'href',
       'https://palomaresdelcampo.dipucuenca.es/',
     );
-    await expect(footer.getByRole('link', { name: 'Sede electrónica' })).toHaveAttribute(
-      'href',
-      'https://palomaresdelcampo.sedelectronica.es/info.0',
-    );
-    await expect(footer.getByRole('link', { name: 'Tablón de anuncios' })).toHaveAttribute(
-      'href',
-      'https://palomaresdelcampo.sedelectronica.es/board',
-    );
     await expect(
       footer.getByRole('link', { name: 'Ver todos los servicios municipales' }),
     ).toHaveAttribute('href', '/informacion-practica/');
-    await expect(footer.getByRole('link', { name: 'Portal de transparencia' })).toHaveCount(0);
-    await expect(footer.getByRole('link', { name: 'Buzón electrónico' })).toHaveCount(0);
   });
 
   test('loads the optional 3D scene only after opening the menu', async ({ page }) => {

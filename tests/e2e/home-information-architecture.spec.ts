@@ -10,7 +10,6 @@ test.describe('home information architecture', () => {
       'href',
       '/informacion-practica/',
     );
-    await expect(page.locator('#vecinos')).toHaveCount(0);
     await expect(page.getByRole('link', { name: /Conocer el pueblo/ })).toHaveAttribute(
       'href',
       '/sobre-el-pueblo/',

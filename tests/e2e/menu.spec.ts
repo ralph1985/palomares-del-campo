@@ -27,6 +27,7 @@ test.describe('accessible site menu', () => {
       'href',
       '/sobre-el-pueblo/',
     );
+    await expect(menu.getByRole('link', { name: 'Rutas' })).toHaveAttribute('href', '/rutas/');
 
     await closeButton.click();
     await expect(menu).toHaveAttribute('aria-hidden', 'true');
