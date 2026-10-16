@@ -35,7 +35,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     authorType,
     datePublished: date,
     sourceUrl,
-    section: category,
+    ...(category === undefined ? {} : { section: category }),
   }}
   breadcrumbs={[
     { name: 'Inicio', path: '/' },

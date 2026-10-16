@@ -147,6 +147,7 @@ export const submitWithTurnstile = action({
 
     const secret = process.env.TURNSTILE_SECRET_KEY;
     const allowedHostnames = parseTurnstileHostnames(process.env.TURNSTILE_ALLOWED_HOSTNAMES);
+    const expectedAction = process.env.TURNSTILE_EXPECTED_ACTION?.trim();
     if (!secret || allowedHostnames.length === 0) {
       throw new Error('turnstile-not-configured');
     }
@@ -161,7 +162,7 @@ export const submitWithTurnstile = action({
     if (
       !isAcceptedTurnstileVerification(verification, {
         allowedHostnames,
-        expectedAction: process.env.TURNSTILE_EXPECTED_ACTION?.trim() || undefined,
+        ...(expectedAction ? { expectedAction } : {}),
       })
     ) {
       throw new Error('turnstile-invalid');
@@ -174,9 +175,9 @@ export const submitWithTurnstile = action({
       story: args.story,
       contactEmail: args.contactEmail,
       consent: args.consent,
-      website: args.website,
-      latitude: args.latitude,
-      longitude: args.longitude,
+      ...(args.website === undefined ? {} : { website: args.website }),
+      ...(args.latitude === undefined ? {} : { latitude: args.latitude }),
+      ...(args.longitude === undefined ? {} : { longitude: args.longitude }),
     });
   },
 });

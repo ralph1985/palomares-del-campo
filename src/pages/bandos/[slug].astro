@@ -44,10 +44,10 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     authorType,
     datePublished: date,
     sourceUrl,
-    section: category,
+    ...(category === undefined ? {} : { section: category }),
   }}
-  socialImage={imageAttachment?.url}
-  socialImageAlt={imageAttachment?.label}
+  {...(imageAttachment?.url === undefined ? {} : { socialImage: imageAttachment.url })}
+  {...(imageAttachment?.label === undefined ? {} : { socialImageAlt: imageAttachment.label })}
   breadcrumbs={[
     { name: 'Inicio', path: '/' },
     { name: 'Bandos', path: '/bandos/' },

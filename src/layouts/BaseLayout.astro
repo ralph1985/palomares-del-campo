@@ -41,6 +41,19 @@ const {
   article,
   breadcrumbs,
 } = Astro.props;
+
+const seoProps = {
+  title,
+  description,
+  ...(canonicalPath === undefined ? {} : { canonicalPath }),
+  ...(socialImage === undefined ? {} : { image: socialImage }),
+  ...(socialImageAlt === undefined ? {} : { imageAlt: socialImageAlt }),
+  ...(type === undefined ? {} : { type }),
+  ...(schema === undefined ? {} : { schema }),
+  ...(noindex === undefined ? {} : { noindex }),
+  ...(article === undefined ? {} : { article }),
+  ...(breadcrumbs === undefined ? {} : { breadcrumbs }),
+};
 ---
 
 <!doctype html>
@@ -48,18 +61,7 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <SEO
-      title={title}
-      description={description}
-      canonicalPath={canonicalPath}
-      image={socialImage}
-      imageAlt={socialImageAlt}
-      type={type}
-      schema={schema}
-      noindex={noindex}
-      article={article}
-      breadcrumbs={breadcrumbs}
-    />
+    <SEO {...seoProps} />
     <slot name="head" />
   </head>
   <body class={bodyClass}>

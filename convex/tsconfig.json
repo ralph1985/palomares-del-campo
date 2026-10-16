@@ -6,6 +6,7 @@
   "compilerOptions": {
     /* These settings are not required by Convex and can be modified. */
     "strict": true,
+    "exactOptionalPropertyTypes": true,
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
     "skipLibCheck": true,
