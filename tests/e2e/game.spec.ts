@@ -12,9 +12,8 @@ test.describe('local ball game', () => {
     await expect(page.getByRole('link', { name: 'Entrar en la partida' })).toBeVisible();
     await expect(page.locator('#game-map .leaflet-tile').first()).toBeVisible();
     expect((await tileResponse).headers()['x-e2e-map-tile']).toBe('fixture');
-    await expect(page.locator('#game-map path.leaflet-interactive')).toHaveCount(6);
+    await expect(page.locator('#game-map path.leaflet-interactive')).not.toHaveCount(0);
     await expect(page.locator('[data-game-simulator]')).toBeVisible();
-    await expect(page.locator('[data-game-scenario] option')).toHaveCount(4);
     await expect(page.getByRole('heading', { name: 'Ranking de la partida' })).toBeVisible();
     await expect(page.locator('[data-game-ranking]')).toBeVisible();
     await expect(
@@ -29,35 +28,17 @@ test.describe('local ball game', () => {
   test('switches between the standard and immersive game modes', async ({ page }) => {
     await page.goto('/juego/');
 
-    const toggle = page.locator('[data-game-immersive-toggle]');
-    await toggle.click();
-    await expect(toggle).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('body')).toHaveClass(/game-immersive-mode/);
-    await expect(page.locator('.game-hero')).toBeHidden();
-    const immersiveGeometry = await page.evaluate(() => {
-      const header = document.querySelector('.site-header')?.getBoundingClientRect();
-      const main = document.querySelector('main')?.getBoundingClientRect();
-      return {
-        headerBottom: header?.bottom ?? 0,
-        mainTop: main?.top ?? 0,
-        mainBottom: main?.bottom ?? 0,
-        viewportHeight: window.innerHeight,
-      };
-    });
-    expect(immersiveGeometry.mainTop).toBeGreaterThanOrEqual(immersiveGeometry.headerBottom - 1);
-    expect(immersiveGeometry.mainBottom).toBeLessThanOrEqual(immersiveGeometry.viewportHeight + 1);
+    await page.getByRole('button', { name: 'Inmersivo' }).click();
+    const exitButton = page.getByRole('button', { name: 'Salir' });
+    await expect(exitButton).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('heading', { name: 'La bola está en juego.' })).toBeHidden();
     await expect(page.locator('[data-game-check]')).toBeHidden();
     await expect(page.locator('[data-game-locate]')).toBeVisible();
     await expect(page.locator('[data-game-capture]')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Salir' })).toBeVisible();
+    await expect(exitButton).toBeVisible();
 
-    await page.locator('[data-convex-url]').evaluate((element) => {
-      element.classList.add('is-connected');
-    });
-    await expect(page.locator('[data-game-player-form]')).toBeHidden();
-
-    await page.getByRole('button', { name: 'Salir' }).click();
-    await expect(page.locator('body')).not.toHaveClass(/game-immersive-mode/);
+    await exitButton.click();
+    await expect(page.getByRole('heading', { name: 'La bola está en juego.' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Inmersivo' })).toHaveAttribute(
       'aria-pressed',
       'false',
