@@ -19,6 +19,7 @@ import {
   type RemoteLeaderboardEntry,
   type RemotePlayerPresence,
 } from './convex-game';
+import { isE2EFixtureMode } from './e2e-fixture-mode';
 import { PRESENCE_HEARTBEAT_MS } from '../../convex/presence';
 
 type Coordinates = GeoPosition;
@@ -55,7 +56,11 @@ const immersiveToggle = document.querySelector<HTMLButtonElement>('[data-game-im
 const immersiveLabel = document.querySelector<HTMLElement>('[data-game-immersive-label]');
 const headerElement = document.querySelector<HTMLElement>('.site-header');
 const gameSection = mapElement.closest<HTMLElement>('[data-convex-url]');
-const convexUrl = gameSection?.dataset.convexUrl ?? '';
+const e2eFixtureMode = isE2EFixtureMode({
+  development: import.meta.env.DEV,
+  flag: import.meta.env.PUBLIC_E2E_TEST_MODE,
+});
+const convexUrl = e2eFixtureMode ? '' : (gameSection?.dataset.convexUrl ?? '');
 
 const map = L.map(mapElement, {
   center: [39.9464, -2.5988],

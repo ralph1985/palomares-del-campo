@@ -1,5 +1,11 @@
 ---
 import ExternalLink from '../ui/ExternalLink.astro';
+import { isE2EFixtureMode } from '../../scripts/e2e-fixture-mode';
+const isE2EFixture = isE2EFixtureMode({
+  development: import.meta.env.DEV,
+  flag: import.meta.env.PUBLIC_E2E_TEST_MODE,
+});
+const convexUrl = isE2EFixture ? '' : (import.meta.env.CONVEX_URL ?? '');
 ---
 
 <section class="world-map-card" aria-labelledby="world-map-title">
@@ -18,7 +24,7 @@ import ExternalLink from '../ui/ExternalLink.astro';
   <div
     class="world-map"
     data-palomarenos-map
-    data-convex-url={import.meta.env.CONVEX_URL ?? ''}
+    data-convex-url={convexUrl}
     data-map-status="loading"
     role="application"
     aria-label="Mapa interactivo de palomareños que viven fuera de Palomares del Campo"
