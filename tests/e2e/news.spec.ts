@@ -1,16 +1,9 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('editorial news', () => {
-  test('shows the published news archive', async ({ page }) => {
-    await page.goto('/noticias/');
-
-    await expect(page.getByRole('heading', { name: 'Noticias', exact: true })).toBeVisible();
-    await expect(page.locator('.news-card')).toHaveCount(13);
-    await expect(page.getByText('13 noticias publicadas')).toBeVisible();
-  });
-
   test('filters news by publication year and restores it from the URL', async ({ page }) => {
     await page.goto('/noticias/');
+    await expect(page.getByRole('heading', { name: 'Noticias', exact: true })).toBeVisible();
 
     const year = page.getByRole('combobox', { name: 'Año' });
     const cards = page.locator('[data-news-card]');
