@@ -1,4 +1,50 @@
+import type { Page } from '@playwright/test';
 import { expect, test } from './fixtures';
+
+const configureSubmissionHarness = async (page: Page, outcome: 'success' | 'rate-limit') => {
+  await page.addInitScript((submissionOutcome) => {
+    type E2EWindow = Window & {
+      __PALOMARENOS_TURNSTILE_TEST__?: boolean;
+      __PALOMARENOS_FORM_TEST__?: (input: unknown) => Promise<unknown>;
+      __PALOMARENOS_FORM_TEST_INPUT__?: unknown;
+      turnstile?: {
+        render: (container: HTMLElement, options: { callback: (token: string) => void }) => string;
+        reset: () => void;
+      };
+    };
+    const browserWindow = window as unknown as E2EWindow;
+    browserWindow.__PALOMARENOS_TURNSTILE_TEST__ = true;
+    browserWindow.__PALOMARENOS_FORM_TEST__ = async (input) => {
+      browserWindow.__PALOMARENOS_FORM_TEST_INPUT__ = input;
+      if (submissionOutcome === 'rate-limit') throw new Error('submission-rate-limited');
+      return {
+        status: 'submitted',
+        submissionId: 'e2e-submission',
+        message: 'Tu propuesta queda pendiente de revisión.',
+      };
+    };
+    browserWindow.turnstile = {
+      render: (_container, options) => {
+        window.setTimeout(() => options.callback('e2e-turnstile-token'), 0);
+        return 'e2e-widget';
+      },
+      reset: () => undefined,
+    };
+
+    const disableConvexForTest = (): boolean => {
+      const form = document.querySelector<HTMLFormElement>('[data-palomarenos-form]');
+      if (!form) return false;
+      form.dataset.convexUrl = '';
+      return true;
+    };
+    if (!disableConvexForTest()) {
+      const observer = new MutationObserver(() => {
+        if (disableConvexForTest()) observer.disconnect();
+      });
+      observer.observe(document, { childList: true, subtree: true });
+    }
+  }, outcome);
+};
 
 test.describe('Palomareños por el mundo', () => {
   test('loads the empty Leaflet map and the public proposal form', async ({ page }) => {
@@ -125,6 +171,68 @@ test.describe('Palomareños por el mundo', () => {
         ),
       )
       .toBe(0);
+  });
+
+  test('submits a proposal and shows the pending-review confirmation', async ({ page }) => {
+    await configureSubmissionHarness(page, 'success');
+    await page.goto('/palomarenos-por-el-mundo/');
+
+    await page.getByRole('textbox', { name: 'Nombre que quieres mostrar' }).fill('Ana de prueba');
+    await page.getByRole('textbox', { name: 'Ciudad' }).fill('Madrid');
+    await page.getByRole('textbox', { name: 'País' }).fill('España');
+    await page.getByRole('textbox', { name: /Email de contacto/ }).fill('ana@example.com');
+    await page.getByRole('textbox', { name: 'Tu historia' }).fill('Un recuerdo de prueba.');
+    await page.getByRole('checkbox', { name: /He leído la información básica/ }).check();
+    await expect(page.getByRole('button', { name: 'Enviar propuesta' })).toBeEnabled();
+    await page.getByRole('button', { name: 'Enviar propuesta' }).click();
+
+    await expect(page.locator('[data-form-status]')).toHaveAttribute('data-state', 'success');
+    await expect(page.locator('[data-form-status]')).toHaveText(
+      'Tu propuesta queda pendiente de revisión.',
+    );
+    await expect(page.getByRole('button', { name: 'Enviar propuesta' })).toBeDisabled();
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            (window as Window & { __PALOMARENOS_FORM_TEST_INPUT__?: unknown })
+              .__PALOMARENOS_FORM_TEST_INPUT__,
+        ),
+      )
+      .toEqual({
+        displayName: 'Ana de prueba',
+        city: 'Madrid',
+        country: 'España',
+        story: 'Un recuerdo de prueba.',
+        contactEmail: 'ana@example.com',
+        consent: true,
+        website: '',
+        turnstileToken: 'e2e-turnstile-token',
+      });
+  });
+
+  test('keeps the proposal available and explains a recoverable submission error', async ({
+    page,
+  }) => {
+    await configureSubmissionHarness(page, 'rate-limit');
+    await page.goto('/palomarenos-por-el-mundo/');
+
+    await page.getByRole('textbox', { name: 'Nombre que quieres mostrar' }).fill('Ana de prueba');
+    await page.getByRole('textbox', { name: 'Ciudad' }).fill('Madrid');
+    await page.getByRole('textbox', { name: 'País' }).fill('España');
+    await page.getByRole('textbox', { name: /Email de contacto/ }).fill('ana@example.com');
+    await page.getByRole('textbox', { name: 'Tu historia' }).fill('Un recuerdo de prueba.');
+    await page.getByRole('checkbox', { name: /He leído la información básica/ }).check();
+    await page.getByRole('button', { name: 'Enviar propuesta' }).click();
+
+    await expect(page.locator('[data-form-status]')).toHaveAttribute('data-state', 'error');
+    await expect(page.locator('[data-form-status]')).toHaveText(
+      'Espera un poco antes de enviar otra propuesta.',
+    );
+    await expect(page.getByRole('button', { name: 'Enviar propuesta' })).toBeEnabled();
+    await expect(page.getByRole('textbox', { name: 'Tu historia' })).toHaveValue(
+      'Un recuerdo de prueba.',
+    );
   });
 
   test('keeps the sticky header above Leaflet layers', async ({ page }) => {

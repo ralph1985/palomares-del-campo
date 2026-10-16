@@ -32,6 +32,7 @@ declare global {
   interface Window {
     turnstile?: TurnstileApi;
     __PALOMARENOS_TURNSTILE_TEST__?: boolean;
+    __PALOMARENOS_FORM_TEST__?: SubmissionTestHook;
   }
 }
 
@@ -40,6 +41,8 @@ export type PalomarenoSubmissionResult = {
   submissionId: string;
   message: string;
 };
+
+type SubmissionTestHook = (input: PalomarenoFormInput) => Promise<PalomarenoSubmissionResult>;
 
 export const submitPalomareno = (
   client: ActionClient,
@@ -115,9 +118,10 @@ const bindForm = (form: HTMLFormElement): void => {
   const turnstileStatusElement = form.querySelector<HTMLElement>('[data-turnstile-status]');
   const turnstileContainer = form.querySelector<HTMLElement>('[data-turnstile-widget]');
   const submitButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+  const testSubmit = import.meta.env.DEV ? window.__PALOMARENOS_FORM_TEST__ : undefined;
 
   if (!statusElement || !submitButton) return;
-  if (!convexUrl) {
+  if (!convexUrl && !testSubmit) {
     submitButton.disabled = true;
     statusElement.textContent =
       'El formulario estará disponible cuando se configure el servicio de datos.';
@@ -144,7 +148,7 @@ const bindForm = (form: HTMLFormElement): void => {
     return;
   }
 
-  const client = new ConvexClient(convexUrl);
+  const client = testSubmit || !convexUrl ? undefined : new ConvexClient(convexUrl);
   let turnstileToken = '';
   let widgetId: string | undefined;
 
@@ -207,7 +211,7 @@ const bindForm = (form: HTMLFormElement): void => {
     statusElement.textContent = 'Enviando propuesta…';
 
     try {
-      const result = await submitPalomareno(client, {
+      const input: PalomarenoFormInput = {
         displayName: getFieldValue(formData, 'displayName'),
         city: getFieldValue(formData, 'city'),
         country: getFieldValue(formData, 'country'),
@@ -216,7 +220,14 @@ const bindForm = (form: HTMLFormElement): void => {
         consent: formData.get('consent') === 'on',
         website: getFieldValue(formData, 'website'),
         turnstileToken,
-      });
+      };
+      const result = testSubmit
+        ? await testSubmit(input)
+        : client
+          ? await submitPalomareno(client, input)
+          : (() => {
+              throw new Error('convex-client-unavailable');
+            })();
       statusElement.dataset.state = 'success';
       statusElement.textContent = result.message;
       form.reset();
