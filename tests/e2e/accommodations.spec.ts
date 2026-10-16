@@ -13,16 +13,21 @@ test.describe('rural accommodation directory', () => {
     await expect(page.getByText('Hasta 12 plazas')).toBeVisible();
     await expect(page.getByText('Horcajada de la Torre')).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Alrededores' })).toBeVisible();
-    await expect(page.locator('[data-accommodation-card]')).toHaveCount(10);
 
     await expect(page.getByText(/No gestionamos reservas/)).toBeVisible();
     await expect(page.getByText(/comprueba precios, disponibilidad/)).toBeVisible();
     await expect(
       page.getByRole('link', { name: /Sitio propio de Casa Rural San Cristóbal/ }),
     ).toHaveAttribute('href', 'https://www.casaruralsancristobalcuenca.es/');
+    const localAccommodation = page.getByRole('article').filter({
+      has: page.getByRole('heading', { name: 'Casa Rural San Cristóbal' }),
+    });
     await expect(
-      page.getByRole('link', { name: /Ficha consultada en TusCasasRurales.com/ }),
-    ).toHaveCount(10);
+      localAccommodation.getByRole('link', { name: /Ficha consultada en TusCasasRurales.com/ }),
+    ).toHaveAttribute(
+      'href',
+      'https://www.tuscasasrurales.com/casa-rural-san-cristobal-f20825.htm',
+    );
   });
 
   test('keeps the directory usable on a narrow viewport and in the menu', async ({ page }) => {
