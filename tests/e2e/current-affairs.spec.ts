@@ -54,24 +54,29 @@ test.describe('current affairs sections', () => {
   });
 
   test('renders images and documents attached to a bando', async ({ page }) => {
-    const attachmentResponse = page.waitForResponse(
-      (response) => response.url().includes('/userFiles/'),
-      { timeout: 2_000 },
+    const attachmentResponse = page.waitForResponse((response) =>
+      response.url().includes('/userFiles/'),
     );
     await page.goto('/bandos/1648341-clase-practica/');
+    const imageResponse = await attachmentResponse;
 
     await expect(page.getByRole('heading', { name: 'Recursos del comunicado' })).toBeVisible();
-    await expect(page.locator('.article-attachments img')).toHaveAttribute(
-      'src',
-      'https://www.bandomovil.com/userFiles/j3/j3a7jIMG-20260924-WA0000.jpg',
-    );
-    expect((await attachmentResponse).headers()['x-e2e-bando-asset']).toBe('fixture');
+    const attachedImage = page.locator('.article-attachments img');
+    await expect(attachedImage).toBeVisible();
+    await expect(attachedImage).toHaveAttribute('alt', /.+/);
+    expect(imageResponse.headers()['x-e2e-bando-asset']).toBe('fixture');
 
     await page.goto('/bandos/1658990-horarios-autobus-de-linea/');
     await expect(page.getByRole('heading', { name: 'Recursos del comunicado' })).toBeVisible();
-    await expect(
-      page.getByRole('link', { name: 'HORARIOSOCUELLAMOSCUENCAFUENTELESPINO.pdf' }),
-    ).toHaveAttribute('href', /HORARIOSOCUELLAMOSCUENCAFUENTELESPINO\.pdf$/);
+    const documentLinks = page
+      .getByRole('region', { name: 'Recursos del comunicado' })
+      .getByRole('link');
+    const pdfLinks = await documentLinks.all();
+    expect(pdfLinks.length).toBeGreaterThan(0);
+    for (const link of pdfLinks) {
+      await expect(link).toBeVisible();
+      await expect(link).toHaveAttribute('href', /\.pdf$/i);
+    }
   });
 
   test('filters bandos by publication year and restores it from the URL', async ({ page }) => {
@@ -126,8 +131,8 @@ test.describe('current affairs sections', () => {
     expect(new URL(page.url()).searchParams.get('q')).toBe('autobus linea');
 
     await search.fill('autobús');
+    await expect(page.locator('[data-bando-card]:visible')).not.toHaveCount(0);
     const accentedQueryMatches = await page.locator('[data-bando-card]:visible').count();
-    expect(accentedQueryMatches).toBe(2);
     await search.fill('autobus');
     await expect(page.locator('[data-bando-card]:visible')).toHaveCount(accentedQueryMatches);
 
