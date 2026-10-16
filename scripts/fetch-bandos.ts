@@ -42,15 +42,23 @@ const contentDirectory = path.join(projectRoot, 'src', 'content', 'bandos');
 const execFileAsync = promisify(execFile);
 
 export function parseRSSItems(xmlText: string): ImportedBandoItem[] {
-  return [...xmlText.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi)].map(([, itemXml]) => ({
-    title: extractXMLContent(itemXml, 'title'),
-    link: extractXMLContent(itemXml, 'link'),
-    description: extractXMLContent(itemXml, 'description'),
-    attachments: extractAttachments(extractXMLContent(itemXml, 'description')),
-    category: extractXMLContent(itemXml, 'category') || 'Info General',
-    pubDate: extractXMLContent(itemXml, 'pubDate'),
-    guid: extractXMLContent(itemXml, 'guid'),
-  }));
+  return [...xmlText.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi)].flatMap((match) => {
+    const itemXml = match[1];
+    if (itemXml === undefined) return [];
+
+    const description = extractXMLContent(itemXml, 'description');
+    return [
+      {
+        title: extractXMLContent(itemXml, 'title'),
+        link: extractXMLContent(itemXml, 'link'),
+        description,
+        attachments: extractAttachments(description),
+        category: extractXMLContent(itemXml, 'category') || 'Info General',
+        pubDate: extractXMLContent(itemXml, 'pubDate'),
+        guid: extractXMLContent(itemXml, 'guid'),
+      },
+    ];
+  });
 }
 
 const MONTHS = new Map([
@@ -70,15 +78,25 @@ const MONTHS = new Map([
 
 export function parseBandomovilDate(value: string): Date {
   const match = value.trim().match(/^(\d{1,2})-([A-Za-zÁÉÍÓÚáéíóú]+)-(\d{4})\s+(\d{1,2}):(\d{2})$/);
-  const month = match ? MONTHS.get(match[2].toLocaleLowerCase('es-ES')) : undefined;
+  const day = match?.[1];
+  const monthName = match?.[2];
+  const year = match?.[3];
+  const hour = match?.[4];
+  const minute = match?.[5];
+  const month = monthName ? MONTHS.get(monthName.toLocaleLowerCase('es-ES')) : undefined;
 
-  if (!match || month === undefined) {
+  if (
+    day === undefined ||
+    monthName === undefined ||
+    year === undefined ||
+    hour === undefined ||
+    minute === undefined ||
+    month === undefined
+  ) {
     throw new Error(`Invalid Bandomovil date: ${value}`);
   }
 
-  return new Date(
-    Date.UTC(Number(match[3]), month, Number(match[1]), Number(match[4]), Number(match[5])),
-  );
+  return new Date(Date.UTC(Number(year), month, Number(day), Number(hour), Number(minute)));
 }
 
 export function extractAttachments(html: string): BandoAttachment[] {
@@ -102,6 +120,7 @@ export function extractAttachments(html: string): BandoAttachment[] {
 
   for (const match of html.matchAll(/<img\b[^>]*>/gi)) {
     const tag = match[0];
+    if (tag === undefined) continue;
     addAttachment(
       readHTMLAttribute(tag, 'src'),
       readHTMLAttribute(tag, 'alt'),
@@ -110,8 +129,9 @@ export function extractAttachments(html: string): BandoAttachment[] {
   }
 
   for (const match of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
-    const attributes = match[1];
-    addAttachment(readHTMLAttribute(attributes, 'href'), htmlToMarkdown(match[2]));
+    const attributes = match[1] ?? '';
+    const content = match[2] ?? '';
+    addAttachment(readHTMLAttribute(attributes, 'href'), htmlToMarkdown(content));
   }
 
   return attachments;
@@ -158,23 +178,45 @@ export function parseArchiveItems(html: string): ArchiveBandoItem[] {
   const itemPattern =
     /<li\b[\s\S]*?href="\/palomaresdelcampo\/(\d+)\/\d+"[\s\S]*?<h3[^>]*>([\s\S]*?)<\/h3>[\s\S]*?<div class="post-publication"[^>]*>[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>[\s\S]*?<span class="badge"[^>]*>([\s\S]*?)<\/span>[\s\S]*?<div class="comunicadobody"[^>]*>([\s\S]*?)<\/div>/gi;
 
-  return [...html.matchAll(itemPattern)].map((match) => ({
-    title: htmlToMarkdown(match[2]),
-    link: `${ARCHIVE_ORIGIN}/palomaresdelcampo/${match[1]}/0`,
-    description: match[5].trim(),
-    attachments: extractAttachments(match[5]),
-    category: htmlToMarkdown(match[4]) || 'Info General',
-    pubDate: parseBandomovilDate(htmlToMarkdown(match[3])).toISOString(),
-    guid: `${ARCHIVE_ORIGIN}/palomaresdelcampo/${match[1]}/0`,
-    sourceId: match[1],
-  }));
+  return [...html.matchAll(itemPattern)].flatMap((match) => {
+    const sourceId = match[1];
+    const title = match[2];
+    const date = match[3];
+    const category = match[4];
+    const description = match[5];
+    if (
+      sourceId === undefined ||
+      title === undefined ||
+      date === undefined ||
+      category === undefined ||
+      description === undefined
+    ) {
+      return [];
+    }
+
+    const link = `${ARCHIVE_ORIGIN}/palomaresdelcampo/${sourceId}/0`;
+    return [
+      {
+        title: htmlToMarkdown(title),
+        link,
+        description: description.trim(),
+        attachments: extractAttachments(description),
+        category: htmlToMarkdown(category) || 'Info General',
+        pubDate: parseBandomovilDate(htmlToMarkdown(date)).toISOString(),
+        guid: link,
+        sourceId,
+      },
+    ];
+  });
 }
 
 export function extractXMLContent(xml: string, tag: string): string {
   const match = xml.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'));
   if (!match) return '';
 
-  let content = match[1].trim();
+  const rawContent = match[1];
+  if (rawContent === undefined) return '';
+  let content = rawContent.trim();
   if (content.startsWith('<![CDATA[') && content.endsWith(']]>')) {
     content = content.slice(9, -3);
   }
@@ -261,7 +303,9 @@ export function htmlToMarkdown(html: string): string {
 }
 
 export function generateFrontmatter(item: BandoItem): string {
-  return createBandoMarkdown(item).split('---\n').slice(1, 2)[0];
+  const frontmatter = createBandoMarkdown(item).split('---\n').slice(1, 2)[0];
+  if (frontmatter === undefined) throw new Error('Generated bando is missing its frontmatter.');
+  return frontmatter;
 }
 
 export function slugify(value: string): string {
@@ -328,7 +372,10 @@ async function fetchText(url: string): Promise<string> {
 function parseArchivePageCount(html: string): number {
   const pages = [
     ...html.matchAll(/web\.php\?municipio=palomaresdelcampo(?:&amp;|&)pag=(\d+)/gi),
-  ].map(([, page]) => Number(page));
+  ].flatMap((match) => {
+    const page = match[1];
+    return page === undefined ? [] : [Number(page)];
+  });
   return Math.max(0, ...pages) + 1;
 }
 
@@ -341,14 +388,16 @@ async function mapWithConcurrency<Item, Result>(
   limit: number,
   callback: (item: Item) => Promise<Result>,
 ): Promise<Result[]> {
-  const results: Result[] = new Array(items.length);
+  const results: Result[] = [];
   let nextIndex = 0;
 
   async function worker(): Promise<void> {
     while (nextIndex < items.length) {
       const index = nextIndex;
       nextIndex += 1;
-      results[index] = await callback(items[index]);
+      const item = items[index];
+      if (item === undefined) throw new Error('Concurrency worker selected an invalid item index.');
+      results[index] = await callback(item);
     }
   }
 
@@ -437,11 +486,17 @@ function extractSerializedAttachments(markdown: string): BandoAttachment[] {
     / {2}- type: '((?:''|[^'])*)'\n {4}url: '((?:''|[^'])*)'\n {4}label: '((?:''|[^'])*)'(?:\n {4}alt: '((?:''|[^'])*)')?/g;
 
   for (const match of markdown.matchAll(attachmentPattern)) {
+    const type = match[1];
+    const url = match[2];
+    const label = match[3];
+    const alt = match[4];
+    if (type === undefined || url === undefined || label === undefined) continue;
+
     attachments.push({
-      type: match[1].replaceAll("''", "'"),
-      url: match[2].replaceAll("''", "'"),
-      label: match[3].replaceAll("''", "'"),
-      ...(match[4] ? { alt: match[4].replaceAll("''", "'") } : {}),
+      type: type.replaceAll("''", "'"),
+      url: url.replaceAll("''", "'"),
+      label: label.replaceAll("''", "'"),
+      ...(alt ? { alt: alt.replaceAll("''", "'") } : {}),
     });
   }
 

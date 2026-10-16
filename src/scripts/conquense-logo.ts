@@ -79,7 +79,9 @@ const initializeCredit = async (credit: HTMLElement) => {
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let isVisible = true;
-    const visibilityObserver = new IntersectionObserver(([entry]) => {
+    const visibilityObserver = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
       isVisible = entry.isIntersecting;
     });
     visibilityObserver.observe(credit);
@@ -108,8 +110,9 @@ const loadCreditWhenVisible = (credit: HTMLElement) => {
   }
 
   const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (!entry.isIntersecting) return;
+    (entries) => {
+      const entry = entries[0];
+      if (!entry || !entry.isIntersecting) return;
       observer.disconnect();
       void initializeCredit(credit);
     },

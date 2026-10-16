@@ -2,6 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { gameLocations } from '../../src/data/game-locations';
 import { demoScoreRules, nextLocationAfter, pointsAfterDecay } from '../../src/game/rules';
 
+const firstLocation = gameLocations[0];
+const secondLocation = gameLocations[1];
+const lastLocation = gameLocations.at(-1);
+if (!firstLocation || !secondLocation || !lastLocation) {
+  throw new Error('Rules test fixture is missing locations.');
+}
+
 describe('game rules', () => {
   it('awards the configured capture score without inactivity', () => {
     expect(pointsAfterDecay(0, 0)).toBe(0);
@@ -19,12 +26,12 @@ describe('game rules', () => {
   });
 
   it('moves to the next location and wraps around', () => {
-    expect(nextLocationAfter(gameLocations, gameLocations[0].id)).toBe(gameLocations[1]);
-    expect(nextLocationAfter(gameLocations, gameLocations.at(-1)?.id ?? '')).toBe(gameLocations[0]);
+    expect(nextLocationAfter(gameLocations, firstLocation.id)).toBe(secondLocation);
+    expect(nextLocationAfter(gameLocations, lastLocation.id)).toBe(firstLocation);
   });
 
   it('starts at the first location for an unknown current id', () => {
-    expect(nextLocationAfter(gameLocations, 'unknown')).toBe(gameLocations[0]);
+    expect(nextLocationAfter(gameLocations, 'unknown')).toBe(firstLocation);
   });
 
   it('fails clearly when no locations are configured', () => {

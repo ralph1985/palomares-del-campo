@@ -2,7 +2,8 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     "allowJs": false,
-    "exactOptionalPropertyTypes": true
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true
   },
   "include": [".astro/types.d.ts", "astro.config.ts", "src/**/*", "tests/**/*", "scripts/**/*"],
   "exclude": ["dist", "node_modules", "convex"]

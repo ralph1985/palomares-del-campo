@@ -59,16 +59,21 @@ function inspectViewport() {
 
     const foregroundMatch = style.color.match(/rgba?\(([^)]+)\)/);
     if (!foregroundMatch) continue;
-    const foregroundParts = foregroundMatch[1]
+    const foregroundColor = foregroundMatch[1];
+    if (foregroundColor === undefined) continue;
+    const foregroundParts = foregroundColor
       .split(/[\s, /]+/)
       .filter(Boolean)
       .map(Number);
-    if (foregroundParts.length < 3) continue;
+    const [redChannel, greenChannel, blueChannel, alphaChannel] = foregroundParts;
+    if (redChannel === undefined || greenChannel === undefined || blueChannel === undefined) {
+      continue;
+    }
     const foreground: RgbColor = {
-      r: foregroundParts[0],
-      g: foregroundParts[1],
-      b: foregroundParts[2],
-      a: foregroundParts[3] ?? 1,
+      r: redChannel,
+      g: greenChannel,
+      b: blueChannel,
+      a: alphaChannel ?? 1,
     };
     if (foreground.a === 0) continue;
 
@@ -77,16 +82,26 @@ function inspectViewport() {
     while (current instanceof HTMLElement) {
       const backgroundMatch = getComputedStyle(current).backgroundColor.match(/rgba?\(([^)]+)\)/);
       if (backgroundMatch) {
-        const backgroundParts = backgroundMatch[1]
+        const backgroundColor = backgroundMatch[1];
+        if (backgroundColor === undefined) {
+          current = current.parentElement;
+          continue;
+        }
+        const backgroundParts = backgroundColor
           .split(/[\s, /]+/)
           .filter(Boolean)
           .map(Number);
-        if (backgroundParts.length >= 3) {
+        const [backgroundRed, backgroundGreen, backgroundBlue, backgroundAlpha] = backgroundParts;
+        if (
+          backgroundRed !== undefined &&
+          backgroundGreen !== undefined &&
+          backgroundBlue !== undefined
+        ) {
           const candidate: RgbColor = {
-            r: backgroundParts[0],
-            g: backgroundParts[1],
-            b: backgroundParts[2],
-            a: backgroundParts[3] ?? 1,
+            r: backgroundRed,
+            g: backgroundGreen,
+            b: backgroundBlue,
+            a: backgroundAlpha ?? 1,
           };
           if (candidate.a >= 0.9) {
             background = candidate;

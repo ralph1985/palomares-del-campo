@@ -9,6 +9,7 @@ import {
 } from '../../src/game/geo';
 
 const plaza = gameLocations[0];
+if (!plaza) throw new Error('Geo test fixture is missing its first location.');
 
 describe('geolocation rules', () => {
   it('returns zero distance for the same coordinates', () => {

@@ -30,5 +30,7 @@ export const nextLocationAfter = (locations: GameLocation[], currentId: string):
 
   const currentIndex = locations.findIndex((location) => location.id === currentId);
   const nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % locations.length;
-  return locations[nextIndex];
+  const nextLocation = locations[nextIndex];
+  if (!nextLocation) throw new Error('No hay ubicaciones de juego configuradas.');
+  return nextLocation;
 };

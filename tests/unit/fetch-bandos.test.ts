@@ -46,6 +46,7 @@ describe('import mode', () => {
 describe('fetch bandos', () => {
   it('parses RSS items and decodes their source fields', () => {
     const [item] = parseRSSItems(rss);
+    if (!item) throw new Error('RSS fixture should contain an item.');
 
     expect(item).toMatchObject({
       title: 'Aviso de agua',
@@ -58,6 +59,7 @@ describe('fetch bandos', () => {
 
   it('parses archive entries and their Spanish publication dates', () => {
     const [item] = parseArchiveItems(archivePage);
+    if (!item) throw new Error('Archive fixture should contain an item.');
 
     expect(item).toMatchObject({
       title: 'Aviso de agua',

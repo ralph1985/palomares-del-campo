@@ -51,13 +51,32 @@ export function buildMainAlignmentCommands({
   return commands;
 }
 
-function getDivergence(cwd: string): Divergence {
-  const output = runGit(['rev-list', '--left-right', '--count', 'main...origin/main'], cwd);
-  const [ahead, behind] = output.split(/\s+/).map(Number);
-  if (!Number.isInteger(ahead) || !Number.isInteger(behind)) {
+export function parseMainDivergence(output: string): Divergence {
+  const counts = output.trim().split(/\s+/);
+  const aheadText = counts[0];
+  const behindText = counts[1];
+  if (
+    counts.length !== 2 ||
+    aheadText === undefined ||
+    behindText === undefined ||
+    !/^(?:0|[1-9]\d*)$/.test(aheadText) ||
+    !/^(?:0|[1-9]\d*)$/.test(behindText)
+  ) {
     throw new Error(`No se pudo interpretar la divergencia de main: ${output}`);
   }
+
+  const ahead = Number(aheadText);
+  const behind = Number(behindText);
+  if (!Number.isSafeInteger(ahead) || !Number.isSafeInteger(behind)) {
+    throw new Error(`No se pudo interpretar la divergencia de main: ${output}`);
+  }
+
   return { ahead, behind };
+}
+
+function getDivergence(cwd: string): Divergence {
+  const output = runGit(['rev-list', '--left-right', '--count', 'main...origin/main'], cwd);
+  return parseMainDivergence(output);
 }
 
 function uniqueBackupBranch(cwd: string, now: Date = new Date()): string {

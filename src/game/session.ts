@@ -8,12 +8,13 @@ export type LocalGameState = {
 };
 
 export const createInitialGameState = (locations: GameLocation[]): LocalGameState => {
-  if (locations.length === 0) {
+  const firstLocation = locations[0];
+  if (!firstLocation) {
     throw new Error('No hay ubicaciones de juego configuradas.');
   }
 
   return {
-    activeLocationId: locations[0].id,
+    activeLocationId: firstLocation.id,
     score: 0,
     captures: 0,
   };

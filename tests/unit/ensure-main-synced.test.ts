@@ -1,5 +1,48 @@
 import { describe, expect, it } from 'vitest';
-import { buildMainAlignmentCommands } from '../../scripts/ensure-main-synced.ts';
+import {
+  buildMainAlignmentCommands,
+  parseMainDivergence,
+} from '../../scripts/ensure-main-synced.ts';
+
+describe('main divergence parsing', () => {
+  it('parses both counts returned by git', () => {
+    expect(parseMainDivergence('2\t3')).toEqual({ ahead: 2, behind: 3 });
+  });
+
+  it('rejects missing or invalid divergence counts', () => {
+    expect(() => parseMainDivergence('2')).toThrow('No se pudo interpretar la divergencia de main');
+    expect(() => parseMainDivergence('0 invalid')).toThrow(
+      'No se pudo interpretar la divergencia de main',
+    );
+  });
+
+  it('rejects zero-padded divergence counts', () => {
+    expect(() => parseMainDivergence('000 1')).toThrow(
+      'No se pudo interpretar la divergencia de main',
+    );
+    expect(() => parseMainDivergence('0 01')).toThrow(
+      'No se pudo interpretar la divergencia de main',
+    );
+  });
+
+  it('rejects counts outside the safe integer range', () => {
+    expect(() => parseMainDivergence('9007199254740992 0')).toThrow(
+      'No se pudo interpretar la divergencia de main',
+    );
+  });
+
+  it('rejects negative counts, extra tokens, and whitespace-only output', () => {
+    expect(() => parseMainDivergence('-1 0')).toThrow(
+      'No se pudo interpretar la divergencia de main',
+    );
+    expect(() => parseMainDivergence('1 0 extra')).toThrow(
+      'No se pudo interpretar la divergencia de main',
+    );
+    expect(() => parseMainDivergence('   ')).toThrow(
+      'No se pudo interpretar la divergencia de main',
+    );
+  });
+});
 
 describe('main alignment policy', () => {
   it('refuses to realign a dirty checkout', () => {

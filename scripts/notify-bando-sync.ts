@@ -13,6 +13,45 @@ type NotificationContent = {
   bandos: NotificationBando[];
   siteUrl: string;
 };
+type SmtpFields = {
+  host: string;
+  user: string;
+  password: string;
+  from: string;
+  to: string;
+};
+type PartialSmtpFields = { [Key in keyof SmtpFields]: string | undefined };
+type SmtpConfiguration = SmtpFields & { port: number; secure: boolean };
+
+const hasSmtpFields = (fields: PartialSmtpFields): fields is SmtpFields =>
+  Object.values(fields).every((value) => typeof value === 'string' && value.length > 0);
+
+export function readSmtpConfiguration(environment: NodeJS.ProcessEnv): SmtpConfiguration {
+  const fields: PartialSmtpFields = {
+    host: environment.BANDOS_SMTP_HOST,
+    user: environment.BANDOS_SMTP_USER,
+    password: environment.BANDOS_SMTP_PASSWORD,
+    from: environment.BANDOS_NOTIFY_FROM,
+    to: environment.BANDOS_NOTIFY_TO,
+  };
+
+  if (!hasSmtpFields(fields)) {
+    const missing = [
+      ...(fields.host ? [] : ['BANDOS_SMTP_HOST']),
+      ...(fields.user ? [] : ['BANDOS_SMTP_USER']),
+      ...(fields.password ? [] : ['BANDOS_SMTP_PASSWORD']),
+      ...(fields.from ? [] : ['BANDOS_NOTIFY_FROM']),
+      ...(fields.to ? [] : ['BANDOS_NOTIFY_TO']),
+    ];
+    throw new Error(`Falta configuración SMTP: ${missing.join(', ')}`);
+  }
+
+  return {
+    ...fields,
+    port: Number(environment.BANDOS_SMTP_PORT ?? '587'),
+    secure: environment.BANDOS_SMTP_SECURE === 'true',
+  };
+}
 
 export function escapeHtml(value: string): string {
   return value
@@ -23,16 +62,27 @@ export function escapeHtml(value: string): string {
     .replaceAll("'", '&#39;');
 }
 
-export function getBandoTitle(filePath: string): string {
-  const content = fs.readFileSync(filePath, 'utf8');
+export function parseBandoTitle(content: string, fallback: string): string {
   const match = content.match(/^title:\s+'(.*)'$/m);
-  return match ? match[1].replaceAll("''", "'") : path.basename(filePath, path.extname(filePath));
+  const title = match?.[1];
+  return title === undefined ? fallback : title.replaceAll("''", "'");
+}
+
+export function getBandoTitle(filePath: string): string {
+  return parseBandoTitle(
+    fs.readFileSync(filePath, 'utf8'),
+    path.basename(filePath, path.extname(filePath)),
+  );
+}
+
+export function parseBandoSourceUrl(content: string): string {
+  const match = content.match(/^sourceUrl:\s+'(.*)'$/m);
+  const sourceUrl = match?.[1];
+  return sourceUrl === undefined ? '' : sourceUrl.replaceAll("''", "'");
 }
 
 export function getBandoSourceUrl(filePath: string): string {
-  const content = fs.readFileSync(filePath, 'utf8');
-  const match = content.match(/^sourceUrl:\s+'(.*)'$/m);
-  return match ? match[1].replaceAll("''", "'") : '';
+  return parseBandoSourceUrl(fs.readFileSync(filePath, 'utf8'));
 }
 
 export function buildBandoUrl(filePath: string, siteUrl: string): string {
@@ -107,18 +157,7 @@ export async function getChangedBandos(commit: string, siteUrl = ''): Promise<No
 export async function notifyBandoSync(
   commit: string,
 ): Promise<{ sent: true; skipped: false; count: number }> {
-  const required = [
-    'BANDOS_SMTP_HOST',
-    'BANDOS_SMTP_USER',
-    'BANDOS_SMTP_PASSWORD',
-    'BANDOS_NOTIFY_FROM',
-    'BANDOS_NOTIFY_TO',
-  ];
-  const missing = required.filter((name) => !process.env[name]);
-  if (missing.length > 0) {
-    throw new Error(`Falta configuración SMTP: ${missing.join(', ')}`);
-  }
-
+  const smtp = readSmtpConfiguration(process.env);
   const siteUrl = (process.env.BANDOS_SITE_URL ?? '').replace(/\/$/, '');
   const bandos = await getChangedBandos(commit, siteUrl);
   if (bandos.length === 0) {
@@ -126,19 +165,19 @@ export async function notifyBandoSync(
   }
 
   const transporter = nodemailer.createTransport({
-    host: process.env.BANDOS_SMTP_HOST!,
-    port: Number(process.env.BANDOS_SMTP_PORT ?? '587'),
-    secure: process.env.BANDOS_SMTP_SECURE === 'true',
+    host: smtp.host,
+    port: smtp.port,
+    secure: smtp.secure,
     requireTLS: true,
     auth: {
-      user: process.env.BANDOS_SMTP_USER!,
-      pass: process.env.BANDOS_SMTP_PASSWORD!,
+      user: smtp.user,
+      pass: smtp.password,
     },
   });
 
   await transporter.sendMail({
-    from: process.env.BANDOS_NOTIFY_FROM!,
-    to: process.env.BANDOS_NOTIFY_TO!,
+    from: smtp.from,
+    to: smtp.to,
     subject: `Palomares: ${bandos.length} bando${bandos.length === 1 ? '' : 's'} publicado${bandos.length === 1 ? '' : 's'}`,
     text: buildNotificationText({ commit, bandos, siteUrl }),
     html: buildNotificationHtml({ commit, bandos, siteUrl }),
