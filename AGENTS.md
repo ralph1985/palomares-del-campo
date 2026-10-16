@@ -100,6 +100,16 @@ Si una carpeta aún no existe, créala solo cuando el primer cambio que la neces
 - No inventar datos ni presentar una inferencia como hecho publicado.
 - No iniciar todavía scripts de descubrimiento automático de noticias.
 
+## TypeScript y fronteras de datos
+
+- La configuración raíz cubre Astro, scripts y tests; `convex/tsconfig.json` es un proyecto separado. Ambos usan `strict`, `exactOptionalPropertyTypes` y `noUncheckedIndexedAccess`; ejecutar `pnpm typecheck` antes de cerrar cambios (`pnpm typecheck:astro` y `pnpm typecheck:convex` permiten diagnosticar cada frontera por separado).
+- Tratar JSON, HTTP, RSS/HTML, `localStorage` y respuestas externas como `unknown`; validar su forma antes de usarlas. `JSON.parse` y `as T` no validan datos en runtime.
+- Mantener las referencias y respuestas de Convex ligadas a `convex/_generated/api` y a los tipos generados; no borrar contratos mediante clientes ad hoc ni editar `convex/_generated/`.
+- No usar `any` como salida fácil, aserciones `!` postfix ni supresiones para silenciar errores. ESLint aplica `no-explicit-any`, `ban-ts-comment`, `no-non-null-assertion` y reglas `no-unsafe-*`; las aserciones de fixtures solo se permiten cuando representan deliberadamente un tipo nominal de prueba.
+- Con `exactOptionalPropertyTypes`, omitir claves cuyo valor sea `undefined`; permitir `?: T | undefined` solo cuando forme parte explícita del contrato.
+- Con `noUncheckedIndexedAccess`, comprobar la presencia de elementos antes de leer arrays, resultados de búsqueda o claves; no añadir `!` para acallar el checker.
+- Al corregir una frontera o acceso opcional, añadir una prueba focalizada para el dato válido y el caso ausente/malformado; conservar el comportamiento de los casos válidos.
+
 ## Comandos y verificación
 
 Usar `pnpm` y versiones fijadas.

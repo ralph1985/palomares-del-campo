@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:4321';
+
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
@@ -8,7 +10,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4321',
+    baseURL,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -21,7 +23,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'pnpm exec astro dev --host 127.0.0.1 --port 4321',
-    url: 'http://127.0.0.1:4321',
+    url: baseURL,
     reuseExistingServer: true,
     timeout: 120_000,
     env: {

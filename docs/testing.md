@@ -5,11 +5,13 @@ La estrategia actual protege la web editorial, el shell compartido y el juego. L
 ## Configuración
 
 - `vitest.config.ts` usa el entorno `node` e incluye `tests/unit/**/*.test.ts` y `tests/integration/**/*.test.ts`.
-- `playwright.config.ts` ejecuta `tests/e2e/` en Chromium, arranca `pnpm exec astro dev --host 127.0.0.1 --port 4321` y usa `http://127.0.0.1:4321` como `baseURL`.
+- `playwright.config.ts` ejecuta `tests/e2e/` en Chromium. Por defecto arranca `pnpm exec astro dev --host 127.0.0.1 --port 4321` y usa `http://127.0.0.1:4321`; `PLAYWRIGHT_BASE_URL` permite apuntar a un servidor ya activo, que se reutiliza si responde. No arrancar una segunda instancia del mismo proyecto sobre una Astro dev existente.
 - En CI Playwright prohíbe `test.only`, usa un worker y hasta dos reintentos. Localmente no reintenta.
 - `tests/features/` contiene escenarios Gherkin de referencia. No hay Cucumber ni un ejecutor de steps conectado a esos archivos.
 
 `astro.config.ts` se incluye en el `tsconfig.json` raíz y se comprueba con `pnpm typecheck:astro`. `eslint.config.mjs` y `prettier.config.mjs` son excepciones deliberadas: la configuración TypeScript de ESLint en Node requiere `jiti >=2.2.0` o las opciones nativas experimentales; Prettier requiere Node `>=22.6.0` y `--experimental-strip-types` antes de Node 24.3. Como el rango soportado por Astro empieza en Node `22.12.0`, mantener Prettier en MJS evita exigir una bandera experimental en parte del runtime soportado; mantener ESLint en MJS evita añadir un loader solo para su configuración estática.
+
+El proyecto tiene dos typechecks separados: `tsconfig.json` para Astro, scripts y tests, y `convex/tsconfig.json` para Convex. Ambos habilitan `strict`, `exactOptionalPropertyTypes` y `noUncheckedIndexedAccess`; `pnpm typecheck` los ejecuta en secuencia. ESLint añade reglas `no-unsafe-*` con información de tipos y excluye `playwright.config.ts`/`vitest.config.ts` de `projectService`; la regla `no-unsafe-type-assertion` se limita a código mantenido de producción. Las aserciones de fixtures quedan fuera de esa regla para permitir mocks y fixtures deliberados, sin relajar las comprobaciones de producción.
 
 ## Comandos
 
@@ -35,14 +37,15 @@ pnpm format:check
 La suite cubre actualmente:
 
 - `src/game/`: distancia Haversine, precisión GPS, reglas de puntuación, decaimiento local, avance de ubicación y sesión;
-- `convex/`: validación geográfica del servidor, decaimiento del score, normalización de nick y TTL/redondeo de presencia;
+- `convex/`: validación geográfica del servidor, decaimiento del score, normalización de nick, TTL/redondeo de presencia y parsing seguro de Turnstile/Resend;
 - `src/scripts/convex-game.ts`: adaptación de queries, mutations, presencia, callbacks reactivos, suscripciones e idempotencia del payload;
 - importación y política de sincronización de bandos;
 - construcción de notificaciones SMTP;
 - alineación segura de `main`;
+- validación de identidad recuperada de `localStorage`, configuración SMTP y JSON-LD generado;
 - tokens y guardas de arquitectura CSS.
 
-La ejecución verificada actual de `pnpm test` contiene 19 archivos y 68 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
+La ejecución verificada actual de `pnpm test` contiene 22 archivos y 100 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
 
 ## Playwright: E2E
 
@@ -59,6 +62,8 @@ Los escenarios E2E prueban la aplicación Astro real en Chromium y cubren:
 - responsive, overflow horizontal y controles de vuelta arriba.
 
 Las pruebas del juego usan `astro dev` y el simulador disponible en `import.meta.env.DEV`. No constituyen una prueba E2E contra un deployment remoto de Convex, ni prueban dos jugadores reales compitiendo por la misma versión de la bola.
+
+Para reutilizar un servidor ya activo (por ejemplo, uno accesible por Tailnet), asignar su URL a `PLAYWRIGHT_BASE_URL` y ejecutar `CI=1 pnpm test:e2e`; el `webServer` de Playwright comprueba esa URL y la reutiliza si responde.
 
 ## Validaciones de calidad
 

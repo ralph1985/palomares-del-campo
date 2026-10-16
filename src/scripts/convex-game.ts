@@ -29,14 +29,28 @@ const createRandomId = (): string => {
 
 const createDeviceId = (): string => createRandomId();
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+export const parsePlayerIdentity = (value: unknown): PlayerIdentity | null => {
+  if (
+    !isRecord(value) ||
+    typeof value.deviceId !== 'string' ||
+    typeof value.nickname !== 'string'
+  ) {
+    return null;
+  }
+
+  return { deviceId: value.deviceId, nickname: value.nickname };
+};
+
 export const loadPlayerIdentity = (): PlayerIdentity => {
   try {
     const stored = window.localStorage.getItem(PLAYER_STORAGE_KEY);
     if (stored) {
-      const parsed = JSON.parse(stored) as Partial<PlayerIdentity>;
-      if (typeof parsed.deviceId === 'string' && typeof parsed.nickname === 'string') {
-        return { deviceId: parsed.deviceId, nickname: parsed.nickname };
-      }
+      const parsed: unknown = JSON.parse(stored);
+      const identity = parsePlayerIdentity(parsed);
+      if (identity) return identity;
     }
   } catch {
     // La partida puede continuar sin identidad persistida.

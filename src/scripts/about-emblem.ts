@@ -104,8 +104,9 @@ if (roots.length > 0) {
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        void initialize(entry.target as HTMLElement);
         visibilityObserver.unobserve(entry.target);
+        if (!(entry.target instanceof HTMLElement)) return;
+        void initialize(entry.target);
       });
     },
     { rootMargin: '160px' },

@@ -131,15 +131,18 @@ test.describe('Palomareños por el mundo', () => {
     await page.goto('/palomarenos-por-el-mundo/');
     await expect(page.locator('[data-palomarenos-map] .leaflet-top.leaflet-left')).toBeVisible();
 
-    const stacking = await page.evaluate(() => ({
-      header: Number.parseInt(getComputedStyle(document.querySelector('.site-header')!).zIndex, 10),
-      leaflet: Number.parseInt(
-        getComputedStyle(
-          document.querySelector('[data-palomarenos-map] .leaflet-top.leaflet-left')!,
-        ).zIndex,
-        10,
-      ),
-    }));
+    const stacking = await page.evaluate(() => {
+      const getZIndex = (selector: string): number => {
+        const element = document.querySelector(selector);
+        if (!element) throw new Error(`Missing stacking-context element: ${selector}`);
+        return Number.parseInt(getComputedStyle(element).zIndex, 10);
+      };
+
+      return {
+        header: getZIndex('.site-header'),
+        leaflet: getZIndex('[data-palomarenos-map] .leaflet-top.leaflet-left'),
+      };
+    });
 
     expect(stacking.header).toBeGreaterThan(stacking.leaflet);
   });
@@ -148,18 +151,18 @@ test.describe('Palomareños por el mundo', () => {
     await page.goto('/palomarenos-por-el-mundo/');
     await page.evaluate(() => window.scrollTo(0, 600));
 
-    const stacking = await page.evaluate(() => ({
-      backToTop: Number.parseInt(
-        getComputedStyle(document.querySelector('[data-back-to-top]')!).zIndex,
-        10,
-      ),
-      leaflet: Number.parseInt(
-        getComputedStyle(
-          document.querySelector('[data-palomarenos-map] .leaflet-top.leaflet-left')!,
-        ).zIndex,
-        10,
-      ),
-    }));
+    const stacking = await page.evaluate(() => {
+      const getZIndex = (selector: string): number => {
+        const element = document.querySelector(selector);
+        if (!element) throw new Error(`Missing stacking-context element: ${selector}`);
+        return Number.parseInt(getComputedStyle(element).zIndex, 10);
+      };
+
+      return {
+        backToTop: getZIndex('[data-back-to-top]'),
+        leaflet: getZIndex('[data-palomarenos-map] .leaflet-top.leaflet-left'),
+      };
+    });
 
     expect(stacking.backToTop).toBeGreaterThan(stacking.leaflet);
   });

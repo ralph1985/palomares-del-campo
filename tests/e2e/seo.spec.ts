@@ -1,9 +1,12 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
-async function readJsonLd(page: Page) {
+async function readJsonLd(page: Page): Promise<unknown[]> {
   const scripts = await page.locator('script[type="application/ld+json"]').allTextContents();
-  return scripts.flatMap((script) => JSON.parse(script));
+  return scripts.flatMap((script): unknown[] => {
+    const parsed: unknown = JSON.parse(script);
+    return Array.isArray(parsed) ? parsed : [parsed];
+  });
 }
 
 test.describe('technical SEO', () => {

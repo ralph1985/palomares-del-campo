@@ -48,23 +48,24 @@ const initialiseMap = async (element: HTMLElement): Promise<void> => {
   let client: ConvexClient | undefined;
 
   try {
-    map = L.map(element, {
+    const activeMap = L.map(element, {
       scrollWheelZoom: false,
       zoomControl: true,
       attributionControl: true,
     });
+    map = activeMap;
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       attribution: '&copy; OpenStreetMap contributors',
-    }).addTo(map);
+    }).addTo(activeMap);
 
     client = new ConvexClient(convexUrl);
     const records = await client.query(api.palomarenos.listApproved, {});
-    const markers = selectMapMarkers(records as unknown[]);
+    const markers = selectMapMarkers(records);
 
     if (markers.length === 0) {
-      map.setView([40.4, -3.7], 2);
+      activeMap.setView([40.4, -3.7], 2);
       setMapState(element, 'empty', 'Todavía no hay historias aprobadas para mostrar.');
       return;
     }
@@ -77,12 +78,12 @@ const initialiseMap = async (element: HTMLElement): Promise<void> => {
         weight: 2,
         fillColor: '#a05c32',
         fillOpacity: 0.95,
-      }).addTo(map as L.Map);
+      }).addTo(activeMap);
       point.bindPopup(createPopupContent(marker));
       return point;
     });
 
-    map.fitBounds(L.featureGroup(layers).getBounds(), { padding: [32, 32], maxZoom: 5 });
+    activeMap.fitBounds(L.featureGroup(layers).getBounds(), { padding: [32, 32], maxZoom: 5 });
     setMapState(
       element,
       'ready',
