@@ -73,7 +73,7 @@ Para reutilizar un servidor ya activo (por ejemplo, uno accesible por Tailnet), 
 
 ### QA visual
 
-`scripts/visual-qa.ts`, ejecutado mediante `pnpm qa:visual`, recorre once rutas en `1440×900` y `375×812`, incluidos alojamientos, «Palomareños por el mundo» y un detalle de bando. Comprueba HTTP 200, overflow horizontal, foco visible, contraste aproximado y errores de consola. Los tiles de OpenStreetMap y adjuntos de Bandomovil se sustituyen por fixtures SVG compartidos con E2E. No genera snapshots ni realiza comparación de píxeles pese a su nombre.
+`scripts/visual-qa.ts`, ejecutado mediante `pnpm qa:visual`, recorre once rutas en `1440×900` y `375×812`, incluidos alojamientos, «Palomareños por el mundo» y un detalle de bando. Comprueba HTTP 200, overflow horizontal, foco visible, contraste aproximado y errores de consola. Los tiles de OpenStreetMap y adjuntos de Bandomovil se sustituyen por fixtures SVG compartidos con E2E. No genera snapshots ni realiza comparación de píxeles pese a su nombre. Este comando no forma parte de `.husky/pre-push`; hasta integrarlo en ese gate, se mantienen en Playwright las regresiones responsive de las rutas críticas.
 
 ### CSS
 
