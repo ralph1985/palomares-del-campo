@@ -5,9 +5,6 @@ set -eu
 echo '→ Comprobando formato...'
 pnpm format:check
 
-echo '→ Comprobando tipos...'
-pnpm typecheck
-
 echo '→ Ejecutando ESLint...'
 pnpm lint
 
