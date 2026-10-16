@@ -5,6 +5,14 @@
     "exactOptionalPropertyTypes": true,
     "noUncheckedIndexedAccess": true
   },
-  "include": [".astro/types.d.ts", "astro.config.ts", "src/**/*", "tests/**/*", "scripts/**/*"],
+  "include": [
+    ".astro/types.d.ts",
+    "astro.config.ts",
+    "playwright.config.ts",
+    "vitest.config.ts",
+    "src/**/*",
+    "tests/**/*",
+    "scripts/**/*"
+  ],
   "exclude": ["dist", "node_modules", "convex"]
 }

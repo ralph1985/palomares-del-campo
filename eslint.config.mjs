@@ -26,7 +26,6 @@ export default tseslint.config(
   },
   {
     files: ['**/*.{ts,tsx}'],
-    ignores: ['playwright.config.ts', 'vitest.config.ts'],
     languageOptions: {
       parserOptions: {
         projectService: true,
