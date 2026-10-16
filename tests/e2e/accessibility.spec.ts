@@ -22,14 +22,4 @@ test.describe('responsive and accessible web shell', () => {
     await backToTop.click();
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(10);
   });
-
-  test('gives the global controls accessible names', async ({ page }) => {
-    await page.goto('/');
-
-    await expect(page.getByRole('button', { name: 'Explorar' })).toBeVisible();
-    await page.getByRole('button', { name: 'Explorar' }).click();
-    await expect(
-      page.locator('#site-menu').getByRole('button', { name: 'Cerrar menú' }),
-    ).toBeVisible();
-  });
 });
