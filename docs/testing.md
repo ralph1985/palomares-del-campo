@@ -7,7 +7,7 @@ La estrategia actual protege la web editorial, el shell compartido y el juego. L
 - `vitest.config.ts` usa el entorno `node` e incluye `tests/unit/**/*.test.ts` y `tests/integration/**/*.test.ts`.
 - `playwright.config.ts` ejecuta `tests/e2e/` en Chromium. Por defecto arranca `pnpm exec astro dev --host 127.0.0.1 --port 4321` y usa `http://127.0.0.1:4321`; `PLAYWRIGHT_BASE_URL` permite apuntar a un servidor ya activo, que se reutiliza si responde. No arrancar una segunda instancia del mismo proyecto sobre una Astro dev existente.
 - El servidor aislado de Playwright establece `DISABLE_ASTRO_DEV_TOOLBAR_FOR_E2E=true`; `astro.config.ts` desactiva la barra solo en ese proceso. La barra sigue activa en `pnpm dev` normal. El test de infraestructura `tests/e2e/test-harness.spec.ts` verifica que el toolbar no se inyecta en el servidor de la suite.
-- `tests/e2e/fixtures.ts` intercepta los tiles de OpenStreetMap en las pruebas de juego, rutas y «Palomareños por el mundo», y sirve un SVG inocuo. Estas pruebas comprueban la integración de Leaflet y su DOM; no verifican el proveedor ni la fidelidad de los tiles reales.
+- `tests/e2e/fixtures.ts` intercepta los tiles de OpenStreetMap y las imágenes adjuntas de Bandomovil en las pruebas correspondientes, y sirve SVGs inocuos. Los tests comprueban la integración de Leaflet y la presencia de adjuntos; no validan el proveedor externo ni la fidelidad de los recursos reales.
 - En CI Playwright prohíbe `test.only`, usa un worker y hasta dos reintentos. Localmente no reintenta.
 - `tests/features/` contiene escenarios Gherkin de referencia. No hay Cucumber ni un ejecutor de steps conectado a esos archivos.
 

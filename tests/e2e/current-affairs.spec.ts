@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test.describe('current affairs sections', () => {
   test('shows an honest empty agenda state', async ({ page }) => {
@@ -68,6 +68,10 @@ test.describe('current affairs sections', () => {
     );
   });
   test('renders images and documents attached to a bando', async ({ page }) => {
+    const attachmentResponse = page.waitForResponse(
+      (response) => response.url().includes('/userFiles/'),
+      { timeout: 2_000 },
+    );
     await page.goto('/bandos/1648341-clase-practica/');
 
     await expect(page.getByRole('heading', { name: 'Recursos del comunicado' })).toBeVisible();
@@ -75,6 +79,7 @@ test.describe('current affairs sections', () => {
       'src',
       'https://www.bandomovil.com/userFiles/j3/j3a7jIMG-20260924-WA0000.jpg',
     );
+    expect((await attachmentResponse).headers()['x-e2e-bando-asset']).toBe('fixture');
 
     await page.goto('/bandos/1658990-horarios-autobus-de-linea/');
     await expect(page.getByRole('heading', { name: 'Recursos del comunicado' })).toBeVisible();
