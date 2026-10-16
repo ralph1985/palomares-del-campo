@@ -53,20 +53,6 @@ test.describe('current affairs sections', () => {
     expect(widths.article).toBeLessThanOrEqual(widths.articleClient);
   });
 
-  test('does not repeat the bando summary in the detail body', async ({ page }) => {
-    await page.goto('/bandos/1659178-horarios-autobus-de-linea/');
-
-    await expect(page.locator('.article-description')).toHaveCount(0);
-    await expect(page.locator('.article-meta')).toContainText('9 de octubre de 2026');
-    await expect(
-      page.locator('.article-meta').getByText('Ayuntamiento de Palomares del Campo', {
-        exact: true,
-      }),
-    ).toHaveCount(0);
-    await expect(page.locator('.article-content')).toContainText(
-      'NUEVOS HORARIOS DE AUTOBÚS DE LÍNEA',
-    );
-  });
   test('renders images and documents attached to a bando', async ({ page }) => {
     const attachmentResponse = page.waitForResponse(
       (response) => response.url().includes('/userFiles/'),
@@ -99,6 +85,28 @@ test.describe('current affairs sections', () => {
     await page.reload();
     await expect(year).toHaveValue('2025');
     await expect(page.locator('[data-bando-card]:visible')).not.toHaveCount(0);
+  });
+
+  test('opens a bando from its card without repeating the summary', async ({ page }) => {
+    await page.goto('/bandos/');
+
+    const card = page.getByRole('article').filter({
+      has: page.getByRole('heading', { name: 'HORARIOS AUTOBÚS DE LINEA', exact: true }),
+    });
+    const cardTime = card.locator('time');
+    await expect(cardTime).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}T/);
+    const publishedAt = await cardTime.getAttribute('datetime');
+    if (publishedAt === null) throw new Error('Bando card is missing its publication date.');
+    const summary = await card.locator('p').innerText();
+
+    await card.getByRole('link', { name: 'HORARIOS AUTOBÚS DE LINEA', exact: true }).click();
+
+    await expect(
+      page.getByRole('heading', { name: 'HORARIOS AUTOBÚS DE LINEA', exact: true }),
+    ).toBeVisible();
+    await expect(page.locator('.article-content')).toContainText('LUNES');
+    await expect(page.locator('.article-content')).not.toContainText(summary);
+    await expect(page.locator('article time')).toHaveAttribute('datetime', publishedAt);
   });
 
   test('shows sourced municipal bandos and keeps the old path compatible', async ({ page }) => {
