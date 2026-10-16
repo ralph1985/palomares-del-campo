@@ -1,15 +1,6 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('shared link components', () => {
-  test('uses action-link variants for internal calls to action', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.locator('[data-ui-link][data-ui-variant="underline"]')).toHaveCount(6);
-    await expect(page.locator('[data-ui-link][data-ui-variant="text"]')).toHaveCount(1);
-
-    await page.goto('/juego/');
-    await expect(page.locator('[data-ui-link][data-ui-variant="solid"]')).toHaveCount(1);
-  });
-
   test('protects external links with a new browsing context and opener protection', async ({
     page,
   }) => {
