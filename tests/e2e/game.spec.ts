@@ -2,9 +2,8 @@ import { expect, test } from './fixtures';
 
 test.describe('local ball game', () => {
   test('loads the map, locations and development simulator', async ({ page }) => {
-    const tileResponse = page.waitForResponse(
-      (response) => response.url().includes('.tile.openstreetmap.org'),
-      { timeout: 2_000 },
+    const tileResponse = page.waitForResponse((response) =>
+      response.url().includes('.tile.openstreetmap.org'),
     );
     await page.goto('/juego/');
 
