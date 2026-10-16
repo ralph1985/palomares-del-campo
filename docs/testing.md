@@ -10,7 +10,6 @@ La estrategia actual protege la web editorial, el shell compartido y el juego. L
 - El hook `.husky/pre-commit` y el workflow CI ejecutan `pnpm typecheck` antes de `pnpm lint`, porque `astro check` genera `.astro/types.d.ts`, necesario para resolver los módulos virtuales de Astro desde un checkout limpio. `.husky/pre-push` no repite el typecheck.
 - `tests/e2e/fixtures.ts` intercepta los tiles de OpenStreetMap y las imágenes adjuntas de Bandomovil en las pruebas correspondientes, y sirve SVGs inocuos. Los tests comprueban la integración de Leaflet y la presencia de adjuntos; no validan el proveedor externo ni la fidelidad de los recursos reales.
 - En CI Playwright prohíbe `test.only`, usa un worker y hasta dos reintentos. Localmente no reintenta.
-- `tests/features/` contiene escenarios Gherkin de referencia. No hay Cucumber ni un ejecutor de steps conectado a esos archivos.
 
 `astro.config.ts` se incluye en el `tsconfig.json` raíz y se comprueba con `pnpm typecheck:astro`. `eslint.config.mjs` y `prettier.config.mjs` son excepciones deliberadas: la configuración TypeScript de ESLint en Node requiere `jiti >=2.2.0` o las opciones nativas experimentales; Prettier requiere Node `>=22.6.0` y `--experimental-strip-types` antes de Node 24.3. Como el rango soportado por Astro empieza en Node `22.12.0`, mantener Prettier en MJS evita exigir una bandera experimental en parte del runtime soportado; mantener ESLint en MJS evita añadir un loader solo para su configuración estática.
 
