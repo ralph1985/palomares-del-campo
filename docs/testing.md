@@ -60,7 +60,8 @@ Los escenarios E2E prueban la aplicación Astro real en Chromium y cubren:
 - estado vacío de agenda;
 - canonical, Open Graph, idioma y JSON-LD en todas las páginas generadas mediante `pnpm check:seo`; incluye contratos específicos de portada, noticias y página «Sobre el pueblo» que antes se comprobaban en E2E;
 - juego local, simulador, captura, puntuación, modo inmersivo y límites de precisión;
-- formulario de Palomareños: envío aceptado y error recuperable con respuestas simuladas en `astro dev`, sin escritura a Convex;
+- formulario de Palomareños: envío aceptado/error recuperable con respuestas simuladas en `astro dev`, sin escritura a Convex; páginas de privacidad/cookies/aviso legal, guardia de Turnstile por hostname y error visible del widget;
+- controles sobre el mapa de Palomareños: menú operable con el mapa bajo el encabezado y regreso al inicio desde esa ruta;
 - fallbacks y carga diferida de escenas Three.js;
 - responsive, overflow horizontal y controles de vuelta arriba.
 

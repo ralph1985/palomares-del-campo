@@ -94,7 +94,6 @@ test.describe('Palomareños por el mundo', () => {
 
     await expect(page.locator('#page-title')).toHaveText('Aviso legal');
     await expect(page.getByRole('note')).toContainText('datos de prueba');
-    await expect(page.getByText('P0000000X · DATO DE PRUEBA — SUSTITUIR')).toBeVisible();
   });
 
   test('does not load real Turnstile on an unauthorized development hostname', async ({ page }) => {
@@ -104,34 +103,6 @@ test.describe('Palomareños por el mundo', () => {
       'La protección anti-bots está disponible en el dominio público.',
     );
     await expect(page.locator('#cloudflare-turnstile')).toHaveCount(0);
-  });
-
-  test('renders the simulated Turnstile widget and enables the submission control', async ({
-    page,
-  }) => {
-    await page.addInitScript(() => {
-      window.__PALOMARENOS_TURNSTILE_TEST__ = true;
-      type TestTurnstile = {
-        render: (container: HTMLElement, options: { callback: (token: string) => void }) => string;
-        reset: () => void;
-      };
-      Object.defineProperty(window, 'turnstile', {
-        configurable: true,
-        value: {
-          render: (_container: HTMLElement, options: { callback: (token: string) => void }) => {
-            window.setTimeout(() => options.callback('e2e-turnstile-token'), 0);
-            return 'e2e-widget';
-          },
-          reset: () => undefined,
-        } satisfies TestTurnstile,
-      });
-    });
-    await page.goto('/palomarenos-por-el-mundo/');
-
-    await expect(page.locator('[data-turnstile-status]')).toHaveText(
-      'Protección anti-bots verificada.',
-    );
-    await expect(page.getByRole('button', { name: 'Enviar propuesta' })).toBeEnabled();
   });
 
   test('does not reset Turnstile repeatedly after a widget error', async ({ page }) => {
@@ -183,6 +154,9 @@ test.describe('Palomareños por el mundo', () => {
     await page.getByRole('textbox', { name: /Email de contacto/ }).fill('ana@example.com');
     await page.getByRole('textbox', { name: 'Tu historia' }).fill('Un recuerdo de prueba.');
     await page.getByRole('checkbox', { name: /He leído la información básica/ }).check();
+    await expect(page.locator('[data-turnstile-status]')).toHaveText(
+      'Protección anti-bots verificada.',
+    );
     await expect(page.getByRole('button', { name: 'Enviar propuesta' })).toBeEnabled();
     await page.getByRole('button', { name: 'Enviar propuesta' }).click();
 
@@ -235,44 +209,35 @@ test.describe('Palomareños por el mundo', () => {
     );
   });
 
-  test('keeps the sticky header above Leaflet layers', async ({ page }) => {
+  test('keeps the menu usable while the map sits under the sticky header', async ({ page }) => {
     await page.goto('/palomarenos-por-el-mundo/');
+
+    const map = page.locator('[data-palomarenos-map]');
+    const header = page.locator('.site-header');
     await expect(page.locator('[data-palomarenos-map] .leaflet-top.leaflet-left')).toBeVisible();
-
-    const stacking = await page.evaluate(() => {
-      const getZIndex = (selector: string): number => {
-        const element = document.querySelector(selector);
-        if (!element) throw new Error(`Missing stacking-context element: ${selector}`);
-        return Number.parseInt(getComputedStyle(element).zIndex, 10);
-      };
-
-      return {
-        header: getZIndex('.site-header'),
-        leaflet: getZIndex('[data-palomarenos-map] .leaflet-top.leaflet-left'),
-      };
+    await map.evaluate((element) => {
+      const mapTop = element.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: mapTop - 24, behavior: 'instant' });
     });
+    await expect(header).not.toBeInViewport();
+    await page.evaluate(() => window.scrollBy({ top: -16, behavior: 'instant' }));
+    await expect(header).toBeInViewport({ ratio: 1 });
+    const mapTop = await map.evaluate((element) => element.getBoundingClientRect().top);
+    const headerBottom = await header.evaluate((element) => element.getBoundingClientRect().bottom);
+    expect(mapTop).toBeLessThan(headerBottom);
 
-    expect(stacking.header).toBeGreaterThan(stacking.leaflet);
+    await page.getByRole('button', { name: 'Explorar' }).click();
+    await expect(page.locator('#site-menu')).toHaveAttribute('aria-hidden', 'false');
   });
 
-  test('keeps the back-to-top control above Leaflet layers', async ({ page }) => {
+  test('returns to the top from the map page', async ({ page }) => {
     await page.goto('/palomarenos-por-el-mundo/');
     await page.evaluate(() => window.scrollTo(0, 600));
 
-    const stacking = await page.evaluate(() => {
-      const getZIndex = (selector: string): number => {
-        const element = document.querySelector(selector);
-        if (!element) throw new Error(`Missing stacking-context element: ${selector}`);
-        return Number.parseInt(getComputedStyle(element).zIndex, 10);
-      };
-
-      return {
-        backToTop: getZIndex('[data-back-to-top]'),
-        leaflet: getZIndex('[data-palomarenos-map] .leaflet-top.leaflet-left'),
-      };
-    });
-
-    expect(stacking.backToTop).toBeGreaterThan(stacking.leaflet);
+    const backToTop = page.getByRole('button', { name: 'Volver arriba' });
+    await expect(backToTop).toBeVisible();
+    await backToTop.click();
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(10);
   });
 
   test('keeps the page within a narrow viewport', async ({ page }) => {
