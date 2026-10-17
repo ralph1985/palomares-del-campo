@@ -152,6 +152,67 @@ describe('remote Convex game adapter', () => {
     expect(fixture.closeCalls).toBe(1);
   });
 
+  it('stops before joining when there is no active season', async () => {
+    const client = {
+      query: async () => null,
+      mutation: async () => {
+        throw new Error('unexpected-mutation');
+      },
+      onUpdate: () => {
+        throw new Error('unexpected-subscription');
+      },
+      close: () => undefined,
+    } as unknown as RemoteConvexClient;
+    const callbacks = {
+      onState: () => undefined,
+      onPlayer: () => undefined,
+      onLeaderboard: () => undefined,
+    };
+
+    await expect(
+      createRemoteGameAdapter(
+        client,
+        { deviceId: 'device-test', nickname: 'Pájaro Verde' },
+        callbacks,
+      ),
+    ).rejects.toThrow('no-active-season');
+  });
+
+  it('surfaces a server refusal before emitting state or subscribing', async () => {
+    let subscriptions = 0;
+    const client = {
+      query: async () => seasonState,
+      mutation: async () => ({ status: 'game-not-active' }),
+      onUpdate: () => {
+        subscriptions += 1;
+        return () => undefined;
+      },
+      close: () => undefined,
+    } as unknown as RemoteConvexClient;
+    let emitted = 0;
+    const callbacks = {
+      onState: () => {
+        emitted += 1;
+      },
+      onPlayer: () => {
+        emitted += 1;
+      },
+      onLeaderboard: () => {
+        emitted += 1;
+      },
+    };
+
+    await expect(
+      createRemoteGameAdapter(
+        client,
+        { deviceId: 'device-test', nickname: 'Pájaro Verde' },
+        callbacks,
+      ),
+    ).rejects.toThrow('game-not-active');
+    expect(emitted).toBe(0);
+    expect(subscriptions).toBe(0);
+  });
+
   it('sends presence and capture commands with the current season and ball version', async () => {
     const fixture = createClientFixture();
     const adapter = await createRemoteGameAdapter(

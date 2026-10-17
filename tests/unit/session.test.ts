@@ -11,6 +11,10 @@ describe('local game session', () => {
     });
   });
 
+  it('explains when no locations are configured', () => {
+    expect(() => createInitialGameState([])).toThrow('No hay ubicaciones de juego configuradas.');
+  });
+
   it('advances the active location and records a capture', () => {
     const nextState = captureLocation(createInitialGameState(gameLocations), gameLocations);
 

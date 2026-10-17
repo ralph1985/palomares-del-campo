@@ -37,6 +37,10 @@ describe('selectMapMarkers', () => {
     ]);
   });
 
+  it('drops non-object records returned by the public query', () => {
+    expect(selectMapMarkers([null, 'malformed-record'])).toEqual([]);
+  });
+
   it('returns an empty list when there are no approved map records', () => {
     expect(selectMapMarkers([])).toEqual([]);
     expect(

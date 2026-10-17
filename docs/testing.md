@@ -38,13 +38,14 @@ pnpm format:check
 
 La suite cubre actualmente:
 
-- `src/game/`: distancia Haversine, precisión GPS, reglas de puntuación, decaimiento local, avance de ubicación y sesión;
-- `convex/`: validación geográfica del servidor, decaimiento del score, normalización de nick, TTL/redondeo de presencia y parsing seguro de Turnstile/Resend;
-- `src/scripts/convex-game.ts`: adaptación de queries, mutations, presencia, callbacks reactivos, suscripciones e idempotencia del payload;
+- `src/game/`: distancia Haversine, precisión GPS, reglas de puntuación, decaimiento local, avance de ubicación y error explícito si la sesión no tiene ubicaciones;
+- `convex/`: validación geográfica del servidor, decaimiento del score, normalización de nick, TTL/redondeo de presencia y verificación fail-closed de Turnstile/Resend, incluida la indisponibilidad del proveedor;
+- `src/scripts/convex-game.ts`: adaptación de queries, mutations, presencia, callbacks reactivos, suscripciones e idempotencia del payload; rechaza ausencia de temporada o denegación del servidor antes de emitir estado o suscribirse;
 - importación y política de sincronización de bandos;
 - construcción de notificaciones SMTP;
 - alineación segura de `main`;
-- validación de identidad recuperada de `localStorage`, configuración SMTP y JSON-LD generado;
+- validación y restauración de identidad desde `localStorage`, generación de identidad nueva ante datos corruptos o almacenamiento bloqueado, configuración SMTP y JSON-LD generado;
+- proyección de registros públicos para el mapa de Palomareños, descartando valores que no sean registros válidos;
 - renderizado de `src/components/SEO.astro` con `AstroContainer`: canonical/noindex, metadatos sociales, schema de Article/WebSite, breadcrumbs y escape de contenido HTML;
 - renderizado de componentes presentacionales con `AstroContainer`: `GamePrivacyNotice` (copia local/remota), `CurrentAffairsEmptyState` (agenda/avisos y relación título-ARIA), tarjetas de alojamiento y patrimonio (variantes/campos opcionales), enlaces/botones compartidos y fecha localizada con atributo ISO legible por máquina;
 - renderizado de `BandoCard` y `NewsCard` con fixtures tipados de Content Collections: rutas, fechas, metadatos de fuente, texto indexable, adjuntos y categoría por defecto;
@@ -52,7 +53,7 @@ La suite cubre actualmente:
 - reintento único de navegación de QA visual cuando `astro dev` aborta una ruta con `net::ERR_ABORTED`;
 - tokens y guardas de arquitectura CSS.
 
-`pnpm test:coverage` se ha ejecutado con 31 archivos y 154 pruebas; genera `coverage/index.html` y `coverage/lcov.info` (ignorados por Git) y aplica un umbral global del 80% en statements, branches, functions y lines; el CI usa este comando como gate. Esta ejecución dio 90,81% statements, 88,3% branches, 94,26% functions y 95,17% lines. El alcance incluye la lógica de dominio en `src/game/`, los adaptadores puros `src/scripts/convex-game.ts` y `src/scripts/palomarenos-map-data.ts`, las funciones/helpers de `convex/` y trece componentes/layouts Astro probados: `SEO`, `BandoCard`, `NewsCard`, `CollectionArchive`, `BaseLayout`, `GamePrivacyNotice`, `CurrentAffairsEmptyState`, `AccommodationCard`, `HeritageCard`, `ActionLink`, `ExternalLink`, `Button` y `CollectionCardMeta`; se excluyen el esquema declarativo y los archivos generados. LCOV confirma el mapeo a fuente de los trece archivos: 100% de líneas y todas las ramas/funciones mapeadas cubiertas. Los demás componentes `.astro`, los entrypoints de navegador y los datos editoriales siguen fuera de esta métrica hasta que se añadan tests adecuados y se verifique su mapeo; la interacción de `CollectionSearch` sigue cubierta por Playwright.
+`pnpm test:coverage` se ha ejecutado con 31 archivos y 167 pruebas; genera `coverage/index.html` y `coverage/lcov.info` (ignorados por Git) y aplica un umbral global del 90% en statements, branches, functions y lines; el CI usa este comando como gate. Esta ejecución dio 92,95% statements, 90,59% branches, 95,9% functions y 96,55% lines. El alcance incluye la lógica de dominio en `src/game/`, los adaptadores puros `src/scripts/convex-game.ts` y `src/scripts/palomarenos-map-data.ts`, las funciones/helpers de `convex/` y trece componentes/layouts Astro probados: `SEO`, `BandoCard`, `NewsCard`, `CollectionArchive`, `BaseLayout`, `GamePrivacyNotice`, `CurrentAffairsEmptyState`, `AccommodationCard`, `HeritageCard`, `ActionLink`, `ExternalLink`, `Button` y `CollectionCardMeta`; se excluyen el esquema declarativo y los archivos generados. LCOV confirma el mapeo a fuente de los trece archivos: 100% de líneas y todas las ramas/funciones mapeadas cubiertas. Los demás componentes `.astro`, los entrypoints de navegador y los datos editoriales siguen fuera de esta métrica hasta que se añadan tests adecuados y se verifique su mapeo; la interacción de `CollectionSearch` sigue cubierta por Playwright.
 
 ## Playwright: E2E
 
