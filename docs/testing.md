@@ -48,7 +48,7 @@ La suite cubre actualmente:
 - reintento único de navegación de QA visual cuando `astro dev` aborta una ruta con `net::ERR_ABORTED`;
 - tokens y guardas de arquitectura CSS.
 
-La ejecución verificada actual de `pnpm test` contiene 25 archivos y 113 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
+La ejecución verificada actual de `pnpm test` contiene 28 archivos y 131 pruebas. `pnpm test:coverage` ejecuta la suite con V8, genera `coverage/index.html` y `coverage/lcov.info` (ignorados por Git) y aplica un umbral global del 80% en statements, branches, functions y lines; el CI usa este comando como gate. Su alcance incluye la lógica de dominio en `src/game/`, los adaptadores puros `src/scripts/convex-game.ts` y `src/scripts/palomarenos-map-data.ts`, y las funciones/helpers de `convex/`, excluyendo el esquema declarativo y los archivos generados. Los entrypoints de navegador, componentes `.astro` y datos editoriales quedan fuera de esta métrica de unit/integration: se validan mediante Playwright o el build, pero Vitest no instrumenta sus ejecuciones.
 
 ## Playwright: E2E
 

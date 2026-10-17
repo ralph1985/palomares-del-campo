@@ -52,8 +52,8 @@ jobs:
       - name: Run ESLint
         run: pnpm lint
 
-      - name: Unit and integration tests
-        run: pnpm test
+      - name: Unit and integration tests with coverage
+        run: pnpm test:coverage
 
       - name: End-to-end tests
         run: pnpm test:e2e
