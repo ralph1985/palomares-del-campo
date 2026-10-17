@@ -1,0 +1,2 @@
+# Reject package releases newer than three days during dependency resolution.
+minimumReleaseAge: 4320
