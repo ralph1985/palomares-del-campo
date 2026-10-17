@@ -1,8 +1,66 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   isAcceptedTurnstileVerification,
+  parseTurnstileHostnames,
   parseTurnstileVerification,
+  TURNSTILE_VERIFY_URL,
+  verifyTurnstileToken,
 } from '../../convex/turnstile';
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+
+describe('parseTurnstileHostnames', () => {
+  it('normalizes configured hostnames and ignores empty entries', () => {
+    expect(parseTurnstileHostnames(' Example.TEST, ,localhost ')).toEqual([
+      'example.test',
+      'localhost',
+    ]);
+  });
+
+  it('returns no allowed hostnames when configuration is absent', () => {
+    expect(parseTurnstileHostnames(undefined)).toEqual([]);
+  });
+});
+
+describe('verifyTurnstileToken', () => {
+  it('posts the token and secret and parses a successful provider response', async () => {
+    const fetchMock = vi.fn<typeof fetch>(
+      async () =>
+        new Response(
+          JSON.stringify({ success: true, hostname: 'example.test', action: 'submit-story' }),
+          { status: 200 },
+        ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(verifyTurnstileToken('synthetic-token', 'synthetic-secret')).resolves.toEqual({
+      success: true,
+      hostname: 'example.test',
+      action: 'submit-story',
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      TURNSTILE_VERIFY_URL,
+      expect.objectContaining({ method: 'POST' }),
+    );
+    const requestBody = new URLSearchParams(String(fetchMock.mock.calls[0]?.[1]?.body));
+    expect(requestBody.get('response')).toBe('synthetic-token');
+    expect(requestBody.get('secret')).toBe('synthetic-secret');
+  });
+
+  it('fails closed when the provider is unavailable', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn<typeof fetch>(async () => new Response('temporarily unavailable', { status: 503 })),
+    );
+
+    await expect(verifyTurnstileToken('synthetic-token', 'synthetic-secret')).rejects.toThrow(
+      'turnstile-provider-unavailable',
+    );
+  });
+});
 
 describe('parseTurnstileVerification', () => {
   it('rejects malformed provider payloads instead of trusting a type assertion', () => {
