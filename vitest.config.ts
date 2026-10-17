@@ -1,6 +1,8 @@
-import { defineConfig } from 'vitest/config';
+/// <reference types="vitest/config" />
 
-export default defineConfig({
+import { getViteConfig } from 'astro/config';
+
+export default getViteConfig({
   test: {
     environment: 'node',
     include: ['tests/unit/**/*.test.ts', 'tests/integration/**/*.test.ts'],
@@ -11,6 +13,7 @@ export default defineConfig({
         'src/game/**/*.ts',
         'src/scripts/convex-game.ts',
         'src/scripts/palomarenos-map-data.ts',
+        'src/components/SEO.astro',
         'convex/**/*.ts',
       ],
       exclude: ['convex/_generated/**', 'convex/schema.ts', '**/*.d.ts'],
