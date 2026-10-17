@@ -513,7 +513,6 @@ Los dos mapas usan teselas públicas de OpenStreetMap con atribución. El códig
 - `vitest.config.ts` usa entorno `node` e incluye `tests/unit/**/*.test.ts` y `tests/integration/**/*.test.ts`.
 - `playwright.config.ts` ejecuta `tests/e2e/` en Chromium, con base URL `http://127.0.0.1:4321`, servidor Astro de desarrollo, trazas y capturas solo en fallo, y vídeo retenido en fallo.
 - En CI Playwright usa un worker y hasta dos reintentos; localmente no reintenta.
-- Los escenarios de `tests/features/` son Gherkin de referencia. No hay Cucumber ni un ejecutor de steps conectado a esos archivos.
 
 ### Pruebas existentes
 

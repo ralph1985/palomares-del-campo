@@ -190,8 +190,6 @@ La suite sigue tres niveles:
 - **Integración:** conexión del adaptador cliente–Convex, callbacks reactivos, presencia, captura, versión de bola e idempotencia.
 - **E2E:** mapa, navegación, modo inmersivo, captura desde el simulador, accesibilidad, CTAs y enlaces externos.
 
-Los escenarios de `tests/features/` documentan comportamiento en Gherkin. No se usa Cucumber en esta fase; Playwright es el ejecutor de aceptación en navegador.
-
 ## Contenido y fuentes
 
 El contenido editorial debe conservar sus fechas, fuentes y enlaces originales cuando proceda. No se deben inventar datos municipales, patrimoniales, horarios, contactos o coordenadas.

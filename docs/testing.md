@@ -7,10 +7,9 @@ La estrategia actual protege la web editorial, el shell compartido y el juego. L
 - `vitest.config.ts` usa el entorno `node` e incluye `tests/unit/**/*.test.ts` y `tests/integration/**/*.test.ts`.
 - `playwright.config.ts` ejecuta `tests/e2e/` en Chromium. Por defecto arranca `pnpm exec astro dev --host 127.0.0.1 --port 4321` y usa `http://127.0.0.1:4321`; `PLAYWRIGHT_BASE_URL` permite apuntar a un servidor ya activo, que se reutiliza si responde. No arrancar una segunda instancia del mismo proyecto sobre una Astro dev existente.
 - El servidor aislado de Playwright establece `DISABLE_ASTRO_DEV_TOOLBAR_FOR_E2E=true`; `astro.config.ts` desactiva la barra solo en ese proceso. También vacía `CONVEX_URL` y activa `PUBLIC_E2E_TEST_MODE=true`: los mapas usan un estado vacío determinista y el juego/formulario no conectan con Convex. Ese modo solo se reconoce con `import.meta.env.DEV`; el frontend de producción no puede activarlo con la variable pública. La barra sigue activa en `pnpm dev` normal. El test de infraestructura `tests/e2e/test-harness.spec.ts` verifica que el toolbar no se inyecta en el servidor de la suite.
-- El hook `.husky/pre-push` y el workflow CI ejecutan `pnpm typecheck` antes de `pnpm lint`, porque `astro check` genera `.astro/types.d.ts`, necesario para resolver los módulos virtuales de Astro desde un checkout limpio.
+- El hook `.husky/pre-commit` y el workflow CI ejecutan `pnpm typecheck` antes de `pnpm lint`, porque `astro check` genera `.astro/types.d.ts`, necesario para resolver los módulos virtuales de Astro desde un checkout limpio. `.husky/pre-push` no repite el typecheck.
 - `tests/e2e/fixtures.ts` intercepta los tiles de OpenStreetMap y las imágenes adjuntas de Bandomovil en las pruebas correspondientes, y sirve SVGs inocuos. Los tests comprueban la integración de Leaflet y la presencia de adjuntos; no validan el proveedor externo ni la fidelidad de los recursos reales.
 - En CI Playwright prohíbe `test.only`, usa un worker y hasta dos reintentos. Localmente no reintenta.
-- `tests/features/` contiene escenarios Gherkin de referencia. No hay Cucumber ni un ejecutor de steps conectado a esos archivos.
 
 `astro.config.ts` se incluye en el `tsconfig.json` raíz y se comprueba con `pnpm typecheck:astro`. `eslint.config.mjs` y `prettier.config.mjs` son excepciones deliberadas: la configuración TypeScript de ESLint en Node requiere `jiti >=2.2.0` o las opciones nativas experimentales; Prettier requiere Node `>=22.6.0` y `--experimental-strip-types` antes de Node 24.3. Como el rango soportado por Astro empieza en Node `22.12.0`, mantener Prettier en MJS evita exigir una bandera experimental en parte del runtime soportado; mantener ESLint en MJS evita añadir un loader solo para su configuración estática.
 
@@ -49,7 +48,7 @@ La suite cubre actualmente:
 - reintento único de navegación de QA visual cuando `astro dev` aborta una ruta con `net::ERR_ABORTED`;
 - tokens y guardas de arquitectura CSS.
 
-La ejecución verificada actual de `pnpm test` contiene 25 archivos y 113 pruebas, todas correctas. No hay cobertura porcentual configurada ni informe de coverage.
+La ejecución verificada actual de `pnpm test` contiene 28 archivos y 131 pruebas. `pnpm test:coverage` ejecuta la suite con V8, genera `coverage/index.html` y `coverage/lcov.info` (ignorados por Git) y aplica un umbral global del 80% en statements, branches, functions y lines; el CI usa este comando como gate. Su alcance incluye la lógica de dominio en `src/game/`, los adaptadores puros `src/scripts/convex-game.ts` y `src/scripts/palomarenos-map-data.ts`, y las funciones/helpers de `convex/`, excluyendo el esquema declarativo y los archivos generados. Los entrypoints de navegador, componentes `.astro` y datos editoriales quedan fuera de esta métrica de unit/integration: se validan mediante Playwright o el build, pero Vitest no instrumenta sus ejecuciones.
 
 ## Playwright: E2E
 
