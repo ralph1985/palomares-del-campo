@@ -1,6 +1,6 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import CollectionSearch from '../../../src/components/CollectionSearch.astro';
 import AboutEmblem from '../../../src/components/about/AboutEmblem.astro';
@@ -90,6 +90,18 @@ describe('WorldSubmissionForm.astro', () => {
     expect(html).toContain('class="world-form-honeypot" aria-hidden="true"');
     expect(html).toContain('data-turnstile-widget');
     expect(html).toContain('data-form-status');
+  });
+
+  it('renders an empty Turnstile site key when the public key is not configured', async () => {
+    vi.stubEnv('PUBLIC_TURNSTILE_SITE_KEY', undefined);
+
+    try {
+      const html = await render(WorldSubmissionForm);
+      expect(html).toMatch(/data-turnstile-site-key(?:\s|>)/);
+      expect(html).not.toMatch(/data-turnstile-site-key="[^"]+"/);
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 });
 
