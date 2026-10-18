@@ -69,6 +69,27 @@ test.describe('Palomareños por el mundo', () => {
     ).toHaveAttribute('href', '/privacidad/#palomarenos-por-el-mundo');
   });
 
+  test('keeps proposal text controls at least 16px on narrow viewports', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/palomarenos-por-el-mundo/');
+
+    const fontSizes = await page
+      .locator(
+        '[data-palomarenos-form] input:not([type="checkbox"]):not([name="website"]), [data-palomarenos-form] textarea',
+      )
+      .evaluateAll((controls) =>
+        controls.map((control) => Number.parseFloat(window.getComputedStyle(control).fontSize)),
+      );
+
+    expect(fontSizes.length).toBeGreaterThan(0);
+    for (const fontSize of fontSizes) {
+      expect(
+        fontSize,
+        'text controls should not trigger mobile browser zoom',
+      ).toBeGreaterThanOrEqual(16);
+    }
+  });
+
   test('exposes the detailed privacy information page', async ({ page }) => {
     await page.goto('/privacidad/');
 
