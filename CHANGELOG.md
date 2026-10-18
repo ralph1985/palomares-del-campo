@@ -1,60 +1,132 @@
 # Changelog
 
-Resumen de cambios relevantes del proyecto, organizado por lo que aportan a la web. El historial de Git conserva el detalle de cada commit. Como todavía no hay etiquetas ni releases publicados, no se inventan versiones: `Unreleased` recoge lo que está en `develop` y aún no se ha promocionado a producción; el histórico resume los principales hitos desde el inicio.
+Este archivo sigue [Keep a Changelog 2.0](https://keepachangelog.com/en/2.0.0/): resume cambios notables para quienes usan y mantienen el proyecto; no reproduce cada commit. Usa las categorías `Security`, `Removed`, `Changed`, `Deprecated`, `Fixed` y `Added`, y fechas ISO `YYYY-MM-DD`. `Unreleased` recoge cambios en `develop` aún no promocionados. El histórico de `main` muestra fechas de commit, no fechas de release. El repositorio aún no tiene etiquetas ni releases publicados.
 
 ## [Unreleased]
 
-### Web y experiencia
+### 2026-10-18
 
-- Añadido un favicon basado en el escudo de Palomares del Campo.
+#### Changed
+
+- `develop` pasa a ser la rama de integración con Preview persistente y backend Convex de desarrollo compartido; debe usar solo datos de prueba.
+- CI ejecuta `Verify` también en pushes y Pull Requests dirigidos a `develop`.
+- Actualizada la documentación para describir las rutas, el backend y las pruebas que existen actualmente.
+
+#### Fixed
+
 - Evitado el zoom automático de móvil en los campos de texto del formulario de Palomareños.
 
-### Preview y calidad de entrega
+#### Added
 
-- Documentado `develop` como rama de integración con Preview persistente y backend Convex de desarrollo compartido; debe utilizarse únicamente con datos de prueba.
-- Ampliada la CI para ejecutar `Verify` también en pushes y Pull Requests dirigidos a `develop`.
-- Documentado el flujo de ramas, Preview y promoción a producción.
+- Favicon basado en el escudo de Palomares del Campo.
 
-### Documentación
+## Historial integrado en `main` — fechas de commit, no de release
 
-- Actualizados README, instrucciones de agentes y guías de arquitectura y pruebas para reflejar la implementación actual.
-- Sustituida la guía genérica de Convex por la descripción de los backends de juego y Palomareños.
+### 2026-10-17
 
-## Hitos del proyecto
+#### Security
 
-### Web editorial y servicios locales · 9–12 de octubre de 2026
+- Añadidas comprobaciones de seguridad para GitHub Actions y revisión de dependencias.
 
-- Creada la web estática con Astro, navegación compartida, identidad visual del municipio y mejoras progresivas con Three.js.
-- Incorporadas noticias y bandos municipales con fuentes, adjuntos, búsqueda y filtros; añadido el importador RSS y el flujo automatizado de sincronización de bandos mediante Pull Request.
-- Añadidas páginas de información práctica, agenda, rutas verificadas con mapa GPX/Leaflet, horarios de transporte y alojamientos rurales.
-- Mejoradas la navegación para vecinos y visitantes, la accesibilidad, la adaptación móvil y la presentación de contenido editorial.
+#### Changed
 
-### Juego geolocalizado · 10–11 de octubre de 2026
+- Aplicada una espera mínima de tres días para que las dependencias recién publicadas puedan instalarse.
 
-- Evolucionado el prototipo local con reglas de captura, ubicaciones y simulador de desarrollo.
-- Añadido Convex para el estado remoto autoritativo: temporadas, capturas, identidad por nick, ranking con decaimiento de puntuación y presencia temporal.
-- Incorporados controles inmersivos y mejoras del mapa, con fallbacks cuando falla WebGL.
+#### Added
 
-### Palomareños por el mundo · 14–15 de octubre de 2026
+- Ampliada la cobertura de componentes Astro y activada su verificación en CI.
 
-- Añadidos el mapa público y el formulario de propuestas con moderación: solo las historias aprobadas y con ubicación válida se proyectan públicamente.
-- Incorporadas validaciones antiabuso, rate limiting y verificación server-side con Turnstile; las notificaciones de moderación y aprobación pueden enviarse mediante Resend.
-- Añadidas operaciones internas de aprobación, rechazo y retirada, además de páginas de privacidad, cookies y aviso legal.
-- Documentación legal y configuración de producción mantenidas como pendientes de revisión; su presencia en la web no implica aprobación jurídica ni despliegue de producción.
+### 2026-10-16
 
-### Diseño, arquitectura y SEO · 12–16 de octubre de 2026
+#### Changed
 
-- Centralizados tokens de diseño y tipografía; documentadas las fronteras de CSS y añadida una comprobación de arquitectura para los cambios de estilos.
-- Reorganizados layouts y componentes para separar responsabilidades y facilitar su reutilización.
-- Añadidos metadatos SEO, datos estructurados y sitemap; diferidas las escenas Three.js con alternativas visuales accesibles.
-- Endurecidos los límites de TypeScript y la validación de respuestas externas, datos del juego, Turnstile y Resend.
+- Aisladas las pruebas de mapas y adjuntos externos con fixtures; ampliadas las pruebas E2E y visuales.
+- Incorporada la CI de calidad para formato, TypeScript, lint, pruebas, build y SEO.
 
-### Pruebas y cadena de suministro · 10–17 de octubre de 2026
+#### Fixed
 
-- Ampliadas las pruebas unitarias, de integración, de componentes Astro, E2E y QA visual; aisladas las pruebas de servicios externos mediante fixtures.
-- Añadida cobertura de código con umbral mínimo y CI para formato, tipos, lint, pruebas, build y verificación SEO.
-- Incorporadas automatizaciones de seguridad y dependencias, revisión de dependencias y una política de antigüedad mínima para paquetes nuevos.
+- Validados con más rigor los datos geográficos, JSON-LD y respuestas de Resend; conservado el menú si falla la escena 3D.
+
+### 2026-10-15
+
+#### Changed
+
+- Documentada la configuración de producción por entorno, sin guardar valores secretos.
+- Activadas comprobaciones estrictas de TypeScript para Astro, Convex, scripts y pruebas.
+
+#### Fixed
+
+- Corregidas la validación de respuestas de Turnstile y la presentación de tarjetas editoriales.
+
+#### Added
+
+- Añadido el flujo interno para retirar historias de «Palomareños por el mundo».
+
+### 2026-10-14
+
+#### Security
+
+- Protegido el envío de propuestas con Turnstile server-side, límites antiabuso y controles por hostname.
+
+#### Fixed
+
+- Corregidos el bucle de error de Turnstile, el contraste de páginas legales y la superposición de mapas con la cabecera.
+
+#### Added
+
+- Publicados el mapa y el formulario moderado de «Palomareños por el mundo», con avisos a quienes envían historias cuando se aprueban.
+- Añadidas páginas de privacidad y cookies, y un borrador de aviso legal.
+
+### 2026-10-13
+
+#### Changed
+
+- Simplificada la navegación para visitas y los accesos a servicios municipales.
+- Ampliadas las escenas opcionales de Three.js y alineada la arquitectura documentada con el código.
+
+#### Fixed
+
+- Mantenido visible el emblema de la página «Sobre el pueblo».
+
+### 2026-10-12
+
+#### Changed
+
+- Centralizados los tokens de diseño y tipografía; reorganizados componentes, layouts y límites CSS.
+
+#### Added
+
+- Incorporados SEO técnico, sitemap y datos estructurados.
+- Añadidos el directorio de alojamientos rurales, mapas Leaflet para rutas y carga de recorridos GPX.
+- Automatizada la importación y sincronización de bandos municipales, con búsqueda, filtros y adjuntos.
+
+### 2026-10-11
+
+#### Fixed
+
+- Mejorada la lectura de resúmenes y enlaces largos de bandos en móvil.
+
+#### Added
+
+- Añadidas páginas de información práctica, agenda, rutas, horarios de autobús y bandos municipales.
+- Mejorados los accesos editoriales de portada y la navegación para vecinos y visitantes.
+- Incorporadas la presencia de jugadores remotos y controles inmersivos al juego.
+
+### 2026-10-10
+
+#### Added
+
+- Creado el prototipo geolocalizado del juego y un simulador de posiciones para desarrollo.
+- Añadido Convex para capturas autoritativas, temporadas, identidad por nick, ranking y decaimiento de puntuación.
+- Incorporadas pruebas unitarias y E2E, lint, formato y hooks de Git.
+
+### 2026-10-09
+
+#### Added
+
+- Iniciado el sitio estático con Astro y pnpm, noticias, navegación compartida, imagen municipal y crédito de `conquense.dev`.
+- Añadido el menú animado con Three.js y una alternativa funcional cuando WebGL falla.
 
 ---
 
-Las fechas del histórico corresponden a los commits integrados en `main`; los cambios posteriores siguen en `Unreleased` hasta una promoción autorizada.
+Cada fecha del histórico resume los cambios notables de ese día; Git conserva el detalle completo de los commits.
