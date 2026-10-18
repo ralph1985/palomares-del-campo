@@ -207,6 +207,8 @@ Los cambios deben ser pequeños y verificables:
 5. No incluyas secretos, archivos `.env`, artefactos generados, `dist/`, `.astro/` ni `node_modules/`.
 6. No ejecutes despliegues de Convex o producción sin autorización explícita.
 
+El flujo de ramas, PRs, Preview y releases está descrito en [`docs/development-workflow.md`](docs/development-workflow.md). Los cambios aún no promocionados a `main` se registran en [`CHANGELOG.md`](CHANGELOG.md).
+
 ## Documentación relacionada
 
 - [`AGENTS.md`](AGENTS.md): reglas operativas del repositorio.
