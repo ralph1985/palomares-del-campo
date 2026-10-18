@@ -1,6 +1,6 @@
 # Changelog
 
-Este archivo sigue [Keep a Changelog 2.0](https://keepachangelog.com/en/2.0.0/): resume cambios notables para quienes usan y mantienen el proyecto; no reproduce cada commit. Usa las categorías `Security`, `Removed`, `Changed`, `Deprecated`, `Fixed` y `Added`, y fechas ISO `YYYY-MM-DD`. `Unreleased` recoge cambios en `develop` aún no promocionados. El histórico de `main` muestra fechas de commit, no fechas de release. El repositorio aún no tiene etiquetas ni releases publicados.
+Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https://keepachangelog.com/en/2.0.0/): resume cambios notables para quienes usan y mantienen el proyecto; no reproduce cada commit. Usa las categorías `Security`, `Removed`, `Changed`, `Deprecated`, `Fixed` y `Added`, y fechas ISO `YYYY-MM-DD`. `Unreleased` recoge cambios en `develop` aún no promocionados. El histórico de `main` muestra fechas de commit, no fechas de release. El repositorio aún no tiene etiquetas ni releases publicados.
 
 ## [Unreleased]
 
