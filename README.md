@@ -1,26 +1,27 @@
 # Palomares del Campo
 
-Web editorial y experiencia interactiva para Palomares del Campo, construida con [Astro](https://astro.build/), TypeScript, Leaflet y Three.js.
+Web editorial y experiencias interactivas para Palomares del Campo, construidas con [Astro](https://astro.build/), TypeScript, Leaflet, Three.js y Convex.
 
-El proyecto combina contenido editorial estático —portada, noticias y patrimonio— con `/juego/`, una experiencia geolocalizada cuyo estado compartido se apoya en Convex cuando se configura un deployment de desarrollo.
+El sitio genera estáticamente sus páginas editoriales. Convex proporciona estado remoto para el juego geolocalizado y gestiona las propuestas moderadas de «Palomareños por el mundo». Son superficies separadas: el contenido editorial general no depende de Convex.
 
 ## Estado del proyecto
 
-- Web editorial estática generada por Astro.
-- Noticias gestionadas mediante Content Collections y Markdown.
-- Mapa Leaflet con teselas de OpenStreetMap y atribución visible.
-- Escena Three.js opcional y cargada bajo demanda.
-- Juego con captura autoritativa, ranking y presencia temporal mediante Convex.
-- Coordenadas y radios del juego todavía provisionales hasta su revisión física.
+- Noticias y bandos municipales gestionados en colecciones Markdown separadas.
+- Mapa Leaflet con teselas de OpenStreetMap y atribución visible; rutas con mapa GPX.
+- Escenas Three.js opcionales, cargadas bajo demanda y con fallback.
+- Juego con modo local y remoto: Convex es la autoridad para capturas, puntuación, ranking y presencia en el modo remoto.
+- «Palomareños por el mundo»: mapa público de historias aprobadas y formulario de propuestas moderadas. El flujo remoto usa Convex, Turnstile server-side y notificaciones mediante Resend cuando el deployment está configurado.
+- Las coordenadas y radios del juego siguen siendo provisionales hasta su revisión física.
+- Las pruebas E2E usan fixtures o modos simulados; no prueban un deployment remoto de Convex ni una partida real de dos jugadores.
 
 ## Requisitos
 
-- Node.js `>=22.12.0` (Astro 7).
+- Node.js `>=22.12.0`.
 - `pnpm` 10.25.0.
 - Chromium instalado para ejecutar Playwright E2E.
-- Convex solo es necesario para probar el modo multijugador remoto; la web puede arrancar en modo local sin él.
+- Convex solo es necesario para probar los flujos remotos; el sitio editorial se puede arrancar localmente sin él.
 
-Comprueba las versiones del proyecto con:
+Comprueba las versiones con:
 
 ```bash
 node --version
@@ -29,196 +30,124 @@ pnpm --version
 
 ## Instalación y desarrollo
 
-Clona el repositorio e instala las dependencias usando el lockfile:
-
 ```bash
 git clone https://github.com/ralph1985/palomares-del-campo.git
 cd palomares-del-campo
 pnpm install --frozen-lockfile
-```
-
-Arranca la web en modo local:
-
-```bash
 pnpm dev
 ```
 
-Astro servirá la aplicación en `http://localhost:4321/`. Sin `CONVEX_URL`, `/juego/` funciona con el simulador local de desarrollo y no representa una partida autoritativa compartida.
+Astro sirve la web en `http://localhost:4321/`. Sin `CONVEX_URL`, el juego usa el modo local de desarrollo; sus capturas y puntuación no son una partida compartida ni autoritativa.
 
-### Modo multijugador de desarrollo
+### Backend Convex de desarrollo
 
-El juego remoto usa un deployment de desarrollo de Convex. En una terminal separada:
+Para trabajar con los flujos remotos, configura localmente las variables del deployment de desarrollo en un archivo ignorado por Git y ejecuta en una terminal separada:
 
 ```bash
 pnpm exec convex dev
 ```
 
-Mantén ese proceso activo mientras trabajas en las funciones de `convex/`. Convex sincroniza el código del backend, valida las funciones y regenera `convex/_generated/`.
-
-Después, arranca Astro:
-
-```bash
-pnpm dev
-```
-
-Las variables de entorno se mantienen en archivos locales ignorados por Git. No copies `.env.local`, tokens, claves ni URLs privadas al repositorio o a una conversación.
-
-> `pnpm exec convex deploy` está reservado para una publicación explícita del backend. El flujo normal de desarrollo usa `pnpm exec convex dev`.
+Luego arranca Astro con `pnpm dev`. El deployment `dev/europe-ireland` se comparte entre desarrollo local y Preview: usa únicamente datos de prueba. No copies archivos de entorno, claves, tokens ni URLs privadas al repositorio o al chat. `pnpm exec convex deploy` no forma parte del desarrollo habitual y requiere autorización explícita.
 
 ## Comandos
 
-| Comando             | Uso                                                                         |
-| ------------------- | --------------------------------------------------------------------------- |
-| `pnpm dev`          | Servidor Astro con recarga en desarrollo.                                   |
-| `pnpm build`        | Genera el sitio estático en `dist/`.                                        |
-| `pnpm typecheck`    | Comprueba Astro, scripts, tests y Convex con sus configuraciones separadas. |
-| `pnpm preview`      | Sirve localmente el build generado.                                         |
-| `pnpm test`         | Ejecuta las pruebas unitarias y de integración con Vitest.                  |
-| `pnpm test:watch`   | Ejecuta Vitest en modo observación.                                         |
-| `pnpm test:e2e`     | Ejecuta Playwright contra la aplicación en un navegador.                    |
-| `pnpm lint`         | Ejecuta ESLint sobre el repositorio.                                        |
-| `pnpm format`       | Formatea el código con Prettier.                                            |
-| `pnpm format:check` | Comprueba que el formato sea correcto sin modificar archivos.               |
-| `pnpm fetch-bandos` | Importa los comunicados nuevos del RSS oficial sin eliminar históricos.     |
-| `pnpm sync-bandos`  | Ejecuta el sincronizador aislado; requiere `gh` y está pensado para cron.   |
+| Comando                             | Uso                                                                               |
+| ----------------------------------- | --------------------------------------------------------------------------------- |
+| `pnpm dev`                          | Servidor Astro con recarga en desarrollo.                                         |
+| `pnpm build`                        | Genera el sitio estático en `dist/`.                                              |
+| `pnpm preview`                      | Sirve localmente el build generado.                                               |
+| `pnpm typecheck`                    | Comprueba Astro/scripts/tests y Convex con configuraciones separadas.             |
+| `pnpm lint`                         | Ejecuta ESLint.                                                                   |
+| `pnpm format` / `pnpm format:check` | Formatea / comprueba el formato con Prettier.                                     |
+| `pnpm test`                         | Ejecuta Vitest sin informe de cobertura.                                          |
+| `pnpm test:coverage`                | Ejecuta Vitest con cobertura; es el gate de CI.                                   |
+| `pnpm test:watch`                   | Ejecuta Vitest en modo observación.                                               |
+| `pnpm test:e2e`                     | Ejecuta Playwright contra Chromium.                                               |
+| `pnpm qa:visual`                    | QA visual/funcional contra un servidor ya iniciado.                               |
+| `pnpm check:css:architecture`       | Comprueba las reglas CSS aplicables al diff.                                      |
+| `pnpm check:seo`                    | Verifica SEO y sitemap del build; requiere un build previo.                       |
+| `pnpm fetch-bandos`                 | Importa comunicados desde el RSS oficial sin eliminar históricos.                 |
+| `pnpm sync-bandos`                  | Ejecuta el sincronizador previsto para cron; requiere `gh` y configuración local. |
 
-### Sincronización automática de bandos
+`pnpm test:coverage` genera `coverage/` (ignorado por Git) y aplica los umbrales de cobertura configurados. CI ejecuta formato, typecheck, lint, tests con cobertura, E2E, build y verificación SEO. `pnpm qa:visual` y `pnpm check:css:architecture` son comandos independientes, no pasos del workflow CI actual.
 
-`pnpm fetch-bandos` usa por defecto el RSS oficial de Bandomovil como fuente incremental. Añade y actualiza comunicados, conserva los Markdown históricos que no aparezcan en la ventana del RSS y mantiene los adjuntos externos de Bandomovil. Para ejecutar manualmente el backfill histórico ya existente, usa `BANDOS_IMPORT_MODE=archive pnpm fetch-bandos`; ese modo está restringido a los años configurados en `scripts/fetch-bandos.ts` y sí reconcilia el directorio generado.
+### Importación y sincronización de bandos
 
-`pnpm sync-bandos` está diseñado para ejecutarse desde cron en un host con `pnpm`, Node.js y una sesión válida de GitHub CLI. Bloquea ejecuciones concurrentes, alinea `main`, trabaja en un worktree temporal, ejecuta el importador incremental, valida el contenido y crea una Pull Request limitada a `src/content/bandos/*.md`. No publica directamente en `main`.
+`pnpm fetch-bandos` usa por defecto el RSS oficial de Bandomovil como fuente incremental. Añade y actualiza comunicados, conserva los Markdown históricos que no aparezcan en la ventana del RSS y mantiene los adjuntos externos. El backfill histórico existente se ejecuta con `BANDOS_IMPORT_MODE=archive pnpm fetch-bandos`; ese modo está restringido a los años configurados en `scripts/fetch-bandos.ts` y reconcilia el directorio generado.
 
-El aviso posterior a la fusión se envía por SMTP, igual que en `ayuntamiento-de-belmontejo`, mediante `nodemailer` y un `.env` local ignorado por Git. Reutiliza estas variables:
+`pnpm sync-bandos` está diseñado para cron en un host con Node.js, pnpm y una sesión válida de GitHub CLI. Bloquea ejecuciones concurrentes, alinea `main`, trabaja en un worktree temporal, ejecuta la importación incremental, valida el contenido y crea una PR limitada a `src/content/bandos/*.md`; no publica directamente en `main`. El repositorio no demuestra que el cron esté instalado.
 
-```text
-BANDOS_SMTP_HOST
-BANDOS_SMTP_PORT=587
-BANDOS_SMTP_SECURE=false
-BANDOS_SMTP_USER
-BANDOS_SMTP_PASSWORD
-BANDOS_NOTIFY_FROM
-BANDOS_NOTIFY_TO
-```
+El aviso posterior a la fusión puede enviarse por SMTP mediante Nodemailer. La configuración se mantiene fuera de Git (`BANDOS_SMTP_HOST`, `BANDOS_SMTP_PORT`, `BANDOS_SMTP_SECURE`, `BANDOS_SMTP_USER`, `BANDOS_SMTP_PASSWORD`, `BANDOS_NOTIFY_FROM` y `BANDOS_NOTIFY_TO`). `BANDOS_SITE_URL` es opcional. No se envían notificaciones por Telegram.
 
-`BANDOS_SITE_URL` es opcional. Si se configura, el correo enlaza al bando publicado en Palomares; si no, conserva el enlace oficial original de Bandomovil. El sincronizador no envía notificaciones por Telegram ni guarda credenciales en el repositorio.
+`SYNC_BANDOS_DRY_RUN=1 pnpm sync-bandos` omite la rama de bandos, la PR, la fusión y las notificaciones. No evita necesariamente la alineación inicial de `main`: consulta `docs/architecture.md` antes de tratarlo como un dry-run sin efectos sobre el checkout. La instalación de cron, SMTP y auto-merge requiere un host autorizado y configuración local.
 
-Para comprobar el flujo sin crear ramas, PRs, merges ni notificaciones:
-
-```bash
-SYNC_BANDOS_DRY_RUN=1 pnpm sync-bandos
-```
-
-La instalación de cron, la configuración SMTP y el auto-merge requieren un host autorizado y variables locales ignoradas por Git. Nunca guardes esas credenciales en el repositorio.
-
-Validación completa antes de publicar cambios:
-
-```bash
-pnpm format:check
-pnpm lint
-pnpm typecheck
-pnpm test
-CI=1 pnpm test:e2e
-pnpm build
-git diff --check
-```
-
-La cobertura porcentual todavía no está configurada; `pnpm test` informa de pruebas ejecutadas, pero no genera un informe de cobertura.
-
-## Estructura del proyecto
+## Estructura
 
 ```text
 src/
-├── components/
-│   ├── about/          # Tarjetas de patrimonio y fuentes
-│   ├── game/           # Mapa, estado, reglas y controles del juego
-│   ├── layout/         # Cabecera, menú, pie y crédito
-│   └── ui/             # Botones y enlaces reutilizables
-├── content/             # Colecciones editoriales Markdown
-├── data/                # Datos de sitio, pueblo y ubicaciones del juego
-├── game/                # Reglas puras de geolocalización y sesión
-├── pages/               # Rutas Astro y composición de páginas
-└── scripts/             # Adaptadores de navegador, Leaflet, Convex y menú
+├── components/       # about, accommodations, game, home, layout, ui, world…
+├── content/          # noticias/ y bandos/ (Markdown)
+├── data/             # datos estructurados del sitio
+├── game/             # reglas puras y sesión local
+├── layouts/          # layout compartido de Astro
+├── pages/            # rutas y composición
+├── scripts/          # mapas, Convex, menú y adaptadores de navegador
+└── styles/           # tokens, estilos globales y hojas específicas
 
-convex/
-├── game.ts              # Temporadas, jugadores, presencia y capturas
-├── geo.ts               # Validación geográfica autoritativa
-├── identity.ts          # Normalización de nicks
-├── leaderboard.ts       # Ranking compartido
-├── presence.ts          # TTL y redondeo de presencia
-├── schema.ts            # Esquema de Convex
-└── _generated/          # Código generado por Convex; no editar manualmente
-
-tests/
-├── unit/                # Reglas puras y límites
-├── integration/         # Contratos del adaptador cliente–Convex
-├── e2e/                 # Flujos visibles en navegador
-└── features/            # Especificaciones BDD en Gherkin
-
-docs/
-├── architecture.md      # Decisiones y límites de arquitectura
-└── testing.md           # Estrategia y convenciones de pruebas
+convex/               # backend de juego y propuestas de Palomareños
+scripts/              # importación, sincronización y QA
+tests/                # unit, integration, e2e y features
+docs/                 # arquitectura, testing, operación y releases
 ```
+
+`convex/_generated/` se regenera con la CLI; no se edita manualmente. La arquitectura fuente detallada está en [`docs/architecture.md`](docs/architecture.md).
 
 ## Rutas principales
 
-- `/`: portada y selección de noticias.
-- `/noticias/`: archivo editorial.
-- `/noticias/[slug]/`: detalle de una noticia.
+- `/`: portada.
+- `/noticias/` y `/noticias/[slug]/`: archivo y detalle de noticias.
+- `/bandos/` y `/bandos/[slug]/`: comunicados municipales; `/avisos/` redirige a `/bandos/`.
 - `/sobre-el-pueblo/`: historia, patrimonio, paisaje y fuentes.
-- `/juego/`: mapa y experiencia de la bola.
+- `/informacion-practica/`, `/agenda/`, `/alojamientos/` y `/rutas/`: recursos e información local.
+- `/juego/`: mapa y experiencia geolocalizada.
+- `/palomarenos-por-el-mundo/`: mapa público y formulario de propuestas moderadas.
+- `/privacidad/`, `/politica-de-cookies/` y `/aviso-legal/`: información legal. La documentación de privacidad y aviso legal conserva pendientes de revisión; no asumir que está aprobada para producción.
 
-## Arquitectura del juego
+## Límites del backend y privacidad
 
-Convex es la autoridad para la partida remota. El cliente solicita acciones y representa el estado recibido; no decide capturas válidas ni puntuaciones.
+En el juego remoto, el backend valida las capturas y mantiene el estado compartido; el modo local no persiste puntuaciones. La identidad del jugador se basa en un `deviceId` local y un nick, no en cuentas de usuario. La presencia guarda temporalmente coordenadas redondeadas y no mantiene historial de recorridos. No hay protección demostrada contra spoofing de GPS ni E2E con varios jugadores conectados a un deployment real.
 
-- La captura se valida en backend por ubicación, precisión, versión de la bola y concurrencia.
-- Las capturas incluyen una clave de idempotencia.
-- La identidad es anónima: `deviceId` local y nick visible; no hay cuentas ni nombres reales.
-- La presencia se publica solo durante la sesión activa.
-- Las coordenadas de presencia se redondean antes de almacenarse.
-- La presencia caduca tras 30 segundos sin actualización.
-- No se conserva historial de recorridos.
-- Los marcadores remotos se interpolan visualmente en el cliente para evitar saltos entre posiciones.
+En Palomareños, las propuestas comienzan pendientes y solo las aprobadas con coordenadas válidas aparecen en la proyección pública. El email y los campos internos de moderación no se exponen en esa proyección. La moderación no tiene un panel administrativo público; las operaciones internas se describen en [`docs/palomarenos-operacion.md`](docs/palomarenos-operacion.md). Antes de producción deben resolverse los pendientes legales y de configuración indicados en [`docs/palomarenos-por-el-mundo.md`](docs/palomarenos-por-el-mundo.md) y [`docs/palomarenos-produccion.md`](docs/palomarenos-produccion.md).
 
-La lógica pura vive en `src/game/`. Los adaptadores de Leaflet, geolocalización, Convex y `requestAnimationFrame` viven en `src/scripts/`.
+Las ubicaciones del juego son provisionales; antes de activar una temporada pública hay que revisar acceso, seguridad, tráfico y precisión GPS. No presentar datos de OpenStreetMap como ubicaciones oficiales sin esa revisión.
 
-## Pruebas
+## Pruebas y contribución
 
-La suite sigue tres niveles:
+La suite Vitest cubre reglas y componentes, las funciones Convex y adaptadores, importación y políticas auxiliares. Playwright comprueba flujos visibles con el servidor de desarrollo, simuladores o respuestas interceptadas: no constituye validación de producción. La ejecución de cobertura verificada el 18 de octubre de 2026 pasó **34 archivos y 189 pruebas**, con 93,50 % de statements, 91,16 % de branches, 96,55 % de functions y 96,85 % de lines.
 
-- **Unitarias:** distancia, radios, precisión GPS, puntuación, decaimiento, identidad, presencia e interpolación.
-- **Integración:** conexión del adaptador cliente–Convex, callbacks reactivos, presencia, captura, versión de bola e idempotencia.
-- **E2E:** mapa, navegación, modo inmersivo, captura desde el simulador, accesibilidad, CTAs y enlaces externos.
+Validación local equivalente al gate principal de CI:
 
-## Contenido y fuentes
+```bash
+pnpm format:check
+pnpm typecheck
+pnpm lint
+pnpm test:coverage
+CI=1 pnpm test:e2e
+pnpm build
+pnpm check:seo
+```
 
-El contenido editorial debe conservar sus fechas, fuentes y enlaces originales cuando proceda. No se deben inventar datos municipales, patrimoniales, horarios, contactos o coordenadas.
-
-Las ubicaciones del juego son provisionales. Antes de convertir una ubicación en parte de una partida pública hay que revisar acceso, seguridad, tráfico, precisión GPS y alternativas.
-
-## Contribución
-
-Los cambios deben ser pequeños y verificables:
-
-1. Revisa `AGENTS.md` y la documentación relevante antes de editar.
-2. Mantén la separación entre composición, componentes, reglas puras, adaptadores y backend.
-3. Añade o actualiza una prueba de comportamiento para cada cambio funcional.
-4. Ejecuta la validación completa antes de crear un commit.
-5. No incluyas secretos, archivos `.env`, artefactos generados, `dist/`, `.astro/` ni `node_modules/`.
-6. No ejecutes despliegues de Convex o producción sin autorización explícita.
-
-El flujo de ramas, PRs, Preview y releases está descrito en [`docs/development-workflow.md`](docs/development-workflow.md). Los cambios aún no promocionados a `main` se registran en [`CHANGELOG.md`](CHANGELOG.md).
+Para cambios de UI, usar también `pnpm qa:visual` cuando haya un servidor disponible. Revisar `AGENTS.md` y la documentación relevante antes de editar; ejecutar `git diff --check` y comprobar que el diff contiene solo los archivos previstos. No desplegar Convex ni producción sin autorización explícita.
 
 ## Documentación relacionada
 
-- [`AGENTS.md`](AGENTS.md): reglas operativas del repositorio.
-- [`docs/architecture.md`](docs/architecture.md): principios y límites de arquitectura.
-- [`docs/testing.md`](docs/testing.md): estrategia de pruebas.
-- [README files en GitHub](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes).
-- [Estructura de proyectos Astro](https://docs.astro.build/en/basics/project-structure/).
-- [CLI de Astro](https://docs.astro.build/en/reference/cli-reference/).
-- [Flujo de desarrollo de Convex](https://docs.convex.dev/understanding/workflow).
+- [`AGENTS.md`](AGENTS.md): reglas operativas para cambios.
+- [`docs/architecture.md`](docs/architecture.md): arquitectura implementada, límites y evolución prevista.
+- [`docs/testing.md`](docs/testing.md): estrategia, alcance y límites de las pruebas.
+- [`docs/development-workflow.md`](docs/development-workflow.md): ramas, Preview y releases.
+- [`docs/palomarenos-por-el-mundo.md`](docs/palomarenos-por-el-mundo.md): tratamiento de datos y pendientes de revisión.
+- [`docs/palomarenos-produccion.md`](docs/palomarenos-produccion.md): configuración por entorno, sin valores secretos.
+- [`docs/palomarenos-operacion.md`](docs/palomarenos-operacion.md): procedimiento interno de retirada de historias.
+- [`CHANGELOG.md`](CHANGELOG.md): cambios aún no promocionados y releases deliberados.
 
-## Mantenimiento
-
-Proyecto mantenido por [ralph1985](https://github.com/ralph1985).
+Mantenido por [ralph1985](https://github.com/ralph1985).

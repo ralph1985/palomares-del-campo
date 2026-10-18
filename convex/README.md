@@ -1,88 +1,47 @@
-# Welcome to your Convex functions directory!
+# Backend Convex de Palomares del Campo
 
-Write your Convex functions here.
-See https://docs.convex.dev/functions for more.
+Este directorio contiene las funciones y el esquema del backend Convex usado por dos flujos concretos del sitio estático Astro:
 
-A query function that takes two arguments looks like:
+- **Juego:** estado de temporada, jugadores anónimos identificados mediante `deviceId`, capturas, ranking y presencia temporal.
+- **Palomareños por el mundo:** recepción de propuestas, moderación interna y consulta pública de historias aprobadas.
 
-```ts
-// convex/myFunctions.ts
-import { query } from './_generated/server';
-import { v } from 'convex/values';
+Convex no es el CMS ni la base de datos del contenido editorial general. Las noticias y los bandos se gestionan como Content Collections Markdown en `src/content/`.
 
-export const myQueryFunction = query({
-  // Validators for arguments.
-  args: {
-    first: v.number(),
-    second: v.string(),
-  },
+## Módulos principales
 
-  // Function implementation.
-  handler: async (ctx, args) => {
-    // Read the database as many times as you need here.
-    // See https://docs.convex.dev/database/reading-data.
-    const documents = await ctx.db.query('tablename').collect();
+- `schema.ts`: tablas e índices compartidos.
+- `game.ts`, `geo.ts`, `identity.ts`, `leaderboard.ts`, `presence.ts` y `score.ts`: reglas y operaciones del juego.
+- `palomarenos.ts` y `palomarenos_validation.ts`: envío, validación, moderación y proyección pública redactada.
+- `palomarenos_notifications.ts`, `palomarenos_notification_content.ts`, `resend_response.ts` y `turnstile.ts`: notificaciones y protección del formulario.
+- `_generated/`: referencias generadas por Convex; no editarlas manualmente.
 
-    // Arguments passed from the client are properties of the args object.
-    console.log(args.first, args.second);
+## Contratos y límites
 
-    // Write arbitrary JavaScript here: filter, aggregate, build derived data,
-    // remove non-public properties, or create new objects.
-    return documents;
-  },
-});
+- En el juego remoto, Convex vuelve a validar capturas y mantiene el estado autoritativo. El modo local del navegador no es una partida compartida.
+- La identidad del jugador usa un identificador local y un nick; no equivale a autenticación fuerte. No hay protección contra spoofing GPS demostrada.
+- El formulario de Palomareños verifica Turnstile en una action de servidor y crea propuestas mediante una mutación interna con estado inicial `pending`.
+- `api.palomarenos.listApproved` expone solo una proyección de fichas aprobadas con coordenadas válidas; no devuelve email ni campos de moderación.
+- Aprobar, rechazar y retirar son operaciones internas. No hay panel público de administración.
+- La presencia del juego almacena coordenadas redondeadas temporalmente; no se conserva historial de recorridos.
+- Las pruebas locales no demuestran que un deployment remoto esté configurado o disponible.
+
+Consulta [`../docs/architecture.md`](../docs/architecture.md) para los flujos técnicos y límites completos. La operación de Palomareños está descrita en [`../docs/palomarenos-operacion.md`](../docs/palomarenos-operacion.md), y la matriz de entornos en [`../docs/palomarenos-produccion.md`](../docs/palomarenos-produccion.md).
+
+## Desarrollo y validación
+
+El deployment de desarrollo compartido es `dev/europe-ireland`; úsalo solo con datos de prueba. Para sincronizar funciones y regenerar tipos:
+
+```bash
+pnpm exec convex dev
 ```
 
-Using this query function in a React component looks like:
+Las variables privadas de backend se configuran en el deployment Convex y las variables locales en archivos ignorados. El frontend usa `CONVEX_URL`; no debe contener un secreto. Para propuestas, los nombres de variables privados/públicos necesarios se documentan sin valores en `docs/palomarenos-produccion.md`.
 
-```ts
-const data = useQuery(api.myFunctions.myQueryFunction, {
-  first: 10,
-  second: 'hello',
-});
+Las funciones y contratos se cubren con Vitest y `convex-test`:
+
+```bash
+pnpm test:coverage
+pnpm typecheck:convex
 ```
 
-A mutation function looks like:
-
-```ts
-// convex/myFunctions.ts
-import { mutation } from './_generated/server';
-import { v } from 'convex/values';
-
-export const myMutationFunction = mutation({
-  // Validators for arguments.
-  args: {
-    first: v.string(),
-    second: v.string(),
-  },
-
-  // Function implementation.
-  handler: async (ctx, args) => {
-    // Insert or modify documents in the database here.
-    // Mutations can also read from the database like queries.
-    // See https://docs.convex.dev/database/writing-data.
-    const message = { body: args.first, author: args.second };
-    const id = await ctx.db.insert('messages', message);
-
-    // Optionally, return a value from your mutation.
-    return await ctx.db.get('messages', id);
-  },
-});
-```
-
-Using this mutation function in a React component looks like:
-
-```ts
-const mutation = useMutation(api.myFunctions.myMutationFunction);
-function handleButtonPress() {
-  // fire and forget, the most common way to use mutations
-  mutation({ first: 'Hello!', second: 'me' });
-  // OR
-  // use the result once the mutation has completed
-  mutation({ first: 'Hello!', second: 'me' }).then((result) => console.log(result));
-}
-```
-
-Use the Convex CLI to push your functions to a deployment. See everything
-the Convex CLI can do by running `npx convex -h` in your project root
-directory. To learn more, launch the docs with `npx convex docs`.
+`pnpm exec convex deploy` modifica un deployment remoto: no ejecutarlo sin autorización explícita y sin confirmar previamente el destino. No incluir claves, tokens ni valores de entorno en Git, logs, documentación pública o conversaciones.
