@@ -110,6 +110,15 @@ Si una carpeta aún no existe, créala solo cuando el primer cambio que la neces
 - Con `noUncheckedIndexedAccess`, comprobar la presencia de elementos antes de leer arrays, resultados de búsqueda o claves; no añadir `!` para acallar el checker.
 - Al corregir una frontera o acceso opcional, añadir una prueba focalizada para el dato válido y el caso ausente/malformado; conservar el comportamiento de los casos válidos.
 
+## Ramas, PR y releases
+
+- `main` es la rama de producción; `develop` es la rama de integración y Preview persistente (`develop.palomaresdelcampo.conquense.dev`). La Preview comparte `dev/europe-ireland` con el desarrollo local: usa solo datos de prueba y nunca secretos ni datos de producción.
+- Trabaja cada tarea en una rama corta creada desde `develop` (`feat/`, `fix/`, `docs/`, etc.) y abre una PR hacia `develop`. No hagas push directo a `develop` ni a `main`.
+- Para integrar en `develop`, espera a que el check requerido `Verify` pase y revisa la Preview de Vercel. No fusiones PRs ni publiques cambios sin autorización explícita del usuario.
+- Promueve cambios a producción mediante una PR de `develop` a `main`. Mantén la PR acotada; espera `Verify`, obtén autorización explícita para fusionar y verifica que Vercel desplegó el commit esperado en producción. Si hay un arreglo independiente en `main`, tráelo de vuelta a `develop` mediante PR.
+- Actualiza `CHANGELOG.md` en `Unreleased` con cambios relevantes para usuarios o para operar el proyecto. No cambies la versión de `package.json` en cada despliegue ni inventes versiones anteriores; crea etiquetas de versión solo para releases explícitos.
+- El procedimiento completo está en [`docs/development-workflow.md`](docs/development-workflow.md).
+
 ## Comandos y verificación
 
 Usar `pnpm` y versiones fijadas.
