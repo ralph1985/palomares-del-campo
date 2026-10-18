@@ -47,6 +47,17 @@ const configureSubmissionHarness = async (page: Page, outcome: 'success' | 'rate
 };
 
 test.describe('Palomareños por el mundo', () => {
+  test('serves the town shield as the site favicon', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href', '/favicon.ico');
+    const response = await page.context().request.get(new URL('/favicon.ico', page.url()).href);
+    const iconHeader = Array.from((await response.body()).subarray(0, 4));
+
+    expect(response.status()).toBe(200);
+    expect(iconHeader).toEqual([0, 0, 1, 0]);
+  });
+
   test('loads the empty Leaflet map and the public proposal form', async ({ page }) => {
     await page.goto('/palomarenos-por-el-mundo/');
 
