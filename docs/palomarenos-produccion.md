@@ -8,12 +8,12 @@ El despliegue de Convex producción, la creación o modificación del proyecto V
 
 ## Entornos y límites
 
-| Entorno          | Frontend                           | Backend                                       | Hostname esperado                    | Uso                                                        |
-| ---------------- | ---------------------------------- | --------------------------------------------- | ------------------------------------ | ---------------------------------------------------------- |
-| Desarrollo local | Astro local                        | `dev/europe-ireland`                          | `localhost`, Tailscale o equivalente | Desarrollo y pruebas controladas                           |
-| Playwright       | Servidor gestionado por Playwright | Backend de desarrollo o fixture controlada    | Host local del runner                | Widget Turnstile simulado; no usa claves reales            |
-| Preview          | Vercel Preview                     | Pendiente de decidir; nunca asumir producción | URL temporal de Vercel               | Revisión previa; no debe usar el widget real de producción |
-| Producción       | Vercel Production                  | Deployment Convex de producción independiente | `palomaresdelcampo.conquense.dev`    | Servicio público                                           |
+| Entorno          | Frontend                           | Backend                                       | Hostname esperado                         | Uso                                                        |
+| ---------------- | ---------------------------------- | --------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------- |
+| Desarrollo local | Astro local                        | `dev/europe-ireland`                          | `localhost`, Tailscale o equivalente      | Desarrollo y pruebas controladas                           |
+| Playwright       | Servidor gestionado por Playwright | Backend de desarrollo o fixture controlada    | Host local del runner                     | Widget Turnstile simulado; no usa claves reales            |
+| Preview          | Vercel Preview                     | Pendiente de decidir; nunca asumir producción | `develop.palomaresdelcampo.conquense.dev` | Revisión previa; no debe usar el widget real de producción |
+| Producción       | Vercel Production                  | Deployment Convex de producción independiente | `palomaresdelcampo.conquense.dev`         | Servicio público                                           |
 
 El deployment Convex de desarrollo no debe reutilizarse como backend de producción.
 
