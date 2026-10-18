@@ -6,6 +6,7 @@ Los cambios relevantes de este proyecto se registran aquí. El historial de Git 
 
 ### Added
 
+- Documentación de proyecto revisada para reflejar el backend Convex del juego y de Palomareños, la cobertura vigente y las rutas actuales.
 - Favicon del sitio basado en el escudo de Palomares del Campo.
 - Documentación del flujo de ramas, Preview persistente y promociones a producción.
 
