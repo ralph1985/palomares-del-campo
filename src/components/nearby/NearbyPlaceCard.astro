@@ -1,0 +1,125 @@
+---
+import ExternalLink from '../ui/ExternalLink.astro';
+import type { NearbyPlace } from '../../data/nearby-places';
+
+interface Props {
+  place: NearbyPlace;
+}
+
+const { place } = Astro.props;
+const formatDistance = (distanceKm: number) =>
+  distanceKm.toLocaleString('es-ES', { maximumFractionDigits: 1 });
+const formatDuration = (minutes: number) => {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  return hours > 0
+    ? `${hours} h ${remainingMinutes.toString().padStart(2, '0')} min`
+    : `${minutes} min`;
+};
+---
+
+<article class="nearby-card" aria-labelledby={`nearby-place-${place.slug}`}>
+  <p class="nearby-card-category">{place.category}</p>
+  <h3 id={`nearby-place-${place.slug}`}>{place.name}</h3>
+  <p class="nearby-card-location">{place.municipality}</p>
+  <p class="nearby-card-summary">{place.summary}</p>
+
+  {place.visitNote && (
+    <p class="nearby-card-note">
+      <strong>Antes de ir:</strong> {place.visitNote}
+    </p>
+  )}
+
+  {place.routeEstimate && (
+    <p class="nearby-card-route">
+      <strong>Ruta orientativa:</strong> ~{formatDistance(place.routeEstimate.distanceKm)} km · ~
+      {formatDuration(place.routeEstimate.durationMinutes)} en coche desde Palomares, hasta{' '}
+      {place.routeEstimate.destinationLabel}.
+    </p>
+  )}
+
+  <nav class="nearby-card-sources" aria-label={`Fuentes oficiales de ${place.name}`}>
+    {place.sources.map((source) => (
+      <ExternalLink href={source.href}>
+        {source.label} <span aria-hidden="true">↗</span>
+      </ExternalLink>
+    ))}
+  </nav>
+</article>
+
+<style>
+  .nearby-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 100%;
+    padding: clamp(1.4rem, 3vw, 2.1rem);
+    border: 1px solid var(--color-accommodation-border);
+    border-radius: 1.25rem;
+    background: var(--color-surface);
+  }
+
+  .nearby-card-category {
+    margin: 0 0 1rem;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .nearby-card h3 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -0.05em;
+    line-height: 1;
+    overflow-wrap: anywhere;
+  }
+
+  .nearby-card-location {
+    margin: 0.7rem 0 0;
+    color: var(--color-clay);
+    font-weight: var(--font-weight-strong);
+  }
+
+  .nearby-card-summary,
+  .nearby-card-note,
+  .nearby-card-route {
+    margin: 1rem 0 0;
+    color: var(--color-muted);
+    line-height: 1.65;
+  }
+
+  .nearby-card-note,
+  .nearby-card-route {
+    padding: 0.85rem 1rem;
+    border-left: 3px solid var(--color-ochre);
+    background: var(--color-surface-soft);
+  }
+
+  .nearby-card-note strong,
+  .nearby-card-route strong {
+    color: var(--color-ink);
+  }
+
+  .nearby-card-sources {
+    display: grid;
+    gap: 0.65rem;
+    margin-top: auto;
+    padding-top: 1.4rem;
+  }
+
+  .nearby-card-sources a {
+    color: var(--color-forest);
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-strong);
+  }
+
+  @media (max-width: 38rem) {
+    .nearby-card {
+      padding: 1.35rem;
+    }
+  }
+</style>
