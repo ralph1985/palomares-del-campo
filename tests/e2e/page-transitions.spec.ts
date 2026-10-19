@@ -48,6 +48,10 @@ test.describe('Three.js page transitions', () => {
     await expect(overlay).toHaveAttribute('data-phase', 'outgoing', { timeout: 3000 });
     await expect.poll(() => sceneRequests).toBeGreaterThan(0);
     await expect(overlay).toHaveAttribute('data-renderer', 'three-css3d');
+    const cubeVeilOpacity = await overlay.evaluate(
+      (element) => getComputedStyle(element, '::before').opacity,
+    );
+    expect(cubeVeilOpacity).toBe('0');
     const toolbarConnections = await page
       .locator('html')
       .getAttribute('data-transition-test-toolbar-connections');
@@ -152,6 +156,10 @@ test.describe('Three.js page transitions', () => {
     await expect(overlay).toHaveAttribute('data-phase', 'fallback-outgoing', {
       timeout: 1500,
     });
+    const fallbackVeilOpacity = await overlay.evaluate(
+      (element) => getComputedStyle(element, '::before').opacity,
+    );
+    expect(Number(fallbackVeilOpacity)).toBeGreaterThan(0);
     await page.waitForURL((url) => url.pathname === destination.pathname, {
       waitUntil: 'commit',
       timeout: 3000,

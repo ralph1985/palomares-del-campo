@@ -47,7 +47,7 @@ const { enabled } = Astro.props;
     inset: 0;
     background: var(--color-night);
     content: '';
-    opacity: 0.68;
+    opacity: 0;
     pointer-events: none;
   }
 
@@ -57,14 +57,6 @@ const { enabled } = Astro.props;
   [data-page-transition-overlay][data-phase='settling'],
   html[data-page-transition-state='incoming'] [data-page-transition-overlay] {
     display: grid;
-  }
-
-  [data-page-transition-overlay][data-phase='preparing']::before {
-    opacity: 0.78;
-  }
-
-  [data-page-transition-overlay][data-phase='outgoing']::before {
-    opacity: 0.92;
   }
 
   [data-page-transition-overlay][data-phase='fallback-outgoing']::before {
