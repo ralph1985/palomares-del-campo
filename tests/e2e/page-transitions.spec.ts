@@ -34,6 +34,7 @@ test.describe('Three.js page transitions', () => {
     const overlay = page.locator('[data-page-transition-overlay]');
     await expect(overlay).toHaveCount(1);
     await expect(overlay).toHaveAttribute('data-effect', 'cube');
+    await expect(overlay.locator('.page-transition-copy')).toHaveCount(0);
     await expect(overlay).not.toBeVisible();
 
     const articleLink = page.locator('.news-card').first().locator('h3 a');
@@ -169,8 +170,7 @@ test.describe('Three.js page transitions', () => {
     if (!bounds) throw new Error('The mobile transition overlay has no visible bounds.');
     expect(bounds).toMatchObject({ x: 0, y: 0, width: 390, height: 844 });
 
-    const caption = await page.locator('.page-transition-copy').boundingBox();
-    expect(caption).toBeNull();
+    await expect(overlay.locator('.page-transition-copy')).toHaveCount(0);
     await expect(
       overlay.locator('[data-page-transition-face="destination"] main h1'),
     ).toBeVisible();

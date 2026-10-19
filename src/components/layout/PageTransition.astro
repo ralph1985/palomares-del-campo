@@ -16,10 +16,6 @@ const { enabled } = Astro.props;
     inert
   >
     <div data-page-transition-scene></div>
-    <div class="page-transition-copy">
-      <span>PALOMARES DEL CAMPO</span>
-      <strong>Un pueblo con muchas capas de historia.</strong>
-    </div>
   </div>
 )}
 
@@ -153,37 +149,6 @@ const { enabled } = Astro.props;
     transition: none !important;
   }
 
-  .page-transition-copy {
-    position: absolute;
-    z-index: 2;
-    right: clamp(1.25rem, 6vw, 5rem);
-    bottom: clamp(2rem, 8vh, 5rem);
-    left: clamp(1.25rem, 6vw, 5rem);
-    display: grid;
-    gap: 0.65rem;
-    max-width: 34rem;
-    text-shadow: 0 2px 24px var(--color-night);
-  }
-
-  [data-page-transition-overlay][data-phase='outgoing'] .page-transition-copy {
-    display: none;
-  }
-
-  .page-transition-copy span {
-    color: var(--color-ochre);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-strong);
-    letter-spacing: var(--tracking-label);
-  }
-
-  .page-transition-copy strong {
-    font-family: var(--font-serif);
-    font-size: clamp(1.65rem, 4vw, 3rem);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: var(--tracking-heading);
-    line-height: 1.05;
-  }
-
   @keyframes page-transition-cover {
     from {
       opacity: 0.38;
@@ -201,12 +166,6 @@ const { enabled } = Astro.props;
 
     [data-page-transition-overlay][data-phase='fallback-outgoing']::before {
       animation-duration: 1ms;
-    }
-  }
-
-  @media (max-width: 38rem) {
-    .page-transition-copy {
-      max-width: 22rem;
     }
   }
 </style>
