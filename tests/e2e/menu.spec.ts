@@ -7,7 +7,9 @@ test.describe('accessible site menu', () => {
     const toggle = page.getByRole('button', { name: 'Explorar' });
     const menu = page.locator('#site-menu');
     const closeButton = menu.getByRole('button', { name: 'Cerrar menú' });
+    const contactFooter = page.locator('#contacto');
 
+    await expect(contactFooter.getByRole('heading', { name: 'Contacto' })).toBeVisible();
     await expect(toggle).toHaveAttribute('aria-expanded', 'false');
     await expect(menu).toHaveAttribute('aria-hidden', 'true');
     await expect(menu).toHaveAttribute('inert', '');
@@ -19,6 +21,7 @@ test.describe('accessible site menu', () => {
     await expect(closeButton).toBeFocused();
     await expect(menu.getByRole('heading', { name: 'Vecinos' })).toBeVisible();
     await expect(menu.getByRole('heading', { name: 'Visita' })).toBeVisible();
+    await expect(menu.getByRole('link', { name: 'Contacto' })).toHaveCount(0);
     await expect(menu.getByRole('link', { name: 'Servicios municipales' })).toHaveAttribute(
       'href',
       '/informacion-practica/',
