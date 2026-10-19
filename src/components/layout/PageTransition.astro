@@ -28,6 +28,10 @@ const { enabled } = Astro.props;
     overflow: hidden;
   }
 
+  html[data-page-transition-state='outgoing'] > body > :not([data-page-transition-overlay]) {
+    visibility: hidden;
+  }
+
   [data-page-transition-overlay] {
     position: fixed;
     z-index: 2147482000;

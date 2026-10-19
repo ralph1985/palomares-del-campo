@@ -46,6 +46,7 @@ test.describe('Three.js page transitions', () => {
     await articleLink.click({ noWaitAfter: true });
 
     await expect(overlay).toHaveAttribute('data-phase', 'outgoing', { timeout: 3000 });
+    await expect(page.locator('html > body > main')).toBeHidden();
     await expect.poll(() => sceneRequests).toBeGreaterThan(0);
     await expect(overlay).toHaveAttribute('data-renderer', 'three-css3d');
     const cubeVeilOpacity = await overlay.evaluate(
