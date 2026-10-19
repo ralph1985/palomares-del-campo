@@ -1,0 +1,86 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'section'> {
+  labelledBy: string;
+  variant: 'heritage' | 'game';
+}
+
+const { labelledBy, variant, class: className, ...sectionAttributes } = Astro.props;
+---
+
+<section
+  {...sectionAttributes}
+  class:list={['split-hero', `split-hero--${variant}`, className]}
+  aria-labelledby={labelledBy}
+>
+  <div class="split-hero__inner">
+    <div class="split-hero__copy">
+      <slot name="copy" />
+    </div>
+    <div class="split-hero__visual">
+      <slot name="visual" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .split-hero {
+    position: relative;
+    overflow: hidden;
+    color: var(--color-surface-soft);
+  }
+
+  .split-hero__inner {
+    display: grid;
+    min-width: 0;
+  }
+
+  .split-hero__copy,
+  .split-hero__visual {
+    min-width: 0;
+  }
+
+  .split-hero--heritage {
+    background: var(--color-ink);
+  }
+
+  .split-hero--heritage .split-hero__inner {
+    grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+    align-items: center;
+    width: min(100% - 2.5rem, 72rem);
+    min-height: min(42rem, calc(100vh - 5.25rem));
+    gap: 3rem;
+    margin: 0 auto;
+    padding: clamp(4rem, 9vw, 8rem) 0;
+  }
+
+  .split-hero--game .split-hero__inner {
+    position: relative;
+    z-index: 1;
+    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+    align-items: end;
+    width: min(100% - 2rem, 80rem);
+    gap: clamp(2rem, 8vw, 8rem);
+    margin: 0 auto;
+  }
+
+  @media (max-width: 52rem) {
+    .split-hero--heritage .split-hero__inner {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .split-hero--heritage .split-hero__inner,
+    .split-hero--game .split-hero__inner {
+      grid-template-columns: 1fr;
+      width: min(100% - 2rem, 72rem);
+    }
+
+    .split-hero--game .split-hero__inner {
+      gap: 2rem;
+    }
+  }
+</style>

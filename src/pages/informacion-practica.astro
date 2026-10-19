@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '../components/ui/ExternalLink.astro';
+import EditorialHero from '../components/hero/EditorialHero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import {
   municipalEmailHref,
@@ -18,16 +19,18 @@ const transportPublishedAt = new Date(
   description={municipalInfo.pageDescription}
 >
   <main>
-    <section class="practical-hero" aria-labelledby="page-title">
-      <div class="practical-shell">
-        <p class="eyebrow">Para vecinos y visitantes</p>
-        <h1 id="page-title">{municipalInfo.pageTitle}</h1>
-        <p class="hero-intro">
-          Lo esencial para contactar con el Ayuntamiento y llegar a sus canales oficiales sin dar
-          vueltas innecesarias.
-        </p>
-      </div>
-    </section>
+    <EditorialHero labelledBy="page-title" variant="sage-display">
+      <p slot="eyebrow" class="eyebrow">
+        Para vecinos y visitantes
+      </p>
+      <h1 slot="title" id="page-title">
+        {municipalInfo.pageTitle}
+      </h1>
+      <p slot="summary" class="hero-intro">
+        Lo esencial para contactar con el Ayuntamiento y llegar a sus canales oficiales sin dar
+        vueltas innecesarias.
+      </p>
+    </EditorialHero>
 
     <section class="contact-section" aria-labelledby="contact-title">
       <div class="practical-shell contact-grid">
@@ -150,11 +153,6 @@ const transportPublishedAt = new Date(
     margin: 0 auto;
   }
 
-  .practical-hero {
-    padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 9vw, 7rem);
-    background: var(--color-sage);
-  }
-
   .eyebrow {
     margin: 0 0 1.25rem;
     color: var(--color-clay);
@@ -173,17 +171,11 @@ const transportPublishedAt = new Date(
     line-height: 0.98;
   }
 
-  h1 {
-    max-width: 11ch;
-    font-size: clamp(3.3rem, 8vw, 7.5rem);
-  }
-
   h2 {
     max-width: 13ch;
     font-size: clamp(2.5rem, 5vw, 5rem);
   }
 
-  .hero-intro,
   .section-intro > p:not(.eyebrow),
   .transport-grid p:not(.eyebrow) {
     max-width: 35rem;

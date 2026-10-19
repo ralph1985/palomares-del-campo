@@ -1,5 +1,6 @@
 ---
 import AccommodationCard from '../../components/accommodations/AccommodationCard.astro';
+import EditorialHero from '../../components/hero/EditorialHero.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { accommodationReviewedAt, ruralAccommodations } from '../../data/accommodations';
 
@@ -22,16 +23,18 @@ const formatDate = (date: string) =>
   description="Directorio informativo de casas rurales y otros alojamientos en Palomares del Campo y localidades cercanas."
 >
   <main>
-    <section class="accommodation-hero" aria-labelledby="page-title">
-      <div class="accommodation-shell">
-        <p class="eyebrow">Palomares del Campo · Visita</p>
-        <h1 id="page-title">Alojamientos rurales</h1>
-        <p>
-          Una selección de casas rurales y alojamientos de Palomares del Campo y su entorno para
-          empezar a organizar una visita con información visible y enlaces de origen.
-        </p>
-      </div>
-    </section>
+    <EditorialHero labelledBy="page-title" variant="sage-display">
+      <p slot="eyebrow" class="eyebrow">
+        Palomares del Campo · Visita
+      </p>
+      <h1 slot="title" id="page-title">
+        Alojamientos rurales
+      </h1>
+      <p slot="summary" class="hero-intro">
+        Una selección de casas rurales y alojamientos de Palomares del Campo y su entorno para
+        empezar a organizar una visita con información visible y enlaces de origen.
+      </p>
+    </EditorialHero>
 
     <section class="criteria-section" aria-labelledby="criteria-title">
       <div class="accommodation-shell criteria-grid">
@@ -103,11 +106,6 @@ const formatDate = (date: string) =>
     margin: 0 auto;
   }
 
-  .accommodation-hero {
-    padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 9vw, 7rem);
-    background: var(--color-sage);
-  }
-
   .eyebrow {
     margin: 0 0 1.25rem;
     color: var(--color-clay);
@@ -127,22 +125,9 @@ const formatDate = (date: string) =>
     line-height: 0.98;
   }
 
-  h1 {
-    max-width: 11ch;
-    font-size: clamp(3.3rem, 8vw, 7.5rem);
-  }
-
   h2 {
     max-width: 14ch;
     font-size: clamp(2.5rem, 5vw, 5rem);
-  }
-
-  .accommodation-hero > .accommodation-shell > p:last-child {
-    max-width: 38rem;
-    margin: 2rem 0 0;
-    color: var(--color-muted);
-    font-size: 1.1rem;
-    line-height: 1.7;
   }
 
   .criteria-section,

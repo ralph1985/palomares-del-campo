@@ -44,6 +44,8 @@ export default getViteConfig({
         'src/components/world/WorldMap.astro',
         'src/components/world/WorldSubmissionForm.astro',
         'src/components/about/AboutEmblem.astro',
+        'src/components/hero/EditorialHero.astro',
+        'src/components/hero/SplitHero.astro',
         'convex/**/*.ts',
       ],
       exclude: ['convex/_generated/**', 'convex/schema.ts', '**/*.d.ts'],

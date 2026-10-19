@@ -1,5 +1,6 @@
 ---
 import NearbyPlaceCard from '../../components/nearby/NearbyPlaceCard.astro';
+import EditorialHero from '../../components/hero/EditorialHero.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { nearbyPlaceGroups, nearbyPlaces, nearbyPlacesReviewedAt } from '../../data/nearby-places';
 
@@ -16,17 +17,19 @@ const formatDate = (date: string) =>
   description="Yacimientos, pueblos y espacios naturales para descubrir desde Palomares del Campo, con fuentes oficiales y condiciones de visita."
 >
   <main>
-    <section class="nearby-hero" aria-labelledby="page-title">
-      <div class="nearby-shell">
-        <p class="eyebrow">Palomares del Campo · Visita</p>
-        <h1 id="page-title">Qué ver cerca de Palomares del Campo</h1>
-        <p class="nearby-lede">
-          Una selección de patrimonio y naturaleza para conocer la zona desde Palomares. Algunas
-          visitas requieren reserva o dependen de la estación; consulta siempre la ficha oficial
-          antes de organizar el viaje.
-        </p>
-      </div>
-    </section>
+    <EditorialHero labelledBy="page-title" variant="ink-display" summaryWidth="wide">
+      <p slot="eyebrow" class="eyebrow">
+        Palomares del Campo · Visita
+      </p>
+      <h1 slot="title" id="page-title">
+        Qué ver cerca de Palomares del Campo
+      </h1>
+      <p slot="summary" class="hero-intro">
+        Una selección de patrimonio y naturaleza para conocer la zona desde Palomares. Algunas
+        visitas requieren reserva o dependen de la estación; consulta siempre la ficha oficial antes
+        de organizar el viaje.
+      </p>
+    </EditorialHero>
 
     <section class="nearby-story" aria-labelledby="story-title">
       <div class="nearby-shell nearby-story-inner">
@@ -86,12 +89,6 @@ const formatDate = (date: string) =>
     margin: 0 auto;
   }
 
-  .nearby-hero {
-    padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 9vw, 7rem);
-    color: var(--color-surface-soft);
-    background: var(--color-ink);
-  }
-
   .eyebrow {
     margin: 0 0 1.1rem;
     color: var(--color-ochre);
@@ -112,22 +109,8 @@ const formatDate = (date: string) =>
     overflow-wrap: anywhere;
   }
 
-  h1 {
-    max-width: 12ch;
-    color: var(--color-surface-soft);
-    font-size: clamp(3.4rem, 9vw, 7.5rem);
-  }
-
   h2 {
     font-size: clamp(2.5rem, 5vw, 4.8rem);
-  }
-
-  .nearby-lede {
-    max-width: 42rem;
-    margin: 2rem 0 0;
-    color: var(--color-sage-light);
-    font-size: clamp(1rem, 1.6vw, 1.2rem);
-    line-height: 1.7;
   }
 
   .nearby-story .eyebrow,

@@ -6,6 +6,11 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ### 2026-10-19
 
+#### Changed
+
+- Componentizados los Hero de las páginas en `EditorialHero` y `SplitHero`, conservando sus variantes, accesibilidad y composiciones multimedia.
+- Mejorado el contraste de las etiquetas de sección en las páginas legales sobre superficies claras.
+
 #### Added
 
 - Añadida la flag de build `PUBLIC_PAGE_TRANSITIONS_ENABLED`, desactivada por defecto, para controlar las transiciones de página.

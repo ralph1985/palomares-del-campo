@@ -52,9 +52,15 @@ Inter no está importada ni empaquetada actualmente. `src/styles/global.css` usa
 
 Los tokens de ritmo (`--line-height-body`, `--line-height-heading`, `--tracking-label` y `--tracking-heading`) describen las proporciones actuales y se migrarán junto con cada superficie, no mediante una reescritura global brusca.
 
+## Componentes Hero
+
+- `EditorialHero.astro` comparte el patrón de una columna con slots para antetítulo, H1, introducción, aviso y acciones. Sus variantes (`ink-display`, `sage-display`, `ink-compact`, `paper-tall`) conservan las superficies actuales; `fullHeight` se reserva a secciones que ocupan la altura de la ventana.
+- `SplitHero.astro` comparte la retícula de dos columnas con slots `copy` y `visual`. Sus variantes `heritage` y `game` mantienen las composiciones fotográfica/3D y de partida interactiva sin trasladar su contenido o estado al componente.
+- Las páginas conservan textos y datos; las excepciones de ancho de título o introducción se expresan con modificadores tipados, no con selectores globales ni CSS repetido.
+
 ## QA visual y excepciones
 
-La comprobación reproducible se ejecuta con `pnpm qa:visual` mientras el servidor Astro esté disponible. Recorre once rutas en escritorio (`1440×900`) y móvil (`375×812`), incluidos el directorio de alojamientos, el formulario del mapa mundial y un bando con URL larga. Verifica HTTP 200, ausencia de overflow horizontal, focus visible, contraste aproximado WCAG y errores de consola.
+La comprobación reproducible se ejecuta con `pnpm qa:visual` mientras el servidor Astro esté disponible. Recorre quince rutas en escritorio (`1440×900`) y móvil (`375×812`), incluidos los patrones Hero editoriales, divididos, de agenda y legales, el directorio de alojamientos, el formulario del mapa mundial y un bando con URL larga. Verifica HTTP 200, ausencia de overflow horizontal, focus visible, contraste aproximado WCAG y errores de consola.
 
 Se conservan dos familias de excepciones documentadas:
 
