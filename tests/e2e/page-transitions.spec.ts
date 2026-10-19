@@ -16,6 +16,13 @@ test.describe('Three.js page transitions', () => {
     });
 
     let sceneRequests = 0;
+    await page.route('**/*', async (route) => {
+      const request = route.request();
+      if (request.resourceType() === 'fetch' && request.headers().accept?.includes('text/html')) {
+        await new Promise((resolve) => setTimeout(resolve, 900));
+      }
+      await route.continue();
+    });
     page.on('request', (request) => {
       if (request.url().includes('page-transition-scene')) sceneRequests += 1;
     });
@@ -45,25 +52,77 @@ test.describe('Three.js page transitions', () => {
 
     await articleLink.click({ noWaitAfter: true });
 
-    await expect(overlay).toHaveAttribute('data-phase', 'outgoing', { timeout: 3000 });
-    await expect(page.locator('html > body > main')).toBeHidden();
-    await expect.poll(() => sceneRequests).toBeGreaterThan(0);
-    await expect(overlay).toHaveAttribute('data-renderer', 'three-css3d');
-    const cubeVeilOpacity = await overlay.evaluate(
-      (element) => getComputedStyle(element, '::before').opacity,
+    const preparingHandle = await page.waitForFunction(() => {
+      const transitionOverlay = document.querySelector<HTMLElement>(
+        '[data-page-transition-overlay]',
+      );
+      if (transitionOverlay?.dataset.phase !== 'preparing') return false;
+      const liveMain = document.querySelector('html > body > main');
+      return {
+        phase: transitionOverlay.dataset.phase,
+        pageState: document.documentElement.dataset.pageTransitionState,
+        mainVisibility: liveMain ? getComputedStyle(liveMain).visibility : 'missing',
+      };
+    });
+    const preparingState = (await preparingHandle.jsonValue()) as {
+      phase: string;
+      pageState: string | undefined;
+      mainVisibility: string;
+    };
+    expect(preparingState).toEqual({
+      phase: 'preparing',
+      pageState: 'outgoing',
+      mainVisibility: 'visible',
+    });
+
+    const outgoingHandle = await page.waitForFunction(
+      () => {
+        const transitionOverlay = document.querySelector<HTMLElement>(
+          '[data-page-transition-overlay]',
+        );
+        if (transitionOverlay?.dataset.phase !== 'outgoing') return false;
+        const liveMain = document.querySelector('html > body > main');
+        return {
+          phase: transitionOverlay.dataset.phase,
+          renderer: transitionOverlay.dataset.renderer,
+          mainVisibility: liveMain ? getComputedStyle(liveMain).visibility : 'missing',
+          veilOpacity: getComputedStyle(transitionOverlay, '::before').opacity,
+          toolbarConnections: document.documentElement.getAttribute(
+            'data-transition-test-toolbar-connections',
+          ),
+          overlayToolbarCount: transitionOverlay.querySelectorAll('astro-dev-toolbar').length,
+          sourceTitle: transitionOverlay
+            .querySelector('[data-page-transition-face="source"] main h1')
+            ?.textContent?.trim(),
+          destinationTitle: transitionOverlay
+            .querySelector('[data-page-transition-face="destination"] main h1')
+            ?.textContent?.trim(),
+        };
+      },
+      undefined,
+      { timeout: 3000 },
     );
-    expect(cubeVeilOpacity).toBe('0');
-    const toolbarConnections = await page
-      .locator('html')
-      .getAttribute('data-transition-test-toolbar-connections');
-    expect(toolbarConnections).toBe('1');
-    await expect(overlay.locator('astro-dev-toolbar')).toHaveCount(0);
-    await expect(overlay.locator('[data-page-transition-face="source"] main h1')).toHaveText(
-      'Noticias',
-    );
-    await expect(overlay.locator('[data-page-transition-face="destination"] main h1')).toHaveText(
-      title,
-    );
+    const outgoingState = (await outgoingHandle.jsonValue()) as {
+      phase: string;
+      renderer: string | undefined;
+      mainVisibility: string;
+      veilOpacity: string;
+      toolbarConnections: string | null;
+      overlayToolbarCount: number;
+      sourceTitle: string | undefined;
+      destinationTitle: string | undefined;
+    };
+    expect(sceneRequests).toBeGreaterThan(0);
+    expect(outgoingState).toMatchObject({
+      phase: 'outgoing',
+      renderer: 'three-css3d',
+      mainVisibility: 'hidden',
+      veilOpacity: '0',
+      toolbarConnections: '1',
+      overlayToolbarCount: 0,
+      sourceTitle: 'Noticias',
+      destinationTitle: title,
+    });
 
     await page.waitForURL((url) => url.pathname === destination.pathname, {
       waitUntil: 'commit',
@@ -82,9 +141,13 @@ test.describe('Three.js page transitions', () => {
     await toggle.click();
     await expect(menu).toHaveAttribute('aria-hidden', 'false');
     await expect(menu).not.toHaveAttribute('inert');
+    await menu.evaluate((element) => {
+      element.scrollTop = element.scrollHeight;
+    });
 
-    const menuLink = menu.locator('a[href="/noticias/"]');
-    await expect(menuLink).toBeVisible();
+    const menuLink = menu.locator('a[href="/juego/"]');
+    await expect(menuLink).toBeInViewport();
+    expect(await menu.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
     const href = await menuLink.getAttribute('href');
     if (!href) throw new Error('The menu destination link has no URL.');
     const destination = new URL(href, page.url());
@@ -102,7 +165,8 @@ test.describe('Three.js page transitions', () => {
       );
       const liveMenu = document.querySelector('#site-menu');
       const sourceMenu = sourceFaceElement?.querySelector('#site-menu');
-      const sourceMenuLink = sourceMenu?.querySelector('a[href="/noticias/"]');
+      const sourceMenuLink = sourceMenu?.querySelector('a[href="/juego/"]');
+      const liveMenuLink = liveMenu?.querySelector('a[href="/juego/"]');
       const sourceBackdrop = sourceFaceElement?.querySelector('[data-menu-backdrop]');
 
       return {
@@ -122,9 +186,13 @@ test.describe('Three.js page transitions', () => {
             'visible',
         sourceBackdropVisible: Boolean(sourceBackdrop && !sourceBackdrop.hasAttribute('hidden')),
         destinationMenuCount: destinationFaceElement?.querySelectorAll('#site-menu').length ?? -1,
+        liveMenuScrollTop: liveMenu?.scrollTop ?? -1,
+        sourceMenuScrollTop: sourceMenu?.scrollTop ?? -1,
+        liveMenuLinkVisible: Boolean(liveMenuLink?.getClientRects().length),
       };
     });
-    expect(menuState).toEqual({
+    const { liveMenuScrollTop, sourceMenuScrollTop, ...menuVisibilityState } = menuState;
+    expect(menuVisibilityState).toEqual({
       phase: 'outgoing',
       renderer: 'three-css3d',
       liveMenuOpen: true,
@@ -132,7 +200,10 @@ test.describe('Three.js page transitions', () => {
       sourceMenuLinkVisible: true,
       sourceBackdropVisible: true,
       destinationMenuCount: 0,
+      liveMenuLinkVisible: true,
     });
+    expect(liveMenuScrollTop).toBeGreaterThan(0);
+    expect(sourceMenuScrollTop).toBe(liveMenuScrollTop);
 
     await page.waitForURL((url) => url.pathname === destination.pathname, {
       waitUntil: 'commit',
@@ -153,14 +224,19 @@ test.describe('Three.js page transitions', () => {
 
     await articleLink.click({ noWaitAfter: true });
 
-    const overlay = page.locator('[data-page-transition-overlay]');
-    await expect(overlay).toHaveAttribute('data-phase', 'fallback-outgoing', {
-      timeout: 1500,
-    });
-    const fallbackVeilOpacity = await overlay.evaluate(
-      (element) => getComputedStyle(element, '::before').opacity,
+    const fallbackVeilHandle = await page.waitForFunction(
+      () => {
+        const transitionOverlay = document.querySelector<HTMLElement>(
+          '[data-page-transition-overlay]',
+        );
+        if (transitionOverlay?.dataset.phase !== 'fallback-outgoing') return false;
+        const opacity = Number(getComputedStyle(transitionOverlay, '::before').opacity);
+        return opacity > 0 ? opacity : false;
+      },
+      undefined,
+      { timeout: 1500 },
     );
-    expect(Number(fallbackVeilOpacity)).toBeGreaterThan(0);
+    expect(Number(await fallbackVeilHandle.jsonValue())).toBeGreaterThan(0);
     await page.waitForURL((url) => url.pathname === destination.pathname, {
       waitUntil: 'commit',
       timeout: 3000,
@@ -173,16 +249,54 @@ test.describe('Three.js page transitions', () => {
     await page.goto('/noticias/');
     await page.locator('.news-card').first().locator('h3 a').click({ noWaitAfter: true });
 
-    const overlay = page.locator('[data-page-transition-overlay]');
-    await expect(overlay).toHaveAttribute('data-phase', 'outgoing', { timeout: 3000 });
-    const bounds = await overlay.boundingBox();
-    if (!bounds) throw new Error('The mobile transition overlay has no visible bounds.');
-    expect(bounds).toMatchObject({ x: 0, y: 0, width: 390, height: 844 });
-
-    await expect(overlay.locator('.page-transition-copy')).toHaveCount(0);
-    await expect(
-      overlay.locator('[data-page-transition-face="destination"] main h1'),
-    ).toBeVisible();
+    const outgoingHandle = await page.waitForFunction(
+      () => {
+        const transitionOverlay = document.querySelector<HTMLElement>(
+          '[data-page-transition-overlay]',
+        );
+        if (
+          transitionOverlay?.dataset.phase !== 'outgoing' ||
+          transitionOverlay.dataset.renderer !== 'three-css3d'
+        ) {
+          return false;
+        }
+        const destinationHeading = transitionOverlay.querySelector<HTMLElement>(
+          '[data-page-transition-face="destination"] main h1',
+        );
+        const bounds = transitionOverlay.getBoundingClientRect();
+        return {
+          phase: transitionOverlay.dataset.phase,
+          renderer: transitionOverlay.dataset.renderer,
+          destinationHeadingVisible: destinationHeading
+            ? Boolean(destinationHeading.getClientRects().length) &&
+              getComputedStyle(destinationHeading).visibility === 'visible'
+            : false,
+          overlayBounds: {
+            x: Math.round(bounds.x),
+            y: Math.round(bounds.y),
+            width: Math.round(bounds.width),
+            height: Math.round(bounds.height),
+          },
+          temporaryCopyCount: transitionOverlay.querySelectorAll('.page-transition-copy').length,
+        };
+      },
+      undefined,
+      { timeout: 3000 },
+    );
+    const outgoingState = (await outgoingHandle.jsonValue()) as {
+      phase: string;
+      renderer: string;
+      destinationHeadingVisible: boolean;
+      overlayBounds: { x: number; y: number; width: number; height: number };
+      temporaryCopyCount: number;
+    };
+    expect(outgoingState).toEqual({
+      phase: 'outgoing',
+      renderer: 'three-css3d',
+      destinationHeadingVisible: true,
+      overlayBounds: { x: 0, y: 0, width: 390, height: 844 },
+      temporaryCopyCount: 0,
+    });
   });
 
   test('skips the 3D scene when reduced motion is requested', async ({ page }) => {

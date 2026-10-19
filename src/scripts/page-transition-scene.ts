@@ -168,6 +168,24 @@ const copyFormState = (source: HTMLElement, copy: HTMLElement) => {
   });
 };
 
+const restoreScrollPositions = (body: HTMLElement) => {
+  body
+    .querySelectorAll<HTMLElement>(
+      '[data-page-transition-scroll-top], [data-page-transition-scroll-left]',
+    )
+    .forEach((element) => {
+      const { pageTransitionScrollTop, pageTransitionScrollLeft } = element.dataset;
+      if (pageTransitionScrollTop !== undefined) {
+        element.scrollTop = Number(pageTransitionScrollTop);
+        delete element.dataset.pageTransitionScrollTop;
+      }
+      if (pageTransitionScrollLeft !== undefined) {
+        element.scrollLeft = Number(pageTransitionScrollLeft);
+        delete element.dataset.pageTransitionScrollLeft;
+      }
+    });
+};
+
 const createPageFace = (
   sourceBody: HTMLElement,
   face: 'source' | 'destination',
@@ -371,7 +389,9 @@ export const playPageTransition = async (
       resizeObserver.observe(sceneHost);
     }
     resize();
+    renderer.render(scene, camera);
     sourceFace.scrollTop = window.scrollY;
+    restoreScrollPositions(sourceFace);
     renderer.render(scene, camera);
     onRendererReady();
 
