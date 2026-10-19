@@ -2,6 +2,7 @@
 import SEO from '../components/SEO.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
+import { PUBLIC_PAGE_TRANSITIONS_ENABLED } from 'astro:env/client';
 import '../styles/global.css';
 
 interface Props {
@@ -70,7 +71,10 @@ const seoProps = {
     <SEO {...seoProps} />
     <slot name="head" />
   </head>
-  <body class={bodyClass}>
+  <body
+    class={bodyClass}
+    data-page-transitions-enabled={PUBLIC_PAGE_TRANSITIONS_ENABLED ? 'true' : 'false'}
+  >
     <SiteHeader />
     <slot />
     <SiteFooter />

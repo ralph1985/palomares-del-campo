@@ -4,6 +4,12 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-10-19
+
+#### Added
+
+- Añadida la flag de build `PUBLIC_PAGE_TRANSITIONS_ENABLED`, desactivada por defecto, como configuración explícita para futuras transiciones de página.
+
 ### 2026-10-18
 
 #### Changed
