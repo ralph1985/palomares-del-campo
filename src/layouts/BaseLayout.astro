@@ -1,5 +1,6 @@
 ---
 import SEO from '../components/SEO.astro';
+import PageTransition from '../components/layout/PageTransition.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import { PUBLIC_PAGE_TRANSITIONS_ENABLED } from 'astro:env/client';
@@ -69,6 +70,25 @@ const seoProps = {
       sizes="16x16 32x32 48x48 64x64 128x128 256x256"
     />
     <SEO {...seoProps} />
+    <script is:inline define:vars={{ pageTransitionsEnabled: PUBLIC_PAGE_TRANSITIONS_ENABLED }}>
+      try {
+        if (!pageTransitionsEnabled) {
+          sessionStorage.removeItem('palomares-page-transition');
+        } else if (sessionStorage.getItem('palomares-page-transition') === 'incoming') {
+          sessionStorage.removeItem('palomares-page-transition');
+          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.dataset.pageTransitionState = 'incoming';
+            window.setTimeout(() => {
+              if (document.documentElement.dataset.pageTransitionState === 'incoming') {
+                document.documentElement.removeAttribute('data-page-transition-state');
+              }
+            }, 3200);
+          }
+        }
+      } catch {
+        // Storage can be disabled; the page remains visible and navigable.
+      }
+    </script>
     <slot name="head" />
   </head>
   <body
@@ -78,5 +98,6 @@ const seoProps = {
     <SiteHeader />
     <slot />
     <SiteFooter />
+    <PageTransition enabled={PUBLIC_PAGE_TRANSITIONS_ENABLED} />
   </body>
 </html>

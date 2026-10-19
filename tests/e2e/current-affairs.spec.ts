@@ -103,14 +103,26 @@ test.describe('current affairs sections', () => {
     const publishedAt = await cardTime.getAttribute('datetime');
     if (publishedAt === null) throw new Error('Bando card is missing its publication date.');
     const summary = await card.locator('p').innerText();
+    const articleLink = card.getByRole('link', {
+      name: 'HORARIOS AUTOBÚS DE LINEA',
+      exact: true,
+    });
+    const href = await articleLink.getAttribute('href');
+    if (!href) throw new Error('Bando card is missing its article URL.');
+    const destination = new URL(href, page.url());
 
-    await card.getByRole('link', { name: 'HORARIOS AUTOBÚS DE LINEA', exact: true }).click();
+    await articleLink.click({ noWaitAfter: true });
+    await page.waitForURL((url) => url.pathname === destination.pathname, {
+      waitUntil: 'commit',
+      timeout: 3000,
+    });
 
     await expect(
       page.getByRole('heading', { name: 'HORARIOS AUTOBÚS DE LINEA', exact: true }),
     ).toBeVisible();
     await expect(page.locator('.article-content')).toContainText('LUNES');
     await expect(page.locator('.article-content')).not.toContainText(summary);
+    await expect(page.locator('[data-page-transition-face]')).toHaveCount(0);
     await expect(page.locator('article time')).toHaveAttribute('datetime', publishedAt);
   });
 
