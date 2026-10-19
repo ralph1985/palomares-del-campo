@@ -177,6 +177,8 @@ Los componentes de `layout/` forman el shell común. `CollectionArchive` y `Coll
 ```text
 src/scripts/
 ├── auto-hide-header.ts   # Oculta/muestra la cabecera según el desplazamiento.
+├── page-transition.ts    # Coordina la transición MPA y su fallback CSS.
+├── page-transition-scene.ts # Cubo Three.js CSS3D con copias DOM, cargado bajo demanda.
 ├── menu.ts               # Menú lateral, foco, Escape, inert y backdrop.
 ├── menu-scene.ts         # Escena Three.js del menú.
 ├── conquense-logo.ts     # Logo 3D del crédito del pie.
@@ -516,7 +518,9 @@ El flujo implementado bloquea ejecuciones concurrentes, alinea `main` con `origi
 
 - Astro genera HTML estático, por lo que el contenido editorial no necesita JavaScript para aparecer.
 - El menú importa `menu-scene` únicamente al abrirse.
-- `PUBLIC_PAGE_TRANSITIONS_ENABLED` es una variable pública de build registrada con `astro:env/client`, desactivada por defecto y expuesta en `body[data-page-transitions-enabled]`. El sitio es estático: cambiar el valor de un despliegue requiere reconstruirlo. Esta flag prepara el contrato de configuración; por sí sola no altera la navegación.
+- El shell monta un controlador ligero; la escena Three.js con `CSS3DRenderer` se importa al seguir un enlace interno compatible. Precarga el HTML y las hojas same-origin de destino, presenta el documento saliente y el destino como copias DOM inertes en caras contiguas y conserva la navegación MPA normal después de un giro de 90°. Las copias no ejecutan scripts ni media y pueden no mostrar estado hidratado de cliente.
+- `PUBLIC_PAGE_TRANSITIONS_ENABLED` es una variable pública de build registrada con `astro:env/client`, desactivada por defecto y expuesta en `body[data-page-transitions-enabled]`; controla a la vez el overlay y la interceptación. Cambiarla en un sitio estático requiere reconstruir y publicar de nuevo.
+- Con `prefers-reduced-motion`, la navegación es normal; si la escena no carga, se usa una cobertura CSS y se continúa navegando. El menú saliente permanece abierto durante el giro y el destino real empieza cerrado.
 - El logo del pie, el emblema de `/sobre-el-pueblo/` y la bola del juego cargan Three.js con `import()` cuando sus elementos son visibles o entran en el margen del viewport.
 - Cada escena mantiene una imagen o dibujo CSS de fallback y oculta el canvas si WebGL o la carga de recursos falla.
 - Los recursos de imagen declaran dimensiones en las superficies principales y las imágenes secundarias de algunas páginas usan `loading="lazy"`.
@@ -529,7 +533,7 @@ El build observado emite una advertencia de Vite por chunks superiores a 500 kB.
 
 ### JavaScript enviado al navegador
 
-El shell global incluye comportamiento de menú y cabecera/pie. Las páginas de colecciones incluyen filtros en cliente. `/juego/` añade Leaflet, geolocalización, la lógica de sesión y, si procede, Convex. `/rutas/` añade Leaflet y el parser GPX. Las escenas Three.js se cargan bajo demanda, pero Three.js sigue siendo un recurso real cuando el usuario activa o alcanza esas superficies.
+El shell global incluye el controlador pequeño de transición, el menú y el comportamiento de cabecera/pie; el módulo Three.js del cubo solo se descarga tras un clic interno elegible. La transición representa SSR en caras DOM inertes y no sustituye la navegación de documento completo. Las páginas de colecciones incluyen filtros en cliente. `/juego/` añade Leaflet, geolocalización, la lógica de sesión y, si procede, Convex. `/rutas/` añade Leaflet y el parser GPX. Las demás escenas Three.js también se cargan bajo demanda.
 
 ### Leaflet y fuentes cartográficas
 
@@ -558,7 +562,7 @@ Las pruebas Vitest cubren:
 
 La ejecución local verificada el 18 de octubre de 2026 con `pnpm test:coverage` contiene 34 archivos y 189 pruebas Vitest, todas correctas: 93,50 % de statements, 91,16 % de branches, 96,55 % de functions y 96,85 % de lines. El umbral global configurado es del 90 % en esas cuatro métricas y CI ejecuta `pnpm test:coverage` como gate.
 
-Playwright cubre navegación, menú accesible, portada, noticias, bandos, agenda vacía, información práctica, alojamientos, rutas, formulario de Palomareños con respuesta simulada, juego local, modo inmersivo, simulador, presencia visual de Three.js y responsive. La cobertura SEO estática corresponde a `check:seo`. Las pruebas del juego usan el servidor Astro de desarrollo y el simulador local; no constituyen una prueba E2E contra un deployment remoto de Convex ni un flujo de dos jugadores reales.
+Playwright cubre navegación, menú accesible, portada, noticias, bandos, agenda vacía, información práctica, alojamientos, rutas, formulario de Palomareños con respuesta simulada, juego local, modo inmersivo, simulador, presencia visual de Three.js y responsive. `tests/e2e/page-transitions.spec.ts` comprueba las caras antes de navegar, la conservación del menú, el fallback, un viewport estrecho y `prefers-reduced-motion`; el test de la flag se ejecuta también con la transición apagada. La cobertura SEO estática corresponde a `check:seo`. Las pruebas del juego usan el servidor Astro de desarrollo y el simulador local; no constituyen una prueba E2E contra un deployment remoto de Convex ni un flujo de dos jugadores reales.
 
 `scripts/visual-qa.ts` recorre once rutas en dos viewports y comprueba HTTP 200, overflow horizontal, foco, contraste aproximado y errores de consola. Incluye alojamientos, el mapa mundial de Palomareños y un detalle de bando; sus assets externos se interceptan con fixtures compartidos con Playwright E2E. Es una comprobación reproducible de calidad visual, no un sistema de snapshots de imagen.
 

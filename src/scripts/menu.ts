@@ -42,7 +42,10 @@ if (toggle && closeButton && menu && backdrop) {
   backdrop.addEventListener('click', () => setMenuOpen(false));
 
   menu.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => setMenuOpen(false));
+    link.addEventListener('click', (event) => {
+      if (event.defaultPrevented) return;
+      setMenuOpen(false);
+    });
   });
 
   document.addEventListener('keydown', (event) => {

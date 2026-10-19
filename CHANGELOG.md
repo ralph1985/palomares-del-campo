@@ -8,7 +8,8 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 #### Added
 
-- Añadida la flag de build `PUBLIC_PAGE_TRANSITIONS_ENABLED`, desactivada por defecto, como configuración explícita para futuras transiciones de página.
+- Añadida la flag de build `PUBLIC_PAGE_TRANSITIONS_ENABLED`, desactivada por defecto, para controlar las transiciones de página.
+- Añadida una transición de página completa en cubo con Three.js, activable mediante la flag; conserva la navegación normal, respeta `prefers-reduced-motion` y ofrece un fallback CSS.
 
 ### 2026-10-18
 

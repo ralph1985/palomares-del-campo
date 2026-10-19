@@ -60,6 +60,12 @@ jobs:
         env:
           CI: '1'
 
+      - name: End-to-end tests with page transitions disabled
+        run: pnpm exec playwright test tests/e2e/page-transition-feature-flag.spec.ts --retries=0
+        env:
+          CI: '1'
+          PUBLIC_PAGE_TRANSITIONS_ENABLED: 'false'
+
       - name: Build static site
         run: pnpm build
 
