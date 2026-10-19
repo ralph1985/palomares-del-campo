@@ -86,23 +86,53 @@ test.describe('Three.js page transitions', () => {
 
     const overlay = page.locator('[data-page-transition-overlay]');
     await expect(overlay).toHaveAttribute('data-phase', 'outgoing', { timeout: 3000 });
-    await expect(menu).toHaveAttribute('aria-hidden', 'false');
-    await expect(menu).not.toHaveAttribute('inert');
-    await expect(page.locator('body').first()).toHaveClass(/menu-is-open/);
-    const sourceFace = overlay.locator('[data-page-transition-face="source"]');
-    const sourceMenu = sourceFace.locator('#site-menu');
-    await expect(sourceFace).toHaveClass(/menu-is-open/);
-    await expect(sourceMenu).toHaveAttribute('aria-hidden', 'false');
-    await expect(sourceMenu).not.toHaveAttribute('inert');
-    await expect(sourceMenu.locator('a[href="/noticias/"]')).toBeVisible();
-    await expect(sourceFace.locator('[data-menu-backdrop]')).not.toHaveAttribute('hidden');
+    const menuState = await page.evaluate(() => {
+      const overlayElement = document.querySelector('[data-page-transition-overlay]');
+      const sourceFaceElement = overlayElement?.querySelector<HTMLElement>(
+        '[data-page-transition-face="source"]',
+      );
+      const destinationFaceElement = overlayElement?.querySelector<HTMLElement>(
+        '[data-page-transition-face="destination"]',
+      );
+      const liveMenu = document.querySelector('#site-menu');
+      const sourceMenu = sourceFaceElement?.querySelector('#site-menu');
+      const sourceMenuLink = sourceMenu?.querySelector('a[href="/noticias/"]');
+      const sourceBackdrop = sourceFaceElement?.querySelector('[data-menu-backdrop]');
 
-    const destinationFace = overlay.locator('[data-page-transition-face="destination"]');
-    await expect(destinationFace.locator('#site-menu')).toHaveCount(0);
+      return {
+        phase: overlayElement?.getAttribute('data-phase'),
+        renderer: overlayElement?.getAttribute('data-renderer'),
+        liveMenuOpen:
+          document.body.classList.contains('menu-is-open') &&
+          liveMenu?.getAttribute('aria-hidden') === 'false' &&
+          !liveMenu.hasAttribute('inert'),
+        sourceMenuOpen:
+          Boolean(sourceFaceElement?.classList.contains('menu-is-open')) &&
+          sourceMenu?.getAttribute('aria-hidden') === 'false' &&
+          !sourceMenu.hasAttribute('inert'),
+        sourceMenuLinkVisible:
+          Boolean(sourceMenuLink?.getClientRects().length) &&
+          sourceMenuLink?.ownerDocument.defaultView?.getComputedStyle(sourceMenuLink).visibility ===
+            'visible',
+        sourceBackdropVisible: Boolean(sourceBackdrop && !sourceBackdrop.hasAttribute('hidden')),
+        destinationMenuCount: destinationFaceElement?.querySelectorAll('#site-menu').length ?? -1,
+      };
+    });
+    expect(menuState).toEqual({
+      phase: 'outgoing',
+      renderer: 'three-css3d',
+      liveMenuOpen: true,
+      sourceMenuOpen: true,
+      sourceMenuLinkVisible: true,
+      sourceBackdropVisible: true,
+      destinationMenuCount: 0,
+    });
+
     await page.waitForURL((url) => url.pathname === destination.pathname, {
       waitUntil: 'commit',
       timeout: 3000,
     });
+
     await expect(page.locator('#site-menu')).toHaveAttribute('aria-hidden', 'true');
     await expect(page.locator('#site-menu')).toHaveAttribute('inert', '');
   });
