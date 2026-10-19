@@ -12,6 +12,7 @@ const routes = [
   '/agenda/',
   '/informacion-practica/',
   '/rutas/',
+  '/que-ver-cerca/',
   '/alojamientos/',
   '/palomarenos-por-el-mundo/',
   '/juego/',

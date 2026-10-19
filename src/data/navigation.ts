@@ -18,6 +18,7 @@ export const navigationGroups: NavigationGroup[] = [
     links: [
       { label: 'Sobre el pueblo', href: '/sobre-el-pueblo/' },
       { label: 'Rutas', href: '/rutas/' },
+      { label: 'Qué ver cerca', href: '/que-ver-cerca/' },
       { label: 'Alojamientos rurales', href: '/alojamientos/' },
     ],
   },
