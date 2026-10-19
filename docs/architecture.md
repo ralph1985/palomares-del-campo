@@ -516,6 +516,7 @@ El flujo implementado bloquea ejecuciones concurrentes, alinea `main` con `origi
 
 - Astro genera HTML estático, por lo que el contenido editorial no necesita JavaScript para aparecer.
 - El menú importa `menu-scene` únicamente al abrirse.
+- `PUBLIC_PAGE_TRANSITIONS_ENABLED` es una variable pública de build registrada con `astro:env/client`, desactivada por defecto y expuesta en `body[data-page-transitions-enabled]`. El sitio es estático: cambiar el valor de un despliegue requiere reconstruirlo. Esta flag prepara el contrato de configuración; por sí sola no altera la navegación.
 - El logo del pie, el emblema de `/sobre-el-pueblo/` y la bola del juego cargan Three.js con `import()` cuando sus elementos son visibles o entran en el margen del viewport.
 - Cada escena mantiene una imagen o dibujo CSS de fallback y oculta el canvas si WebGL o la carga de recursos falla.
 - Los recursos de imagen declaran dimensiones en las superficies principales y las imágenes secundarias de algunas páginas usan `loading="lazy"`.
