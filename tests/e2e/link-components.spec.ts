@@ -19,4 +19,26 @@ test.describe('shared link components', () => {
     expect(externalAttributes.every(({ rel }) => rel?.includes('noopener'))).toBe(true);
     expect(externalAttributes.every(({ rel }) => rel?.includes('noreferrer'))).toBe(true);
   });
+
+  test('uses the shared text action for the news back-link', async ({ page }) => {
+    await page.goto('/noticias/');
+    await page.locator('.news-card').first().locator('h3 a').click();
+
+    const backLink = page.getByRole('link', { name: '← Volver a noticias', exact: true });
+    await expect(backLink).toHaveAttribute('href', '/noticias');
+    await expect(backLink).toHaveAttribute('data-ui-link', '');
+    await expect(backLink).toHaveAttribute('data-ui-variant', 'text');
+    await expect(backLink).toHaveCSS('margin-bottom', '48px');
+  });
+
+  test('uses the shared text action for the bando back-link', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/bandos/1646075-visita-virgen-de-lourdes-a-nuestro-pueblo/');
+
+    const backLink = page.getByRole('link', { name: '← Volver a bandos', exact: true });
+    await expect(backLink).toHaveAttribute('href', '/bandos/');
+    await expect(backLink).toHaveAttribute('data-ui-link', '');
+    await expect(backLink).toHaveAttribute('data-ui-variant', 'text');
+    await expect(backLink).toHaveCSS('margin-bottom', '48px');
+  });
 });

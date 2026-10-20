@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import ActionLink from '../../components/ui/ActionLink.astro';
 import ExternalLink from '../../components/ui/ExternalLink.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
@@ -55,9 +56,9 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   ]}
 >
   <main class="article-shell">
-    <a class="back-link" href="/bandos/">
+    <ActionLink class="article-back-link" variant="text" href="/bandos/">
       ← Volver a bandos
-    </a>
+    </ActionLink>
     <article>
       <header class="article-header">
         <p class="eyebrow">{category}</p>
@@ -116,7 +117,6 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     padding: clamp(3rem, 8vw, 7rem) 0;
   }
 
-  .back-link,
   .article-source a {
     color: var(--color-forest);
     font-size: 0.85rem;
@@ -124,13 +124,10 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     text-decoration: none;
   }
 
-  .back-link {
-    display: inline-block;
+  :global(.article-back-link) {
     margin-bottom: 3rem;
   }
 
-  .back-link:hover,
-  .back-link:focus-visible,
   .article-source a:hover,
   .article-source a:focus-visible {
     color: var(--color-clay);
