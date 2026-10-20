@@ -1,5 +1,5 @@
 const STORAGE_KEY = 'palomares-page-transition';
-const SCENE_LOAD_TIMEOUT_MS = 3_200;
+const SCENE_LOAD_TIMEOUT_MS = 1_200;
 const SCENE_RUN_TIMEOUT_MS = 3_800;
 const FALLBACK_OUTGOING_MS = 220;
 const SETTLE_MS = 260;
@@ -20,24 +20,6 @@ const cloneCurrentBody = (): HTMLElement => {
     copy.setAttribute(attribute.name, attribute.value);
   });
   copy.replaceChildren(...Array.from(document.body.childNodes, (node) => node.cloneNode(true)));
-
-  const sourceElements = Array.from(document.body.querySelectorAll('*')).filter(
-    (element): element is HTMLElement => element instanceof HTMLElement,
-  );
-  const copiedElements = Array.from(copy.querySelectorAll('*')).filter(
-    (element): element is HTMLElement => element instanceof HTMLElement,
-  );
-  sourceElements.forEach((sourceElement, index) => {
-    const copiedElement = copiedElements[index];
-    if (!copiedElement) return;
-    if (sourceElement.scrollTop !== 0) {
-      copiedElement.dataset.pageTransitionScrollTop = String(sourceElement.scrollTop);
-    }
-    if (sourceElement.scrollLeft !== 0) {
-      copiedElement.dataset.pageTransitionScrollLeft = String(sourceElement.scrollLeft);
-    }
-  });
-
   copy.scrollTop = window.scrollY;
   return copy;
 };
@@ -78,7 +60,6 @@ const playScene = async (
       sourceBodySnapshot,
       abortController.signal,
       () => {
-        pageRoot.dataset.pageTransitionContentHidden = 'true';
         overlay.dataset.renderer = 'three-css3d';
         overlay.dataset.phase = 'outgoing';
       },
@@ -90,7 +71,6 @@ const playScene = async (
 
 const revealPage = () => {
   pageRoot.removeAttribute('data-page-transition-state');
-  pageRoot.removeAttribute('data-page-transition-content-hidden');
   if (!overlay) return;
 
   overlay.dataset.phase = 'settling';
@@ -194,7 +174,6 @@ if (overlay && sceneHost) {
   window.addEventListener('pageshow', (event) => {
     if (!event.persisted) return;
     pageRoot.removeAttribute('data-page-transition-state');
-    pageRoot.removeAttribute('data-page-transition-content-hidden');
     overlay.dataset.phase = 'idle';
     overlay.dataset.renderer = 'none';
   });

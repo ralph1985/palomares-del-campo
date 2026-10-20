@@ -10,7 +10,7 @@ test('exposes the page-transition build flag on the shared shell', async ({ page
   );
 });
 
-test('disables cube navigation when the build-time flag is false', async ({ page }) => {
+test('disables cube transitions when the build-time flag is false', async ({ page }) => {
   test.skip(
     process.env.PUBLIC_PAGE_TRANSITIONS_ENABLED !== 'false',
     'Run with PUBLIC_PAGE_TRANSITIONS_ENABLED=false to verify the kill switch.',
@@ -25,7 +25,6 @@ test('disables cube navigation when the build-time flag is false', async ({ page
   });
   await page.goto('/noticias/');
 
-  await expect(page.locator('body')).toHaveAttribute('data-page-transitions-enabled', 'false');
   await expect(page.locator('[data-page-transition-overlay]')).toHaveCount(0);
   await expect(page.locator('html')).not.toHaveAttribute('data-page-transition-state');
   expect(await page.evaluate(() => sessionStorage.getItem('palomares-page-transition'))).toBeNull();

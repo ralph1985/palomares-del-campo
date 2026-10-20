@@ -20,7 +20,7 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 #### Added
 
 - Añadida la flag de build `PUBLIC_PAGE_TRANSITIONS_ENABLED`, desactivada por defecto, para controlar las transiciones de página.
-- Añadida una transición de página completa en cubo con Three.js, activable mediante la flag; conserva la navegación normal, respeta `prefers-reduced-motion` y ofrece un fallback CSS.
+- Añadida una transición de página completa en cubo con Three.js, activable mediante la flag; precarga el destino en la cara contigua, conserva abierto el menú durante la salida, respeta `prefers-reduced-motion` y ofrece un fallback CSS.
 - Añadida la guía «Qué ver cerca» con recursos culturales y naturales de la zona, fuentes oficiales y avisos de visita.
 - Mejorado el nombre accesible del botón del menú para conservarlo también en móviles.
 
