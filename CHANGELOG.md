@@ -4,6 +4,12 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-10-20
+
+#### Changed
+
+- Reutilizado `ActionLink` en los enlaces de regreso de noticias y bandos, con foco visible consistente.
+
 ### 2026-10-19
 
 #### Changed
