@@ -22,6 +22,7 @@ test.describe('editorial news', () => {
     const title = await firstCard.locator('h3 a').innerText();
 
     await firstCard.locator('h3 a').click();
+    await expect(page).toHaveURL(/\/noticias\/[^/]+\/?$/);
 
     await expect(page.getByRole('heading', { name: title })).toBeVisible();
     await expect(page.locator('article')).toBeVisible();

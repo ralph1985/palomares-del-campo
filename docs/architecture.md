@@ -4,12 +4,13 @@
 
 Este documento describe la implementación que existe en el repositorio. No describe una arquitectura objetivo ni convierte la hoja de ruta en funcionalidades disponibles. Cuando una capacidad todavía no está implementada aparece en **Evolución prevista** o en **Limitaciones conocidas**.
 
-La web tiene dos superficies relacionadas, pero con fronteras distintas:
+La web tiene una superficie editorial estática y dos flujos dinámicos con fronteras distintas:
 
 - una web editorial estática generada por Astro;
-- un prototipo de juego geolocalizado con un modo local y un modo remoto respaldado por Convex cuando se configura `CONVEX_URL`.
+- un juego geolocalizado con modo local y modo remoto respaldado por Convex cuando se configura `CONVEX_URL`;
+- un mapa y flujo de propuestas moderadas de «Palomareños por el mundo», respaldado por Convex.
 
-El contenido editorial no depende de Convex. Convex solo interviene en el estado compartido del juego.
+Las colecciones editoriales generales no dependen de Convex. El backend remoto también almacena propuestas de Palomareños, pero la consulta pública solo devuelve una proyección redactada de historias aprobadas.
 
 ## Visión general
 
@@ -23,9 +24,10 @@ El proyecto publica información sobre Palomares del Campo y ofrece una experien
 - proporcionar navegación, búsqueda y filtros en el navegador sin introducir un framework de UI;
 - mostrar mapas de Leaflet con cartografía de OpenStreetMap y atribución visible;
 - ofrecer el juego en modo local y conectarlo a una temporada remota de Convex cuando existe un deployment configurado;
+- recibir propuestas de historias, someterlas a moderación y publicar en el mapa únicamente las aprobadas;
 - cargar mejoras visuales Three.js de forma diferida, siempre con un fallback HTML, imagen o CSS.
 
-No hay CMS, servidor Astro, API editorial, cuentas de usuario ni una base de datos para el contenido editorial.
+No hay CMS ni API para gestionar el contenido editorial general, ni servidor Astro ni cuentas de usuario. Convex sí almacena el estado del juego y las propuestas de Palomareños; estas últimas no se mezclan con las colecciones editoriales Markdown.
 
 ### Stack verificado
 
@@ -99,13 +101,20 @@ src/pages/
 ├── agenda/index.astro                  /agenda/
 ├── alojamientos/index.astro            /alojamientos/
 ├── rutas/index.astro                   /rutas/
+├── que-ver-cerca/index.astro           /que-ver-cerca/
 ├── juego/index.astro                   /juego/
 ├── avisos/index.astro                  /avisos/ (redirección 301)
 ├── noticias/index.astro                /noticias/
 ├── noticias/[slug].astro               /noticias/[slug]/
 ├── bandos/index.astro                  /bandos/
-└── bandos/[slug].astro                 /bandos/[slug]/
+├── bandos/[slug].astro                 /bandos/[slug]/
+├── palomarenos-por-el-mundo/index.astro /palomarenos-por-el-mundo/
+├── privacidad/index.astro              /privacidad/
+├── politica-de-cookies.astro            /politica-de-cookies/
+└── aviso-legal.astro                   /aviso-legal/
 ```
+
+También existen `/avisos/` (redirección 301 a `/bandos/`), `/rutas/`, `/agenda/`, `/alojamientos/` e `/informacion-practica/`.
 
 No existen actualmente rutas para `/lugares/`, `/lugares/[slug]/` ni `/patrimonio/` como páginas independientes. La información de patrimonio está integrada en `/sobre-el-pueblo/`.
 
@@ -135,6 +144,12 @@ src/components/
 │   └── AccommodationCard.astro
 ├── current-affairs/
 │   └── CurrentAffairsEmptyState.astro
+├── hero/
+│   ├── EditorialHero.astro
+│   └── SplitHero.astro
+├── world/
+│   ├── WorldMap.astro
+│   └── WorldSubmissionForm.astro
 ├── game/
 │   ├── GameBallVisual.astro
 │   ├── GameDevelopmentSimulator.astro
@@ -159,13 +174,15 @@ src/components/
     └── ExternalLink.astro
 ```
 
-Los componentes de `layout/` forman el shell común. `CollectionArchive` y `CollectionSearch` son compartidos por noticias y bandos. Los componentes de `game/` componen la superficie del juego; la lógica del mapa y la comunicación con Convex están en scripts de cliente separados.
+Los componentes de `layout/` forman el shell común. `EditorialHero` comparte la estructura de una columna de las páginas editoriales y `SplitHero` el patrón de dos columnas de Sobre el pueblo y La bola; ambos conservan el contenido mediante slots. `CurrentAffairsEmptyState` usa `EditorialHero` para mantener su aviso y atributos de estado. `CollectionArchive` y `CollectionSearch` son compartidos por noticias y bandos. Los componentes de `game/` componen la superficie del juego; la lógica del mapa y la comunicación con Convex están en scripts de cliente separados.
 
 ### `src/scripts/`
 
 ```text
 src/scripts/
 ├── auto-hide-header.ts   # Oculta/muestra la cabecera según el desplazamiento.
+├── page-transition.ts    # Coordina la transición MPA y su fallback CSS.
+├── page-transition-scene.ts # Cubo Three.js CSS3D con copias DOM, cargado bajo demanda.
 ├── menu.ts               # Menú lateral, foco, Escape, inert y backdrop.
 ├── menu-scene.ts         # Escena Three.js del menú.
 ├── conquense-logo.ts     # Logo 3D del crédito del pie.
@@ -173,6 +190,9 @@ src/scripts/
 ├── game-ball.ts          # Bola 3D del encabezado del juego.
 ├── game-map.ts           # Leaflet, geolocalización, juego local y adaptadores remotos.
 ├── convex-game.ts        # Cliente Convex, identidad y suscripciones remotas.
+├── palomarenos-map.ts    # Consulta y renderizado del mapa público.
+├── palomarenos-form.ts   # Envío de propuestas y estados de Turnstile.
+├── palomarenos-map-data.ts # Proyección pública validada del mapa.
 └── route-map.ts          # Descarga, parseo y renderizado Leaflet de GPX.
 ```
 
@@ -237,6 +257,12 @@ src/data/
 convex/
 ├── schema.ts
 ├── game.ts
+├── palomarenos.ts
+├── palomarenos_validation.ts
+├── palomarenos_notifications.ts
+├── palomarenos_notification_content.ts
+├── turnstile.ts
+├── resend_response.ts
 ├── geo.ts
 ├── identity.ts
 ├── leaderboard.ts
@@ -244,10 +270,10 @@ convex/
 ├── score.ts
 ├── tsconfig.json
 ├── _generated/       # generado por Convex; no editar manualmente
-└── README.md         # README genérico del scaffolding de Convex
+├── README.md         # guía del backend Convex de este proyecto
 ```
 
-`convex/_generated/` se regenera con la CLI y contiene las referencias que importa `src/scripts/convex-game.ts`.
+`convex/_generated/` se regenera con la CLI y contiene las referencias que importan los adaptadores del cliente. `game.ts` implementa el estado remoto del juego; `palomarenos.ts` implementa la recepción, consulta pública redactada y moderación interna de historias. `palomarenos_notifications.ts`, `turnstile.ts` y `resend_response.ts` cubren notificaciones y verificación de Turnstile. Las operaciones internas de moderación no forman parte del API público del frontend.
 
 ### `tests/`
 
@@ -266,6 +292,7 @@ scripts/
 ├── fetch-bandos.ts
 ├── sync-bandos-cron.sh
 ├── bandos-sync-policy.ts
+├── sync-main-to-develop.ts
 ├── notify-bando-sync.ts
 ├── ensure-main-synced.ts
 ├── verify-seo.ts
@@ -453,6 +480,14 @@ Por tanto:
 
 Estas limitaciones son parte del estado actual y no deben documentarse como si existiera autenticación de jugadores.
 
+## Palomareños por el mundo
+
+`/palomarenos-por-el-mundo/` compone el mapa público y el formulario en `WorldMap.astro` y `WorldSubmissionForm.astro`. Cuando `CONVEX_URL` está configurada, el mapa consulta `api.palomarenos.listApproved`; la query devuelve solo historias aprobadas con coordenadas válidas y una proyección que no incluye email ni campos internos.
+
+El formulario envía la propuesta a `api.palomarenos.submitWithTurnstile`. La action valida el token en servidor y después llama a una mutación interna que normaliza y limita la propuesta, la guarda con estado `pending` y programa el aviso correspondiente. La aprobación, el rechazo y la retirada son operaciones internas; no hay panel público de moderación. Los envíos del formulario en E2E se simulan y no prueban el deployment remoto.
+
+La descripción de datos, configuración por entorno, operación y pendientes previos a producción está en [`palomarenos-por-el-mundo.md`](palomarenos-por-el-mundo.md), [`palomarenos-produccion.md`](palomarenos-produccion.md) y [`palomarenos-operacion.md`](palomarenos-operacion.md). La documentación legal de este flujo es borrador y conserva validaciones pendientes.
+
 ## Contenido editorial
 
 ### Noticias
@@ -476,11 +511,11 @@ El importador convierte HTML a Markdown, valida URLs HTTPS, restringe los adjunt
 
 ### Sincronización automatizada de bandos
 
-`scripts/sync-bandos-cron.sh` está diseñado para ser invocado desde cron en un host con Node.js, pnpm, GitHub CLI y credenciales locales. El repositorio no contiene una instalación de cron ni un workflow de GitHub que pruebe que el proceso esté programado.
+`scripts/sync-bandos-cron.sh` está diseñado para ser invocado desde cron en un host con Node.js, pnpm, GitHub CLI y credenciales locales. El repositorio no contiene la instalación de cron; su estado real depende del host.
 
-El flujo implementado bloquea ejecuciones concurrentes, alinea `main` con `origin/main` mediante `ensure-main-synced.ts`, trabaja desde un worktree de `origin/main`, ejecuta el importador RSS y valida formato, lint, Vitest y build. Si hay cambios, limita la rama y la Pull Request a `src/content/bandos/*.md`, espera los checks obligatorios, fusiona la PR y vuelve a alinear `main`.
+El flujo bloquea ejecuciones concurrentes, alinea `main` con `origin/main` mediante `ensure-main-synced.ts`, trabaja desde un worktree de `origin/main`, ejecuta el importador RSS y valida formato, lint, Vitest y build. Si hay cambios, limita la rama y la PR a `src/content/bandos/*.md`, espera los checks obligatorios y fusiona la PR en `main`. Cuando esta versión esté instalada en el checkout `main` del cron, `sync-main-to-develop.ts` crea o actualiza una rama temporal desde `origin/develop`, integra `origin/main` y abre una PR hacia `develop`; espera el `Verify` obligatorio y la fusiona solo cuando pasa. La promoción se vuelve a reconciliar en las ejecuciones sin novedades RSS para reintentar una PR pendiente. Si hay conflictos o checks fallidos, se conserva la PR y no se fuerza ninguna rama protegida.
 
-`SYNC_BANDOS_DRY_RUN=1` detiene el flujo antes de crear la rama de bandos, la PR, la fusión y las notificaciones. No equivale a un dry-run completamente no destructivo del checkout: `ensure-main-synced.ts` se ejecuta antes de comprobar la variable y puede crear una rama de respaldo y alinear `main` con `origin/main` si detecta divergencia. Tras una fusión normal, `notify-bando-sync.ts` puede enviar un correo SMTP con Nodemailer; si falta la configuración o falla el envío, la PR ya fusionada no se deshace.
+`SYNC_BANDOS_DRY_RUN=1` impide crear o fusionar las PRs de bandos y de promoción, y omite la notificación. No equivale a un dry-run completamente no destructivo del checkout: `ensure-main-synced.ts` se ejecuta antes de comprobar la variable y puede crear una rama de respaldo y alinear `main` con `origin/main` si detecta divergencia. Tras la fusión de bandos, `notify-bando-sync.ts` puede enviar un correo SMTP con Nodemailer; si falta la configuración o falla el envío, la PR de bandos ya fusionada no se deshace.
 
 ## Rendimiento y carga de cliente
 
@@ -488,6 +523,9 @@ El flujo implementado bloquea ejecuciones concurrentes, alinea `main` con `origi
 
 - Astro genera HTML estático, por lo que el contenido editorial no necesita JavaScript para aparecer.
 - El menú importa `menu-scene` únicamente al abrirse.
+- El shell monta un controlador ligero; la escena Three.js con `CSS3DRenderer` se importa al seguir un enlace interno compatible. Precarga el HTML y las hojas same-origin de destino, presenta el documento saliente y el destino como copias DOM inertes en caras contiguas y conserva la navegación MPA normal después de un giro de 90°. Las copias no ejecutan scripts ni media y pueden no mostrar estado hidratado de cliente.
+- `PUBLIC_PAGE_TRANSITIONS_ENABLED` es una variable pública de build registrada con `astro:env/client`, desactivada por defecto y expuesta en `body[data-page-transitions-enabled]`; controla a la vez el overlay y la interceptación. Cambiarla en un sitio estático requiere reconstruir y publicar de nuevo.
+- Con `prefers-reduced-motion`, la navegación es normal; si la escena no carga, se usa una cobertura CSS y se continúa navegando. El menú saliente permanece abierto durante el giro y el destino real empieza cerrado.
 - El logo del pie, el emblema de `/sobre-el-pueblo/` y la bola del juego cargan Three.js con `import()` cuando sus elementos son visibles o entran en el margen del viewport.
 - Cada escena mantiene una imagen o dibujo CSS de fallback y oculta el canvas si WebGL o la carga de recursos falla.
 - Los recursos de imagen declaran dimensiones en las superficies principales y las imágenes secundarias de algunas páginas usan `loading="lazy"`.
@@ -500,11 +538,11 @@ El build observado emite una advertencia de Vite por chunks superiores a 500 kB.
 
 ### JavaScript enviado al navegador
 
-El shell global incluye comportamiento de menú y cabecera/pie. Las páginas de colecciones incluyen filtros en cliente. `/juego/` añade Leaflet, geolocalización, la lógica de sesión y, si procede, Convex. `/rutas/` añade Leaflet y el parser GPX. Las escenas Three.js se cargan bajo demanda, pero Three.js sigue siendo un recurso real cuando el usuario activa o alcanza esas superficies.
+El shell global incluye el controlador pequeño de transición, el menú y el comportamiento de cabecera/pie; el módulo Three.js del cubo solo se descarga tras un clic interno elegible. La transición representa SSR en caras DOM inertes y no sustituye la navegación de documento completo. Las páginas de colecciones incluyen filtros en cliente. `/juego/` añade Leaflet, geolocalización, la lógica de sesión y, si procede, Convex. `/rutas/` añade Leaflet y el parser GPX. Las demás escenas Three.js también se cargan bajo demanda.
 
 ### Leaflet y fuentes cartográficas
 
-Los dos mapas usan teselas públicas de OpenStreetMap con atribución. El código no implementa caché propia, proxy de teselas ni control de disponibilidad del proveedor. La experiencia puede mostrar un estado de error en el mapa de rutas; el juego conserva su estructura, pero depende de la carga de las teselas para la cartografía.
+Los mapas de juego, rutas y Palomareños usan teselas públicas de OpenStreetMap con atribución. El código no implementa caché propia, proxy de teselas ni control de disponibilidad del proveedor. Las páginas de rutas y Palomareños pueden mostrar un estado de error; el juego conserva su estructura, pero depende de la carga de las teselas para la cartografía.
 
 ## Testing y validación
 
@@ -527,9 +565,9 @@ Las pruebas Vitest cubren:
 - tokens y guardas de arquitectura CSS;
 - alineación segura de `main`.
 
-La ejecución verificada actual contiene 19 archivos y 68 pruebas Vitest, todas correctas. No hay informe de cobertura configurado.
+La ejecución local verificada el 18 de octubre de 2026 con `pnpm test:coverage` contiene 34 archivos y 189 pruebas Vitest, todas correctas: 93,50 % de statements, 91,16 % de branches, 96,55 % de functions y 96,85 % de lines. El umbral global configurado es del 90 % en esas cuatro métricas y CI ejecuta `pnpm test:coverage` como gate.
 
-Playwright cubre navegación, menú accesible, portada, noticias, bandos, agenda vacía, información práctica, alojamientos, rutas, formulario de Palomareños con respuesta simulada, juego local, modo inmersivo, simulador, presencia visual de Three.js y responsive. La cobertura SEO estática corresponde a `check:seo`. Las pruebas del juego usan el servidor Astro de desarrollo y el simulador local; no constituyen una prueba E2E contra un deployment remoto de Convex ni un flujo de dos jugadores reales.
+Playwright cubre navegación, menú accesible, portada, noticias, bandos, agenda vacía, información práctica, alojamientos, rutas, formulario de Palomareños con respuesta simulada, juego local, modo inmersivo, simulador, presencia visual de Three.js y responsive. `tests/e2e/page-transitions.spec.ts` comprueba las caras antes de navegar, la conservación del menú, el fallback, un viewport estrecho y `prefers-reduced-motion`; el test de la flag se ejecuta también con la transición apagada. La cobertura SEO estática corresponde a `check:seo`. Las pruebas del juego usan el servidor Astro de desarrollo y el simulador local; no constituyen una prueba E2E contra un deployment remoto de Convex ni un flujo de dos jugadores reales.
 
 `scripts/visual-qa.ts` recorre once rutas en dos viewports y comprueba HTTP 200, overflow horizontal, foco, contraste aproximado y errores de consola. Incluye alojamientos, el mapa mundial de Palomareños y un detalle de bando; sus assets externos se interceptan con fixtures compartidos con Playwright E2E. Es una comprobación reproducible de calidad visual, no un sistema de snapshots de imagen.
 
@@ -542,7 +580,9 @@ pnpm install --frozen-lockfile
 pnpm dev
 pnpm build
 pnpm preview
+pnpm typecheck
 pnpm test
+pnpm test:coverage
 pnpm test:watch
 pnpm test:e2e
 pnpm qa:visual
@@ -592,7 +632,7 @@ La interfaz solo considera remoto el juego cuando `CONVEX_URL` está disponible 
 
 Los nombres utilizados por el código son:
 
-- `CONVEX_URL` para activar el cliente remoto del juego;
+- `CONVEX_URL` para activar los clientes remotos del juego y de Palomareños por el mundo;
 - `BANDOS_IMPORT_MODE` para elegir `rss` o `archive`;
 - `SYNC_BANDOS_DRY_RUN` para el modo seguro del sincronizador;
 - `BANDOS_CHECK_DISCOVERY_ATTEMPTS` y `BANDOS_CHECK_DISCOVERY_INTERVAL_SECONDS` para la espera de checks;
@@ -613,7 +653,10 @@ La clasificación se basa en la comparación entre el `architecture.md` anterior
 | Incorrecto     | Se enumeraban `/lugares/`, `/patrimonio/` y otras rutas “previstas” como si fueran la superficie existente.                      | Se sustituye por el inventario real de `src/pages/`; patrimonio queda situado en `/sobre-el-pueblo/`.              |
 | Incorrecto     | Se atribuían Content Collections a lugares, patrimonio y agenda.                                                                 | Se documentan únicamente `noticias` y `bandos`; la agenda real es un array vacío en `src/data/current-affairs.ts`. |
 | Incompleto     | La estructura de componentes omitía `about`, `game`, `home`, `accommodations`, `current-affairs`, componentes de colección y UI. | Se incorpora el árbol real y la separación de responsabilidades observada.                                         |
-| Incompleto     | La lista de scripts solo cubría menú y Three.js.                                                                                 | Se añaden mapas, Convex, sesión, geolocalización, GPX, cabecera y sincronización visual.                           |
+| Incompleto     | La lista de scripts solo cubría menú y Three.js.                                                                                 | Se añaden mapas, Convex, Palomareños, sesión, geolocalización, GPX, cabecera y sincronización visual.              |
+| Incompleto     | No se documentaba el backend de propuestas de Palomareños ni el alcance de su proyección pública.                                | Se documentan el flujo Turnstile → mutación interna, moderación privada y datos públicos redactados.               |
+| Incorrecto     | La guía de Convex era el README genérico del scaffolding y el código se describía como futuro en `AGENTS.md`.                    | Se reemplaza por una guía del backend actual y se corrigen las instrucciones operativas.                           |
+| Incorrecto     | El README afirmaba que la cobertura no estaba configurada y omitía rutas y comandos actuales.                                    | Se actualiza contra `package.json`, CI, `src/pages/` y las pruebas ejecutadas.                                     |
 | Incompleto     | No se describían esquema, índices, queries, mutations, presencia, ranking, score ni seguridad de Convex.                         | Se añade una sección basada en `convex/schema.ts` y las funciones exportadas.                                      |
 | Incompleto     | La documentación trataba SEO y sitemap como intención, sin describir el contrato de `SEO.astro` ni la verificación.              | Se documentan metadatos, JSON-LD, canonical, sitemap, robots y `check:seo`.                                        |
 | Incompleto     | No se explicaban importación RSS, backfill, worktree, Pull Request, checks y SMTP.                                               | Se describe el flujo real y se separa de la instalación de cron, que no está en el repositorio.                    |
@@ -628,6 +671,7 @@ La clasificación se basa en la comparación entre el `architecture.md` anterior
 - Noticias y bandos están validados mediante Content Collections y tienen rutas de archivo y detalle.
 - El juego local funciona con geolocalización o simulador de desarrollo.
 - Convex implementa temporada activa, jugadores, bola, capturas, ranking, presencia y suscripciones remotas.
+- Convex también recibe propuestas moderadas de Palomareños, publica una proyección redactada de historias aprobadas y ejecuta notificaciones configuradas.
 - El cliente y el backend comparten reglas de distancia y precisión, pero el backend es la autoridad remota.
 - El SEO técnico, el sitemap y la validación de artefactos generados están implementados.
 - El sincronizador de bandos tiene un flujo de PR y merge implementado, aunque su programación y credenciales pertenecen al host de automatización.
@@ -638,11 +682,10 @@ La clasificación se basa en la comparación entre el `architecture.md` anterior
 - No hay protección contra manipulación de GPS.
 - La presencia almacena coordenadas redondeadas temporalmente en Convex.
 - Las coordenadas y radios de `src/data/game-locations.ts` son provisionales y no equivalen a una revisión física.
-- No hay mutation de finalización de temporadas ni administración de backend.
-- No hay prueba E2E de varios jugadores contra Convex real.
-- No hay cobertura de código configurada.
+- No hay mutation de finalización de temporadas ni interfaz administrativa para gestionarlas.
+- No hay pruebas E2E contra un deployment remoto de Convex, incluido un flujo de varios jugadores, ni una garantía de cobertura funcional del backend desplegado.
+- Los documentos legales de Palomareños siguen siendo borradores con validaciones pendientes. Desde el repositorio no se puede verificar el deployment activo de producción, la instalación de cron ni la configuración real de SMTP o Convex.
 - El build advierte de chunks grandes.
-- No se puede verificar desde el repositorio el despliegue de producción, la instalación de cron ni la configuración real de SMTP o Convex.
 - Las teselas y algunos adjuntos dependen de servicios externos sin caché propia.
 - El adaptador remoto sigue resolviendo el nombre, radio y descripción contra `src/data/game-locations.ts`; una temporada Convex con ubicaciones distintas puede mostrar feedback local incorrecto.
 - Las queries de estado y ranking son públicas, no hay rate limiting ni cuotas de jugador, y el índice de idempotencia no declara una restricción de unicidad en el esquema.

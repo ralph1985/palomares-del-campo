@@ -4,26 +4,27 @@ Estas reglas se aplican a todo el repositorio. La arquitectura explicada está e
 
 ## Proyecto
 
-- Es una web editorial de Palomares del Campo construida con Astro y TypeScript.
-- Astro genera el sitio estático. No introducir backend, base de datos, CMS, autenticación ni automatización de descubrimiento de noticias sin una decisión explícita.
-- `/juego/` puede contener un prototipo local sin persistencia; Convex queda reservado para la fase posterior de estado compartido, usuarios y ranking real.
-- El contenido editorial vive en `src/content/` mediante Content Collections y sus esquemas en `src/content.config.ts`.
-- Las noticias externas y los futuros comunicados municipales son contenidos distintos y no deben mezclarse.
+- Es una web editorial de Palomares del Campo construida con Astro y TypeScript, con salida estática.
+- Las noticias y los bandos editoriales viven en `src/content/` mediante Content Collections y sus esquemas en `src/content.config.ts`; no hay CMS ni backend para gestionar el contenido editorial general.
+- Convex ya se usa para el estado compartido del juego y para las propuestas moderadas de «Palomareños por el mundo». No añadir otros servicios, bases de datos o superficies de autenticación general sin una decisión explícita.
+- El juego dispone de modo local y modo remoto. En remoto, Convex es la autoridad de capturas, puntuación, ranking y presencia; el modo local no representa una partida compartida.
+- Las propuestas de Palomareños se guardan en Convex, empiezan pendientes y solo las aprobadas forman parte de la proyección pública. No exponer datos de contacto ni crear un panel público de administración sin decisión explícita.
+- Las noticias externas y los comunicados municipales son colecciones distintas y no deben mezclarse.
 - Three.js es una mejora visual opcional. La navegación y la accesibilidad del menú deben funcionar aunque Three.js o WebGL fallen.
 
 ## Infraestructura decidida
 
-- Astro genera la web estática y su despliegue previsto es Vercel.
-- El juego tendrá un backend Convex independiente cuando necesite usuarios, ranking, persistencia o sincronización.
+- Astro genera la web estática; Vercel está documentado como plataforma de despliegue, pero la configuración remota debe verificarse antes de afirmar que un entorno está publicado.
+- Convex contiene el backend existente del juego y del flujo de propuestas de Palomareños. El deployment `dev/europe-ireland` se comparte entre desarrollo local y Preview; usar solo datos de prueba.
 - La carpeta `convex/` contiene funciones y esquema del backend; `convex/_generated/` se regenera con la CLI y no se edita manualmente.
 - `pnpm exec convex dev` solo apunta al deployment de desarrollo; `pnpm exec convex deploy` requiere autorización explícita y nunca debe ejecutarse por accidente desde una revisión local.
 - Las variables de Convex viven en archivos de entorno ignorados; no imprimirlas ni añadirlas al repositorio.
-- No introducir un servidor dedicado ni Supabase para este proyecto.
-- No añadir backend, base de datos, autenticación o infraestructura remota sin una decisión explícita para la fase correspondiente.
+- No introducir un servidor dedicado, Supabase ni infraestructura remota adicional para este proyecto.
+- No añadir nuevas bases de datos, mecanismos de autenticación ni servicios externos sin una decisión explícita para la fase correspondiente.
 
 ## Juego y estado autoritativo
 
-- El prototipo local de `/juego/` puede funcionar sin persistencia; su estado y sus capturas no representan una partida real.
+- El modo local de `/juego/` puede funcionar sin persistencia; su estado y sus capturas no representan una partida compartida ni autoritativa.
 - La lógica pura de geolocalización y reglas vive en `src/game/`; los adaptadores de Leaflet y del navegador viven fuera de ella.
 - El cliente puede ofrecer feedback provisional, pero nunca decide una captura real.
 - La identidad de jugador usa un `deviceId` aleatorio local y un nick; no introducir cuentas ni datos personales para el MVP. El cambio de nick reinicia el progreso y el ranking excluye puntuaciones cero.
@@ -39,22 +40,21 @@ Estas reglas se aplican a todo el repositorio. La arquitectura explicada está e
 - Antes de activar un lugar en una temporada hay que revisar acceso público, seguridad, tráfico, precisión GPS y posibles alternativas.
 - No presentar datos de OpenStreetMap como ubicaciones oficiales sin esa revisión.
 
-## Pruebas previstas del juego
+## Pruebas del juego y límites de E2E
 
-Cuando se incorpore la infraestructura real, cubrir como mínimo la distancia y las reglas con tests unitarios, la mutation de captura y sus carreras con tests de integración, y el flujo de dos jugadores con contextos de navegador independientes en E2E.
+- La lógica de dominio y las funciones de Convex deben conservar sus pruebas unitarias y de integración. Las pruebas E2E actuales usan el modo local o respuestas simuladas; no equivalen a validar dos jugadores contra un deployment Convex real.
 
-## Estructura prevista
+## Estructura vigente (orientativa)
 
 - `src/layouts/`: layouts compartidos de página y artículo.
 - `src/components/layout/`: cabecera, pie y menú global.
 - `src/components/ui/`: piezas visuales reutilizables y pequeñas.
-- `src/components/sections/`: secciones de páginas.
-- `src/components/news/`: componentes específicos de noticias.
+- `src/components/about/`, `accommodations/`, `current-affairs/`, `game/`, `home/`, `layout/`, `ui/` y `world/`: componentes por superficie; comprobar el árbol real antes de crear una carpeta nueva.
 - `src/scripts/`: comportamiento cliente; cada módulo debe tener una responsabilidad clara.
 - `src/styles/`: tokens y estilos globales.
 - `src/pages/`: rutas, composición y datos de la página; no convertirlas en almacenes de componentes o CSS global.
 
-Si una carpeta aún no existe, créala solo cuando el primer cambio que la necesita esté justificado.
+La estructura puede evolucionar; comprobar los archivos existentes antes de describirla o añadir nuevas convenciones.
 
 ## Responsabilidades y tamaño de archivos
 
@@ -110,6 +110,19 @@ Si una carpeta aún no existe, créala solo cuando el primer cambio que la neces
 - Con `noUncheckedIndexedAccess`, comprobar la presencia de elementos antes de leer arrays, resultados de búsqueda o claves; no añadir `!` para acallar el checker.
 - Al corregir una frontera o acceso opcional, añadir una prueba focalizada para el dato válido y el caso ausente/malformado; conservar el comportamiento de los casos válidos.
 
+## Ramas, PR y releases
+
+- `main` es la rama de producción; `develop` es la rama de integración y Preview persistente (`develop.palomaresdelcampo.conquense.dev`). La Preview comparte `dev/europe-ireland` con el desarrollo local: usa solo datos de prueba y nunca secretos ni datos de producción.
+- Trabaja cada tarea en una rama corta creada desde `develop` (`feat/`, `fix/`, `docs/`, etc.) y abre una PR hacia `develop`. No hagas push directo a `develop` ni a `main`.
+- Para el trabajo interactivo de agentes, usa por defecto el worktree ya abierto en el repositorio; no crees worktrees persistentes adicionales. Crea uno temporal solo si hace falta trabajar en paralelo de verdad o una automatización del proyecto lo requiere, y nómbralo para identificar tarea y rama.
+- Antes de cambiar de rama, revisa `git status --short --branch` y `git worktree list`. Una rama solo puede estar abierta en un worktree a la vez: si ya está ocupada en otra ruta, no crees otro worktree ni muevas o borres el existente por iniciativa propia; informa de la ruta y pide autorización antes de cambiar esa disposición.
+- Retira un worktree temporal al terminar solo después de verificar que está limpio y que no contiene cambios del usuario; nunca uses `--force` para eliminarlo. Si tiene cambios, consérvalo y consulta antes de tocarlo.
+- Para integrar en `develop`, espera a que el check requerido `Verify` pase y revisa la Preview de Vercel. No fusiones PRs ni publiques cambios sin autorización explícita del usuario.
+- Tras confirmar en GitHub que una PR con base `develop` está fusionada, vuelve a `develop` y sincronízala con `origin/develop`: comprueba que el árbol está limpio y revisa `git worktree list`; cambia a `develop` solo si no está abierta en otro worktree; ejecuta `git fetch origin` y `git merge --ff-only origin/develop`; verifica que ambos SHA coinciden. Si hay cambios locales, otro worktree ocupa `develop` o las ramas divergen, no guardes, resetees, fusiones ni borres nada automáticamente: conserva el estado e informa antes de continuar.
+- Promueve cambios a producción mediante una PR de `develop` a `main`. Mantén la PR acotada; espera `Verify`, obtén autorización explícita para fusionar y verifica que Vercel desplegó el commit esperado en producción. Si hay un arreglo independiente en `main`, tráelo de vuelta a `develop` mediante PR.
+- Actualiza `CHANGELOG.md` en `Unreleased` con cambios relevantes para usuarios o para operar el proyecto. No cambies la versión de `package.json` en cada despliegue ni inventes versiones anteriores; crea etiquetas de versión solo para releases explícitos.
+- El procedimiento completo está en [`docs/development-workflow.md`](docs/development-workflow.md).
+
 ## Comandos y verificación
 
 Usar `pnpm` y versiones fijadas.
@@ -121,10 +134,11 @@ pnpm run build
 
 Antes de considerar terminado un cambio:
 
-1. Ejecutar el build.
-2. Verificar la ruta o interacción afectada en el navegador cuando sea UI.
-3. Ejecutar `git diff --check`.
-4. Revisar que el diff solo contiene los archivos previstos.
-5. No afirmar que algo está publicado o desplegado sin comprobar el estado remoto correspondiente.
+1. Ejecutar `pnpm format:check`, `pnpm typecheck`, `pnpm lint` y `pnpm test:coverage` cuando afecte al código o a la configuración.
+2. Para cambios que afecten a rutas o interacciones, ejecutar `CI=1 pnpm test:e2e`; para cambios de UI, comprobar el navegador y ejecutar `pnpm qa:visual` cuando el servidor esté disponible.
+3. Ejecutar `pnpm build`; tras el build, ejecutar `pnpm check:seo` cuando cambien páginas, contenido o metadatos.
+4. Ejecutar `git diff --check`.
+5. Revisar que el diff solo contiene los archivos previstos.
+6. No afirmar que algo está publicado o desplegado sin comprobar el estado remoto correspondiente.
 
 No añadir secretos, `.env`, credenciales ni artefactos generados fuera de `convex/_generated/`; tampoco `dist/`, `.astro/` ni `node_modules/` al repositorio.

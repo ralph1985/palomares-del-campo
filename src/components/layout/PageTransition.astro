@@ -1,0 +1,167 @@
+---
+interface Props {
+  enabled: boolean;
+}
+
+const { enabled } = Astro.props;
+---
+
+{enabled && (
+  <div
+    data-page-transition-overlay
+    data-effect="cube"
+    data-phase="idle"
+    data-renderer="none"
+    aria-hidden="true"
+    inert
+  >
+    <div data-page-transition-scene></div>
+  </div>
+)}
+
+<script>
+  import '../../scripts/page-transition.ts';
+</script>
+
+<style is:global>
+  html[data-page-transition-state] {
+    overflow: hidden;
+  }
+
+  html[data-page-transition-content-hidden='true'] > body > :not([data-page-transition-overlay]) {
+    visibility: hidden;
+  }
+
+  [data-page-transition-overlay] {
+    position: fixed;
+    z-index: 2147482000;
+    inset: 0;
+    display: none;
+    overflow: hidden;
+    isolation: isolate;
+    color: var(--color-surface-soft);
+    background: transparent;
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  [data-page-transition-overlay]::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background: var(--color-night);
+    content: '';
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  [data-page-transition-overlay][data-phase='preparing'],
+  [data-page-transition-overlay][data-phase='outgoing'],
+  [data-page-transition-overlay][data-phase='fallback-outgoing'],
+  [data-page-transition-overlay][data-phase='settling'],
+  html[data-page-transition-state='incoming'] [data-page-transition-overlay] {
+    display: grid;
+  }
+
+  [data-page-transition-overlay][data-phase='fallback-outgoing']::before {
+    animation: page-transition-cover 220ms ease-in both;
+    background: var(--color-night);
+  }
+
+  [data-page-transition-overlay][data-phase='settling'] {
+    opacity: 0;
+    transition: opacity 240ms ease-out;
+  }
+
+  [data-page-transition-overlay][data-phase='preparing'],
+  [data-page-transition-overlay][data-phase='outgoing'],
+  [data-page-transition-overlay][data-phase='fallback-outgoing'] {
+    pointer-events: auto;
+  }
+
+  [data-page-transition-scene] {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  [data-page-transition-scene] > .page-transition-cube-renderer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .page-transition-cube-panel {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    box-sizing: border-box;
+    padding: clamp(1.5rem, 7vw, 6rem);
+    border: 1px solid var(--color-ochre);
+    color: var(--color-surface-soft);
+    background: linear-gradient(145deg, var(--color-forest), var(--color-night) 72%);
+    text-align: center;
+    backface-visibility: hidden;
+  }
+
+  .page-transition-cube-panel span {
+    margin-bottom: 1.25rem;
+    color: var(--color-ochre);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .page-transition-cube-panel strong {
+    max-width: 12ch;
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-heading);
+    line-height: 1.05;
+  }
+
+  body[data-page-transition-face] {
+    box-sizing: border-box;
+    border: 1px solid var(--color-ochre);
+    scrollbar-width: none;
+  }
+
+  body[data-page-transition-face]::-webkit-scrollbar {
+    display: none;
+  }
+
+  body[data-page-transition-face] *,
+  body[data-page-transition-face] *::before,
+  body[data-page-transition-face] *::after {
+    animation: none !important;
+    caret-color: transparent !important;
+    cursor: default !important;
+    transition: none !important;
+  }
+
+  @keyframes page-transition-cover {
+    from {
+      opacity: 0.38;
+    }
+
+    to {
+      opacity: 0.9;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-page-transition-overlay][data-phase='settling'] {
+      transition-duration: 1ms;
+    }
+
+    [data-page-transition-overlay][data-phase='fallback-outgoing']::before {
+      animation-duration: 1ms;
+    }
+  }
+</style>

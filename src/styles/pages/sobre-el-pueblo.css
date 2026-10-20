@@ -3,22 +3,6 @@
   margin: 0 auto;
 }
 
-.about-hero {
-  overflow: hidden;
-  color: var(--color-surface-soft);
-  background: var(--color-ink);
-}
-
-.about-hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
-  align-items: center;
-  min-height: min(42rem, calc(100vh - 5.25rem));
-  gap: 3rem;
-  padding-top: clamp(4rem, 9vw, 8rem);
-  padding-bottom: clamp(4rem, 9vw, 8rem);
-}
-
 .eyebrow {
   margin: 0 0 1.25rem;
   color: var(--color-clay);
@@ -28,7 +12,7 @@
   text-transform: uppercase;
 }
 
-.about-hero .eyebrow,
+.split-hero--heritage .eyebrow,
 .landscape-section .eyebrow {
   color: var(--color-ochre);
 }
@@ -445,16 +429,11 @@ h2 {
 }
 
 @media (max-width: 52rem) {
-  .about-hero-grid,
   .history-grid,
   .landscape-grid,
   .traditions-grid,
   .sources-inner {
     grid-template-columns: 1fr;
-  }
-
-  .about-hero-grid {
-    min-height: auto;
   }
 
   .hero-emblem {

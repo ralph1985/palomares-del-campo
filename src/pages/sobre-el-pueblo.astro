@@ -2,6 +2,7 @@
 import ExternalLink from '../components/ui/ExternalLink.astro';
 import AboutEmblem from '../components/about/AboutEmblem.astro';
 import HeritageCard from '../components/about/HeritageCard.astro';
+import SplitHero from '../components/hero/SplitHero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { aboutPalomares } from '../data/about-palomares';
 import '../styles/pages/sobre-el-pueblo.css';
@@ -14,37 +15,35 @@ import '../styles/pages/sobre-el-pueblo.css';
   socialImageAlt={aboutPalomares.heroImage.alt}
 >
   <main>
-    <section class="about-hero" aria-labelledby="page-title">
-      <div class="about-shell about-hero-grid">
-        <div class="about-hero-copy">
-          <p class="eyebrow">{aboutPalomares.landingEyebrow}</p>
-          <h1 id="page-title">{aboutPalomares.landingTitle}</h1>
-          <p class="hero-intro">{aboutPalomares.landingIntro}</p>
-          <a class="hero-link" href="#historia">
-            Descubrir el pueblo <span aria-hidden="true">↓</span>
-          </a>
-        </div>
-
-        <div class="hero-emblem">
-          <AboutEmblem />
-          <div class="hero-emblem-orbit hero-emblem-orbit--one" aria-hidden="true"></div>
-          <div class="hero-emblem-orbit hero-emblem-orbit--two" aria-hidden="true"></div>
-          <figure class="hero-photo">
-            <img
-              src={aboutPalomares.heroImage.src}
-              alt={aboutPalomares.heroImage.alt}
-              width="592"
-              height="890"
-            />
-            <figcaption>
-              <ExternalLink href={aboutPalomares.heroImage.sourceHref}>
-                {aboutPalomares.heroImage.sourceLabel} <span aria-hidden="true">↗</span>
-              </ExternalLink>
-            </figcaption>
-          </figure>
-        </div>
+    <SplitHero variant="heritage" labelledBy="page-title">
+      <div slot="copy" class="about-hero-copy">
+        <p class="eyebrow">{aboutPalomares.landingEyebrow}</p>
+        <h1 id="page-title">{aboutPalomares.landingTitle}</h1>
+        <p class="hero-intro">{aboutPalomares.landingIntro}</p>
+        <a class="hero-link" href="#historia">
+          Descubrir el pueblo <span aria-hidden="true">↓</span>
+        </a>
       </div>
-    </section>
+
+      <div slot="visual" class="hero-emblem">
+        <AboutEmblem />
+        <div class="hero-emblem-orbit hero-emblem-orbit--one" aria-hidden="true"></div>
+        <div class="hero-emblem-orbit hero-emblem-orbit--two" aria-hidden="true"></div>
+        <figure class="hero-photo">
+          <img
+            src={aboutPalomares.heroImage.src}
+            alt={aboutPalomares.heroImage.alt}
+            width="592"
+            height="890"
+          />
+          <figcaption>
+            <ExternalLink href={aboutPalomares.heroImage.sourceHref}>
+              {aboutPalomares.heroImage.sourceLabel} <span aria-hidden="true">↗</span>
+            </ExternalLink>
+          </figcaption>
+        </figure>
+      </div>
+    </SplitHero>
 
     <section class="history-section" id="historia" aria-labelledby="history-title">
       <div class="about-shell history-grid">

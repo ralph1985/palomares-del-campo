@@ -47,6 +47,17 @@ const configureSubmissionHarness = async (page: Page, outcome: 'success' | 'rate
 };
 
 test.describe('Palomareños por el mundo', () => {
+  test('serves the town shield as the site favicon', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href', '/favicon.ico');
+    const response = await page.context().request.get(new URL('/favicon.ico', page.url()).href);
+    const iconHeader = Array.from((await response.body()).subarray(0, 4));
+
+    expect(response.status()).toBe(200);
+    expect(iconHeader).toEqual([0, 0, 1, 0]);
+  });
+
   test('loads the empty Leaflet map and the public proposal form', async ({ page }) => {
     await page.goto('/palomarenos-por-el-mundo/');
 
@@ -67,6 +78,27 @@ test.describe('Palomareños por el mundo', () => {
     await expect(
       page.getByRole('link', { name: 'Leer la información completa sobre privacidad' }),
     ).toHaveAttribute('href', '/privacidad/#palomarenos-por-el-mundo');
+  });
+
+  test('keeps proposal text controls at least 16px on narrow viewports', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/palomarenos-por-el-mundo/');
+
+    const fontSizes = await page
+      .locator(
+        '[data-palomarenos-form] input:not([type="checkbox"]):not([name="website"]), [data-palomarenos-form] textarea',
+      )
+      .evaluateAll((controls) =>
+        controls.map((control) => Number.parseFloat(window.getComputedStyle(control).fontSize)),
+      );
+
+    expect(fontSizes.length).toBeGreaterThan(0);
+    for (const fontSize of fontSizes) {
+      expect(
+        fontSize,
+        'text controls should not trigger mobile browser zoom',
+      ).toBeGreaterThanOrEqual(16);
+    }
   });
 
   test('exposes the detailed privacy information page', async ({ page }) => {

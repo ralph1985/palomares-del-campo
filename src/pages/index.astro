@@ -1,5 +1,6 @@
 ---
 import ActionLink from '../components/ui/ActionLink.astro';
+import EditorialHero from '../components/hero/EditorialHero.astro';
 import HomeAudienceCards from '../components/home/HomeAudienceCards.astro';
 import HomeEditorialGuide from '../components/home/HomeEditorialGuide.astro';
 import NewsSection from '../components/NewsSection.astro';
@@ -12,17 +13,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   schema="website"
 >
   <main id="inicio">
-    <section class="intro" id="proyecto" aria-labelledby="intro-title">
-      <p class="eyebrow">Palomares del Campo · Cuenca</p>
-      <h1 id="intro-title">Un nuevo espacio para descubrir el pueblo.</h1>
-      <p class="intro-copy">
+    <EditorialHero id="proyecto" labelledBy="intro-title" variant="paper-tall">
+      <p slot="eyebrow" class="eyebrow">
+        Palomares del Campo · Cuenca
+      </p>
+      <h1 slot="title" id="intro-title">
+        Un nuevo espacio para descubrir el pueblo.
+      </h1>
+      <p slot="summary" class="hero-intro">
         Este proyecto está tomando forma. Aquí reuniremos información, lugares e historias de
         Palomares del Campo en una experiencia clara y cercana.
       </p>
-      <ActionLink class="intro-action" variant="underline" href="/juego/">
+      <ActionLink slot="actions" variant="underline" href="/juego/">
         Probar el mapa del juego <span aria-hidden="true">→</span>
       </ActionLink>
-    </section>
+    </EditorialHero>
 
     <HomeAudienceCards />
     <HomeEditorialGuide />
@@ -31,47 +36,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <style>
-  .intro {
-    display: grid;
-    align-content: center;
-    width: min(100% - 2.5rem, 72rem);
-    min-height: calc(100vh - 10.5rem);
-    margin: 0 auto;
-    padding: 6rem 0;
-  }
-
-  .eyebrow {
-    margin: 0 0 1.25rem;
-    color: var(--color-clay);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-strong);
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-  }
-
-  h1 {
-    max-width: 11ch;
-    margin: 0;
-    color: var(--color-ink);
-    font-family: var(--font-serif);
-    font-size: clamp(3.4rem, 8vw, 7.5rem);
-    font-weight: 500;
-    letter-spacing: -0.065em;
-    line-height: 0.94;
-  }
-
-  .intro-copy {
-    max-width: 34rem;
-    margin: 2rem 0 0;
-    color: var(--color-muted);
-    font-size: clamp(1rem, 1.5vw, 1.2rem);
-    line-height: 1.7;
-  }
-
-  .intro-action {
-    margin-top: 2rem;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     :global(html) {
       scroll-behavior: auto;
@@ -82,11 +46,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     .intro,
     .footer-inner {
       width: min(100% - 2rem, 72rem);
-    }
-
-    .intro {
-      min-height: calc(100vh - 10.25rem);
-      padding: 4rem 0;
     }
   }
 </style>

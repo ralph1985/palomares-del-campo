@@ -1,0 +1,204 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'section'> {
+  fullHeight?: boolean;
+  id?: string;
+  labelledBy: string;
+  titleWidth?: 'narrow' | 'wide';
+  summaryWidth?: 'wide';
+  variant: 'ink-display' | 'sage-display' | 'ink-compact' | 'paper-tall';
+}
+
+const {
+  id,
+  labelledBy,
+  titleWidth,
+  summaryWidth,
+  fullHeight,
+  variant,
+  class: className,
+  ...sectionAttributes
+} = Astro.props;
+---
+
+<section
+  {...sectionAttributes}
+  id={id}
+  class:list={[
+    'editorial-hero',
+    `editorial-hero--${variant}`,
+    fullHeight && 'editorial-hero--viewport',
+    titleWidth && `editorial-hero--title-${titleWidth}`,
+    summaryWidth && `editorial-hero--summary-${summaryWidth}`,
+    className,
+  ]}
+  aria-labelledby={labelledBy}
+>
+  <div class="editorial-hero__inner">
+    <slot name="eyebrow" />
+    <slot name="title" />
+    <slot name="summary" />
+    {Astro.slots.has('notice') && (
+      <div class="editorial-hero__notice">
+        <slot name="notice" />
+      </div>
+    )}
+    {Astro.slots.has('actions') && (
+      <div class="editorial-hero__actions">
+        <slot name="actions" />
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .editorial-hero {
+    --hero-gutter: min(100% - 2.5rem, 72rem);
+    padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 9vw, 7rem);
+  }
+
+  .editorial-hero__inner {
+    width: var(--hero-gutter);
+    margin: 0 auto;
+  }
+
+  .editorial-hero--ink-display {
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
+  }
+
+  .editorial-hero--sage-display {
+    background: var(--color-sage);
+  }
+
+  .editorial-hero--ink-compact {
+    padding: clamp(3.5rem, 8vw, 7rem) 0;
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
+  }
+
+  .editorial-hero--paper-tall {
+    display: grid;
+    align-content: center;
+    min-height: calc(100vh - 10.5rem);
+    padding: 6rem 0;
+  }
+
+  .editorial-hero--viewport {
+    min-height: calc(100vh - 10.5rem);
+    padding: clamp(5rem, 14vw, 10rem) 0;
+  }
+
+  .editorial-hero--viewport :global(h1) {
+    max-width: 10ch;
+    font-size: clamp(4rem, 12vw, 9rem);
+    letter-spacing: -0.07em;
+    line-height: 0.9;
+  }
+
+  .editorial-hero--viewport :global(.hero-intro) {
+    max-width: 34rem;
+  }
+
+  .editorial-hero :global(.eyebrow) {
+    margin: 0 0 1.1rem;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .editorial-hero--ink-display :global(.eyebrow),
+  .editorial-hero--ink-compact :global(.eyebrow) {
+    color: var(--color-ochre);
+    letter-spacing: 0.14em;
+  }
+
+  .editorial-hero :global(h1) {
+    margin: 0;
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    font-size: clamp(3.3rem, 8vw, 7.5rem);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -0.06em;
+    line-height: 0.96;
+  }
+
+  .editorial-hero--ink-display :global(h1) {
+    max-width: 12ch;
+    color: var(--color-surface-soft);
+    font-size: clamp(4rem, 11vw, 8rem);
+    line-height: 0.95;
+  }
+
+  .editorial-hero--sage-display :global(h1) {
+    max-width: 11ch;
+  }
+
+  .editorial-hero--ink-compact :global(h1) {
+    max-width: 18ch;
+    color: var(--color-surface-soft);
+    font-size: clamp(2.4rem, 6vw, 5rem);
+  }
+
+  .editorial-hero--paper-tall :global(h1) {
+    max-width: 11ch;
+    font-size: clamp(3.4rem, 8vw, 7.5rem);
+    letter-spacing: -0.065em;
+    line-height: 0.94;
+  }
+
+  .editorial-hero--title-narrow :global(h1) {
+    max-width: 9ch;
+  }
+
+  .editorial-hero--title-wide :global(h1) {
+    max-width: 20ch;
+  }
+
+  .editorial-hero :global(.hero-intro) {
+    max-width: 38rem;
+    margin: 2rem 0 0;
+    color: var(--color-muted);
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    line-height: 1.7;
+  }
+
+  .editorial-hero--ink-display :global(.hero-intro) {
+    max-width: 36rem;
+    color: var(--color-sage-light);
+  }
+
+  .editorial-hero--summary-wide :global(.hero-intro) {
+    max-width: 42rem;
+  }
+
+  .editorial-hero--ink-compact :global(.hero-intro) {
+    margin-top: 1.5rem;
+    color: var(--color-night-text);
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    line-height: 1.6;
+  }
+
+  .editorial-hero--paper-tall :global(.hero-intro) {
+    max-width: 34rem;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+  }
+
+  .editorial-hero__actions {
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 38rem) {
+    .editorial-hero {
+      --hero-gutter: min(100% - 2rem, 72rem);
+    }
+
+    .editorial-hero--paper-tall {
+      min-height: calc(100vh - 10.25rem);
+      padding: 4rem 0;
+    }
+  }
+</style>

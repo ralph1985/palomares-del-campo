@@ -1,5 +1,6 @@
 ---
 import ActionLink from '../../components/ui/ActionLink.astro';
+import SplitHero from '../../components/hero/SplitHero.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import GameBallVisual from '../../components/game/GameBallVisual.astro';
 import GameMap from '../../components/game/GameMap.astro';
@@ -14,48 +15,46 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
   bodyClass="game-page"
 >
   <main>
-    <section class="game-hero" aria-labelledby="page-title">
-      <div class="game-hero-inner">
-        <div class="game-hero-copy">
-          <div class="game-kicker">
-            <span aria-hidden="true"></span>
-            {hasRemoteGame ? 'Partida en directo · Palomares' : 'Modo local · Palomares'}
-          </div>
-          <h1 id="page-title">
-            La bola está
-            <br />
-            en juego.
-          </h1>
-          <p>Encuentra la ubicación. Llega antes que el resto. Captura y sube puestos.</p>
-          <ActionLink class="game-hero-cta" variant="solid" href="#game-map">
-            Entrar en la partida <span aria-hidden="true">↓</span>
-          </ActionLink>
+    <SplitHero variant="game" labelledBy="page-title">
+      <div slot="copy" class="game-hero-copy">
+        <div class="game-kicker">
+          <span aria-hidden="true"></span>
+          {hasRemoteGame ? 'Partida en directo · Palomares' : 'Modo local · Palomares'}
         </div>
+        <h1 id="page-title">
+          La bola está
+          <br />
+          en juego.
+        </h1>
+        <p>Encuentra la ubicación. Llega antes que el resto. Captura y sube puestos.</p>
+        <ActionLink class="game-hero-cta" variant="solid" href="#game-map">
+          Entrar en la partida <span aria-hidden="true">↓</span>
+        </ActionLink>
+      </div>
 
-        <div class="match-card" aria-label="Estado de la partida">
-          <div class="match-card-topline">
-            <span class="match-card-live">
-              <span aria-hidden="true"></span>
-              {hasRemoteGame ? 'LIVE MATCH' : 'LOCAL MATCH'}
-            </span>
-            <span>EU · 01</span>
-          </div>
-          <GameBallVisual />
-          <strong>LA BOLA</strong>
-          <p>El objetivo cambia de punto cuando alguien captura.</p>
-          <div class="match-card-stats">
-            <span>
-              <small>FORMATO</small>
-              <b>GPS / REAL</b>
-            </span>
-            <span>
-              <small>ESTADO</small>
-              <b>{hasRemoteGame ? 'EN JUEGO' : 'DEMO LOCAL'}</b>
-            </span>
-          </div>
+      <div slot="visual" class="match-card" aria-label="Estado de la partida">
+        <div class="match-card-topline">
+          <span class="match-card-live">
+            <span aria-hidden="true"></span>
+            {hasRemoteGame ? 'LIVE MATCH' : 'LOCAL MATCH'}
+          </span>
+          <span>EU · 01</span>
+        </div>
+        <GameBallVisual />
+        <strong>LA BOLA</strong>
+        <p>El objetivo cambia de punto cuando alguien captura.</p>
+        <div class="match-card-stats">
+          <span>
+            <small>FORMATO</small>
+            <b>GPS / REAL</b>
+          </span>
+          <span>
+            <small>ESTADO</small>
+            <b>{hasRemoteGame ? 'EN JUEGO' : 'DEMO LOCAL'}</b>
+          </span>
         </div>
       </div>
-    </section>
+    </SplitHero>
 
     <GameMap />
     <GameRules />
@@ -90,16 +89,13 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
     min-height: 4rem;
   }
 
-  .game-hero {
-    position: relative;
-    overflow: hidden;
+  :global(.game-page .split-hero--game) {
     padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(2rem, 4vw, 3.25rem);
-    color: var(--color-surface-soft);
     background:
       radial-gradient(circle at 85% 30%, rgb(47 102 82 / 28%), transparent 24rem), var(--color-ink);
   }
 
-  .game-hero::after {
+  :global(.game-page .split-hero--game::after) {
     position: absolute;
     inset: 0;
     background-image:
@@ -109,17 +105,6 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
     content: '';
     mask-image: linear-gradient(to right, rgb(0 0 0 / 80%), transparent 75%);
     pointer-events: none;
-  }
-
-  .game-hero-inner {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
-    align-items: end;
-    gap: clamp(2rem, 8vw, 8rem);
-    width: min(100% - 2rem, 80rem);
-    margin: 0 auto;
   }
 
   .game-kicker {
@@ -227,12 +212,6 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
   }
 
   @media (max-width: 38rem) {
-    .game-hero-inner {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      width: min(100% - 2rem, 72rem);
-    }
-
     .match-card {
       max-width: none;
     }

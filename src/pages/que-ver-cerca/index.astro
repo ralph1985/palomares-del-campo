@@ -1,0 +1,215 @@
+---
+import NearbyPlaceCard from '../../components/nearby/NearbyPlaceCard.astro';
+import EditorialHero from '../../components/hero/EditorialHero.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { nearbyPlaceGroups, nearbyPlaces, nearbyPlacesReviewedAt } from '../../data/nearby-places';
+
+const formatDate = (date: string) =>
+  new Date(`${date}T00:00:00`).toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+---
+
+<BaseLayout
+  title="Qué ver cerca de Palomares del Campo"
+  description="Yacimientos, pueblos y espacios naturales para descubrir desde Palomares del Campo, con fuentes oficiales y condiciones de visita."
+>
+  <main>
+    <EditorialHero labelledBy="page-title" variant="ink-display" summaryWidth="wide">
+      <p slot="eyebrow" class="eyebrow">
+        Palomares del Campo · Visita
+      </p>
+      <h1 slot="title" id="page-title">
+        Qué ver cerca de Palomares del Campo
+      </h1>
+      <p slot="summary" class="hero-intro">
+        Una selección de patrimonio y naturaleza para conocer la zona desde Palomares. Algunas
+        visitas requieren reserva o dependen de la estación; consulta siempre la ficha oficial antes
+        de organizar el viaje.
+      </p>
+    </EditorialHero>
+
+    <section class="nearby-story" aria-labelledby="story-title">
+      <div class="nearby-shell nearby-story-inner">
+        <div>
+          <p class="eyebrow">Una historia del territorio</p>
+          <h2 id="story-title">Roma y el brillo del lapis specularis</h2>
+        </div>
+        <p>
+          Segóbriga y las minas de la comarca cuentan una historia conectada por el lapis
+          specularis, el yeso translúcido que se extraía en la zona. La Mora Encantada y las Cuevas
+          de Sanabrio permiten acercarse a esa huella minera; son visitas distintas y sus accesos
+          deben confirmarse por separado.
+        </p>
+      </div>
+    </section>
+
+    {nearbyPlaceGroups.map((group) => {
+      const places = nearbyPlaces.filter((place) => place.group === group.id);
+      return (
+        <section
+          class:list={['nearby-section', { 'nearby-section--alternate': group.id === 'day-trip' }]}
+          aria-labelledby={`nearby-group-${group.id}`}
+        >
+          <div class="nearby-shell">
+            <div class="nearby-section-heading">
+              <p class="eyebrow">{group.id === 'nearby' ? 'Alrededores' : 'Para una jornada'}</p>
+              <h2 id={`nearby-group-${group.id}`}>{group.title}</h2>
+              <p>{group.intro}</p>
+            </div>
+            <div class="nearby-grid">
+              {places.map((place) => (
+                <NearbyPlaceCard place={place} />
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    })}
+
+    <section class="nearby-sources" aria-label="Criterio y fecha de revisión">
+      <div class="nearby-shell">
+        <p>
+          Las rutas en coche que aparecen son estimaciones orientativas basadas en OpenStreetMap y
+          llegan al lugar nombrado en cada ficha; no reflejan tráfico, aparcamiento ni cambios en el
+          acceso. Los horarios, tarifas, reservas y condiciones estacionales pueden cambiar:
+          consúltalos en la fuente oficial.
+        </p>
+        <p>Fuentes y accesos revisados el {formatDate(nearbyPlacesReviewedAt)}.</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .nearby-shell {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    margin: 0 0 1.1rem;
+    color: var(--color-ochre);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h1,
+  h2 {
+    max-width: 18ch;
+    margin: 0;
+    font-family: var(--font-serif);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -0.055em;
+    line-height: 0.98;
+    overflow-wrap: anywhere;
+  }
+
+  h2 {
+    font-size: clamp(2.5rem, 5vw, 4.8rem);
+  }
+
+  .nearby-story .eyebrow,
+  .nearby-section-heading .eyebrow {
+    color: var(--color-clay);
+  }
+
+  .nearby-story {
+    padding: clamp(3.5rem, 8vw, 6rem) 0;
+    background: var(--color-sage);
+  }
+
+  .nearby-story-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 7vw, 7rem);
+    align-items: end;
+  }
+
+  .nearby-story-inner > p {
+    max-width: 42rem;
+    margin: 0;
+    color: var(--color-ink);
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.75;
+  }
+
+  .nearby-section {
+    padding: clamp(4rem, 9vw, 7rem) 0;
+    background: var(--color-surface);
+  }
+
+  .nearby-section--alternate {
+    background: var(--color-sage-light);
+  }
+
+  .nearby-section-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.7fr);
+    gap: 1rem 3rem;
+    align-items: end;
+    margin-bottom: 2.5rem;
+  }
+
+  .nearby-section-heading .eyebrow {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+    color: var(--color-clay);
+  }
+
+  .nearby-section-heading h2 {
+    max-width: 14ch;
+  }
+
+  .nearby-section-heading > p:last-child {
+    max-width: 36rem;
+    margin: 0;
+    color: var(--color-ink);
+    line-height: 1.65;
+  }
+
+  .nearby-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    align-items: stretch;
+  }
+
+  .nearby-sources {
+    padding: 2.5rem 0 4rem;
+    color: var(--color-muted);
+    background: var(--color-surface-soft);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .nearby-sources p {
+    max-width: 55rem;
+    margin: 0;
+  }
+
+  .nearby-sources p + p {
+    margin-top: 0.75rem;
+  }
+
+  @media (max-width: 48rem) {
+    .nearby-story-inner,
+    .nearby-section-heading {
+      grid-template-columns: 1fr;
+    }
+
+    .nearby-section-heading .eyebrow {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .nearby-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

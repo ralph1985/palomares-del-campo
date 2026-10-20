@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '../components/ui/ExternalLink.astro';
+import EditorialHero from '../components/hero/EditorialHero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { municipalContact } from '../data/site-footer';
 
@@ -10,16 +11,18 @@ const pageDescription =
 
 <BaseLayout title={`${pageTitle} · Palomares del Campo`} description={pageDescription}>
   <main>
-    <section class="legal-hero" aria-labelledby="page-title">
-      <div class="legal-shell">
-        <p class="eyebrow">Información jurídica</p>
-        <h1 id="page-title">{pageTitle}</h1>
-        <p class="draft-warning" role="note">
-          Borrador de desarrollo: contiene datos de prueba que deben sustituirse por los datos
-          oficiales antes de publicar este aviso.
-        </p>
-      </div>
-    </section>
+    <EditorialHero labelledBy="page-title" variant="ink-compact">
+      <p slot="eyebrow" class="eyebrow">
+        Información jurídica
+      </p>
+      <h1 slot="title" id="page-title">
+        {pageTitle}
+      </h1>
+      <p slot="summary" class="draft-warning" role="note">
+        Borrador de desarrollo: contiene datos de prueba que deben sustituirse por los datos
+        oficiales antes de publicar este aviso.
+      </p>
+    </EditorialHero>
 
     <section class="legal-section" aria-labelledby="identification-title">
       <div class="legal-shell legal-grid">
@@ -152,12 +155,10 @@ const pageDescription =
 </BaseLayout>
 
 <style>
-  .legal-hero,
   .legal-section {
     padding: clamp(3.5rem, 8vw, 7rem) 0;
   }
 
-  .legal-hero,
   .legal-section-dark {
     color: var(--color-surface-soft);
     background: var(--color-ink);
@@ -168,7 +169,6 @@ const pageDescription =
     margin: 0 auto;
   }
 
-  .legal-hero h1,
   .legal-section h2 {
     max-width: 18ch;
     margin: 0;
@@ -191,6 +191,10 @@ const pageDescription =
     font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
     text-transform: uppercase;
+  }
+
+  .legal-section:not(.legal-section-dark) .eyebrow {
+    color: var(--color-clay);
   }
 
   .draft-warning {
