@@ -292,6 +292,7 @@ scripts/
 ├── fetch-bandos.ts
 ├── sync-bandos-cron.sh
 ├── bandos-sync-policy.ts
+├── sync-main-to-develop.ts
 ├── notify-bando-sync.ts
 ├── ensure-main-synced.ts
 ├── verify-seo.ts
@@ -510,11 +511,11 @@ El importador convierte HTML a Markdown, valida URLs HTTPS, restringe los adjunt
 
 ### Sincronización automatizada de bandos
 
-`scripts/sync-bandos-cron.sh` está diseñado para ser invocado desde cron en un host con Node.js, pnpm, GitHub CLI y credenciales locales. El repositorio no contiene una instalación de cron ni un workflow de GitHub que pruebe que el proceso esté programado.
+`scripts/sync-bandos-cron.sh` está diseñado para ser invocado desde cron en un host con Node.js, pnpm, GitHub CLI y credenciales locales. El repositorio no contiene la instalación de cron; su estado real depende del host.
 
-El flujo implementado bloquea ejecuciones concurrentes, alinea `main` con `origin/main` mediante `ensure-main-synced.ts`, trabaja desde un worktree de `origin/main`, ejecuta el importador RSS y valida formato, lint, Vitest y build. Si hay cambios, limita la rama y la Pull Request a `src/content/bandos/*.md`, espera los checks obligatorios, fusiona la PR y vuelve a alinear `main`.
+El flujo bloquea ejecuciones concurrentes, alinea `main` con `origin/main` mediante `ensure-main-synced.ts`, trabaja desde un worktree de `origin/main`, ejecuta el importador RSS y valida formato, lint, Vitest y build. Si hay cambios, limita la rama y la PR a `src/content/bandos/*.md`, espera los checks obligatorios y fusiona la PR en `main`. Cuando esta versión esté instalada en el checkout `main` del cron, `sync-main-to-develop.ts` crea o actualiza una rama temporal desde `origin/develop`, integra `origin/main` y abre una PR hacia `develop`; espera el `Verify` obligatorio y la fusiona solo cuando pasa. La promoción se vuelve a reconciliar en las ejecuciones sin novedades RSS para reintentar una PR pendiente. Si hay conflictos o checks fallidos, se conserva la PR y no se fuerza ninguna rama protegida.
 
-`SYNC_BANDOS_DRY_RUN=1` detiene el flujo antes de crear la rama de bandos, la PR, la fusión y las notificaciones. No equivale a un dry-run completamente no destructivo del checkout: `ensure-main-synced.ts` se ejecuta antes de comprobar la variable y puede crear una rama de respaldo y alinear `main` con `origin/main` si detecta divergencia. Tras una fusión normal, `notify-bando-sync.ts` puede enviar un correo SMTP con Nodemailer; si falta la configuración o falla el envío, la PR ya fusionada no se deshace.
+`SYNC_BANDOS_DRY_RUN=1` impide crear o fusionar las PRs de bandos y de promoción, y omite la notificación. No equivale a un dry-run completamente no destructivo del checkout: `ensure-main-synced.ts` se ejecuta antes de comprobar la variable y puede crear una rama de respaldo y alinear `main` con `origin/main` si detecta divergencia. Tras la fusión de bandos, `notify-bando-sync.ts` puede enviar un correo SMTP con Nodemailer; si falta la configuración o falla el envío, la PR de bandos ya fusionada no se deshace.
 
 ## Rendimiento y carga de cliente
 

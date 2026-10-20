@@ -9,6 +9,7 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 #### Changed
 
 - Reutilizado `ActionLink` en los enlaces de regreso de noticias y bandos, con foco visible consistente.
+- Sincronizada automáticamente la rama `main` hacia `develop` mediante una PR protegida tras cada ejecución del importador de bandos.
 
 ### 2026-10-19
 

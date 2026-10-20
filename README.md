@@ -75,11 +75,11 @@ Luego arranca Astro con `pnpm dev`. El deployment `dev/europe-ireland` se compar
 
 `pnpm fetch-bandos` usa por defecto el RSS oficial de Bandomovil como fuente incremental. Añade y actualiza comunicados, conserva los Markdown históricos que no aparezcan en la ventana del RSS y mantiene los adjuntos externos. El backfill histórico existente se ejecuta con `BANDOS_IMPORT_MODE=archive pnpm fetch-bandos`; ese modo está restringido a los años configurados en `scripts/fetch-bandos.ts` y reconcilia el directorio generado.
 
-`pnpm sync-bandos` está diseñado para cron en un host con Node.js, pnpm y una sesión válida de GitHub CLI. Bloquea ejecuciones concurrentes, alinea `main`, trabaja en un worktree temporal, ejecuta la importación incremental, valida el contenido y crea una PR limitada a `src/content/bandos/*.md`; no publica directamente en `main`. El repositorio no demuestra que el cron esté instalado.
+`pnpm sync-bandos` está diseñado para cron en un host con Node.js, pnpm y una sesión válida de GitHub CLI. Bloquea ejecuciones concurrentes, alinea `main`, trabaja en un worktree temporal, ejecuta la importación incremental, valida el contenido y crea una PR limitada a `src/content/bandos/*.md`; fusiona en `main` cuando los checks obligatorios están verdes. Después crea o actualiza una PR de `main` hacia `develop`, espera `Verify` y la fusiona automáticamente cuando pasa. También reconcilia promociones pendientes aunque el RSS no traiga bandos nuevos. Esta lógica nueva solo se activa cuando llega a la rama `main` desde la que se ejecuta el cron; a partir de ahí, las actualizaciones de bandos ya no esperan a una release posterior de `develop`.
 
 El aviso posterior a la fusión puede enviarse por SMTP mediante Nodemailer. La configuración se mantiene fuera de Git (`BANDOS_SMTP_HOST`, `BANDOS_SMTP_PORT`, `BANDOS_SMTP_SECURE`, `BANDOS_SMTP_USER`, `BANDOS_SMTP_PASSWORD`, `BANDOS_NOTIFY_FROM` y `BANDOS_NOTIFY_TO`). `BANDOS_SITE_URL` es opcional. No se envían notificaciones por Telegram.
 
-`SYNC_BANDOS_DRY_RUN=1 pnpm sync-bandos` omite la rama de bandos, la PR, la fusión y las notificaciones. No evita necesariamente la alineación inicial de `main`: consulta `docs/architecture.md` antes de tratarlo como un dry-run sin efectos sobre el checkout. La instalación de cron, SMTP y auto-merge requiere un host autorizado y configuración local.
+`SYNC_BANDOS_DRY_RUN=1 pnpm sync-bandos` omite la rama y la PR de bandos, su fusión, la notificación y la promoción a `develop`. No evita necesariamente la alineación inicial de `main`: consulta `docs/architecture.md` antes de tratarlo como un dry-run sin efectos sobre el checkout. La instalación de cron, SMTP y auto-merge requiere un host autorizado y configuración local.
 
 ## Estructura
 

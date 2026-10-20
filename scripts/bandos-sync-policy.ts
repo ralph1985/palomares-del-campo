@@ -1,9 +1,11 @@
 export const bandosPullRequestTitle = 'chore: actualizar bandos';
+export const mainToDevelopPullRequestTitle = 'chore: integrar main en develop';
 
 type BandosPullRequest = {
   number: number;
   title: string;
   headRefName: string;
+  baseRefName?: string;
   url: string;
   state: string;
 };
@@ -31,6 +33,17 @@ export function buildBandosBranchName(date: Date = new Date()): string {
   return `chore/bandos-sync-${timestamp}`;
 }
 
+export function buildMainToDevelopBranchName(date: Date = new Date()): string {
+  const timestamp = date
+    .toISOString()
+    .replace(/[-:]/g, '')
+    .replace(/\.\d{3}Z$/, 'Z')
+    .replace('T', '-')
+    .replace('Z', '');
+
+  return `chore/main-to-develop-${timestamp}`;
+}
+
 export function findOpenBandosPullRequest(
   pullRequests: BandosPullRequest[],
 ): BandosPullRequest | null {
@@ -39,6 +52,20 @@ export function findOpenBandosPullRequest(
       (pullRequest) =>
         String(pullRequest.state).toUpperCase() === 'OPEN' &&
         pullRequest.title === bandosPullRequestTitle,
+    ) ?? null
+  );
+}
+
+export function findOpenMainToDevelopPullRequest(
+  pullRequests: BandosPullRequest[],
+): BandosPullRequest | null {
+  return (
+    pullRequests.find(
+      (pullRequest) =>
+        String(pullRequest.state).toUpperCase() === 'OPEN' &&
+        pullRequest.title === mainToDevelopPullRequestTitle &&
+        pullRequest.baseRefName === 'develop' &&
+        /^chore\/main-to-develop-\d{8}-\d{6}$/.test(pullRequest.headRefName),
     ) ?? null
   );
 }
