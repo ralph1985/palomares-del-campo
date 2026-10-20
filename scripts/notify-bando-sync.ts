@@ -135,6 +135,7 @@ export async function getChangedBandoFiles(commit: string): Promise<string[]> {
     '--no-commit-id',
     '--name-only',
     '-r',
+    `${commit}^1`,
     commit,
     '--',
     'src/content/bandos',
