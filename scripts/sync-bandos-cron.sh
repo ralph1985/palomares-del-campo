@@ -126,6 +126,7 @@ else
   (
     cd "$WORKTREE_DIR"
     "$PNPM_BIN" run format:check
+    "$PNPM_BIN" run typecheck
     "$PNPM_BIN" run lint
     "$PNPM_BIN" run test
     "$PNPM_BIN" run build

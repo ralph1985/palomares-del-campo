@@ -164,7 +164,7 @@ test.describe('current affairs sections', () => {
     await expect(page.getByText('No hay bandos que coincidan con estos filtros.')).toBeVisible();
     await search.fill('autobús');
 
-    await page.locator('[data-bando-card] h2 a').first().click();
+    await page.locator('[data-bando-card]:visible h2 a').first().click();
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await expect(page.getByText('Fuente original:')).toBeVisible();
     await expect(page.getByRole('link', { name: /Palomares del Campo Informa/ })).toBeVisible();
