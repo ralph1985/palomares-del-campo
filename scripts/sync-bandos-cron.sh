@@ -113,6 +113,12 @@ else
     [[ -z "$(/usr/bin/git -C "$WORKTREE_DIR" status --porcelain -- src/content/bandos)" ]]
   then
     echo 'No hay bandos nuevos o actualizados.'
+    if [[ "${SYNC_BANDOS_DRY_RUN:-0}" == '1' ]]; then
+      echo 'Dry run: se omite la sincronización de main hacia develop.'
+      exit 0
+    fi
+    PHASE='reconciliación de main hacia develop'
+    "$PNPM_BIN" exec tsx scripts/sync-main-to-develop.ts
     exit 0
   fi
 
@@ -251,4 +257,7 @@ if ! "$PNPM_BIN" exec tsx scripts/notify-bando-sync.ts "$MERGE_COMMIT"; then
   echo "Aviso de sincronización no enviado; la PR sí quedó fusionada en $MERGE_COMMIT." >&2
 fi
 
-echo "Sincronización de bandos completada y main alineada en $MERGE_COMMIT."
+PHASE='reconciliación de main hacia develop'
+"$PNPM_BIN" exec tsx scripts/sync-main-to-develop.ts
+
+echo "Sincronización de bandos completada y main integrada en develop (${MERGE_COMMIT})."
