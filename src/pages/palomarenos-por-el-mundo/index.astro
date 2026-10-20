@@ -1,6 +1,7 @@
 ---
 import WorldMap from '../../components/world/WorldMap.astro';
 import WorldSubmissionForm from '../../components/world/WorldSubmissionForm.astro';
+import EditorialHero from '../../components/hero/EditorialHero.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
@@ -9,16 +10,18 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   description="Mapa de historias de personas vinculadas a Palomares del Campo que viven fuera."
 >
   <main>
-    <section class="world-hero" aria-labelledby="page-title">
-      <div class="world-shell">
-        <p class="eyebrow">Palomares del Campo · Comunidad</p>
-        <h1 id="page-title">Palomareños por el mundo</h1>
-        <p class="hero-intro">
-          El pueblo también se extiende allí donde viven quienes lo llevan consigo. Descubre sus
-          historias y comparte la tuya.
-        </p>
-      </div>
-    </section>
+    <EditorialHero labelledBy="page-title" variant="sage-display" titleWidth="narrow">
+      <p slot="eyebrow" class="eyebrow">
+        Palomares del Campo · Comunidad
+      </p>
+      <h1 slot="title" id="page-title">
+        Palomareños por el mundo
+      </h1>
+      <p slot="summary" class="hero-intro">
+        El pueblo también se extiende allí donde viven quienes lo llevan consigo. Descubre sus
+        historias y comparte la tuya.
+      </p>
+    </EditorialHero>
 
     <section class="world-intro" aria-labelledby="intro-title">
       <div class="world-shell world-intro-grid">
@@ -75,11 +78,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     margin: 0 auto;
   }
 
-  .world-hero {
-    padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 9vw, 7rem);
-    background: var(--color-sage);
-  }
-
   .eyebrow {
     margin: 0 0 1.25rem;
     color: var(--color-clay);
@@ -98,22 +96,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     line-height: 0.98;
   }
 
-  h1 {
-    max-width: 9ch;
-    font-size: clamp(3.3rem, 8vw, 7.5rem);
-  }
-
   h2 {
     max-width: 14ch;
     font-size: clamp(2.4rem, 5vw, 5rem);
-  }
-
-  .hero-intro {
-    max-width: 38rem;
-    margin: 2rem 0 0;
-    color: var(--color-muted);
-    font-size: 1.1rem;
-    line-height: 1.7;
   }
 
   .world-intro,

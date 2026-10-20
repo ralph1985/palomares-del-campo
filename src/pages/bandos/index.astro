@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BandoCard from '../../components/BandoCard.astro';
 import CollectionArchive from '../../components/CollectionArchive.astro';
+import EditorialHero from '../../components/hero/EditorialHero.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const posts = (await getCollection('bandos')).sort(
@@ -18,16 +19,18 @@ const years = [...new Set(posts.map((post) => post.data.date.getFullYear()))].so
   description="Bandos y comunicados publicados por el Ayuntamiento de Palomares del Campo."
 >
   <main>
-    <section class="bandos-hero" aria-labelledby="page-title">
-      <div class="bandos-hero-inner">
-        <p class="eyebrow">Palomares del Campo · Actualidad</p>
-        <h1 id="page-title">Bandos</h1>
-        <p>
-          Comunicados municipales publicados en el canal de Palomares del Campo Informa, con fecha,
-          categoría y enlace a la fuente original.
-        </p>
-      </div>
-    </section>
+    <EditorialHero labelledBy="page-title" variant="ink-display">
+      <p slot="eyebrow" class="eyebrow">
+        Palomares del Campo · Actualidad
+      </p>
+      <h1 slot="title" id="page-title">
+        Bandos
+      </h1>
+      <p slot="summary" class="hero-intro">
+        Comunicados municipales publicados en el canal de Palomares del Campo Informa, con fecha,
+        categoría y enlace a la fuente original.
+      </p>
+    </EditorialHero>
 
     <CollectionArchive
       scope="bando"
@@ -51,43 +54,3 @@ const years = [...new Set(posts.map((post) => post.data.date.getFullYear()))].so
     </CollectionArchive>
   </main>
 </BaseLayout>
-
-<style>
-  .bandos-hero {
-    padding: clamp(5rem, 13vw, 10rem) 0 clamp(4rem, 9vw, 7rem);
-    background: var(--color-ink);
-  }
-  .bandos-hero-inner {
-    width: min(100% - 2.5rem, 72rem);
-    margin: 0 auto;
-    color: var(--color-surface-soft);
-  }
-  .eyebrow {
-    margin: 0 0 1rem;
-    color: var(--color-ochre);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-strong);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-  h1 {
-    margin: 0;
-    font-family: var(--font-serif);
-    font-size: clamp(4rem, 11vw, 8rem);
-    font-weight: 500;
-    letter-spacing: -0.06em;
-    line-height: 0.95;
-  }
-  .bandos-hero p:last-child {
-    max-width: 36rem;
-    margin: 2rem 0 0;
-    color: var(--color-sage-light);
-    font-size: clamp(1rem, 1.6vw, 1.2rem);
-    line-height: 1.65;
-  }
-  @media (max-width: 38rem) {
-    .bandos-hero-inner {
-      width: min(100% - 2rem, 72rem);
-    }
-  }
-</style>

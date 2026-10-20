@@ -101,6 +101,7 @@ src/pages/
 ├── agenda/index.astro                  /agenda/
 ├── alojamientos/index.astro            /alojamientos/
 ├── rutas/index.astro                   /rutas/
+├── que-ver-cerca/index.astro           /que-ver-cerca/
 ├── juego/index.astro                   /juego/
 ├── avisos/index.astro                  /avisos/ (redirección 301)
 ├── noticias/index.astro                /noticias/
@@ -143,6 +144,9 @@ src/components/
 │   └── AccommodationCard.astro
 ├── current-affairs/
 │   └── CurrentAffairsEmptyState.astro
+├── hero/
+│   ├── EditorialHero.astro
+│   └── SplitHero.astro
 ├── world/
 │   ├── WorldMap.astro
 │   └── WorldSubmissionForm.astro
@@ -170,7 +174,7 @@ src/components/
     └── ExternalLink.astro
 ```
 
-Los componentes de `layout/` forman el shell común. `CollectionArchive` y `CollectionSearch` son compartidos por noticias y bandos. Los componentes de `game/` componen la superficie del juego; la lógica del mapa y la comunicación con Convex están en scripts de cliente separados.
+Los componentes de `layout/` forman el shell común. `EditorialHero` comparte la estructura de una columna de las páginas editoriales y `SplitHero` el patrón de dos columnas de Sobre el pueblo y La bola; ambos conservan el contenido mediante slots. `CurrentAffairsEmptyState` usa `EditorialHero` para mantener su aviso y atributos de estado. `CollectionArchive` y `CollectionSearch` son compartidos por noticias y bandos. Los componentes de `game/` componen la superficie del juego; la lógica del mapa y la comunicación con Convex están en scripts de cliente separados.
 
 ### `src/scripts/`
 

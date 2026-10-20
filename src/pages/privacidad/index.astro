@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '../../components/ui/ExternalLink.astro';
+import EditorialHero from '../../components/hero/EditorialHero.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { municipalContact } from '../../data/site-footer';
 
@@ -10,15 +11,17 @@ const pageDescription =
 
 <BaseLayout title={`${pageTitle} · Palomares del Campo`} description={pageDescription}>
   <main>
-    <section class="privacy-hero" aria-labelledby="page-title">
-      <div class="privacy-shell">
-        <p class="eyebrow">Información transparente</p>
-        <h1 id="page-title">{pageTitle}</h1>
-        <p class="hero-intro">
-          Explicamos qué datos tratamos, para qué los usamos y qué puedes hacer con ellos.
-        </p>
-      </div>
-    </section>
+    <EditorialHero labelledBy="page-title" variant="ink-compact">
+      <p slot="eyebrow" class="eyebrow">
+        Información transparente
+      </p>
+      <h1 slot="title" id="page-title">
+        {pageTitle}
+      </h1>
+      <p slot="summary" class="hero-intro">
+        Explicamos qué datos tratamos, para qué los usamos y qué puedes hacer con ellos.
+      </p>
+    </EditorialHero>
 
     <section class="privacy-section" aria-labelledby="general-title">
       <div class="privacy-shell privacy-grid">
@@ -187,14 +190,8 @@ const pageDescription =
 </BaseLayout>
 
 <style>
-  .privacy-hero,
   .privacy-section {
     padding: clamp(3.5rem, 8vw, 7rem) 0;
-  }
-
-  .privacy-hero {
-    color: var(--color-surface-soft);
-    background: var(--color-ink);
   }
 
   .privacy-shell {
@@ -202,7 +199,6 @@ const pageDescription =
     margin: 0 auto;
   }
 
-  .privacy-hero h1,
   .privacy-section h2 {
     max-width: 16ch;
     margin: 0;
@@ -214,14 +210,6 @@ const pageDescription =
     line-height: 0.96;
   }
 
-  .hero-intro {
-    max-width: 36rem;
-    margin: 1.5rem 0 0;
-    color: var(--color-night-text);
-    font-size: clamp(1.05rem, 2vw, 1.3rem);
-    line-height: 1.6;
-  }
-
   .eyebrow {
     margin: 0 0 0.9rem;
     color: var(--color-ochre);
@@ -229,6 +217,10 @@ const pageDescription =
     font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
     text-transform: uppercase;
+  }
+
+  .privacy-section:not(.privacy-section-dark) .eyebrow {
+    color: var(--color-clay);
   }
 
   .privacy-grid {
