@@ -98,7 +98,9 @@ La estructura puede evolucionar; comprobar los archivos existentes antes de desc
 - Validar cada nueva colección en `src/content.config.ts`.
 - Las entradas Markdown deben conservar fecha, fuente y enlace original cuando proceda.
 - No inventar datos ni presentar una inferencia como hecho publicado.
-- No iniciar todavía scripts de descubrimiento automático de noticias.
+- El descubrimiento automático de noticias para Palomares está aprobado: usa búsqueda Codex en modo solo lectura, fuentes HTTPS de la lista permitida y solo historias verificables con relación directa al municipio; excluye bandos, avisos, agendas, empleo y opinión.
+- Cada propuesta de noticias debe escribirse solo en `src/content/noticias`, abrir una PR revisable contra `main` y enviar un correo con el enlace de GitHub. No fusionar ni publicar automáticamente; detener nuevas propuestas si hay una PR de noticias automatizada pendiente.
+- No instalar ni modificar el cron de noticias hasta recibir autorización explícita; la ejecución actual es manual. Mantener la atribución y no inventar hechos.
 
 ## TypeScript y fronteras de datos
 
