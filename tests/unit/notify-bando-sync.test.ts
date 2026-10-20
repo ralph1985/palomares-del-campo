@@ -1,8 +1,13 @@
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   buildNotificationHtml,
   buildNotificationText,
   escapeHtml,
+  getChangedBandoFiles,
   parseBandoSourceUrl,
   parseBandoTitle,
   readSmtpConfiguration,
@@ -69,5 +74,45 @@ describe('bando synchronization notification', () => {
     expect(() => readSmtpConfiguration({ BANDOS_SMTP_HOST: 'smtp.example.test' })).toThrow(
       'BANDOS_SMTP_USER, BANDOS_SMTP_PASSWORD, BANDOS_NOTIFY_FROM, BANDOS_NOTIFY_TO',
     );
+  });
+
+  it('finds bandos introduced by a merge commit relative to its first parent', async () => {
+    const originalWorkingDirectory = process.cwd();
+    const repository = mkdtempSync(path.join(tmpdir(), 'bandos-notify-merge-'));
+    const runGit = (args: string[]) =>
+      execFileSync('git', args, {
+        cwd: repository,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }).trim();
+
+    try {
+      runGit(['init', '--initial-branch=main']);
+      runGit(['config', 'user.name', 'Test']);
+      runGit(['config', 'user.email', 'test@example.invalid']);
+      runGit(['config', 'commit.gpgsign', 'false']);
+      writeFileSync(path.join(repository, 'README.md'), 'base\n');
+      runGit(['add', 'README.md']);
+      runGit(['commit', '-m', 'base']);
+
+      runGit(['switch', '-c', 'bandos']);
+      const bandoPath = path.join(repository, 'src/content/bandos/123-aviso.md');
+      mkdirSync(path.dirname(bandoPath), { recursive: true });
+      writeFileSync(bandoPath, "title: 'Aviso de prueba'\n");
+      runGit(['add', 'src/content/bandos/123-aviso.md']);
+      runGit(['commit', '-m', 'add bando']);
+
+      runGit(['switch', 'main']);
+      runGit(['merge', '--no-ff', 'bandos', '-m', 'merge bandos']);
+      const mergeCommit = runGit(['rev-parse', 'HEAD']);
+      process.chdir(repository);
+
+      await expect(getChangedBandoFiles(mergeCommit)).resolves.toEqual([
+        'src/content/bandos/123-aviso.md',
+      ]);
+    } finally {
+      process.chdir(originalWorkingDirectory);
+      rmSync(repository, { recursive: true, force: true });
+    }
   });
 });
