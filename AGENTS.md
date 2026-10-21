@@ -10,6 +10,9 @@ Estas reglas se aplican a todo el repositorio. La arquitectura explicada está e
 - El juego dispone de modo local y modo remoto. En remoto, Convex es la autoridad de capturas, puntuación, ranking y presencia; el modo local no representa una partida compartida.
 - Las propuestas de Palomareños se guardan en Convex, empiezan pendientes y solo las aprobadas forman parte de la proyección pública. No exponer datos de contacto ni crear un panel público de administración sin decisión explícita.
 - Las noticias externas y los comunicados municipales son colecciones distintas y no deben mezclarse.
+- La Agenda es una proyección de eventos, servicios fechados y plazos/trámites con fuente oficial visible. No inferir fechas, horas, lugares ni destinatarios; omitir publicaciones ambiguas y horarios permanentes. El generador de bandos solo modifica `src/data/agenda-bandos.generated.ts`; las entradas verificadas desde adjuntos y fuentes oficiales se mantienen en `src/data/agenda-manual.ts`.
+- Las fechas vencidas permanecen en los datos y pasan al archivo cerrado por defecto según `Europe/Madrid`; no borrarlas por haber pasado.
+- No ejecutar `pnpm sync-bandos`, instalar cron ni enviar notificaciones mientras se trabaje en Agenda, salvo petición explícita.
 - Three.js es una mejora visual opcional. La navegación y la accesibilidad del menú deben funcionar aunque Three.js o WebGL fallen.
 
 ## Infraestructura decidida

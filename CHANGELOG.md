@@ -4,6 +4,17 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-10-21
+
+#### Fixed
+
+- Interpretar las horas locales del archivo de Bandomovil en `Europe/Madrid` y corregir 124 fechas históricas mal etiquetadas como UTC; las fechas RSS con offset explícito se conservan.
+
+#### Added
+
+- Completada `/agenda/` con actividades, servicios públicos y plazos con fuente visible; las fechas vencidas pasan automáticamente a un archivo cerrado según `Europe/Madrid`.
+- Añadida la extracción determinista de fechas elegibles desde bandos y su proyección generada en la misma PR automática de sincronización, con allowlist limitada a los bandos y el archivo generado.
+
 ### 2026-10-20
 
 #### Added

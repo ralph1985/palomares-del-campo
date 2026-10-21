@@ -1,46 +1,84 @@
 ---
+import AgendaItemCard from '../../components/current-affairs/AgendaItemCard.astro';
 import CurrentAffairsEmptyState from '../../components/current-affairs/CurrentAffairsEmptyState.astro';
-import ExternalLink from '../../components/ui/ExternalLink.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { agendaItems } from '../../data/current-affairs';
+import { getDateInTimeZone, splitAgendaItems } from '../../data/agenda-utils';
 
+const today = getDateInTimeZone(new Date(), 'Europe/Madrid');
+const sections = splitAgendaItems(agendaItems, today);
 const hasAgenda = agendaItems.length > 0;
-const formatDate = (date: string) =>
-  new Date(`${date}T00:00:00`).toLocaleDateString('es-ES', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
 ---
 
 <BaseLayout
   title="Agenda · Palomares del Campo"
-  description="Agenda de actividades y eventos publicados para Palomares del Campo."
+  description="Actividades, servicios públicos y plazos municipales con su fuente oficial."
 >
   <main>
     {hasAgenda ? (
-      <section class="agenda-section" aria-labelledby="agenda-title">
+      <section class="agenda-section" aria-labelledby="agenda-title" data-agenda>
         <div class="agenda-shell">
           <p class="eyebrow">Actualidad · Agenda</p>
           <h1 id="agenda-title">Agenda</h1>
-          <div class="agenda-list">
-            {agendaItems.map((item) => (
-              <article class="agenda-card">
-                <p class="agenda-date">
-                  {formatDate(item.startDate)}
-                  {item.endDate ? ` — ${formatDate(item.endDate)}` : ''}
-                </p>
-                <h2>{item.title}</h2>
-                <p class="agenda-meta">
-                  {item.category} · {item.location}
-                </p>
-                <p>{item.summary}</p>
-                <ExternalLink href={item.source.href}>
-                  {item.source.label} <span aria-hidden="true">↗</span>
-                </ExternalLink>
-              </article>
-            ))}
-          </div>
+          <p class="agenda-intro">
+            Actividades, servicios y plazos públicos con fechas confirmadas y enlace a su fuente.
+          </p>
+
+          <section
+            class="agenda-group"
+            aria-labelledby="upcoming-title"
+            data-agenda-section="upcoming"
+          >
+            <h2 id="upcoming-title">Próximas fechas</h2>
+            <p
+              class="empty-upcoming"
+              data-agenda-empty-upcoming
+              hidden={sections.upcoming.length > 0}
+            >
+              No hay próximas actividades ni plazos confirmados.
+            </p>
+            <div class="agenda-list" data-agenda-list="upcoming">
+              {sections.upcoming.map((item) => (
+                <AgendaItemCard item={item} />
+              ))}
+            </div>
+          </section>
+
+          <details
+            class="agenda-archive"
+            data-agenda-section="past"
+            hidden={sections.past.length === 0}
+          >
+            <summary>
+              Fechas pasadas{' '}
+              <span class="archive-count" data-agenda-count="past">
+                {sections.past.length}
+              </span>
+            </summary>
+            <div class="agenda-list" data-agenda-list="past">
+              {sections.past.map((item) => (
+                <AgendaItemCard item={item} />
+              ))}
+            </div>
+          </details>
+
+          <details
+            class="agenda-archive"
+            data-agenda-section="cancelled"
+            hidden={sections.cancelled.length === 0}
+          >
+            <summary>
+              Actividades canceladas{' '}
+              <span class="archive-count" data-agenda-count="cancelled">
+                {sections.cancelled.length}
+              </span>
+            </summary>
+            <div class="agenda-list" data-agenda-list="cancelled">
+              {sections.cancelled.map((item) => (
+                <AgendaItemCard item={item} />
+              ))}
+            </div>
+          </details>
         </div>
       </section>
     ) : (
@@ -48,12 +86,52 @@ const formatDate = (date: string) =>
         section="agenda"
         eyebrow="Actualidad · Agenda"
         title="Agenda"
-        description="Aquí reuniremos actividades, encuentros y fechas públicas cuando estén confirmadas y tengan una fuente visible."
-        emptyMessage="No hay actividades publicadas todavía."
+        description="Aquí reuniremos actividades, servicios públicos y plazos cuando estén confirmados y tengan una fuente visible."
+        emptyMessage="No hay fechas públicas confirmadas todavía."
       />
     )}
   </main>
 </BaseLayout>
+
+<script>
+  import { getDateInTimeZone } from '../../data/agenda-utils';
+
+  const root = document.querySelector<HTMLElement>('[data-agenda]');
+  if (root) {
+    const lists = {
+      upcoming: root.querySelector<HTMLElement>('[data-agenda-list="upcoming"]'),
+      past: root.querySelector<HTMLElement>('[data-agenda-list="past"]'),
+      cancelled: root.querySelector<HTMLElement>('[data-agenda-list="cancelled"]'),
+    };
+    const today = getDateInTimeZone(new Date(), 'Europe/Madrid');
+
+    for (const card of root.querySelectorAll<HTMLElement>('[data-agenda-card]')) {
+      const status = card.dataset.status;
+      const endDate = card.dataset.endDate ?? card.dataset.startDate ?? '';
+      const destination =
+        status === 'cancelled' ? lists.cancelled : endDate < today ? lists.past : lists.upcoming;
+      destination?.append(card);
+    }
+
+    for (const section of root.querySelectorAll<HTMLElement>('[data-agenda-section]')) {
+      const list = section.querySelector<HTMLElement>('[data-agenda-list]');
+      section.hidden =
+        section.dataset.agendaSection !== 'upcoming' && (!list || list.childElementCount === 0);
+    }
+
+    const upcomingList = lists.upcoming;
+    const upcomingEmpty = root.querySelector<HTMLElement>('[data-agenda-empty-upcoming]');
+    if (upcomingList && upcomingEmpty) {
+      upcomingEmpty.hidden = upcomingList.childElementCount > 0;
+    }
+
+    for (const sectionName of ['past', 'cancelled'] as const) {
+      const counter = root.querySelector<HTMLElement>(`[data-agenda-count="${sectionName}"]`);
+      const list = lists[sectionName];
+      if (counter && list) counter.textContent = String(list.childElementCount);
+    }
+  }
+</script>
 
 <style>
   .agenda-section {
@@ -82,51 +160,81 @@ const formatDate = (date: string) =>
     font-family: var(--font-serif);
     font-weight: 500;
     letter-spacing: -0.06em;
-    line-height: 0.95;
   }
 
   h1 {
     font-size: clamp(4rem, 12vw, 9rem);
+    line-height: 0.95;
+  }
+
+  .agenda-intro {
+    max-width: 42rem;
+    margin: 1.5rem 0 0;
+    color: var(--color-muted);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.6;
+  }
+
+  .agenda-group {
+    margin-top: clamp(3rem, 8vw, 5rem);
+  }
+
+  .agenda-group h2 {
+    margin-bottom: 1.5rem;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1.05;
   }
 
   .agenda-list {
     display: grid;
     gap: 1rem;
-    margin-top: 4rem;
   }
 
-  .agenda-card {
-    display: grid;
-    gap: 0.8rem;
-    padding: clamp(1.5rem, 4vw, 2.5rem);
-    border-radius: 1.25rem;
-    background: var(--color-paper);
+  .agenda-archive {
+    margin-top: 1.5rem;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    border: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
+    border-radius: 1.2rem;
+    background: color-mix(in srgb, var(--color-paper) 52%, transparent);
   }
 
-  .agenda-card h2 {
-    font-size: clamp(2rem, 4vw, 3.5rem);
-  }
-
-  .agenda-card p {
-    max-width: 42rem;
-    margin: 0;
-    color: var(--color-muted);
-    line-height: 1.6;
-  }
-
-  .agenda-card .agenda-date,
-  .agenda-card .agenda-meta {
-    color: var(--color-clay);
-    font-size: 0.78rem;
-    font-weight: var(--font-weight-strong);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .agenda-card a {
+  .agenda-archive summary {
+    display: flex;
     width: fit-content;
-    color: var(--color-ink);
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
     font-weight: var(--font-weight-strong);
     text-underline-offset: 0.25em;
+  }
+
+  .agenda-archive[open] summary {
+    margin-bottom: 1.25rem;
+  }
+
+  .archive-count {
+    display: inline-grid;
+    min-width: 1.65rem;
+    min-height: 1.65rem;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-size: 0.8rem;
+  }
+
+  .empty-upcoming {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  @media (max-width: 34rem) {
+    .agenda-shell {
+      width: min(100% - 1.5rem, 72rem);
+    }
   }
 </style>

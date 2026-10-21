@@ -2,7 +2,7 @@
 title: 'BANDO INFORMATIVO Y DE AGRADECIMIENTO'
 description: 'BANDO INFORMATIVO Y DE AGRADECIMIENTO DEL AYUNTAMIENTO DE PALOMARES DEL CAMPO A TODAS LA PERSONAS QUE, DE MANERA COMPLETAMENTE DESINTERESADA, SE HAN VOLCADO EN LAS LABORES DE BÚSQU…'
 author: 'Ayuntamiento de Palomares del Campo'
-date: 2026-08-16T14:06:00.000Z
+date: 2026-08-16T12:06:00.000Z
 category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1623353/0'

@@ -6,6 +6,7 @@ import {
   findOpenBandosPullRequest,
   findOpenMainToDevelopPullRequest,
   isAllowedBandoPath,
+  isAllowedBandosSyncPath,
 } from '../../scripts/bandos-sync-policy.ts';
 
 const pullRequest = {
@@ -63,6 +64,13 @@ describe('bandos sync policy', () => {
     expect(isAllowedBandoPath('src/content/bandos/123-aviso.md')).toBe(true);
     expect(isAllowedBandoPath('src/content/noticias/123-aviso.md')).toBe(false);
     expect(isAllowedBandoPath('src/content/bandos/../../.env')).toBe(false);
+    expect(isAllowedBandosSyncPath('src/content/bandos/123-aviso.md')).toBe(true);
+    expect(isAllowedBandosSyncPath('src/content/bandos/nested/unexpected.md')).toBe(false);
+    expect(isAllowedBandosSyncPath('src/content/bandos/2026/draft/unexpected.md')).toBe(false);
+    expect(isAllowedBandosSyncPath('src/data/agenda-bandos.generated.ts')).toBe(true);
+    expect(isAllowedBandosSyncPath('src/data/agenda-manual.ts')).toBe(false);
+    expect(isAllowedBandosSyncPath('src/data/current-affairs.ts')).toBe(false);
+    expect(isAllowedBandosSyncPath('src/data/../../.env')).toBe(false);
   });
 
   it('evaluates required checks as missing, pending, or failed', () => {

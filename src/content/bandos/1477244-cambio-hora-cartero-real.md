@@ -2,7 +2,7 @@
 title: 'CAMBIO HORA CARTERO REAL'
 description: 'FINALMENTE EL **CARTERO REAL** NOS VISITARÁ **MAÑANA** MARTES A LAS **17:30 HORAS EN EL SALÓN DE ACTOS DEL AYUNTAMIENTO**. A CONTINUACIÓN DARÁ COMIENZO **LA RUTA DE DECORACIÓN DE B…'
 author: 'Ayuntamiento de Palomares del Campo'
-date: 2025-12-29T13:55:00.000Z
+date: 2025-12-29T12:55:00.000Z
 category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1477244/0'

@@ -76,6 +76,108 @@ const MONTHS = new Map([
   ['diciembre', 11],
 ]);
 
+const MADRID_DATE_TIME_FORMATTER = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Europe/Madrid',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  hourCycle: 'h23',
+});
+
+function getMadridDateTimeParts(epochMilliseconds: number): {
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+} {
+  const parts = Object.fromEntries(
+    MADRID_DATE_TIME_FORMATTER.formatToParts(new Date(epochMilliseconds)).map(({ type, value }) => [
+      type,
+      value,
+    ]),
+  );
+  return {
+    year: Number(parts.year),
+    month: Number(parts.month),
+    day: Number(parts.day),
+    hour: Number(parts.hour),
+    minute: Number(parts.minute),
+  };
+}
+
+// The archive exposes Europe/Madrid wall time without an offset; reject gaps and overlaps.
+function parseBandomovilWallClockDate(
+  value: string,
+  year: number,
+  month: number,
+  day: number,
+  hour: number,
+  minute: number,
+): Date {
+  const wallTimeAsUtc = Date.UTC(year, month, day, hour, minute);
+  const normalizedWallTime = new Date(wallTimeAsUtc);
+  if (
+    normalizedWallTime.getUTCFullYear() !== year ||
+    normalizedWallTime.getUTCMonth() !== month ||
+    normalizedWallTime.getUTCDate() !== day ||
+    hour > 23 ||
+    minute > 59
+  ) {
+    throw new Error(`Invalid Bandomovil date: ${value}`);
+  }
+
+  const possibleOffsets = new Set<number>();
+  for (let hoursFromWallTime = -36; hoursFromWallTime <= 36; hoursFromWallTime += 6) {
+    const sample = wallTimeAsUtc + hoursFromWallTime * 60 * 60 * 1000;
+    const sampleParts = getMadridDateTimeParts(sample);
+    const sampleLocalTimeAsUtc = Date.UTC(
+      sampleParts.year,
+      sampleParts.month - 1,
+      sampleParts.day,
+      sampleParts.hour,
+      sampleParts.minute,
+    );
+    possibleOffsets.add(sampleLocalTimeAsUtc - sample);
+  }
+
+  const candidates = new Set<number>();
+  for (const offset of possibleOffsets) {
+    const candidate = wallTimeAsUtc - offset;
+    const candidateParts = getMadridDateTimeParts(candidate);
+    if (
+      candidateParts.year === year &&
+      candidateParts.month === month + 1 &&
+      candidateParts.day === day &&
+      candidateParts.hour === hour &&
+      candidateParts.minute === minute
+    ) {
+      candidates.add(candidate);
+    }
+  }
+
+  if (candidates.size === 0) {
+    throw new Error(`Bandomovil date ${value} does not exist in Europe/Madrid.`);
+  }
+  if (candidates.size > 1) {
+    throw new Error(`Bandomovil date ${value} is ambiguous in Europe/Madrid.`);
+  }
+
+  const candidate = candidates.values().next();
+  if (candidate.done) throw new Error(`Could not resolve Bandomovil date ${value}.`);
+  return new Date(candidate.value);
+}
+
+export function getBandomovilPublicationYear(value: string): number {
+  const date = new Date(value);
+  if (Number.isNaN(date.valueOf())) {
+    throw new Error(`Invalid Bandomovil publication date: ${value}`);
+  }
+  return getMadridDateTimeParts(date.valueOf()).year;
+}
+
 export function parseBandomovilDate(value: string): Date {
   const match = value.trim().match(/^(\d{1,2})-([A-Za-zÁÉÍÓÚáéíóú]+)-(\d{4})\s+(\d{1,2}):(\d{2})$/);
   const day = match?.[1];
@@ -96,7 +198,14 @@ export function parseBandomovilDate(value: string): Date {
     throw new Error(`Invalid Bandomovil date: ${value}`);
   }
 
-  return new Date(Date.UTC(Number(year), month, Number(day), Number(hour), Number(minute)));
+  return parseBandomovilWallClockDate(
+    value,
+    Number(year),
+    month,
+    Number(day),
+    Number(hour),
+    Number(minute),
+  );
 }
 
 export function extractAttachments(html: string): BandoAttachment[] {
@@ -450,7 +559,7 @@ async function loadImportItems(
   if (mode === 'archive') {
     const { items: archiveItems, pageCount } = await fetchArchiveItems();
     const inScope = archiveItems.filter((item) =>
-      TARGET_YEARS.has(new Date(item.pubDate).getUTCFullYear()),
+      TARGET_YEARS.has(getBandomovilPublicationYear(item.pubDate)),
     );
     const items = await mapWithConcurrency(inScope, DETAIL_CONCURRENCY, fetchArchiveDetail);
     return { items, pageCount };

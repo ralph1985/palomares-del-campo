@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   createBandoMarkdown,
   generateFilename,
+  getBandomovilPublicationYear,
   getImportMode,
   mergeExistingAttachments,
   parseArchiveItems,
@@ -68,6 +69,7 @@ describe('fetch bandos', () => {
       link: 'https://www.bandomovil.com/palomaresdelcampo/1641085/0',
     });
     expect(item.description).toContain('aviso.pdf');
+    expect(item.pubDate).toBe('2026-09-11T09:28:00.000Z');
     expect(item.attachments).toEqual([
       {
         type: 'image',
@@ -82,9 +84,32 @@ describe('fetch bandos', () => {
       },
     ]);
     expect(parseBandomovilDate('11-Septiembre-2026 11:28').toISOString()).toBe(
-      '2026-09-11T11:28:00.000Z',
+      '2026-09-11T09:28:00.000Z',
+    );
+    expect(parseBandomovilDate('11-Enero-2026 11:28').toISOString()).toBe(
+      '2026-01-11T10:28:00.000Z',
     );
   });
+
+  it('fails the archive import closed when a publication time is ambiguous', () => {
+    const ambiguousPage = archivePage.replace('11-Septiembre-2026 11:28', '25-Octubre-2026 02:30');
+
+    expect(() => parseArchiveItems(ambiguousPage)).toThrow(/is ambiguous in Europe\/Madrid/);
+  });
+
+  it('uses the Madrid publication year when the UTC instant falls in the previous year', () => {
+    expect(getBandomovilPublicationYear('2025-12-31T23:30:00.000Z')).toBe(2026);
+  });
+
+  it('rejects nonexistent and ambiguous local publication times', () => {
+    expect(() => parseBandomovilDate('29-Marzo-2026 02:30')).toThrow(
+      /does not exist in Europe\/Madrid/,
+    );
+    expect(() => parseBandomovilDate('25-Octubre-2026 02:30')).toThrow(
+      /is ambiguous in Europe\/Madrid/,
+    );
+  });
+
   it('creates a stable id-based filename', () => {
     expect(generateFilename('Aviso de agua', '')).toBe('aviso-de-agua');
     expect(
