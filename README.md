@@ -81,6 +81,20 @@ El aviso posterior a la fusión puede enviarse por SMTP mediante Nodemailer. La 
 
 `SYNC_BANDOS_DRY_RUN=1 pnpm sync-bandos` omite la rama y la PR de bandos, su fusión, la notificación y la promoción a `develop`. No evita necesariamente la alineación inicial de `main`: consulta `docs/architecture.md` antes de tratarlo como un dry-run sin efectos sobre el checkout. La instalación de cron, SMTP y auto-merge requiere un host autorizado y configuración local.
 
+### Descubrimiento de noticias
+
+`pnpm discover-news` ejecuta manualmente el descubrimiento para Palomares del Campo con Codex CLI y búsqueda web en sandbox de solo lectura. Propone como máximo tres noticias con fecha de hoy o de los 29 días naturales anteriores (30 fechas en total), con vínculo explícito al municipio y fuente HTTPS de la lista permitida. Excluye bandos de Bandomovil, anuncios/avisos, agendas, empleo y opinión; no descarga imágenes ni destaca noticias automáticamente.
+
+La ejecución real obtiene `origin/main`, compara sus noticias existentes, crea un worktree temporal basado en `main` dentro del caché privado del usuario, valida los Markdown y abre una PR de contenido contra `main`. Si no hay propuestas válidas, no crea PR ni envía correo. No publica ni fusiona la PR. Si ya hay una PR automática de noticias abierta, se detiene para no duplicar propuestas. El wrapper evita ejecuciones simultáneas con un lock exclusivo `fcntl` bajo el caché privado del usuario; lo abre sin seguir enlaces simbólicos. El dry-run no toma ese bloqueo. Tras leer de vuelta y verificar la PR, envía un correo con el enlace directo de GitHub.
+
+```bash
+pnpm discover-news:dry-run
+```
+
+El dry-run sí realiza una búsqueda web de solo lectura, pero no hace `fetch`, no crea worktree, archivos, ramas o PRs, y no envía correo; toma como referencia la colección de noticias del checkout actual. El proceso real usa el `origin/main` actualizado.
+
+Se requiere Codex CLI autenticado localmente (`codex login`), Python 3, una sesión autenticada de `gh` y SMTP. La búsqueda usa solo la herramienta web de Codex: desactiva shell, navegador, control del ordenador, code-mode y herramientas de apps; además, el subproceso solo recibe variables de ejecución permitidas y no hereda credenciales SMTP/GitHub ni API keys del proceso principal. El SMTP acepta `NEWS_SMTP_HOST`, `NEWS_SMTP_PORT`, `NEWS_SMTP_SECURE`, `NEWS_SMTP_USER`, `NEWS_SMTP_PASSWORD`, `NEWS_NOTIFY_FROM` y `NEWS_NOTIFY_TO`; si no se configuran, reutiliza las variables `BANDOS_*` existentes. No se configura ni instala cron en esta fase; la programación se hará después de revisar el worker y promover su código a `main`.
+
 ## Estructura
 
 ```text
@@ -123,7 +137,7 @@ Las ubicaciones del juego son provisionales; antes de activar una temporada púb
 
 ## Pruebas y contribución
 
-La suite Vitest cubre reglas y componentes, las funciones Convex y adaptadores, importación y políticas auxiliares. Playwright comprueba flujos visibles con el servidor de desarrollo, simuladores o respuestas interceptadas: no constituye validación de producción. La ejecución de cobertura verificada el 18 de octubre de 2026 pasó **34 archivos y 189 pruebas**, con 93,50 % de statements, 91,16 % de branches, 96,55 % de functions y 96,85 % de lines.
+La suite Vitest cubre reglas y componentes, las funciones Convex y adaptadores, importación y políticas auxiliares. Playwright comprueba flujos visibles con el servidor de desarrollo, simuladores o respuestas interceptadas: no constituye validación de producción. La ejecución de cobertura verificada el 20 de octubre de 2026 pasó **43 archivos y 241 pruebas**, con 93,78 % de statements, 91,36 % de branches, 96,58 % de functions y 96,58 % de lines.
 
 Validación local equivalente al gate principal de CI:
 

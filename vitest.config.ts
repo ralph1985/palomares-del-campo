@@ -10,6 +10,12 @@ export default getViteConfig({
     coverage: {
       provider: 'v8',
       include: [
+        'scripts/news-discovery-policy.ts',
+        'scripts/news-discovery-workflow.ts',
+        'scripts/news-discovery-notification.ts',
+        'scripts/news-discovery-prompt.ts',
+        'scripts/news-discovery-github.ts',
+        'scripts/news-discovery-worktree.ts',
         'src/game/**/*.ts',
         'src/scripts/convex-game.ts',
         'src/scripts/palomarenos-map-data.ts',

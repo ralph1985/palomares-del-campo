@@ -13,6 +13,8 @@
     "typecheck": "pnpm run typecheck:astro && pnpm run typecheck:convex",
     "fetch-bandos": "tsx scripts/fetch-bandos.ts",
     "sync-bandos": "bash scripts/sync-bandos-cron.sh",
+    "discover-news": "bash scripts/run-news-discovery.sh",
+    "discover-news:dry-run": "bash scripts/run-news-discovery.sh --dry-run",
     "preview": "astro preview",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
