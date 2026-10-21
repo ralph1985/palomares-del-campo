@@ -78,6 +78,11 @@ describe('bando synchronization notification', () => {
 
   it('finds bandos introduced by a merge commit relative to its first parent', async () => {
     const originalWorkingDirectory = process.cwd();
+    const inheritedGitEnvironment = Object.fromEntries(
+      Object.entries(process.env).filter(([name]) => name.startsWith('GIT_')),
+    );
+    // Git hooks export repository variables; a temporary repo must not inherit the parent index.
+    for (const name of Object.keys(inheritedGitEnvironment)) delete process.env[name];
     const repository = mkdtempSync(path.join(tmpdir(), 'bandos-notify-merge-'));
     const runGit = (args: string[]) =>
       execFileSync('git', args, {
@@ -113,6 +118,7 @@ describe('bando synchronization notification', () => {
     } finally {
       process.chdir(originalWorkingDirectory);
       rmSync(repository, { recursive: true, force: true });
+      Object.assign(process.env, inheritedGitEnvironment);
     }
   });
 });
