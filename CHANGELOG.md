@@ -6,6 +6,10 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ### 2026-10-20
 
+#### Added
+
+- Añadido un worker manual de descubrimiento de noticias locales: búsqueda web de solo lectura, filtros de fuente y actualidad, PR revisable contra `main` y aviso SMTP con enlace; no instala cron ni fusiona la PR.
+
 #### Changed
 
 - Reutilizado `ActionLink` en los enlaces de regreso de noticias y bandos, con foco visible consistente.
