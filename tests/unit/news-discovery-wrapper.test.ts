@@ -49,26 +49,22 @@ function runWrapper(
   });
 }
 
-const newsLockDirectory = (home: string): string =>
+const sharedLockDirectory = (home: string): string =>
   path.join(home, '.cache', 'palomares-del-campo');
 
-const newsLockPath = (home: string): string =>
-  path.join(newsLockDirectory(home), 'news-discovery.lock');
+const sharedLockPath = (home: string): string =>
+  path.join(sharedLockDirectory(home), 'cron-worktree.lock');
 
 describe('news discovery command wrapper', () => {
-  it('runs a dry-run without creating or opening the worker lock', () => {
+  it('holds the common worktree lock for a dry-run too', () => {
     const harness = createHarness();
-    const target = path.join(harness.home, 'dry-run-target.txt');
-    const temporaryLock = path.join(harness.home, 'palomares-del-campo-news-discovery.lock');
-    writeFileSync(target, 'preserve me');
-    symlinkSync(target, temporaryLock);
 
     try {
       expect(runWrapper(harness, ['--dry-run'])).toContain(
         'pnpm-ran:exec tsx scripts/discover-news.ts --dry-run',
       );
-      expect(readFileSync(target, 'utf8')).toBe('preserve me');
-      expect(existsSync(newsLockPath(harness.home))).toBe(false);
+      expect(existsSync(sharedLockPath(harness.home))).toBe(true);
+      expect(statSync(sharedLockPath(harness.home)).mode & 0o777).toBe(0o600);
     } finally {
       rmSync(harness.home, { recursive: true, force: true });
     }
@@ -77,9 +73,9 @@ describe('news discovery command wrapper', () => {
   it('refuses a symlink lock file without changing its target or starting pnpm', () => {
     const harness = createHarness();
     const target = path.join(harness.home, 'important.txt');
-    mkdirSync(newsLockDirectory(harness.home), { recursive: true, mode: 0o700 });
+    mkdirSync(sharedLockDirectory(harness.home), { recursive: true, mode: 0o700 });
     writeFileSync(target, 'preserve me');
-    symlinkSync(target, newsLockPath(harness.home));
+    symlinkSync(target, sharedLockPath(harness.home));
 
     try {
       expect(() => runWrapper(harness)).toThrow();
@@ -97,7 +93,7 @@ describe('news discovery command wrapper', () => {
     mkdirSync(target, { recursive: true });
     mkdirSync(cache, { recursive: true });
     writeFileSync(path.join(target, 'marker'), 'preserve me');
-    symlinkSync(target, path.join(cache, 'palomares-del-campo'));
+    symlinkSync(target, sharedLockDirectory(harness.home));
 
     try {
       expect(() => runWrapper(harness)).toThrow();
@@ -124,7 +120,7 @@ describe('news discovery command wrapper', () => {
 
   it('refuses a writable lock directory rather than fixing it after the trust check', () => {
     const harness = createHarness();
-    const lockDirectory = newsLockDirectory(harness.home);
+    const lockDirectory = sharedLockDirectory(harness.home);
     mkdirSync(lockDirectory, { recursive: true, mode: 0o700 });
     chmodSync(lockDirectory, 0o777);
 
@@ -137,7 +133,7 @@ describe('news discovery command wrapper', () => {
     }
   });
 
-  it('runs the worker when the secure lock is available and can be reacquired', () => {
+  it('runs the worker when the secure common lock is available and can be reacquired', () => {
     const harness = createHarness();
 
     try {
@@ -148,11 +144,11 @@ describe('news discovery command wrapper', () => {
     }
   });
 
-  it('skips when another process owns the user-cache lock', async () => {
+  it('skips when another process owns the common worktree lock', async () => {
     const harness = createHarness();
-    const lockDirectory = newsLockDirectory(harness.home);
+    const lockDirectory = sharedLockDirectory(harness.home);
     mkdirSync(lockDirectory, { recursive: true, mode: 0o700 });
-    const lockPath = newsLockPath(harness.home);
+    const lockPath = sharedLockPath(harness.home);
     const readyPath = path.join(harness.home, 'holder-ready');
     const holderCode = [
       'import fcntl, os, pathlib, sys, time',
@@ -172,7 +168,7 @@ describe('news discovery command wrapper', () => {
       }
       expect(existsSync(readyPath)).toBe(true);
       const output = runWrapper(harness);
-      expect(output).toContain('Ya hay una búsqueda de noticias en marcha');
+      expect(output).toContain('Ya hay una tarea de cron en marcha');
       expect(existsSync(harness.marker)).toBe(false);
     } finally {
       holder.kill('SIGTERM');

@@ -16,5 +16,5 @@ if [[ -z "$PYTHON_BIN" ]]; then
 fi
 
 cd "$PROJECT_ROOT"
-exec "$PYTHON_BIN" scripts/news-discovery-lock.py \
+exec "$PYTHON_BIN" scripts/cron-worktree-lock.py \
   "$PNPM_BIN" exec tsx scripts/discover-news.ts "$@"
