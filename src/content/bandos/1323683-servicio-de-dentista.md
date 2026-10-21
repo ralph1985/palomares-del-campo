@@ -2,7 +2,7 @@
 title: 'SERVICIO DE DENTISTA'
 description: 'EL PRÓXIMO MIÉRCOLES 7 DE MAYO VIENE EL SERVICIO DE DENTISTA "RURALDENTMÓVIL" A LAS 15:00 HORAS. AQUELLOS INTERESADOS QUE NO HAYAN SOLICITADO CITA TODAVÍA DEBERÁN APUNTARSE EN EL A…'
 author: 'Ayuntamiento de Palomares del Campo'
-date: 2025-05-05T13:03:00.000Z
+date: 2025-05-05T11:03:00.000Z
 category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1323683/0'
