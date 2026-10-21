@@ -1,16 +1,55 @@
 import { expect, test } from './fixtures';
 
 test.describe('current affairs sections', () => {
-  test('shows an honest empty agenda state', async ({ page }) => {
+  test('separa automáticamente las fechas pasadas en un archivo cerrado y mantiene los plazos vigentes', async ({
+    page,
+  }) => {
+    await page.clock.install({ time: new Date('2026-10-21T10:00:00.000Z') });
     await page.goto('/agenda/');
 
     await expect(page).toHaveTitle(/Agenda/);
     await expect(page.getByRole('heading', { level: 1, name: 'Agenda' })).toBeVisible();
-    await expect(page.getByText('No hay actividades publicadas todavía.')).toBeVisible();
-    await expect(page.locator('[data-current-affairs-empty]')).toHaveAttribute(
-      'data-section',
-      'agenda',
+    const upcoming = page.locator('[data-agenda-list="upcoming"]');
+    const currentDeadline = upcoming.locator('[data-item-id="municipal:jccm-thermalism-2026"]');
+    await expect(currentDeadline).toBeVisible();
+    await expect(currentDeadline).toContainText('Solicitudes del Termalismo JCCM 2026');
+    await expect(currentDeadline.locator('a')).toHaveAttribute('href', /1508150/);
+
+    const pastDisclosure = page.locator('details[data-agenda-section="past"]');
+    const archivedEvent = pastDisclosure.locator('[data-item-id="municipal:summer-2026-flamenco"]');
+    await expect(pastDisclosure).toBeVisible();
+    await expect(pastDisclosure).not.toHaveAttribute('open');
+    await expect(archivedEvent).toHaveCount(1);
+    await expect(archivedEvent).not.toBeVisible();
+    await expect(upcoming.locator('[data-item-id="municipal:summer-2026-flamenco"]')).toHaveCount(
+      0,
     );
+
+    await pastDisclosure.locator('summary').click();
+    await expect(archivedEvent).toBeVisible();
+    await expect(archivedEvent.locator('a')).toHaveAttribute('href', /1608976/);
+
+    await page.setViewportSize({ width: 375, height: 812 });
+    const widths = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      document: document.documentElement.scrollWidth,
+    }));
+    expect(widths.document).toBeLessThanOrEqual(widths.viewport);
+  });
+
+  test('shows the empty upcoming state after every dated item expires', async ({ page }) => {
+    await page.clock.install({ time: new Date('2030-01-01T10:00:00.000Z') });
+    await page.goto('/agenda/');
+
+    const upcomingSection = page.locator('[data-agenda-section="upcoming"]');
+    await expect(upcomingSection).toBeVisible();
+    await expect(
+      upcomingSection.getByText('No hay próximas actividades ni plazos confirmados.'),
+    ).toBeVisible();
+
+    const pastDisclosure = page.locator('details[data-agenda-section="past"]');
+    await expect(pastDisclosure).toBeVisible();
+    await expect(pastDisclosure).not.toHaveAttribute('open');
   });
 
   test('wraps long URLs in bando cards on narrow screens', async ({ page }) => {

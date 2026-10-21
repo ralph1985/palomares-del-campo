@@ -2,7 +2,7 @@
 title: 'CARGLASS'
 description: '2 y 3 de enero de 2025. ¿Quieres que un profesional revise la luna de tu vehículo y llevarte GRATIS un tratamiento antilluvia para el parabrisas? Los técnicos de Carglass estarán e…'
 author: 'Ayuntamiento de Palomares del Campo'
-date: 2025-01-02T09:52:00.000Z
+date: 2025-01-02T08:52:00.000Z
 category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1259942/0'

@@ -2,7 +2,7 @@
 title: 'SERVICIO DENTISTA'
 description: 'EL PRÓXIMO 14 DE OCTUBRE (MARTES) VENDRÁ EL SERVICIO DE DENTISTA "RURALDENTMOVIL" A LAS 12:30 HORAS. AQUELLOS INTERESADOS QUE TODAVIA NO TENGAN CITA, PODRÁN APUNTARSE EN EL AYUNTAM…'
 author: 'Ayuntamiento de Palomares del Campo'
-date: 2025-10-09T11:43:00.000Z
+date: 2025-10-09T09:43:00.000Z
 category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1427928/0'

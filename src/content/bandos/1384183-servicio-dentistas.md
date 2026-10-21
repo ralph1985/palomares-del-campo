@@ -2,7 +2,7 @@
 title: 'SERVICIO DENTISTAS'
 description: 'EL PROXIMO 6 DE AGOSTO VENDRA EL SERVICIO DE DENTISTA "RURALDENTMOVIL" A PRIMERA HORA DE LA MAÑANA. AQUELLOS INTERESADOS QUE TODAVIA NO TENGAN SOLICITADO CITA, PODRAN APUNTARSE EN…'
 author: 'Ayuntamiento de Palomares del Campo'
-date: 2025-08-04T10:36:00.000Z
+date: 2025-08-04T08:36:00.000Z
 category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1384183/0'

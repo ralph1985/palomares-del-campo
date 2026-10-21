@@ -2,7 +2,7 @@
 title: 'BANDO MUNICIPAL'
 description: 'El Ayuntamiento de Palomares del Campo informa a todos los vecinos, que lamentablemente este año no podrá celebrarse la Escuela de Verano. Esto se debe a que la Diputación Provinci…'
 author: 'Ayuntamiento de Palomares del Campo'
-date: 2026-07-29T13:01:00.000Z
+date: 2026-07-29T11:01:00.000Z
 category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1607408/0'
