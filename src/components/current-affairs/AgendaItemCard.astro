@@ -1,0 +1,106 @@
+---
+import ExternalLink from '../ui/ExternalLink.astro';
+import { getDateInTimeZone } from '../../data/agenda-utils';
+import type { AgendaItem } from '../../data/current-affairs';
+
+interface Props {
+  item: AgendaItem;
+}
+
+const { item } = Astro.props;
+const kindLabels = {
+  event: 'Actividad',
+  service: 'Servicio público',
+  deadline: 'Plazo o trámite',
+} as const;
+const formatDate = (value: string) =>
+  new Date(`${value}T12:00:00Z`).toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Europe/Madrid',
+  });
+const sourceDate = getDateInTimeZone(new Date(item.source.publishedAt), 'Europe/Madrid');
+const eventTime = item.startTime ? `${item.startTime} h` : undefined;
+const deadlineTime = item.deadlineTime ? `Límite: ${item.deadlineTime} h` : undefined;
+const audience = item.audience === 'businesses' ? 'Dirigido a empresas' : undefined;
+const meta = [item.category, item.location, audience].filter(Boolean);
+---
+
+<article
+  class="agenda-card"
+  data-agenda-card
+  data-item-id={item.id}
+  data-start-date={item.startDate}
+  data-end-date={item.endDate ?? item.startDate}
+  data-status={item.status ?? 'active'}
+>
+  <p class="agenda-kind">{kindLabels[item.kind]}</p>
+  <p class="agenda-date">
+    <time datetime={item.startDate}>{formatDate(item.startDate)}</time>
+    {item.endDate && item.endDate !== item.startDate ? ` — ${formatDate(item.endDate)}` : ''}
+    {eventTime ? ` · ${eventTime}` : ''}
+    {deadlineTime ? ` · ${deadlineTime}` : ''}
+  </p>
+  <h3>{item.title}</h3>
+  {meta.length > 0 && <p class="agenda-meta">{meta.join(' · ')}</p>}
+  {item.summary && <p class="agenda-summary">{item.summary}</p>}
+  {item.status === 'cancelled' && <p class="agenda-cancelled">Actividad cancelada</p>}
+  <ExternalLink href={item.source.href} aria-label={`Ver fuente: ${item.source.label}`}>
+    Fuente: {item.source.label} · {formatDate(sourceDate)} <span aria-hidden="true">↗</span>
+  </ExternalLink>
+</article>
+
+<style>
+  .agenda-card {
+    display: grid;
+    gap: 0.75rem;
+    padding: clamp(1.4rem, 3.5vw, 2.4rem);
+    border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+    border-radius: 1.2rem;
+    background: var(--color-paper);
+  }
+
+  .agenda-kind,
+  .agenda-date,
+  .agenda-meta {
+    margin: 0;
+    color: var(--color-clay);
+    font-size: 0.82rem;
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.06em;
+  }
+
+  .agenda-kind {
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+  }
+
+  .agenda-summary {
+    max-width: 48rem;
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.6;
+  }
+
+  .agenda-cancelled {
+    margin: 0;
+    color: var(--color-clay);
+    font-weight: var(--font-weight-strong);
+  }
+
+  .agenda-card a {
+    width: fit-content;
+    color: var(--color-ink);
+    font-weight: var(--font-weight-strong);
+    text-underline-offset: 0.25em;
+  }
+</style>

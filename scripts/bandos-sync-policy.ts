@@ -97,3 +97,11 @@ export function evaluateRequiredChecks(
 export function isAllowedBandoPath(filePath: string): boolean {
   return /^src\/content\/bandos\/[^/]+\.md$/.test(filePath);
 }
+
+export function isAllowedAgendaProjectionPath(filePath: string): boolean {
+  return filePath === 'src/data/agenda-bandos.generated.ts';
+}
+
+export function isAllowedBandosSyncPath(filePath: string): boolean {
+  return isAllowedBandoPath(filePath) || isAllowedAgendaProjectionPath(filePath);
+}

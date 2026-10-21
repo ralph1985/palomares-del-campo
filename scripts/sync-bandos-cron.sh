@@ -108,11 +108,17 @@ else
     "$PNPM_BIN" run fetch-bandos
   )
 
+  PHASE='proyección de Agenda desde bandos oficiales'
+  (
+    cd "$WORKTREE_DIR"
+    "$PNPM_BIN" run sync-agenda-from-bandos
+  )
+
   if
-    /usr/bin/git -C "$WORKTREE_DIR" diff --quiet -- src/content/bandos &&
-    [[ -z "$(/usr/bin/git -C "$WORKTREE_DIR" status --porcelain -- src/content/bandos)" ]]
+    /usr/bin/git -C "$WORKTREE_DIR" diff --quiet -- src/content/bandos src/data/agenda-bandos.generated.ts &&
+    [[ -z "$(/usr/bin/git -C "$WORKTREE_DIR" status --porcelain --untracked-files=all -- src/content/bandos src/data/agenda-bandos.generated.ts)" ]]
   then
-    echo 'No hay bandos nuevos o actualizados.'
+    echo 'No hay bandos ni elementos de Agenda que publicar.'
     if [[ "${SYNC_BANDOS_DRY_RUN:-0}" == '1' ]]; then
       echo 'Dry run: se omite la sincronización de main hacia develop.'
       exit 0
@@ -143,12 +149,16 @@ else
     process.stdout.write(buildBandosBranchName());
   ')"
   /usr/bin/git -C "$WORKTREE_DIR" switch -c "$WORKTREE_BRANCH"
-  /usr/bin/git -C "$WORKTREE_DIR" add -- src/content/bandos
+  /usr/bin/git -C "$WORKTREE_DIR" add -- src/content/bandos src/data/agenda-bandos.generated.ts
   /usr/bin/git -C "$WORKTREE_DIR" diff --cached --check
 
   while IFS= read -r changed_file; do
     case "$changed_file" in
-      src/content/bandos/*.md) ;;
+      src/content/bandos/*/*.md)
+        echo "Ruta anidada inesperada en bandos: $changed_file" >&2
+        exit 1
+        ;;
+      src/content/bandos/*.md|src/data/agenda-bandos.generated.ts) ;;
       *)
         echo "Archivo inesperado en la sincronización de bandos: $changed_file" >&2
         exit 1
@@ -167,13 +177,13 @@ else
     --base main \
     --head "$WORKTREE_BRANCH" \
     --title 'chore: actualizar bandos' \
-    --body '## Actualización automática de bandos
+    --body '## Actualización automática de bandos y Agenda
 
-Esta PR contiene los bandos nuevos o modificados descargados del RSS oficial de Bandomovil.
+Esta PR incluye los bandos nuevos o modificados del RSS oficial y la proyección de Agenda derivada de los avisos municipales que contienen una fecha pública verificable.
 
-El sincronizador esperará los checks obligatorios y fusionará la PR solo cuando estén verdes.
+La extracción es determinista y conservadora: omite horarios permanentes, avisos operativos sin fecha y fechas ambiguas; conserva el enlace al comunicado original. La proyección se valida junto con los bandos y solo se fusiona cuando los checks obligatorios están verdes.
 
-_Generada por scripts/sync-bandos-cron.sh._')"
+_Proceso ejecutado por scripts/sync-bandos-cron.sh._')"
   PR_NUMBER="${PR_URL##*/}"
   echo "Pull Request creada: $PR_URL"
 fi

@@ -143,6 +143,7 @@ src/components/
 ├── accommodations/
 │   └── AccommodationCard.astro
 ├── current-affairs/
+│   ├── AgendaItemCard.astro
 │   └── CurrentAffairsEmptyState.astro
 ├── hero/
 │   ├── EditorialHero.astro
@@ -241,6 +242,9 @@ src/data/
 ├── about-palomares.ts
 ├── accommodations.ts
 ├── current-affairs.ts
+├── agenda-bandos.generated.ts
+├── agenda-manual.ts
+├── agenda-utils.ts
 ├── game-locations.ts
 ├── home.ts
 ├── municipal-info.ts
@@ -249,7 +253,7 @@ src/data/
 └── site-footer.ts
 ```
 
-`current-affairs.ts` declara el contrato de agenda, pero `agendaItems` está vacío; por eso `/agenda/` muestra el estado vacío.
+`current-affairs.ts` define el contrato compartido y compone `agendaItems` a partir de `agenda-bandos.generated.ts` y `agenda-manual.ts`. `agenda-utils.ts` combina y deduplica ambas fuentes y separa los elementos vigentes, pasados y cancelados por fecha local. El generador solo modifica su proyección; los datos comprobados en adjuntos o fichas oficiales se mantienen en el módulo manual.
 
 ### `convex/`
 
@@ -289,6 +293,8 @@ tests/
 
 ```text
 scripts/
+├── agenda-from-bandos.ts
+├── sync-agenda-from-bandos.ts
 ├── fetch-bandos.ts
 ├── sync-bandos-cron.sh
 ├── bandos-sync-policy.ts
@@ -314,7 +320,7 @@ Todas las páginas de contenido importan `BaseLayout.astro` y componen su conten
 - `/rutas/` usa `localRoutes`, carga un GPX público y crea el mapa interactivo en el navegador.
 - `/alojamientos/` usa `ruralAccommodations` y separa opciones del municipio y alrededores.
 - `/informacion-practica/` usa `municipalInfo` para contacto, servicios oficiales y horarios de transporte.
-- `/agenda/` usa el array `agendaItems`; al estar vacío, renderiza `CurrentAffairsEmptyState`.
+- `/agenda/` combina eventos, servicios públicos y plazos con procedencia visible; separa las fechas vigentes, las pasadas en un `<details>` cerrado por defecto y las canceladas. Recalcula el corte con la fecha de `Europe/Madrid` en cada visita, también después de un build estático.
 - `/juego/` calcula `hasRemoteGame` a partir de `import.meta.env.CONVEX_URL` y compone la experiencia local o remota.
 - `/avisos/` ejecuta `Astro.redirect('/bandos/', 301)` y no genera contenido editorial propio.
 
@@ -511,11 +517,8 @@ El importador convierte HTML a Markdown, valida URLs HTTPS, restringe los adjunt
 
 ### Sincronización automatizada de bandos
 
-`scripts/sync-bandos-cron.sh` está diseñado para ser invocado desde cron en un host con Node.js, pnpm, GitHub CLI y credenciales locales. El repositorio no contiene la instalación de cron; su estado real depende del host.
-
-El flujo bloquea ejecuciones concurrentes, alinea `main` con `origin/main` mediante `ensure-main-synced.ts`, trabaja desde un worktree de `origin/main`, ejecuta el importador RSS y valida formato, lint, Vitest y build. Si hay cambios, limita la rama y la PR a `src/content/bandos/*.md`, espera los checks obligatorios y fusiona la PR en `main`. Cuando esta versión esté instalada en el checkout `main` del cron, `sync-main-to-develop.ts` crea o actualiza una rama temporal desde `origin/develop`, integra `origin/main` y abre una PR hacia `develop`; espera el `Verify` obligatorio y la fusiona solo cuando pasa. La promoción se vuelve a reconciliar en las ejecuciones sin novedades RSS para reintentar una PR pendiente. Si hay conflictos o checks fallidos, se conserva la PR y no se fuerza ninguna rama protegida.
-
-`SYNC_BANDOS_DRY_RUN=1` impide crear o fusionar las PRs de bandos y de promoción, y omite la notificación. No equivale a un dry-run completamente no destructivo del checkout: `ensure-main-synced.ts` se ejecuta antes de comprobar la variable y puede crear una rama de respaldo y alinear `main` con `origin/main` si detecta divergencia. Tras la fusión de bandos, `notify-bando-sync.ts` puede enviar un correo SMTP con Nodemailer; si falta la configuración o falla el envío, la PR de bandos ya fusionada no se deshace.
+`scripts/sync-bandos-cron.sh` está diseñado para cron en un host con Node.js, pnpm, GitHub CLI y credenciales locales. El flujo bloquea ejecuciones concurrentes, alinea `main` con `origin/main`, trabaja en un worktree de esa base, ejecuta `fetch-bandos` y regenera la Agenda antes de comprobar cambios. La PR automática permite solo `src/content/bandos/*.md` y `src/data/agenda-bandos.generated.ts`; las entradas manuales y el resto de la aplicación quedan fuera de su allowlist. Los avisos de cancelación/aplazamiento se omiten en la extracción automática y se revisan manualmente, porque el texto breve puede discrepar de un cartel adjunto. Ambos cambios pasan los mismos gates y se fusionan en `main` únicamente con los checks obligatorios en verde. Después se reconcilia la PR de `main` a `develop` mediante una rama temporal. Esta modificación del worker queda activa solo cuando el código llegue a `main`; no se ha ejecutado ni instalado el cron en esta tarea.
+`SYNC_BANDOS_DRY_RUN=1` impide crear o fusionar las PR de bandos y de promoción, y omite la notificación, pero no evita la alineación inicial del checkout. La instalación del cron y sus credenciales siguen siendo externas a Git. Esta tarea no ejecutó el modo dry-run ni el cron.
 
 ## Rendimiento y carga de cliente
 
@@ -567,7 +570,7 @@ Las pruebas Vitest cubren:
 
 La ejecución local verificada el 18 de octubre de 2026 con `pnpm test:coverage` contiene 34 archivos y 189 pruebas Vitest, todas correctas: 93,50 % de statements, 91,16 % de branches, 96,55 % de functions y 96,85 % de lines. El umbral global configurado es del 90 % en esas cuatro métricas y CI ejecuta `pnpm test:coverage` como gate.
 
-Playwright cubre navegación, menú accesible, portada, noticias, bandos, agenda vacía, información práctica, alojamientos, rutas, formulario de Palomareños con respuesta simulada, juego local, modo inmersivo, simulador, presencia visual de Three.js y responsive. `tests/e2e/page-transitions.spec.ts` comprueba las caras antes de navegar, la conservación del menú, el fallback, un viewport estrecho y `prefers-reduced-motion`; el test de la flag se ejecuta también con la transición apagada. La cobertura SEO estática corresponde a `check:seo`. Las pruebas del juego usan el servidor Astro de desarrollo y el simulador local; no constituyen una prueba E2E contra un deployment remoto de Convex ni un flujo de dos jugadores reales.
+Playwright cubre navegación, menú accesible, portada, noticias, bandos, la separación de Agenda entre fechas vigentes y archivo cerrado, información práctica, alojamientos, rutas, formulario de Palomareños con respuesta simulada, juego local, modo inmersivo, simulador, presencia visual de Three.js y responsive. `tests/e2e/page-transitions.spec.ts` comprueba las caras antes de navegar, la conservación del menú, el fallback, un viewport estrecho y `prefers-reduced-motion`; el test de la flag se ejecuta también con la transición apagada. La cobertura SEO estática corresponde a `check:seo`. Las pruebas del juego usan el servidor Astro de desarrollo y el simulador local; no constituyen una prueba E2E contra un deployment remoto de Convex ni un flujo de dos jugadores reales.
 
 `scripts/visual-qa.ts` recorre once rutas en dos viewports y comprueba HTTP 200, overflow horizontal, foco, contraste aproximado y errores de consola. Incluye alojamientos, el mapa mundial de Palomareños y un detalle de bando; sus assets externos se interceptan con fixtures compartidos con Playwright E2E. Es una comprobación reproducible de calidad visual, no un sistema de snapshots de imagen.
 
@@ -647,21 +650,21 @@ Las integraciones externas verificables son OpenStreetMap, Bandomovil, fuentes e
 
 La clasificación se basa en la comparación entre el `architecture.md` anterior y los archivos fuente actuales.
 
-| Clasificación  | Hallazgo                                                                                                                         | Corrección aplicada                                                                                                |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Desactualizado | El juego se describía principalmente como prototipo local, con Convex como estado compartido futuro.                             | Se documentan el modo remoto actual, las subscriptions, las mutations y sus límites.                               |
-| Incorrecto     | Se enumeraban `/lugares/`, `/patrimonio/` y otras rutas “previstas” como si fueran la superficie existente.                      | Se sustituye por el inventario real de `src/pages/`; patrimonio queda situado en `/sobre-el-pueblo/`.              |
-| Incorrecto     | Se atribuían Content Collections a lugares, patrimonio y agenda.                                                                 | Se documentan únicamente `noticias` y `bandos`; la agenda real es un array vacío en `src/data/current-affairs.ts`. |
-| Incompleto     | La estructura de componentes omitía `about`, `game`, `home`, `accommodations`, `current-affairs`, componentes de colección y UI. | Se incorpora el árbol real y la separación de responsabilidades observada.                                         |
-| Incompleto     | La lista de scripts solo cubría menú y Three.js.                                                                                 | Se añaden mapas, Convex, Palomareños, sesión, geolocalización, GPX, cabecera y sincronización visual.              |
-| Incompleto     | No se documentaba el backend de propuestas de Palomareños ni el alcance de su proyección pública.                                | Se documentan el flujo Turnstile → mutación interna, moderación privada y datos públicos redactados.               |
-| Incorrecto     | La guía de Convex era el README genérico del scaffolding y el código se describía como futuro en `AGENTS.md`.                    | Se reemplaza por una guía del backend actual y se corrigen las instrucciones operativas.                           |
-| Incorrecto     | El README afirmaba que la cobertura no estaba configurada y omitía rutas y comandos actuales.                                    | Se actualiza contra `package.json`, CI, `src/pages/` y las pruebas ejecutadas.                                     |
-| Incompleto     | No se describían esquema, índices, queries, mutations, presencia, ranking, score ni seguridad de Convex.                         | Se añade una sección basada en `convex/schema.ts` y las funciones exportadas.                                      |
-| Incompleto     | La documentación trataba SEO y sitemap como intención, sin describir el contrato de `SEO.astro` ni la verificación.              | Se documentan metadatos, JSON-LD, canonical, sitemap, robots y `check:seo`.                                        |
-| Incompleto     | No se explicaban importación RSS, backfill, worktree, Pull Request, checks y SMTP.                                               | Se describe el flujo real y se separa de la instalación de cron, que no está en el repositorio.                    |
-| Incorrecto     | Se presentaba `src/styles/typography.css` como parte de la estructura.                                                           | Se elimina del inventario porque no existe.                                                                        |
-| Incompleto     | Three.js aparecía reducido a menú y crédito.                                                                                     | Se incluyen también emblema y bola, carga bajo demanda y fallbacks.                                                |
+| Clasificación  | Hallazgo                                                                                                                         | Corrección aplicada                                                                                                                           |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Desactualizado | El juego se describía principalmente como prototipo local, con Convex como estado compartido futuro.                             | Se documentan el modo remoto actual, las subscriptions, las mutations y sus límites.                                                          |
+| Incorrecto     | Se enumeraban `/lugares/`, `/patrimonio/` y otras rutas “previstas” como si fueran la superficie existente.                      | Se sustituye por el inventario real de `src/pages/`; patrimonio queda situado en `/sobre-el-pueblo/`.                                         |
+| Histórico      | La auditoría previa señalaba que la Agenda estaba vacía y no tenía Content Collection.                                           | La Agenda ya está implementada como proyección TypeScript (`agenda-manual.ts` + `agenda-bandos.generated.ts`), sin crear una colección nueva. |
+| Incompleto     | La estructura de componentes omitía `about`, `game`, `home`, `accommodations`, `current-affairs`, componentes de colección y UI. | Se incorpora el árbol real y la separación de responsabilidades observada.                                                                    |
+| Incompleto     | La lista de scripts solo cubría menú y Three.js.                                                                                 | Se añaden mapas, Convex, Palomareños, sesión, geolocalización, GPX, cabecera y sincronización visual.                                         |
+| Incompleto     | No se documentaba el backend de propuestas de Palomareños ni el alcance de su proyección pública.                                | Se documentan el flujo Turnstile → mutación interna, moderación privada y datos públicos redactados.                                          |
+| Incorrecto     | La guía de Convex era el README genérico del scaffolding y el código se describía como futuro en `AGENTS.md`.                    | Se reemplaza por una guía del backend actual y se corrigen las instrucciones operativas.                                                      |
+| Incorrecto     | El README afirmaba que la cobertura no estaba configurada y omitía rutas y comandos actuales.                                    | Se actualiza contra `package.json`, CI, `src/pages/` y las pruebas ejecutadas.                                                                |
+| Incompleto     | No se describían esquema, índices, queries, mutations, presencia, ranking, score ni seguridad de Convex.                         | Se añade una sección basada en `convex/schema.ts` y las funciones exportadas.                                                                 |
+| Incompleto     | La documentación trataba SEO y sitemap como intención, sin describir el contrato de `SEO.astro` ni la verificación.              | Se documentan metadatos, JSON-LD, canonical, sitemap, robots y `check:seo`.                                                                   |
+| Incompleto     | No se explicaban importación RSS, backfill, worktree, Pull Request, checks y SMTP.                                               | Se describe el flujo real y se separa de la instalación de cron, que no está en el repositorio.                                               |
+| Incorrecto     | Se presentaba `src/styles/typography.css` como parte de la estructura.                                                           | Se elimina del inventario porque no existe.                                                                                                   |
+| Incompleto     | Three.js aparecía reducido a menú y crédito.                                                                                     | Se incluyen también emblema y bola, carga bajo demanda y fallbacks.                                                                           |
 
 ## Estado actual, limitaciones y evolución
 
