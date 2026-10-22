@@ -26,6 +26,18 @@ test.describe('current affairs sections', () => {
     );
 
     await pastDisclosure.locator('summary').click();
+    const archivePagination = pastDisclosure.getByRole('navigation', {
+      name: 'Páginas de fechas pasadas',
+    });
+    for (
+      let pageNumber = 1;
+      pageNumber < 10 && !(await archivedEvent.isVisible());
+      pageNumber += 1
+    ) {
+      const nextPage = archivePagination.getByRole('button', { name: 'Siguiente' });
+      if (!(await nextPage.isEnabled())) break;
+      await nextPage.click();
+    }
     await expect(archivedEvent).toBeVisible();
     await expect(archivedEvent.locator('a')).toHaveAttribute('href', /1608976/);
 
@@ -50,6 +62,58 @@ test.describe('current affairs sections', () => {
     const pastDisclosure = page.locator('details[data-agenda-section="past"]');
     await expect(pastDisclosure).toBeVisible();
     await expect(pastDisclosure).not.toHaveAttribute('open');
+  });
+
+  test('combines agenda filters, restores them from the URL and paginates the archive', async ({
+    page,
+  }) => {
+    await page.clock.install({ time: new Date('2026-10-21T10:00:00.000Z') });
+    await page.goto('/agenda/');
+
+    const search = page.getByRole('searchbox', { name: 'Buscar en toda la agenda' });
+    const kind = page.getByRole('combobox', { name: 'Tipo' });
+    const category = page.getByRole('combobox', { name: 'Categoría' });
+    const year = page.getByRole('combobox', { name: 'Año' });
+    await search.fill('dentista');
+    await kind.selectOption('service');
+    await category.selectOption('Servicio público');
+    await year.selectOption('2025');
+
+    const filteredCards = page.locator('[data-agenda-card]:visible');
+    await expect(filteredCards).not.toHaveCount(0);
+    await expect(page.locator('[data-agenda-results]')).toContainText('fechas encontradas');
+    await expect(page.locator('details[data-agenda-section="past"]')).toHaveAttribute('open', '');
+    expect(new URL(page.url()).searchParams.get('q')).toBe('dentista');
+    expect(new URL(page.url()).searchParams.get('kind')).toBe('service');
+    expect(new URL(page.url()).searchParams.get('category')).toBe('Servicio público');
+    expect(new URL(page.url()).searchParams.get('year')).toBe('2025');
+    for (const card of await filteredCards.all()) {
+      await expect(card).toHaveAttribute('data-kind', 'service');
+      await expect(card).toHaveAttribute('data-year', '2025');
+    }
+
+    await page.reload();
+    await expect(search).toHaveValue('dentista');
+    await expect(kind).toHaveValue('service');
+    await expect(category).toHaveValue('Servicio público');
+    await expect(year).toHaveValue('2025');
+
+    await page.getByRole('button', { name: 'Limpiar filtros' }).click();
+    await expect(search).toHaveValue('');
+    expect(new URL(page.url()).searchParams.has('q')).toBe(false);
+    await expect(page.locator('details[data-agenda-section="past"]')).not.toHaveAttribute('open');
+
+    const past = page.locator('details[data-agenda-section="past"]');
+    await past.locator('summary').click();
+    const pagination = past.getByRole('navigation', { name: 'Páginas de fechas pasadas' });
+    await expect(pagination).toBeVisible();
+    await pagination.getByRole('button', { name: 'Siguiente' }).click();
+    await expect(pagination).toContainText('Página 2 de');
+    expect(new URL(page.url()).searchParams.get('pastPage')).toBe('2');
+    await page.reload();
+    await expect(past).toHaveAttribute('open', '');
+    await expect(pagination).toContainText('Página 2 de');
+    await expect(pagination.getByRole('button', { name: 'Anterior' })).toBeEnabled();
   });
 
   test('wraps long URLs in bando cards on narrow screens', async ({ page }) => {

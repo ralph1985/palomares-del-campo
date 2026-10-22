@@ -8,6 +8,8 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 #### Added
 
+- Añadida a la Agenda la búsqueda de texto y filtros combinables por tipo, categoría y año, con estado de resultados accesible y filtros restaurables desde la URL.
+- Añadida paginación progresiva a los grupos de Agenda con más de seis fechas, conservando el archivo cerrado por defecto y priorizando las fechas más recientes en el archivo.
 - Añadido a la Agenda el plazo oficial de la convocatoria 2026 de ayudas a la accesibilidad en viviendas de Castilla-La Mancha.
 - Añadidos los plazos JCCM 2026 para ayudas de conciliación mediante cuidados en el hogar y para la contratación indefinida (línea 1).
 - Añadida la feature flag de build `PUBLIC_PALOMARENOS_ENABLED`, desactivada por defecto, que oculta el mapa y el formulario hasta su activación explícita.

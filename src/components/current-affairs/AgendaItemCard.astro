@@ -34,6 +34,9 @@ const meta = [item.category, item.location, audience].filter(Boolean);
   data-start-date={item.startDate}
   data-end-date={item.endDate ?? item.startDate}
   data-status={item.status ?? 'active'}
+  data-kind={item.kind}
+  data-category={item.category}
+  data-year={item.startDate.slice(0, 4)}
 >
   <p class="agenda-kind">{kindLabels[item.kind]}</p>
   <p class="agenda-date">
@@ -59,6 +62,10 @@ const meta = [item.category, item.location, audience].filter(Boolean);
     border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
     border-radius: 1.2rem;
     background: var(--color-paper);
+  }
+
+  .agenda-card[hidden] {
+    display: none !important;
   }
 
   .agenda-kind,

@@ -1,0 +1,139 @@
+---
+interface Props {
+  categories: string[];
+  years: string[];
+}
+
+const { categories, years } = Astro.props;
+---
+
+<form class="agenda-filters" role="search" aria-label="Filtrar agenda" data-agenda-filters>
+  <label class="agenda-search-label" for="agenda-search">
+    Buscar en toda la agenda
+  </label>
+  <input
+    id="agenda-search"
+    name="q"
+    type="search"
+    placeholder="Ej. dentista, ayudas o fiestas"
+    autocomplete="off"
+  />
+  <div class="agenda-filter-selects">
+    <div class="agenda-filter-field">
+      <label for="agenda-kind">Tipo</label>
+      <select id="agenda-kind" name="kind">
+        <option value="">Todos los tipos</option>
+        <option value="event">Actividades</option>
+        <option value="service">Servicios públicos</option>
+        <option value="deadline">Plazos y trámites</option>
+      </select>
+    </div>
+    <div class="agenda-filter-field">
+      <label for="agenda-category">Categoría</label>
+      <select id="agenda-category" name="category">
+        <option value="">Todas</option>
+        {categories.map((category) => (
+          <option value={category}>{category}</option>
+        ))}
+      </select>
+    </div>
+    <div class="agenda-filter-field">
+      <label for="agenda-year">Año</label>
+      <select id="agenda-year" name="year">
+        <option value="">Todos los años</option>
+        {years.map((year) => (
+          <option value={year}>{year}</option>
+        ))}
+      </select>
+    </div>
+  </div>
+  <button class="agenda-clear" type="button" data-agenda-clear>
+    Limpiar filtros
+  </button>
+</form>
+
+<style>
+  .agenda-filters {
+    display: grid;
+    grid-template-columns: minmax(12rem, 1.3fr) minmax(0, 2fr) auto;
+    gap: 1rem;
+    align-items: end;
+    margin-top: 2.5rem;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    border: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--color-paper) 70%, transparent);
+  }
+
+  .agenda-filters label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--color-ink);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-strong);
+  }
+
+  .agenda-search-label {
+    grid-column: 1 / -1;
+    margin-bottom: -0.75rem !important;
+  }
+
+  .agenda-filters input,
+  .agenda-filters select {
+    width: 100%;
+    min-height: 2.9rem;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+    border-radius: 0.55rem;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font: inherit;
+  }
+
+  .agenda-filter-selects {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .agenda-filter-field {
+    min-width: 0;
+  }
+
+  .agenda-clear {
+    min-height: 2.9rem;
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--color-forest);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-ink);
+    font: inherit;
+    font-weight: var(--font-weight-strong);
+    cursor: pointer;
+  }
+
+  .agenda-clear:hover {
+    background: var(--color-forest);
+    color: var(--color-surface);
+  }
+
+  .agenda-filters :focus-visible {
+    outline: 3px solid var(--color-clay);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 34rem) {
+    .agenda-filters,
+    .agenda-filter-selects {
+      grid-template-columns: 1fr;
+    }
+
+    .agenda-search-label {
+      grid-column: auto;
+    }
+
+    .agenda-clear {
+      width: 100%;
+    }
+  }
+</style>
