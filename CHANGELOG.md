@@ -4,6 +4,12 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-10-22
+
+#### Added
+
+- Añadida la feature flag de build `PUBLIC_PALOMARENOS_ENABLED`, desactivada por defecto, que oculta el mapa y el formulario hasta su activación explícita.
+
 ### 2026-10-21
 
 #### Fixed
