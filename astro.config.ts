@@ -10,6 +10,12 @@ export default defineConfig({
         optional: true,
         default: false,
       }),
+      PUBLIC_PALOMARENOS_ENABLED: envField.boolean({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: false,
+      }),
     },
   },
   site: 'https://palomaresdelcampo.conquense.dev',

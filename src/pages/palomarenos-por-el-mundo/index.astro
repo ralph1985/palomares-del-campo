@@ -3,12 +3,15 @@ import WorldMap from '../../components/world/WorldMap.astro';
 import WorldSubmissionForm from '../../components/world/WorldSubmissionForm.astro';
 import EditorialHero from '../../components/hero/EditorialHero.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { PUBLIC_PALOMARENOS_ENABLED } from 'astro:env/client';
+
+const palomarenosEnabled = PUBLIC_PALOMARENOS_ENABLED;
+const pageDescription = palomarenosEnabled
+  ? 'Mapa de historias de personas vinculadas a Palomares del Campo que viven fuera.'
+  : 'Sección en preparación sobre personas vinculadas a Palomares del Campo que viven fuera.';
 ---
 
-<BaseLayout
-  title="Palomareños por el mundo · Palomares del Campo"
-  description="Mapa de historias de personas vinculadas a Palomares del Campo que viven fuera."
->
+<BaseLayout title="Palomareños por el mundo · Palomares del Campo" description={pageDescription}>
   <main>
     <EditorialHero labelledBy="page-title" variant="sage-display" titleWidth="narrow">
       <p slot="eyebrow" class="eyebrow">
@@ -18,57 +21,70 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         Palomareños por el mundo
       </h1>
       <p slot="summary" class="hero-intro">
-        El pueblo también se extiende allí donde viven quienes lo llevan consigo. Descubre sus
-        historias y comparte la tuya.
+        {palomarenosEnabled
+          ? 'El pueblo también se extiende allí donde viven quienes lo llevan consigo. Descubre sus historias y comparte la tuya.'
+          : 'El pueblo también se extiende allí donde viven quienes lo llevan consigo. Estamos preparando un espacio para reunir esas historias.'}
       </p>
     </EditorialHero>
 
-    <section class="world-intro" aria-labelledby="intro-title">
-      <div class="world-shell world-intro-grid">
-        <div>
-          <p class="eyebrow">Una red de vínculos</p>
-          <h2 id="intro-title">Distancia no siempre significa desconexión.</h2>
-        </div>
-        <div class="world-copy">
-          <p>
-            Este mapa reúne, poco a poco, a personas vinculadas a Palomares del Campo que viven en
-            otras ciudades y países.
-          </p>
-          <p>
-            Las historias se revisan antes de publicarse. Mostramos solo la ciudad aproximada y los
-            datos que cada persona elige compartir; nunca una dirección personal.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="world-map-section" aria-labelledby="map-section-title">
-      <div class="world-shell">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Historias aprobadas</p>
-            <h2 id="map-section-title">Un pueblo con muchos puntos cardinales.</h2>
+    {palomarenosEnabled ? (
+      <>
+        <section class="world-intro" aria-labelledby="intro-title">
+          <div class="world-shell world-intro-grid">
+            <div>
+              <p class="eyebrow">Una red de vínculos</p>
+              <h2 id="intro-title">Distancia no siempre significa desconexión.</h2>
+            </div>
+            <div class="world-copy">
+              <p>
+                Este mapa reúne, poco a poco, a personas vinculadas a Palomares del Campo que viven
+                en otras ciudades y países.
+              </p>
+              <p>
+                Las historias se revisan antes de publicarse. Mostramos solo la ciudad aproximada y
+                los datos que cada persona elige compartir; nunca una dirección personal.
+              </p>
+            </div>
           </div>
-          <p>Abre cada punto para conocer la historia que hay detrás.</p>
+        </section>
+
+        <section class="world-map-section" aria-labelledby="map-section-title">
+          <div class="world-shell">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Historias aprobadas</p>
+                <h2 id="map-section-title">Un pueblo con muchos puntos cardinales.</h2>
+              </div>
+              <p>Abre cada punto para conocer la historia que hay detrás.</p>
+            </div>
+            <WorldMap />
+          </div>
+        </section>
+
+        <section class="world-form-section" aria-labelledby="form-section-title">
+          <div class="world-shell">
+            <WorldSubmissionForm />
+          </div>
+        </section>
+
+        <section class="world-note-section" aria-label="Privacidad y revisión">
+          <div class="world-shell">
+            <p>
+              Las propuestas se revisan manualmente. El email se utiliza solo para contacto y no se
+              publica en el mapa. Puedes solicitar una corrección o la retirada de tu historia.
+            </p>
+          </div>
+        </section>
+      </>
+    ) : (
+      <section class="world-disabled" aria-labelledby="world-disabled-title">
+        <div class="world-shell world-disabled-content">
+          <p class="eyebrow">Comunidad</p>
+          <h2 id="world-disabled-title">La sección se está preparando</h2>
+          <p>El mapa y el envío de propuestas estarán disponibles más adelante.</p>
         </div>
-        <WorldMap />
-      </div>
-    </section>
-
-    <section class="world-form-section" aria-labelledby="form-section-title">
-      <div class="world-shell">
-        <WorldSubmissionForm />
-      </div>
-    </section>
-
-    <section class="world-note-section" aria-label="Privacidad y revisión">
-      <div class="world-shell">
-        <p>
-          Las propuestas se revisan manualmente. El email se utiliza solo para contacto y no se
-          publica en el mapa. Puedes solicitar una corrección o la retirada de tu historia.
-        </p>
-      </div>
-    </section>
+      </section>
+    )}
   </main>
 </BaseLayout>
 
@@ -103,8 +119,25 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   .world-intro,
   .world-map-section,
-  .world-form-section {
+  .world-form-section,
+  .world-disabled {
     padding: clamp(4.5rem, 10vw, 8rem) 0;
+  }
+
+  .world-disabled {
+    background: var(--color-paper);
+  }
+
+  .world-disabled-content {
+    max-width: 60rem;
+  }
+
+  .world-disabled-content > p:last-child {
+    max-width: 40rem;
+    margin: 1.25rem 0 0;
+    color: var(--color-muted);
+    font-size: 1.05rem;
+    line-height: 1.7;
   }
 
   .world-intro-grid,
