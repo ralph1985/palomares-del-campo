@@ -9,6 +9,7 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 #### Added
 
 - Añadido a la Agenda el plazo oficial de la convocatoria 2026 de ayudas a la accesibilidad en viviendas de Castilla-La Mancha.
+- Añadidos los plazos JCCM 2026 para ayudas de conciliación mediante cuidados en el hogar y para la contratación indefinida (línea 1).
 - Añadida la feature flag de build `PUBLIC_PALOMARENOS_ENABLED`, desactivada por defecto, que oculta el mapa y el formulario hasta su activación explícita.
 
 ### 2026-10-21
