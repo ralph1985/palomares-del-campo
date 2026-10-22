@@ -49,12 +49,15 @@ Inter no está importada ni empaquetada actualmente. `src/styles/global.css` usa
 - `--font-size-small`: 0.85rem, información secundaria.
 - `--font-size-label`: 0.7rem, etiquetas en mayúsculas.
 - `--font-size-display`: escala fluida para titulares principales.
+- `--font-size-page-title`: escala fluida de títulos de página, con máximo de 5.5rem.
+- `--font-size-section-heading`: escala común de encabezados de sección, con máximo de 3.75rem.
+- `--spacing-section-y`: ritmo vertical fluido para secciones, con máximo de 5.5rem.
 
 Los tokens de ritmo (`--line-height-body`, `--line-height-heading`, `--tracking-label` y `--tracking-heading`) describen las proporciones actuales y se migrarán junto con cada superficie, no mediante una reescritura global brusca.
 
 ## Componentes Hero
 
-- `EditorialHero.astro` comparte el patrón de una columna con slots para antetítulo, H1, introducción, aviso y acciones. Sus variantes (`ink-display`, `sage-display`, `ink-compact`, `paper-tall`) conservan las superficies actuales; `fullHeight` se reserva a secciones que ocupan la altura de la ventana.
+- `EditorialHero.astro` comparte el patrón de una columna con slots para antetítulo, H1, introducción, aviso y acciones. Sus variantes (`ink-display`, `sage-display`, `ink-compact`, `paper-tall`) consumen la escala común de título y reducen el espacio vertical de escritorio; `fullHeight` se reserva a secciones que ocupan la altura de la ventana.
 - `SplitHero.astro` comparte la retícula de dos columnas con slots `copy` y `visual`. Sus variantes `heritage` y `game` mantienen las composiciones fotográfica/3D y de partida interactiva sin trasladar su contenido o estado al componente.
 - Las páginas conservan textos y datos; las excepciones de ancho de título o introducción se expresan con modificadores tipados, no con selectores globales ni CSS repetido.
 

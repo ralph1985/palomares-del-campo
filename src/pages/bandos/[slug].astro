@@ -114,7 +114,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   .article-shell {
     width: min(100% - 2.5rem, 54rem);
     margin: 0 auto;
-    padding: clamp(3rem, 8vw, 7rem) 0;
+    padding: var(--spacing-section-y) 0;
   }
 
   .article-source a {
@@ -153,7 +153,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     max-width: 18ch;
     margin: 0;
     font-family: var(--font-serif);
-    font-size: clamp(2.8rem, 7vw, 5.7rem);
+    font-size: var(--font-size-page-title);
     font-weight: 500;
     letter-spacing: -0.06em;
     line-height: 0.96;

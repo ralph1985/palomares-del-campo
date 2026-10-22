@@ -149,8 +149,8 @@ const years = [...new Set(agendaItems.map((item) => item.startDate.slice(0, 4)))
 
 <style>
   .agenda-section {
-    min-height: calc(100vh - 10.5rem);
-    padding: clamp(5rem, 12vw, 9rem) 0;
+    min-height: min(36rem, calc(100vh - 5.25rem));
+    padding: var(--spacing-section-y) 0;
     background: var(--color-sage);
   }
 
@@ -177,7 +177,7 @@ const years = [...new Set(agendaItems.map((item) => item.startDate.slice(0, 4)))
   }
 
   h1 {
-    font-size: clamp(4rem, 12vw, 9rem);
+    font-size: var(--font-size-page-title);
     line-height: 0.95;
   }
 
