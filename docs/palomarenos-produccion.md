@@ -23,9 +23,12 @@ Estas variables llegan al build de Astro y pueden formar parte del navegador. No
 
 | Variable                     | Entorno                       | Servicio               | Visibilidad | Obligatoria                          | Validación                                                                                      |
 | ---------------------------- | ----------------------------- | ---------------------- | ----------- | ------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| `PUBLIC_PALOMARENOS_ENABLED` | Desarrollo/Preview/Producción | Página Astro           | Pública     | No                                   | Boolean; ausente o `false` oculta mapa y formulario; `true` los activa en el siguiente build    |
 | `CONVEX_URL`                 | Desarrollo/Preview/Producción | Astro y cliente Convex | Pública     | Sí para mapa y formulario remotos    | Debe ser la URL HTTPS del deployment Convex previsto para ese entorno                           |
 | `PUBLIC_TURNSTILE_SITE_KEY`  | Desarrollo/Preview/Producción | Widget Turnstile       | Pública     | Sí cuando se habilita Turnstile real | Debe corresponder al widget y hostname del entorno                                              |
 | `PUBLIC_TURNSTILE_HOSTNAMES` | Desarrollo/Preview/Producción | Guard del formulario   | Pública     | Recomendable                         | Lista separada por comas; producción debe contener únicamente `palomaresdelcampo.conquense.dev` |
+
+`PUBLIC_PALOMARENOS_ENABLED` está desactivada por defecto en todos los builds. El `.env.local` de desarrollo puede establecerla a `true` para pruebas; Preview y Producción deben permanecer en `false` o sin definir hasta que se autorice la activación. En un sitio estático, cambiar el valor requiere un nuevo build y despliegue.
 
 En Playwright se usa una clave sintética y un widget simulado mediante `window.__PALOMARENOS_TURNSTILE_TEST__`. Ese bypass solo existe en modo de desarrollo y en los tests; no es una alternativa para producción.
 

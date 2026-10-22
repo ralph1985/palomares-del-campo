@@ -3,6 +3,8 @@ import { defineConfig, devices } from '@playwright/test';
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:4321';
 const pageTransitionsEnabled = process.env.PUBLIC_PAGE_TRANSITIONS_ENABLED ?? 'true';
 process.env.PUBLIC_PAGE_TRANSITIONS_ENABLED = pageTransitionsEnabled;
+const palomarenosEnabled = process.env.PUBLIC_PALOMARENOS_ENABLED ?? 'true';
+process.env.PUBLIC_PALOMARENOS_ENABLED = palomarenosEnabled;
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -34,6 +36,7 @@ export default defineConfig({
       DISABLE_ASTRO_DEV_TOOLBAR_FOR_E2E: 'true',
       PUBLIC_E2E_TEST_MODE: 'true',
       PUBLIC_PAGE_TRANSITIONS_ENABLED: pageTransitionsEnabled,
+      PUBLIC_PALOMARENOS_ENABLED: palomarenosEnabled,
       PUBLIC_TURNSTILE_SITE_KEY: 'e2e-test-site-key',
     },
   },

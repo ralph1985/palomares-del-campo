@@ -17,6 +17,9 @@ CI=1 pnpm test:e2e
 echo '→ Verificando la navegación con transiciones desactivadas...'
 PUBLIC_PAGE_TRANSITIONS_ENABLED=false CI=1 pnpm exec playwright test tests/e2e/page-transition-feature-flag.spec.ts --retries=0
 
+echo '→ Verificando Palomareños con la feature flag desactivada...'
+PUBLIC_PALOMARENOS_ENABLED=false CI=1 pnpm exec playwright test tests/e2e/palomarenos-feature-flag.spec.ts --retries=0
+
 echo '→ Construyendo la aplicación...'
 pnpm run build
 
