@@ -143,6 +143,7 @@ src/components/
 ├── accommodations/
 │   └── AccommodationCard.astro
 ├── current-affairs/
+│   ├── AgendaFilters.astro
 │   ├── AgendaItemCard.astro
 │   └── CurrentAffairsEmptyState.astro
 ├── hero/
@@ -175,12 +176,13 @@ src/components/
     └── ExternalLink.astro
 ```
 
-Los componentes de `layout/` forman el shell común. `EditorialHero` comparte la estructura de una columna de las páginas editoriales y `SplitHero` el patrón de dos columnas de Sobre el pueblo y La bola; ambos conservan el contenido mediante slots. `CurrentAffairsEmptyState` usa `EditorialHero` para mantener su aviso y atributos de estado. `CollectionArchive` y `CollectionSearch` son compartidos por noticias y bandos. Los componentes de `game/` componen la superficie del juego; la lógica del mapa y la comunicación con Convex están en scripts de cliente separados.
+Los componentes de `layout/` forman el shell común. `EditorialHero` comparte la estructura de una columna de las páginas editoriales y `SplitHero` el patrón de dos columnas de Sobre el pueblo y La bola; ambos conservan el contenido mediante slots. `CurrentAffairsEmptyState` usa `EditorialHero` para mantener su aviso y atributos de estado. `AgendaFilters` presenta búsqueda y filtros para el archivo estático de Agenda; `agenda.ts` los combina con la paginación accesible, mantiene los filtros en la URL y recalcula la separación entre fechas vigentes y pasadas en `Europe/Madrid`. `CollectionArchive` y `CollectionSearch` son compartidos por noticias y bandos. Los componentes de `game/` componen la superficie del juego; la lógica del mapa y la comunicación con Convex están en scripts de cliente separados.
 
 ### `src/scripts/`
 
 ```text
 src/scripts/
+├── agenda.ts             # Búsqueda, filtros y paginación de la Agenda.
 ├── auto-hide-header.ts   # Oculta/muestra la cabecera según el desplazamiento.
 ├── page-transition.ts    # Coordina la transición MPA y su fallback CSS.
 ├── page-transition-scene.ts # Cubo Three.js CSS3D con copias DOM, cargado bajo demanda.
