@@ -12,6 +12,12 @@ const jccmThermalismSource = {
   publishedAt: '2026-02-20T10:14:00.000Z',
 };
 
+const accessibilityGrantSource = {
+  label: 'Junta de Comunidades de Castilla-La Mancha (JCCM)',
+  href: 'https://www.jccm.es/sede/tramite/M8X',
+  publishedAt: '2026-09-30',
+};
+
 const imsersoThermalismSource = {
   label: 'Palomares del Campo Informa',
   href: 'https://www.bandomovil.com/palomaresdelcampo/1452409/0',
@@ -178,6 +184,18 @@ export const manualAgendaItems: AgendaItem[] = [
       href: 'https://contrataciondelestado.es/wps/poc?uri=deeplink:detalle_licitacion&idEvl=7K4zNBUeDP6KeVWTb9Scog%3D%3D',
       publishedAt: '2026-10-06',
     },
+  },
+  {
+    id: 'municipal:accessibility-housing-2026',
+    kind: 'deadline',
+    title: 'Ayudas de accesibilidad en viviendas · convocatoria 2026',
+    startDate: '2026-10-01',
+    endDate: '2026-11-30',
+    category: 'Trámite público',
+    audience: 'residents',
+    summary:
+      'Ayudas para mejorar la accesibilidad en viviendas de Castilla-La Mancha. Las actuaciones deben haberse iniciado entre el 1 de julio de 2024 y el 31 de diciembre de 2025. Pueden solicitarlas personas propietarias o usufructuarias, comunidades de propietarios y, en supuestos concretos, personas arrendatarias. Plazo hasta el 30 de noviembre, salvo agotamiento previo del crédito; consulta los requisitos oficiales.',
+    source: accessibilityGrantSource,
   },
   {
     id: 'municipal:imserso-thermalism-2026-turn-1',
