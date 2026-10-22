@@ -49,10 +49,10 @@ const { labelledBy, variant, class: className, ...sectionAttributes } = Astro.pr
     grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
     align-items: center;
     width: min(100% - 2.5rem, 72rem);
-    min-height: min(42rem, calc(100vh - 5.25rem));
+    min-height: min(38rem, calc(100vh - 5.25rem));
     gap: 3rem;
     margin: 0 auto;
-    padding: clamp(4rem, 9vw, 8rem) 0;
+    padding: var(--spacing-section-y) 0;
   }
 
   .split-hero--game .split-hero__inner {

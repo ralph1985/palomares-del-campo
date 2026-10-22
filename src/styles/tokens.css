@@ -80,6 +80,9 @@
   --font-size-small: 0.85rem;
   --font-size-label: 0.7rem;
   --font-size-display: clamp(3.4rem, 8vw, 7.5rem);
+  --font-size-page-title: clamp(2.8rem, 5vw, 5.5rem);
+  --font-size-section-heading: clamp(2rem, 3.4vw, 3.75rem);
+  --spacing-section-y: clamp(3.5rem, 6vw, 5.5rem);
 
   /* Reading rhythm */
   --line-height-body: 1.7;

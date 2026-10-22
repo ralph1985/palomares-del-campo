@@ -35,20 +35,20 @@ h3 {
 }
 
 h1 {
-  max-width: 8ch;
-  font-size: clamp(4rem, 9vw, 8.6rem);
+  max-width: 11ch;
+  font-size: var(--font-size-page-title);
 }
 
 h2 {
   max-width: 12ch;
-  font-size: clamp(3rem, 6vw, 5.8rem);
+  font-size: var(--font-size-section-heading);
 }
 
 .hero-intro {
   max-width: 31rem;
-  margin: 2.25rem 0 0;
+  margin: 1.5rem 0 0;
   color: var(--color-sage-light);
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-size: clamp(1rem, 1.3vw, 1.1rem);
   line-height: 1.55;
 }
 
@@ -177,7 +177,7 @@ h2 {
 .heritage-section,
 .traditions-section,
 .sources-section {
-  padding: clamp(5rem, 10vw, 9rem) 0;
+  padding: var(--spacing-section-y) 0;
 }
 
 .history-section {
@@ -387,7 +387,7 @@ h2 {
 }
 
 .tradition-item h3 {
-  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-size: clamp(1.5rem, 2.7vw, 2rem);
 }
 
 .tradition-item p {
@@ -402,8 +402,8 @@ h2 {
 }
 
 .sources-section {
-  padding-top: clamp(3.5rem, 7vw, 6rem);
-  padding-bottom: clamp(3.5rem, 7vw, 6rem);
+  padding-top: var(--spacing-section-y);
+  padding-bottom: var(--spacing-section-y);
   background: var(--color-paper);
 }
 

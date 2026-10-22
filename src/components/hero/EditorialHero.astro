@@ -55,7 +55,7 @@ const {
 <style>
   .editorial-hero {
     --hero-gutter: min(100% - 2.5rem, 72rem);
-    padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 9vw, 7rem);
+    padding: clamp(4rem, 7vw, 6rem) 0 clamp(3.5rem, 6vw, 5rem);
   }
 
   .editorial-hero__inner {
@@ -73,7 +73,7 @@ const {
   }
 
   .editorial-hero--ink-compact {
-    padding: clamp(3.5rem, 8vw, 7rem) 0;
+    padding: clamp(3rem, 6vw, 5rem) 0;
     color: var(--color-surface-soft);
     background: var(--color-ink);
   }
@@ -81,18 +81,18 @@ const {
   .editorial-hero--paper-tall {
     display: grid;
     align-content: center;
-    min-height: calc(100vh - 10.5rem);
-    padding: 6rem 0;
+    min-height: min(36rem, calc(100vh - 5.25rem));
+    padding: 4rem 0;
   }
 
   .editorial-hero--viewport {
-    min-height: calc(100vh - 10.5rem);
-    padding: clamp(5rem, 14vw, 10rem) 0;
+    min-height: min(36rem, calc(100vh - 5.25rem));
+    padding: clamp(4rem, 7vw, 6rem) 0;
   }
 
   .editorial-hero--viewport :global(h1) {
-    max-width: 10ch;
-    font-size: clamp(4rem, 12vw, 9rem);
+    max-width: 13ch;
+    font-size: var(--font-size-page-title);
     letter-spacing: -0.07em;
     line-height: 0.9;
   }
@@ -120,7 +120,7 @@ const {
     margin: 0;
     color: var(--color-ink);
     font-family: var(--font-serif);
-    font-size: clamp(3.3rem, 8vw, 7.5rem);
+    font-size: var(--font-size-page-title);
     font-weight: var(--font-weight-medium);
     letter-spacing: -0.06em;
     line-height: 0.96;
@@ -129,7 +129,7 @@ const {
   .editorial-hero--ink-display :global(h1) {
     max-width: 12ch;
     color: var(--color-surface-soft);
-    font-size: clamp(4rem, 11vw, 8rem);
+    font-size: clamp(3.25rem, 5.5vw, 6rem);
     line-height: 0.95;
   }
 
@@ -140,12 +140,12 @@ const {
   .editorial-hero--ink-compact :global(h1) {
     max-width: 18ch;
     color: var(--color-surface-soft);
-    font-size: clamp(2.4rem, 6vw, 5rem);
+    font-size: var(--font-size-page-title);
   }
 
   .editorial-hero--paper-tall :global(h1) {
-    max-width: 11ch;
-    font-size: clamp(3.4rem, 8vw, 7.5rem);
+    max-width: 13ch;
+    font-size: var(--font-size-page-title);
     letter-spacing: -0.065em;
     line-height: 0.94;
   }
@@ -160,9 +160,9 @@ const {
 
   .editorial-hero :global(.hero-intro) {
     max-width: 38rem;
-    margin: 2rem 0 0;
+    margin: 1.5rem 0 0;
     color: var(--color-muted);
-    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    font-size: clamp(1rem, 1.3vw, 1.1rem);
     line-height: 1.7;
   }
 
@@ -176,9 +176,9 @@ const {
   }
 
   .editorial-hero--ink-compact :global(.hero-intro) {
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
     color: var(--color-night-text);
-    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    font-size: clamp(1rem, 1.3vw, 1.1rem);
     line-height: 1.6;
   }
 
