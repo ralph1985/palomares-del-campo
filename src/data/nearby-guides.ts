@@ -24,12 +24,60 @@ export interface NearbyPlaceGuide {
   beforeYouGo: string;
   visitUrl: string;
   visitLabel: string;
+  video?: { youtubeId: string; title: string; watchUrl: string; credit: string };
   sources: { label: string; href: string }[];
 }
 
 export const nearbyPlaceGuidesReviewedAt = '2026-10-24';
 
 export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
+  {
+    slug: 'castillo-torrebuceit',
+    title: 'El castillo de Torrebuceit, vigía del Záncara',
+    description:
+      'Guía del castillo medieval de Torrebuceit: su arquitectura, las cautelas sobre su cronología y un vídeo aéreo grabado por Rafa.',
+    eyebrow: 'Castillo medieval · Villar del Águila',
+    introduction:
+      'El castillo de Torrebuceit se encuentra en Villar del Águila, dentro del término municipal de Torrejoncillo del Rey. Hoy está integrado en un caserío privado: puede contemplarse desde el exterior, pero no se permite visitar su interior.',
+    sections: [
+      {
+        heading: 'Una fortaleza transformada',
+        paragraphs: [
+          'La Asociación Española de Amigos de los Castillos describe un recinto de planta rectangular, con lienzos de muralla y cuatro torres: tres cuadradas y una redondeada. También recoge mampostería y restos de culturas precedentes islámicas.',
+          'Las fuentes consultadas no coinciden del todo en cómo fechar y atribuir el origen del conjunto. Turismo de Castilla-La Mancha lo presenta como una fortaleza islámica del siglo XIV; la ficha de la asociación lo clasifica como medieval cristiano y plantea que pudo ser una alquería musulmana transformada. Por eso esta guía no fija una cronología única.',
+        ],
+      },
+      {
+        heading: 'Contemplarlo sin invadir la propiedad',
+        paragraphs: [
+          'La ficha turística indica que el castillo es visible desde la carretera que une Zafra de Záncara y Huerta de la Obispalía, pero el edificio es de propiedad privada y el interior no está abierto a visitas. El vídeo aéreo de esta página ofrece una vista general sin necesidad de acceder al caserío.',
+          'Si te acercas, quédate en espacios públicos donde sea seguro detenerse. No entres en la propiedad ni pares sobre la calzada.',
+        ],
+      },
+    ],
+    images: [],
+    beforeYouGo:
+      'La propiedad es privada y no se permite la visita interior. La ficha oficial indica que es visible desde la carretera; contempla el castillo únicamente desde un lugar público y seguro, sin entrar en el caserío ni detenerte en la calzada.',
+    visitUrl:
+      'https://www.turismocastillalamancha.es/es/cultura-y-patrimonio/castillos/cuenca/castillo-de-torrebuceit',
+    visitLabel: 'Ficha del Castillo de Torrebuceit · Turismo de Castilla-La Mancha',
+    video: {
+      youtubeId: 'd5C1apoWJ9w',
+      title: 'Torrebuceit desde el aire',
+      watchUrl: 'https://youtu.be/d5C1apoWJ9w',
+      credit: 'Vídeo grabado por Rafa',
+    },
+    sources: [
+      {
+        label: 'Castillo de Torrebuceit · Turismo de Castilla-La Mancha',
+        href: 'https://www.turismocastillalamancha.es/es/cultura-y-patrimonio/castillos/cuenca/castillo-de-torrebuceit',
+      },
+      {
+        label: 'Castillo de Torrebuceit · Asociación Española de Amigos de los Castillos',
+        href: 'https://www.xn--castillosdeespaa-lub.es/es/content/torrebuceit-castillo-de',
+      },
+    ],
+  },
   {
     slug: 'segobriga-saelices',
     title: 'Segóbriga: una ciudad romana en la Meseta',

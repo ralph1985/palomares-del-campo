@@ -41,6 +41,28 @@ export const nearbyPlaceGroups = [
 
 export const nearbyPlaces: NearbyPlace[] = [
   {
+    slug: 'castillo-torrebuceit',
+    name: 'Castillo de Torrebuceit',
+    municipality: 'Villar del Águila · Torrejoncillo del Rey',
+    category: 'Patrimonio · castillo medieval',
+    group: 'nearby',
+    summary:
+      'Un castillo medieval transformado en caserío, visible desde el exterior en el valle del Záncara. La guía explica qué se sabe de su arquitectura y cómo contemplarlo con respeto.',
+    visitNote:
+      'Es una propiedad privada y no se permiten visitas al interior. Obsérvalo únicamente desde zonas públicas y seguras; no accedas al caserío ni te detengas en la calzada.',
+    guidePath: '/que-ver-cerca/castillo-torrebuceit/',
+    sources: [
+      {
+        label: 'Castillo de Torrebuceit · Turismo de Castilla-La Mancha',
+        href: 'https://www.turismocastillalamancha.es/es/cultura-y-patrimonio/castillos/cuenca/castillo-de-torrebuceit',
+      },
+      {
+        label: 'Castillo de Torrebuceit · Asociación Española de Amigos de los Castillos',
+        href: 'https://www.xn--castillosdeespaa-lub.es/es/content/torrebuceit-castillo-de',
+      },
+    ],
+  },
+  {
     slug: 'mina-mora-encantada',
     name: 'Mina de la Mora Encantada',
     municipality: 'Torrejoncillo del Rey',
