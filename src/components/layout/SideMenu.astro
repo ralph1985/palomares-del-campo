@@ -1,5 +1,13 @@
 ---
 import { navigationGroups } from '../../data/navigation';
+import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
+
+const visibleNavigationGroups = navigationGroups
+  .map((group) => ({
+    ...group,
+    links: group.links.filter((link) => PUBLIC_BALL_GAME_ENABLED || link.href !== '/juego/'),
+  }))
+  .filter((group) => group.links.length > 0);
 ---
 
 <button
@@ -22,7 +30,7 @@ import { navigationGroups } from '../../data/navigation';
     <div class="side-menu-content">
       <nav aria-label="Secciones del sitio">
         <div class="side-nav-groups">
-          {navigationGroups.map((group) => (
+          {visibleNavigationGroups.map((group) => (
             <section class="side-nav-group" aria-labelledby={`menu-group-${group.label}`}>
               <h2 id={`menu-group-${group.label}`}>{group.label}</h2>
               <ul class="side-nav">

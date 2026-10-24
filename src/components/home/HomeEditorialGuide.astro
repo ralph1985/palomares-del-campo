@@ -1,17 +1,24 @@
 ---
 import ActionLink from '../ui/ActionLink.astro';
 import { homeEditorialEntries } from '../../data/home';
+import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
+
+const visibleEntries = homeEditorialEntries.filter(
+  (entry) => PUBLIC_BALL_GAME_ENABLED || entry.accent !== 'game',
+);
 ---
 
 <section class="editorial-section" aria-labelledby="editorial-title">
   <div class="editorial-shell">
     <div class="editorial-heading">
       <p class="audience-eyebrow">Una primera guía</p>
-      <h2 id="editorial-title">Palomares se descubre de cuatro maneras.</h2>
+      <h2 id="editorial-title">
+        Palomares se descubre de {PUBLIC_BALL_GAME_ENABLED ? 'cuatro' : 'tres'} maneras.
+      </h2>
     </div>
 
     <div class="editorial-grid">
-      {homeEditorialEntries.map((entry, index) => (
+      {visibleEntries.map((entry, index) => (
         <article class:list={['editorial-card', `editorial-card--${entry.accent}`]}>
           <span class="editorial-index">0{index + 1}</span>
           <div>

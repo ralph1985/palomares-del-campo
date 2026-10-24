@@ -328,7 +328,7 @@ Todas las páginas de contenido importan `BaseLayout.astro` y componen su conten
 - `/alojamientos/` usa `ruralAccommodations` y separa opciones del municipio y alrededores.
 - `/informacion-practica/` usa `municipalInfo` para contacto, servicios oficiales y horarios de transporte.
 - `/agenda/` combina eventos, servicios públicos y plazos con procedencia visible; separa las fechas vigentes, las pasadas en un `<details>` cerrado por defecto y las canceladas. Recalcula el corte con la fecha de `Europe/Madrid` en cada visita, también después de un build estático.
-- `/juego/` calcula `hasRemoteGame` a partir de `import.meta.env.CONVEX_URL` y compone la experiencia local o remota.
+- `/juego/` solo muestra el juego cuando `PUBLIC_BALL_GAME_ENABLED` está activada en el build; apagada, devuelve una página 404 no indexable sin montar la experiencia. La flag también controla sus enlaces en menú, portada, pie y rutas, y excluye la ruta del sitemap. Activarla en el sitio estático requiere un nuevo build. Cuando está activa, calcula `hasRemoteGame` a partir de `import.meta.env.CONVEX_URL` y compone la experiencia local o remota.
 - `/avisos/` ejecuta `Astro.redirect('/bandos/', 301)` y no genera contenido editorial propio.
 
 ### Content Collections
