@@ -8,7 +8,10 @@ import SideMenu from './SideMenu.astro';
       <span class="brand-mark" aria-hidden="true">
         <img src="/brand/escudo-palomares-del-campo.svg" alt="" width="64" height="112" />
       </span>
-      <span>Palomares del Campo</span>
+      <span class="brand-name">
+        <span class="brand-name-main">Palomares</span>
+        <span class="brand-name-sub">del Campo</span>
+      </span>
     </a>
 
     <button
@@ -39,8 +42,9 @@ import SideMenu from './SideMenu.astro';
     position: sticky;
     z-index: 1100;
     top: 0;
+    border-top: 3px solid var(--color-clay);
     border-bottom: 1px solid rgb(25 52 45 / 12%);
-    background: rgb(244 241 233 / 92%);
+    background: var(--color-paper);
     transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
   }
@@ -54,7 +58,7 @@ import SideMenu from './SideMenu.astro';
     align-items: center;
     justify-content: space-between;
     width: min(100% - 2.5rem, 72rem);
-    min-height: 5.5rem;
+    min-height: 5.75rem;
     margin: 0 auto;
     gap: 2rem;
   }
@@ -62,32 +66,44 @@ import SideMenu from './SideMenu.astro';
   .site-header .brand {
     display: inline-flex;
     align-items: center;
-    gap: 0.9rem;
+    gap: 1rem;
     color: var(--color-ink);
-    font-size: var(--font-size-small);
-    font-weight: var(--font-weight-strong);
-    letter-spacing: -0.01em;
     text-decoration: none;
   }
 
-  .site-header .brand > span:last-child {
+  .site-header .brand-name {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .site-header .brand-name-main {
     font-family: var(--font-serif);
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-weight: var(--font-weight-medium);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    letter-spacing: -0.035em;
+    line-height: 1;
     white-space: nowrap;
+  }
+
+  .site-header .brand-name-sub {
+    color: var(--color-clay);
+    font-size: 0.66rem;
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.15em;
+    line-height: 1;
+    text-transform: uppercase;
   }
 
   .site-header .brand-mark {
     display: grid;
-    width: 2.65rem;
-    height: 3.1rem;
+    width: 3.35rem;
+    height: 3.5rem;
     place-items: center;
     overflow: hidden;
-    border-radius: 0;
+    border-radius: 0.65rem;
+    padding: 0.2rem;
     color: var(--color-paper);
-    background: transparent;
+    background: var(--color-sage);
     font-family: var(--font-serif);
     font-size: 1.3rem;
     font-weight: 700;
@@ -107,30 +123,34 @@ import SideMenu from './SideMenu.astro';
   .menu-toggle {
     display: inline-flex;
     align-items: center;
-    gap: 0.9rem;
+    gap: 0.7rem;
     min-width: 2.75rem;
     min-height: 2.75rem;
-    padding: 0.5rem 0;
+    padding: 0.6rem 1rem;
     border: 0;
-    color: var(--color-ink);
-    background: transparent;
+    border-radius: 999px;
+    color: var(--color-surface-soft);
+    background: var(--color-forest);
     cursor: pointer;
     font: inherit;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     font-weight: 700;
+    transition:
+      background-color 180ms ease,
+      transform 180ms ease;
   }
 
   .menu-toggle-icon {
     display: grid;
     gap: 0.3rem;
-    width: 1.5rem;
+    width: 1.35rem;
   }
 
   .menu-toggle-icon span {
     display: block;
     height: 2px;
     border-radius: 999px;
-    background: var(--color-forest);
+    background: currentColor;
     transition: transform 220ms ease;
   }
 
@@ -142,6 +162,11 @@ import SideMenu from './SideMenu.astro';
   .menu-toggle:hover .menu-toggle-icon span:first-child,
   .menu-toggle:focus-visible .menu-toggle-icon span:first-child {
     transform: translateX(-0.2rem);
+  }
+
+  .menu-toggle:hover {
+    background: var(--color-ink);
+    transform: translateY(-1px);
   }
 
   .menu-toggle:hover .menu-toggle-icon span:last-child,
@@ -157,6 +182,7 @@ import SideMenu from './SideMenu.astro';
 
   @media (prefers-reduced-motion: reduce) {
     .site-header,
+    .menu-toggle,
     .menu-toggle-icon span {
       transition-duration: 0.01ms;
     }
@@ -165,24 +191,30 @@ import SideMenu from './SideMenu.astro';
   @media (max-width: 38rem) {
     .site-header .header-inner {
       width: min(100% - 2rem, 72rem);
-      min-height: 5.1rem;
+      min-height: 5.4rem;
     }
 
     .site-header .brand {
-      gap: 0.65rem;
+      gap: 0.7rem;
     }
 
-    .site-header .brand > span:last-child {
-      font-size: 1rem;
+    .site-header .brand-name-main {
+      font-size: 1.05rem;
     }
 
     .site-header .brand-mark {
-      width: 2.4rem;
-      height: 2.8rem;
+      width: 3rem;
+      height: 3.1rem;
     }
 
-    .menu-toggle-label {
-      display: none;
+    .menu-toggle {
+      gap: 0.55rem;
+      padding-inline: 0.75rem;
+      font-size: 0.76rem;
+    }
+
+    .menu-toggle-icon {
+      width: 1.15rem;
     }
   }
 </style>
