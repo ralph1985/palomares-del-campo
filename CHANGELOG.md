@@ -10,6 +10,8 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 - Añadida una guía ampliada de la iglesia de Nuestra Señora de la Asunción, enlazada desde la tarjeta de patrimonio y con fuentes institucionales visibles.
 - Ampliada la guía de la iglesia con tres fotografías exteriores de Wikimedia Commons, crédito visible y licencia CC BY-SA 4.0.
+- Añadida una guía del Castillo de Torrebuceit a «Qué ver cerca», con el testimonio familiar sobre Crescente y Eusebia, contexto documentado sobre el trabajo en la finca, cautelas de acceso y vídeo grabado por Rafa en homenaje a su abuelo Crescente.
+- Añadidas tres fotografías de Torrebuceit con atribución a 19Tarrestnom65 y licencia CC BY-SA 4.0; las copias WebP locales enlazan a sus originales y a la licencia.
 - Añadidas guías ampliadas de Segóbriga, la Mina de la Mora Encantada y Noheda, con fotografías licenciadas y créditos visibles, fuentes oficiales y condiciones de visita.
 
 #### Changed

@@ -1,6 +1,7 @@
 ---
 import ActionLink from '../ui/ActionLink.astro';
 import ExternalLink from '../ui/ExternalLink.astro';
+import NearbyPlaceVideo from './NearbyPlaceVideo.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import type { NearbyPlace } from '../../data/nearby-places';
 import type { NearbyPlaceGuide as Guide } from '../../data/nearby-guides';
@@ -74,6 +75,8 @@ const featuredImage = guide.images[0];
         )}
       </header>
 
+      {guide.video && <NearbyPlaceVideo video={guide.video} />}
+
       <section class="visit-panel" aria-labelledby="visit-panel-title">
         <div>
           <p class="eyebrow">Antes de organizar la visita</p>
@@ -143,7 +146,7 @@ const featuredImage = guide.images[0];
             pueden cambiar.
           </p>
         </div>
-        <nav aria-label={`Fuentes oficiales de ${place.name}`}>
+        <nav aria-label={`Fuentes y referencias de ${place.name}`}>
           {guide.sources.map((source) => (
             <ExternalLink href={source.href}>{source.label} ↗</ExternalLink>
           ))}

@@ -17,6 +17,7 @@ const routes = [
   '/politica-de-cookies/',
   '/privacidad/',
   '/que-ver-cerca/',
+  '/que-ver-cerca/castillo-torrebuceit/',
   '/que-ver-cerca/segobriga-saelices/',
   '/que-ver-cerca/mina-mora-encantada/',
   '/que-ver-cerca/villa-romana-noheda/',
