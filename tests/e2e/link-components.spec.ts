@@ -20,25 +20,29 @@ test.describe('shared link components', () => {
     expect(externalAttributes.every(({ rel }) => rel?.includes('noreferrer'))).toBe(true);
   });
 
-  test('uses the shared text action for the news back-link', async ({ page }) => {
+  test('uses the breadcrumb instead of a duplicate back-link on news detail', async ({ page }) => {
     await page.goto('/noticias/');
     await page.locator('.news-card').first().locator('h3 a').click();
 
-    const backLink = page.getByRole('link', { name: '← Volver a noticias', exact: true });
-    await expect(backLink).toHaveAttribute('href', '/noticias');
-    await expect(backLink).toHaveAttribute('data-ui-link', '');
-    await expect(backLink).toHaveAttribute('data-ui-variant', 'text');
-    await expect(backLink).toHaveCSS('margin-bottom', '48px');
+    const breadcrumbs = page.getByRole('navigation', { name: 'Migas de pan' });
+    await expect(breadcrumbs.getByRole('link', { name: 'Noticias', exact: true })).toHaveAttribute(
+      'href',
+      '/noticias/',
+    );
+    await expect(page.getByRole('link', { name: '← Volver a noticias', exact: true })).toHaveCount(
+      0,
+    );
   });
 
-  test('uses the shared text action for the bando back-link', async ({ page }) => {
+  test('uses the breadcrumb instead of a duplicate back-link on bando detail', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto('/bandos/1646075-visita-virgen-de-lourdes-a-nuestro-pueblo/');
 
-    const backLink = page.getByRole('link', { name: '← Volver a bandos', exact: true });
-    await expect(backLink).toHaveAttribute('href', '/bandos/');
-    await expect(backLink).toHaveAttribute('data-ui-link', '');
-    await expect(backLink).toHaveAttribute('data-ui-variant', 'text');
-    await expect(backLink).toHaveCSS('margin-bottom', '48px');
+    const breadcrumbs = page.getByRole('navigation', { name: 'Migas de pan' });
+    await expect(breadcrumbs.getByRole('link', { name: 'Bandos', exact: true })).toHaveAttribute(
+      'href',
+      '/bandos/',
+    );
+    await expect(page.getByRole('link', { name: '← Volver a bandos', exact: true })).toHaveCount(0);
   });
 });

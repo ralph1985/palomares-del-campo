@@ -1,5 +1,4 @@
 ---
-import ActionLink from '../ui/ActionLink.astro';
 import ExternalLink from '../ui/ExternalLink.astro';
 import NearbyPlaceVideo from './NearbyPlaceVideo.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -42,10 +41,6 @@ const featuredImage = guide.images[0];
 >
   <main class="guide-shell">
     <article>
-      <ActionLink class="guide-back-link" variant="text" href="/que-ver-cerca/">
-        ← Volver a Qué ver cerca
-      </ActionLink>
-
       <header class="guide-header">
         <div class="guide-heading">
           <p class="eyebrow">{guide.eyebrow}</p>
@@ -161,10 +156,6 @@ const featuredImage = guide.images[0];
     width: min(100% - 2.5rem, 72rem);
     margin: 0 auto;
     padding: var(--spacing-section-y) 0 4rem;
-  }
-
-  .guide-back-link {
-    margin-bottom: 2rem;
   }
 
   .guide-header {
