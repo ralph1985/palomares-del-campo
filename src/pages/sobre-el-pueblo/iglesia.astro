@@ -7,6 +7,38 @@ const parishSource =
   'https://www.diocesisdecuenca.es/parroquia/parroquia-de-ntra-sra-de-la-asuncion-58/';
 const churchImage =
   'https://palomaresdelcampo.dipucuenca.es/images/PALOMARES_DEL_CAMPO/NUESTRA_SE%C3%91ORA_DE_LA_ASUNCION_2.jpg';
+const churchGalleryImages = [
+  {
+    src: '/church-gallery/church-entry-detail.jpg',
+    alt: 'Detalle escultórico labrado sobre la portada de la iglesia',
+    caption: 'Detalle de la portada principal.',
+    width: 960,
+    height: 720,
+    title: 'Imágenes de Palomares del Campo 07.jpg',
+    fileUrl: 'https://commons.wikimedia.org/wiki/File:Im%C3%A1genes_de_Palomares_del_Campo_07.jpg',
+  },
+  {
+    src: '/church-gallery/church-side-tower.jpg',
+    alt: 'Vista lateral de la iglesia y su torre campanario',
+    caption: 'El lateral del templo y la torre campanario.',
+    width: 960,
+    height: 1280,
+    title: 'Fotos de Palomares del Campo 03.jpg',
+    fileUrl: 'https://commons.wikimedia.org/wiki/File:Fotos_de_Palomares_del_Campo_03.jpg',
+  },
+  {
+    src: '/church-gallery/church-side-wall.jpg',
+    alt: 'Vista exterior del muro lateral de la iglesia',
+    caption: 'Muro lateral del templo.',
+    width: 960,
+    height: 720,
+    title: 'Imágenes de Palomares del Campo 06.jpg',
+    fileUrl: 'https://commons.wikimedia.org/wiki/File:Im%C3%A1genes_de_Palomares_del_Campo_06.jpg',
+  },
+];
+const churchPhotoAuthor = '19Tarrestnom65';
+const churchPhotoLicense = 'CC BY-SA 4.0';
+const churchPhotoLicenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
 ---
 
 <BaseLayout
@@ -50,6 +82,46 @@ const churchImage =
         </figcaption>
       </figure>
     </header>
+
+    <section class="church-gallery" aria-labelledby="gallery-title">
+      <div class="church-gallery-heading">
+        <div>
+          <p class="eyebrow">Fotografías</p>
+          <h2 id="gallery-title">Otras vistas exteriores</h2>
+        </div>
+        <p>
+          Una mirada más cercana a la portada, la torre y el muro lateral. Estas imágenes muestran
+          el exterior del templo.
+        </p>
+      </div>
+      <div class="church-gallery-grid">
+        {churchGalleryImages.map((image) => (
+          <figure class="church-gallery-item">
+            <img
+              src={image.src}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <p>{image.caption}</p>
+              <p class="church-photo-credit">
+                <ExternalLink href={image.fileUrl}>
+                  {churchPhotoAuthor} · {image.title} <span aria-hidden="true">↗</span>
+                </ExternalLink>
+                <span aria-hidden="true">·</span>
+                <ExternalLink href={churchPhotoLicenseUrl}>
+                  {churchPhotoLicense} <span aria-hidden="true">↗</span>
+                </ExternalLink>
+                <span>Imagen redimensionada para esta página.</span>
+              </p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
 
     <section class="church-history" aria-labelledby="history-title">
       <div class="section-kicker">
@@ -168,6 +240,7 @@ const churchImage =
 
   .church-breadcrumbs,
   .church-hero,
+  .church-gallery,
   .church-history,
   .church-art,
   .church-sources {
@@ -203,6 +276,71 @@ const churchImage =
     gap: clamp(2.5rem, 8vw, 7rem);
     align-items: center;
     padding-block: clamp(2rem, 6vw, 5rem) clamp(4rem, 9vw, 8rem);
+  }
+
+  .church-gallery {
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+    border-top: 1px solid rgb(25 52 45 / 16%);
+  }
+
+  .church-gallery-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(16rem, 1fr);
+    gap: 2rem 4rem;
+    align-items: end;
+    margin-bottom: 2rem;
+  }
+
+  .church-gallery-heading > p {
+    max-width: 38rem;
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  .church-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .church-gallery-item {
+    min-width: 0;
+    margin: 0;
+    border: 1px solid rgb(25 52 45 / 14%);
+    background: var(--color-surface-soft);
+  }
+
+  .church-gallery-item img {
+    display: block;
+    width: 100%;
+    height: clamp(13rem, 22vw, 19rem);
+    object-fit: contain;
+    background: var(--color-paper);
+  }
+
+  .church-gallery-item figcaption {
+    padding: 1rem;
+  }
+
+  .church-gallery-item figcaption > p:first-child {
+    margin: 0 0 0.75rem;
+    color: var(--color-ink);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .church-photo-credit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.4rem;
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.74rem;
+    line-height: 1.5;
+  }
+
+  .church-photo-credit a {
+    color: var(--color-forest);
   }
 
   .eyebrow {
@@ -420,6 +558,7 @@ const churchImage =
 
   @media (max-width: 700px) {
     .church-hero,
+    .church-gallery-heading,
     .church-history,
     .church-sources {
       grid-template-columns: 1fr;
@@ -427,6 +566,10 @@ const churchImage =
 
     .church-hero {
       gap: 2.5rem;
+    }
+
+    .church-gallery-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .church-photo {
@@ -463,6 +606,7 @@ const churchImage =
   @media (max-width: 420px) {
     .church-breadcrumbs,
     .church-hero,
+    .church-gallery,
     .church-history,
     .church-art,
     .church-sources {
@@ -470,6 +614,10 @@ const churchImage =
     }
 
     .timeline {
+      grid-template-columns: 1fr;
+    }
+
+    .church-gallery-grid {
       grid-template-columns: 1fr;
     }
   }

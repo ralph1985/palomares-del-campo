@@ -60,6 +60,14 @@ test.describe('web navigation', () => {
     await expect(
       page.getByRole('heading', { name: 'Capillas, pintura y escultura' }),
     ).toBeVisible();
+    const gallery = page.getByRole('region', { name: 'Otras vistas exteriores' });
+    await expect(gallery.getByRole('figure')).toHaveCount(3);
+    await expect(
+      gallery.getByRole('img', {
+        name: 'Detalle escultórico labrado sobre la portada de la iglesia',
+      }),
+    ).toBeVisible();
+    await expect(gallery.getByRole('link', { name: 'CC BY-SA 4.0' })).toHaveCount(3);
     await expect(page.getByRole('link', { name: 'Qué ver · portal municipal' })).toHaveAttribute(
       'href',
       'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-three',
