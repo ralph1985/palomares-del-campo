@@ -1,5 +1,6 @@
 ---
 import SEO from '../components/SEO.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
 import PageTransition from '../components/layout/PageTransition.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
@@ -96,6 +97,7 @@ const seoProps = {
     data-page-transitions-enabled={PUBLIC_PAGE_TRANSITIONS_ENABLED ? 'true' : 'false'}
   >
     <SiteHeader />
+    {breadcrumbs && breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
     <slot />
     <SiteFooter />
     <PageTransition enabled={PUBLIC_PAGE_TRANSITIONS_ENABLED} />

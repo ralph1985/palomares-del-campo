@@ -126,7 +126,7 @@ src/layouts/
 └── BaseLayout.astro
 ```
 
-`BaseLayout` es el único layout compartido. Inserta el documento HTML, `SEO.astro`, `SiteHeader`, el slot principal y `SiteFooter`. Acepta `bodyClass`, datos de Open Graph, configuración de schema, `noindex`, datos de artículo, breadcrumbs y un slot nombrado `head`.
+`BaseLayout` es el único layout compartido. Inserta el documento HTML, `SEO.astro`, `SiteHeader`, las migas visibles cuando la ruta proporciona breadcrumbs, el slot principal y `SiteFooter`. La misma prop alimenta el componente accesible `Breadcrumbs.astro` y el esquema `BreadcrumbList` de SEO. Acepta `bodyClass`, datos de Open Graph, configuración de schema, `noindex`, datos de artículo, breadcrumbs y un slot nombrado `head`.
 
 ### `src/components/`
 
@@ -175,6 +175,7 @@ src/components/
 │   └── SiteHeader.astro
 └── ui/
     ├── ActionLink.astro
+    ├── Breadcrumbs.astro
     ├── Button.astro
     ├── CollectionCardMeta.astro
     └── ExternalLink.astro
