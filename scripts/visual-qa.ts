@@ -6,6 +6,7 @@ const baseUrl = process.env.VISUAL_QA_BASE_URL ?? 'http://127.0.0.1:4321';
 const routes = [
   '/',
   '/sobre-el-pueblo/',
+  '/sobre-el-pueblo/iglesia/',
   '/bandos/',
   '/bandos/1646075-visita-virgen-de-lourdes-a-nuestro-pueblo/',
   '/noticias/',

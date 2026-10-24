@@ -8,6 +8,7 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 #### Added
 
+- Añadida una guía ampliada de la iglesia de Nuestra Señora de la Asunción, enlazada desde la tarjeta de patrimonio y con fuentes institucionales visibles.
 - Añadidas guías ampliadas de Segóbriga, la Mina de la Mora Encantada y Noheda, con fotografías licenciadas y créditos visibles, fuentes oficiales y condiciones de visita.
 
 #### Changed
