@@ -1,5 +1,7 @@
 ---
+import { getImage, inferRemoteSize } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
+import { getResponsiveImageWidths, optimizeRemoteImage } from '../../images';
 import ActionLink from '../../components/ui/ActionLink.astro';
 import ExternalLink from '../../components/ui/ExternalLink.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -26,6 +28,46 @@ const {
   attachments,
 } = post.data;
 const imageAttachment = attachments.find((attachment) => attachment.type === 'image');
+const renderedAttachments = await Promise.all(
+  attachments.map(async (attachment) => {
+    if (attachment.type !== 'image') {
+      return { attachment, imageSource: null, optimizedImage: null };
+    }
+
+    const result = await optimizeRemoteImage(
+      attachment.url,
+      async () => {
+        const dimensions = await inferRemoteSize(attachment.url);
+
+        return getImage({
+          src: attachment.url,
+          width: dimensions.width,
+          height: dimensions.height,
+          widths: getResponsiveImageWidths(dimensions.width, [320, 640, 864]),
+          sizes: '(max-width: 54rem) calc(100vw - 2rem), 52rem',
+          format: 'webp',
+          quality: 85,
+        });
+      },
+      (error) =>
+        console.warn(
+          `Could not optimize a bando image; preserving its source URL: ${attachment.url}`,
+          error,
+        ),
+    );
+
+    return {
+      attachment,
+      imageSource: result.source,
+      optimizedImage: result.transformed,
+    };
+  }),
+);
+const socialImageAttachment = renderedAttachments.find(
+  ({ attachment }) => attachment.type === 'image',
+);
+const socialImage =
+  socialImageAttachment?.optimizedImage?.src ?? socialImageAttachment?.imageSource ?? undefined;
 const formattedDate = new Intl.DateTimeFormat('es-ES', {
   day: 'numeric',
   month: 'long',
@@ -47,7 +89,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     sourceUrl,
     ...(category === undefined ? {} : { section: category }),
   }}
-  {...(imageAttachment?.url === undefined ? {} : { socialImage: imageAttachment.url })}
+  {...(socialImage === undefined ? {} : { socialImage })}
   {...(imageAttachment?.label === undefined ? {} : { socialImageAlt: imageAttachment.label })}
   breadcrumbs={[
     { name: 'Inicio', path: '/' },
@@ -72,15 +114,19 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
         <Content />
       </div>
 
-      {attachments.length > 0 && (
+      {renderedAttachments.length > 0 && (
         <section class="article-attachments" aria-labelledby="attachments-title">
           <h2 id="attachments-title">Recursos del comunicado</h2>
           <div class="attachment-list">
-            {attachments.map((attachment) =>
+            {renderedAttachments.map(({ attachment, imageSource, optimizedImage }) =>
               attachment.type === 'image' ? (
                 <figure class="attachment-image">
                   <img
-                    src={attachment.url}
+                    src={optimizedImage?.src ?? imageSource ?? attachment.url}
+                    srcset={optimizedImage?.srcSet.attribute}
+                    sizes="(max-width: 54rem) calc(100vw - 2rem), 52rem"
+                    width={optimizedImage?.options.width}
+                    height={optimizedImage?.options.height}
                     alt={attachment.alt ?? attachment.label}
                     loading="lazy"
                     decoding="async"

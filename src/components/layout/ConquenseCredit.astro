@@ -1,5 +1,13 @@
 ---
+import { getImage, Image } from 'astro:assets';
 import ExternalLink from '../ui/ExternalLink.astro';
+import heightLogo from '../../assets/brand/conquense-dev-logo-height.webp';
+import lightLogo from '../../assets/brand/conquense-dev-logo-light.webp';
+
+const [logoTexture, heightTexture] = await Promise.all([
+  getImage({ src: lightLogo, width: 600, format: 'webp', quality: 90 }),
+  getImage({ src: heightLogo, width: 600, format: 'webp', quality: 90 }),
+]);
 ---
 
 <ExternalLink
@@ -8,13 +16,21 @@ import ExternalLink from '../ui/ExternalLink.astro';
   aria-label="Web realizada por conquense.dev"
 >
   <span class="conquense-credit-label">Web realizada por</span>
-  <span class="conquense-credit-logo" data-conquense-logo>
-    <img
-      src="/brand/conquense-dev-logo-light.webp"
+  <span
+    class="conquense-credit-logo"
+    data-conquense-logo
+    data-conquense-logo-texture-src={logoTexture.src}
+    data-conquense-logo-height-src={heightTexture.src}
+  >
+    <Image
+      src={lightLogo}
       alt="conquense.dev"
-      width="180"
-      height="61"
+      widths={[180, 360, 540]}
+      sizes="(max-width: 38rem) 8rem, 14rem"
+      format="webp"
+      quality={85}
       loading="lazy"
+      decoding="async"
     />
     <canvas data-conquense-logo-canvas aria-hidden="true"></canvas>
   </span>

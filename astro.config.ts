@@ -2,6 +2,20 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig, envField } from 'astro/config';
 
 export default defineConfig({
+  image: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.bandomovil.com',
+        pathname: '/userFiles/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'palomaresdelcampo.dipucuenca.es',
+        pathname: '/images/PALOMARES_DEL_CAMPO/**',
+      },
+    ],
+  },
   env: {
     schema: {
       PUBLIC_PAGE_TRANSITIONS_ENABLED: envField.boolean({

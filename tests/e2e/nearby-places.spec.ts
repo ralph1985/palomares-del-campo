@@ -119,7 +119,16 @@ test.describe('nearby attractions guide', () => {
       await expect(
         page.locator('main figure a[href*="commons.wikimedia.org/wiki/File:"]'),
       ).toHaveCount(guide.images);
-      await expect(page.locator('main figure img').first()).toHaveJSProperty('naturalWidth', 1280);
+      await expect
+        .poll(() =>
+          page
+            .locator('main figure img')
+            .first()
+            .evaluate((element) =>
+              element instanceof HTMLImageElement ? element.naturalWidth : 0,
+            ),
+        )
+        .toBeGreaterThan(0);
       await expect(page.getByRole('link', { name: 'Volver a Qué ver cerca' })).toHaveAttribute(
         'href',
         placesUrl,

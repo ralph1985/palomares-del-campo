@@ -510,7 +510,7 @@ Las noticias son Markdown en `src/content/noticias/`. La colección exige títul
 
 Los bandos son una colección separada en `src/content/bandos/`. No se mezclan con las noticias aunque compartan el patrón de archivo y búsqueda. Cada entrada conserva autor, fecha, categoría, `sourceName`, `sourceUrl`, `sourceId` y adjuntos externos tipados.
 
-La página de detalle renderiza imágenes, documentos y vídeos según el tipo validado. Las imágenes usan `loading="lazy"` y `decoding="async"`; los documentos y vídeos se muestran como enlaces externos. `/avisos/` se conserva como redirección 301 de compatibilidad hacia `/bandos/`.
+La página de detalle renderiza imágenes, documentos y vídeos según el tipo validado. Las imágenes usan `astro:assets` con variantes WebP responsive y dimensiones inferidas; mantienen `loading="lazy"`, `decoding="async"` y el enlace al comunicado original. Documentos y vídeos continúan como enlaces externos. `/avisos/` se conserva como redirección 301 de compatibilidad hacia `/bandos/`.
 
 ### Importación externa
 
@@ -538,11 +538,12 @@ El importador convierte HTML a Markdown, valida URLs HTTPS, restringe los adjunt
 - Con `prefers-reduced-motion`, la navegación es normal; si la escena no carga, se usa una cobertura CSS y se continúa navegando. El menú saliente permanece abierto durante el giro y el destino real empieza cerrado.
 - El logo del pie, el emblema de `/sobre-el-pueblo/` y la bola del juego cargan Three.js con `import()` cuando sus elementos son visibles o entran en el margen del viewport.
 - Cada escena mantiene una imagen o dibujo CSS de fallback y oculta el canvas si WebGL o la carga de recursos falla.
-- Los recursos de imagen declaran dimensiones en las superficies principales y las imágenes secundarias de algunas páginas usan `loading="lazy"`.
+- Las imágenes raster de páginas y metadatos sociales se transforman con `astro:assets` y Sharp durante el build estático; las variantes responsive se publican como archivos versionados en `/_astro/`, con dimensiones inferidas para evitar CLS. Las imágenes locales viven en `src/assets/`; las fuentes remotas de Dipucuenca y Bandomovil están limitadas por `image.remotePatterns` y se convierten a WebP. Si una fuente remota no se puede transformar, se conserva su URL original con una advertencia. Las imágenes fuera de las páginas (por ejemplo, teselas de Leaflet) no pasan por este pipeline.
+- Las imágenes secundarias usan `loading="lazy"`; las imágenes principales mantienen prioridad alta. La imagen fallback del crédito 3D y sus texturas también usan assets generados/versionados.
 - El juego y los mapas cargan Leaflet solo en las rutas que los incluyen.
 - `prefers-reduced-motion` desactiva o reduce las animaciones de CSS y Three.js donde está contemplado.
 
-No hay una integración de optimización de imágenes de Astro ni una estrategia de CDN definida en el repositorio. La mayoría de las imágenes proceden de `public/` o de URLs externas de los contenidos.
+No hay una integración del servicio de optimización de imágenes de Vercel ni una regla CDN explícita. Astro genera y versiona las transformaciones estáticas; la política HTTP final la aplica el hosting. Si no se puede transformar una imagen de los orígenes remotos autorizados, el build conserva su URL original y emite una advertencia; en ese caso, la disponibilidad de esa imagen vuelve a depender del servidor de origen.
 
 El build observado emite una advertencia de Vite por chunks superiores a 500 kB. No se debe afirmar que la división de código ha eliminado ese coste; la optimización de bundles queda como tarea independiente.
 
@@ -696,7 +697,7 @@ La clasificación se basa en la comparación entre el `architecture.md` anterior
 - No hay pruebas E2E contra un deployment remoto de Convex, incluido un flujo de varios jugadores, ni una garantía de cobertura funcional del backend desplegado.
 - Los documentos legales de Palomareños siguen siendo borradores con validaciones pendientes. Desde el repositorio no se puede verificar el deployment activo de producción, la instalación de cron ni la configuración real de SMTP o Convex.
 - El build advierte de chunks grandes.
-- Las teselas y algunos adjuntos dependen de servicios externos sin caché propia.
+- Las teselas de mapa siguen dependiendo de OpenStreetMap y no tienen caché propia. Los documentos y vídeos de bandos siguen alojados en Bandomovil; las imágenes raster se transforman durante el build cuando el origen responde, con fallback explícito a la URL original si no responde.
 - El adaptador remoto sigue resolviendo el nombre, radio y descripción contra `src/data/game-locations.ts`; una temporada Convex con ubicaciones distintas puede mostrar feedback local incorrecto.
 - Las queries de estado y ranking son públicas, no hay rate limiting ni cuotas de jugador, y el índice de idempotencia no declara una restricción de unicidad en el esquema.
 - `captureBall` valida la regla de distancia y precisión sobre los valores recibidos, pero no implementa una prueba de autenticidad del GPS ni una validación explícita de rangos de coordenadas equivalente a la de `updatePresence`.

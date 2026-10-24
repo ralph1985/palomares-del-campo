@@ -1,5 +1,12 @@
+import type { ImageMetadata } from 'astro';
+import segobrigaTeatro from '../assets/nearby-guides/Segobriga_teatro.webp';
+import segobrigaAnfi from '../assets/nearby-guides/Segobriga_anfi.webp';
+import minaMoraEncantada from '../assets/nearby-guides/Mina_de_la_Mora_Encantada.webp';
+import nohedaMosaico from '../assets/nearby-guides/Noheda_mosaico.webp';
+import nohedaEscenas from '../assets/nearby-guides/Noheda_mosaico_escenas.webp';
+
 export interface NearbyGuideImage {
-  src: string;
+  src: ImageMetadata;
   alt: string;
   caption: string;
   author: string;
@@ -56,7 +63,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
     ],
     images: [
       {
-        src: '/nearby-guides/Segobriga_teatro.webp',
+        src: segobrigaTeatro,
         alt: 'Vista del teatro romano de Segóbriga entre las estructuras arqueológicas',
         caption: 'Teatro romano de Segóbriga.',
         author: 'VIATOR IMPERI from HISPANIA',
@@ -65,7 +72,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
         licenseUrl: 'https://creativecommons.org/licenses/by-sa/2.0/',
       },
       {
-        src: '/nearby-guides/Segobriga_anfi.webp',
+        src: segobrigaAnfi,
         alt: 'Vista general del anfiteatro romano de Segóbriga',
         caption: 'Anfiteatro de Segóbriga.',
         author: 'Malopez 21',
@@ -123,7 +130,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
     ],
     images: [
       {
-        src: '/nearby-guides/Mina_de_la_Mora_Encantada.webp',
+        src: minaMoraEncantada,
         alt: 'Interior de una galería de la Mina de la Mora Encantada, en Torrejoncillo del Rey',
         caption: 'Galería de la Mina de la Mora Encantada.',
         author: '19Tarrestnom65',
@@ -176,7 +183,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
     ],
     images: [
       {
-        src: '/nearby-guides/Noheda_mosaico.webp',
+        src: nohedaMosaico,
         alt: 'Detalle del mosaico romano de la Villa de Noheda, con figuras y decoración geométrica',
         caption: 'Detalle del mosaico de la villa.',
         author: 'Ernestobanpiroa',
@@ -185,7 +192,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
         licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
       },
       {
-        src: '/nearby-guides/Noheda_mosaico_escenas.webp',
+        src: nohedaEscenas,
         alt: 'Escena del mosaico de Noheda con una troupe de mimos y pantomimos',
         caption: 'Escena de mimos y pantomimos en el mosaico.',
         author: 'Fotografía de Rodelar, retocada por Égoïté',
