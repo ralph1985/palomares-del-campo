@@ -110,6 +110,9 @@ describe('SiteHeader.astro and SideMenu.astro', () => {
     const menuHtml = await render(SideMenu);
 
     expect(html).toContain('aria-label="Palomares del Campo, inicio"');
+    expect(html).toContain('class="brand-name-main">Palomares</span>');
+    expect(html).toContain('class="brand-name-sub">del Campo</span>');
+    expect(html).toContain('class="menu-toggle-label">Explorar</span>');
     expect(html).toContain('data-menu-toggle');
     expect(html).toContain('aria-controls="site-menu"');
     expect(html).toContain('aria-expanded="false"');

@@ -12,6 +12,7 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 #### Changed
 
+- Reforzada la identidad de la cabecera con el escudo enmarcado, el nombre en dos niveles y un botón «Explorar» destacado, manteniendo el conjunto compacto en móvil.
 - Priorizado el acceso a las guías internas de «Qué ver cerca» frente a los enlaces externos de fuentes en las tarjetas.
 - Ampliado el borrador del aviso legal para aclarar el alcance informativo del sitio y marcar los datos institucionales pendientes de verificación sin conservar identificadores ficticios.
 
