@@ -7,7 +7,7 @@ interface Props extends HTMLAttributes<'section'> {
   labelledBy: string;
   titleWidth?: 'narrow' | 'wide';
   summaryWidth?: 'wide';
-  variant: 'ink-display' | 'sage-display' | 'ink-compact' | 'paper-tall';
+  variant: 'ink-display' | 'sage-display' | 'ink-compact' | 'paper-tall' | 'sage-tall';
 }
 
 const {
@@ -78,11 +78,16 @@ const {
     background: var(--color-ink);
   }
 
-  .editorial-hero--paper-tall {
+  .editorial-hero--paper-tall,
+  .editorial-hero--sage-tall {
     display: grid;
     align-content: center;
     min-height: min(36rem, calc(100vh - 5.25rem));
     padding: 4rem 0;
+  }
+
+  .editorial-hero--sage-tall {
+    background: var(--color-sage);
   }
 
   .editorial-hero--viewport {
@@ -143,7 +148,8 @@ const {
     font-size: var(--font-size-page-title);
   }
 
-  .editorial-hero--paper-tall :global(h1) {
+  .editorial-hero--paper-tall :global(h1),
+  .editorial-hero--sage-tall :global(h1) {
     max-width: 13ch;
     font-size: var(--font-size-page-title);
     letter-spacing: -0.065em;
@@ -182,7 +188,8 @@ const {
     line-height: 1.6;
   }
 
-  .editorial-hero--paper-tall :global(.hero-intro) {
+  .editorial-hero--paper-tall :global(.hero-intro),
+  .editorial-hero--sage-tall :global(.hero-intro) {
     max-width: 34rem;
     font-size: clamp(1rem, 1.5vw, 1.2rem);
   }
@@ -196,7 +203,8 @@ const {
       --hero-gutter: min(100% - 2rem, 72rem);
     }
 
-    .editorial-hero--paper-tall {
+    .editorial-hero--paper-tall,
+    .editorial-hero--sage-tall {
       min-height: calc(100vh - 10.25rem);
       padding: 4rem 0;
     }

@@ -11,6 +11,27 @@ test.describe('web navigation', () => {
     ).toHaveAttribute('href', 'https://conquense.dev/');
   });
 
+  test('separates the home hero surface from the light site header', async ({ page }) => {
+    await page.goto('/');
+
+    const surfaces = await page.evaluate(() => {
+      const header = document.querySelector('.site-header');
+      const hero = document.querySelector('.editorial-hero');
+
+      if (!(header instanceof HTMLElement) || !(hero instanceof HTMLElement)) {
+        throw new Error('Expected the site header and home hero to render');
+      }
+
+      return {
+        header: getComputedStyle(header).backgroundColor,
+        hero: getComputedStyle(hero).backgroundColor,
+      };
+    });
+
+    expect(surfaces.hero).not.toBe('rgba(0, 0, 0, 0)');
+    expect(surfaces.hero).not.toBe(surfaces.header);
+  });
+
   test('presents the about page with a sourced history section', async ({ page }) => {
     await page.goto('/sobre-el-pueblo/');
 
