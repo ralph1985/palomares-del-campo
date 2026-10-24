@@ -62,7 +62,35 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
         ],
       },
     ],
-    images: [],
+    images: [
+      {
+        src: '/nearby-guides/Torrebuceit_01.webp',
+        alt: 'Vista general de Torrebuceit desde la carretera, con el caserío y una señal de propiedad privada',
+        caption: 'Vista general del conjunto desde la carretera.',
+        author: '19Tarrestnom65',
+        fileUrl: 'https://commons.wikimedia.org/wiki/File:Torrebuceit_01.jpg',
+        license: 'CC BY-SA 4.0 · versión WebP optimizada',
+        licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+      },
+      {
+        src: '/nearby-guides/Torrebuceit_02.webp',
+        alt: 'Fachada porticada de Torrebuceit delante de un muro de mampostería',
+        caption: 'Detalle de la fachada porticada y los muros de piedra.',
+        author: '19Tarrestnom65',
+        fileUrl: 'https://commons.wikimedia.org/wiki/File:Torrebuceit_02.jpg',
+        license: 'CC BY-SA 4.0 · versión WebP optimizada',
+        licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+      },
+      {
+        src: '/nearby-guides/Torrebuceit_03.webp',
+        alt: 'Vista lateral del caserío de Torrebuceit entre árboles, junto a la señal que identifica el lugar',
+        caption: 'Vista lateral del caserío y el camino de entrada.',
+        author: '19Tarrestnom65',
+        fileUrl: 'https://commons.wikimedia.org/wiki/File:Torrebuceit_03.jpg',
+        license: 'CC BY-SA 4.0 · versión WebP optimizada',
+        licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+      },
+    ],
     beforeYouGo:
       'La propiedad es privada y no se permite la visita interior. La ficha oficial indica que es visible desde la carretera; contempla el castillo únicamente desde un lugar público y seguro, sin entrar en el caserío ni detenerte en la calzada.',
     visitUrl:

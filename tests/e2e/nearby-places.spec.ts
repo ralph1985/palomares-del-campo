@@ -106,7 +106,7 @@ test.describe('nearby attractions guide', () => {
       {
         path: 'castillo-torrebuceit',
         heading: 'El castillo de Torrebuceit, vigía del Záncara',
-        images: 0,
+        images: 3,
       },
       {
         path: 'segobriga-saelices',
@@ -133,10 +133,9 @@ test.describe('nearby attractions guide', () => {
         page.locator('main figure a[href*="commons.wikimedia.org/wiki/File:"]'),
       ).toHaveCount(guide.images);
       if (guide.images > 0) {
-        await expect(page.locator('main figure img').first()).toHaveJSProperty(
-          'naturalWidth',
-          1280,
-        );
+        for (const image of await page.locator('main figure img').all()) {
+          await expect(image).toHaveJSProperty('naturalWidth', 1280);
+        }
       }
       await expect(page.getByRole('link', { name: 'Volver a Qué ver cerca' })).toHaveAttribute(
         'href',
@@ -149,6 +148,9 @@ test.describe('nearby attractions guide', () => {
     }
 
     await page.goto('/que-ver-cerca/castillo-torrebuceit/');
+    await expect(page.locator('main figure img[alt*="Torrebuceit"]')).toHaveCount(3);
+    await expect(page.getByRole('link', { name: '19Tarrestnom65' })).toHaveCount(3);
+    await expect(page.getByRole('link', { name: /CC BY-SA 4\.0/ })).toHaveCount(3);
     const video = page.getByTitle('Torrebuceit desde el aire');
     await expect(video).toHaveAttribute(
       'src',
