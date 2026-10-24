@@ -47,7 +47,7 @@ export const nearbyPlaces: NearbyPlace[] = [
     category: 'Patrimonio · castillo medieval',
     group: 'nearby',
     summary:
-      'Un castillo medieval transformado en caserío, visible desde el exterior en el valle del Záncara. La guía explica qué se sabe de su arquitectura y cómo contemplarlo con respeto.',
+      'Un castillo medieval transformado en caserío. La guía reúne fuentes sobre la fortaleza y el recuerdo de Rafa, nieto de Crescente y Eusebia, guardeses durante años.',
     visitNote:
       'Es una propiedad privada y no se permiten visitas al interior. Obsérvalo únicamente desde zonas públicas y seguras; no accedas al caserío ni te detengas en la calzada.',
     guidePath: '/que-ver-cerca/castillo-torrebuceit/',

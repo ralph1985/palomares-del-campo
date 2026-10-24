@@ -154,7 +154,14 @@ test.describe('nearby attractions guide', () => {
       'src',
       'https://www.youtube-nocookie.com/embed/d5C1apoWJ9w',
     );
-    await expect(page.locator('main')).toContainText('Vídeo grabado por Rafa');
+    await expect(page.locator('main')).toContainText('Rafa, nieto de Crescente y Eusebia');
+    await expect(page.locator('main')).toContainText('28 personas');
+    await expect(page.locator('main')).toContainText(
+      'Grabado por Rafa en homenaje a su abuelo Crescente',
+    );
+    await expect(
+      page.getByRole('link', { name: /Sirvientes y criados en el mundo rural manchego/ }),
+    ).toHaveAttribute('href', 'https://doi.org/10.24215/15155994e071');
     await expect(page.getByRole('link', { name: 'Ver en YouTube' })).toHaveAttribute(
       'href',
       'https://youtu.be/d5C1apoWJ9w',

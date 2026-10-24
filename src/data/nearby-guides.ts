@@ -35,7 +35,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
     slug: 'castillo-torrebuceit',
     title: 'El castillo de Torrebuceit, vigía del Záncara',
     description:
-      'Guía del castillo medieval de Torrebuceit: su arquitectura, las cautelas sobre su cronología y un vídeo aéreo grabado por Rafa.',
+      'Guía del castillo medieval de Torrebuceit: su arquitectura, la memoria familiar de Crescente y Eusebia, y un vídeo grabado en homenaje a Crescente.',
     eyebrow: 'Castillo medieval · Villar del Águila',
     introduction:
       'El castillo de Torrebuceit se encuentra en Villar del Águila, dentro del término municipal de Torrejoncillo del Rey. Hoy está integrado en un caserío privado: puede contemplarse desde el exterior, pero no se permite visitar su interior.',
@@ -45,6 +45,13 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
         paragraphs: [
           'La Asociación Española de Amigos de los Castillos describe un recinto de planta rectangular, con lienzos de muralla y cuatro torres: tres cuadradas y una redondeada. También recoge mampostería y restos de culturas precedentes islámicas.',
           'Las fuentes consultadas no coinciden del todo en cómo fechar y atribuir el origen del conjunto. Turismo de Castilla-La Mancha lo presenta como una fortaleza islámica del siglo XIV; la ficha de la asociación lo clasifica como medieval cristiano y plantea que pudo ser una alquería musulmana transformada. Por eso esta guía no fija una cronología única.',
+        ],
+      },
+      {
+        heading: 'La memoria de quienes lo habitaron',
+        paragraphs: [
+          'Rafa, nieto de Crescente y Eusebia, cuenta que sus abuelos vivieron durante muchos años en el castillo como guardeses y trabajaron para sus propietarios. Recogemos este dato como testimonio familiar aportado por su nieto.',
+          'Mucho antes, las cuentas de las fincas del Hospital de Santiago de Cuenca en Torrebuceit y La Moraleja ya registraban trabajo de guarda. El estudio de Francisco García González documenta 28 personas adscritas a esa explotación en 1747 y 1748, entre ellas un guarda de montes, además del ama y la moza del servicio doméstico. Son cuentas de otra época y de ambas fincas; no identifican a Crescente ni a Eusebia.',
         ],
       },
       {
@@ -65,7 +72,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
       youtubeId: 'd5C1apoWJ9w',
       title: 'Torrebuceit desde el aire',
       watchUrl: 'https://youtu.be/d5C1apoWJ9w',
-      credit: 'Vídeo grabado por Rafa',
+      credit: 'Grabado por Rafa en homenaje a su abuelo Crescente',
     },
     sources: [
       {
@@ -75,6 +82,11 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
       {
         label: 'Castillo de Torrebuceit · Asociación Española de Amigos de los Castillos',
         href: 'https://www.xn--castillosdeespaa-lub.es/es/content/torrebuceit-castillo-de',
+      },
+      {
+        label:
+          'Francisco García González · Sirvientes y criados en el mundo rural manchego (Mundo Agrario, 2017)',
+        href: 'https://doi.org/10.24215/15155994e071',
       },
     ],
   },
