@@ -23,7 +23,7 @@ const routes = [
   '/que-ver-cerca/villa-romana-noheda/',
   '/alojamientos/',
   '/palomarenos-por-el-mundo/',
-  '/juego/',
+  ...(process.env.PUBLIC_BALL_GAME_ENABLED === 'true' ? ['/juego/'] : []),
 ];
 const viewports = [
   { name: 'desktop', width: 1440, height: 900 },

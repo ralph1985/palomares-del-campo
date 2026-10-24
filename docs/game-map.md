@@ -5,6 +5,8 @@ La ruta `/juego/` ofrece una experiencia geolocalizada con dos modos:
 - **modo local**, disponible sin `CONVEX_URL`, con estado en memoria y simulador de desarrollo;
 - **modo remoto**, disponible cuando `CONVEX_URL` apunta a un deployment Convex con una temporada activa.
 
+La experiencia está detrás de la variable pública de build `PUBLIC_BALL_GAME_ENABLED`, cuyo valor predeterminado es `false`. Con la flag apagada, los enlaces a la página no se muestran y `/juego/` presenta una página 404 no indexable; el sitemap tampoco la incluye. En una build estática, activarla requiere reconstruir el sitio con `PUBLIC_BALL_GAME_ENABLED=true`.
+
 ## Superficie actual
 
 La página incluye:
