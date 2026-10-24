@@ -80,10 +80,18 @@ test.describe('nearby attractions guide', () => {
     ];
     for (const place of featuredPlaces) {
       const card = page.getByRole('article', { name: place.name });
-      await expect(card.getByRole('link', { name: 'Guía de visita' })).toHaveAttribute(
+      const guideLink = card.getByRole('link', { name: 'Leer guía de visita' });
+      await expect(card.getByRole('link').first()).toHaveAttribute(
         'href',
         `/que-ver-cerca/${place.slug}/`,
       );
+      await expect(guideLink).toHaveAttribute('data-ui-variant', 'solid');
+      await expect(
+        card
+          .getByRole('navigation', { name: `Fuentes oficiales de ${place.name}` })
+          .getByRole('link')
+          .first(),
+      ).toBeVisible();
     }
 
     const guides = [
