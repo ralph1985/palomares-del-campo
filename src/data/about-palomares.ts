@@ -16,6 +16,7 @@ export interface HeritageFeature {
   description: string;
   body: string;
   source: AboutSource;
+  detailHref?: string;
 }
 
 export const aboutPalomares = {
@@ -52,6 +53,7 @@ export const aboutPalomares = {
       title: 'Iglesia de Nuestra Señora de la Asunción',
       description: 'Un templo renacentista que conserva capas artísticas de varios siglos.',
       body: 'Su construcción comenzó en 1553 y la fachada se terminó en 1638. El conjunto reúne arquitectura, capillas funerarias, retablos, pintura y escultura de los siglos XVI al XVIII.',
+      detailHref: '/sobre-el-pueblo/iglesia/',
       source: {
         label: 'Qué ver en el portal municipal',
         href: 'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-three',
