@@ -24,12 +24,100 @@ export interface NearbyPlaceGuide {
   beforeYouGo: string;
   visitUrl: string;
   visitLabel: string;
+  video?: { youtubeId: string; title: string; watchUrl: string; credit: string };
   sources: { label: string; href: string }[];
 }
 
 export const nearbyPlaceGuidesReviewedAt = '2026-10-24';
 
 export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
+  {
+    slug: 'castillo-torrebuceit',
+    title: 'El castillo de Torrebuceit, vigía del Záncara',
+    description:
+      'Guía del castillo medieval de Torrebuceit: su arquitectura, la memoria familiar de Crescente y Eusebia, y un vídeo grabado en homenaje a Crescente.',
+    eyebrow: 'Castillo medieval · Villar del Águila',
+    introduction:
+      'El castillo de Torrebuceit se encuentra en Villar del Águila, dentro del término municipal de Torrejoncillo del Rey. Hoy está integrado en un caserío privado: puede contemplarse desde el exterior, pero no se permite visitar su interior.',
+    sections: [
+      {
+        heading: 'Una fortaleza transformada',
+        paragraphs: [
+          'La Asociación Española de Amigos de los Castillos describe un recinto de planta rectangular, con lienzos de muralla y cuatro torres: tres cuadradas y una redondeada. También recoge mampostería y restos de culturas precedentes islámicas.',
+          'Las fuentes consultadas no coinciden del todo en cómo fechar y atribuir el origen del conjunto. Turismo de Castilla-La Mancha lo presenta como una fortaleza islámica del siglo XIV; la ficha de la asociación lo clasifica como medieval cristiano y plantea que pudo ser una alquería musulmana transformada. Por eso esta guía no fija una cronología única.',
+        ],
+      },
+      {
+        heading: 'La memoria de quienes lo habitaron',
+        paragraphs: [
+          'Rafa, nieto de Crescente y Eusebia, cuenta que sus abuelos vivieron durante muchos años en el castillo como guardeses y trabajaron para sus propietarios. Recogemos este dato como testimonio familiar aportado por su nieto.',
+          'Mucho antes, las cuentas de las fincas del Hospital de Santiago de Cuenca en Torrebuceit y La Moraleja ya registraban trabajo de guarda. El estudio de Francisco García González documenta 28 personas adscritas a esa explotación en 1747 y 1748, entre ellas un guarda de montes, además del ama y la moza del servicio doméstico. Son cuentas de otra época y de ambas fincas; no identifican a Crescente ni a Eusebia.',
+        ],
+      },
+      {
+        heading: 'Contemplarlo sin invadir la propiedad',
+        paragraphs: [
+          'La ficha turística indica que el castillo es visible desde la carretera que une Zafra de Záncara y Huerta de la Obispalía, pero el edificio es de propiedad privada y el interior no está abierto a visitas. El vídeo aéreo de esta página ofrece una vista general sin necesidad de acceder al caserío.',
+          'Si te acercas, quédate en espacios públicos donde sea seguro detenerse. No entres en la propiedad ni pares sobre la calzada.',
+        ],
+      },
+    ],
+    images: [
+      {
+        src: '/nearby-guides/Torrebuceit_01.webp',
+        alt: 'Vista general de Torrebuceit desde la carretera, con el caserío y una señal de propiedad privada',
+        caption: 'Vista general del conjunto desde la carretera.',
+        author: '19Tarrestnom65',
+        fileUrl: 'https://commons.wikimedia.org/wiki/File:Torrebuceit_01.jpg',
+        license: 'CC BY-SA 4.0 · versión WebP optimizada',
+        licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+      },
+      {
+        src: '/nearby-guides/Torrebuceit_02.webp',
+        alt: 'Fachada porticada de Torrebuceit delante de un muro de mampostería',
+        caption: 'Detalle de la fachada porticada y los muros de piedra.',
+        author: '19Tarrestnom65',
+        fileUrl: 'https://commons.wikimedia.org/wiki/File:Torrebuceit_02.jpg',
+        license: 'CC BY-SA 4.0 · versión WebP optimizada',
+        licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+      },
+      {
+        src: '/nearby-guides/Torrebuceit_03.webp',
+        alt: 'Vista lateral del caserío de Torrebuceit entre árboles, junto a la señal que identifica el lugar',
+        caption: 'Vista lateral del caserío y el camino de entrada.',
+        author: '19Tarrestnom65',
+        fileUrl: 'https://commons.wikimedia.org/wiki/File:Torrebuceit_03.jpg',
+        license: 'CC BY-SA 4.0 · versión WebP optimizada',
+        licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+      },
+    ],
+    beforeYouGo:
+      'La propiedad es privada y no se permite la visita interior. La ficha oficial indica que es visible desde la carretera; contempla el castillo únicamente desde un lugar público y seguro, sin entrar en el caserío ni detenerte en la calzada.',
+    visitUrl:
+      'https://www.turismocastillalamancha.es/es/cultura-y-patrimonio/castillos/cuenca/castillo-de-torrebuceit',
+    visitLabel: 'Ficha del Castillo de Torrebuceit · Turismo de Castilla-La Mancha',
+    video: {
+      youtubeId: 'd5C1apoWJ9w',
+      title: 'Torrebuceit desde el aire',
+      watchUrl: 'https://youtu.be/d5C1apoWJ9w',
+      credit: 'Grabado por Rafa en homenaje a su abuelo Crescente',
+    },
+    sources: [
+      {
+        label: 'Castillo de Torrebuceit · Turismo de Castilla-La Mancha',
+        href: 'https://www.turismocastillalamancha.es/es/cultura-y-patrimonio/castillos/cuenca/castillo-de-torrebuceit',
+      },
+      {
+        label: 'Castillo de Torrebuceit · Asociación Española de Amigos de los Castillos',
+        href: 'https://www.xn--castillosdeespaa-lub.es/es/content/torrebuceit-castillo-de',
+      },
+      {
+        label:
+          'Francisco García González · Sirvientes y criados en el mundo rural de la España interior, 1700-1860. Desigualdad social y dependencia (Mundo Agrario, 2017)',
+        href: 'https://doi.org/10.24215/15155994e071',
+      },
+    ],
+  },
   {
     slug: 'segobriga-saelices',
     title: 'Segóbriga: una ciudad romana en la Meseta',

@@ -1,0 +1,85 @@
+---
+import ExternalLink from '../ui/ExternalLink.astro';
+import type { NearbyPlaceGuide } from '../../data/nearby-guides';
+
+interface Props {
+  video: NonNullable<NearbyPlaceGuide['video']>;
+}
+
+const { video } = Astro.props;
+---
+
+<section class="guide-video" aria-labelledby="guide-video-title">
+  <div class="gallery-heading">
+    <p class="eyebrow">Una vista desde el aire</p>
+    <h2 id="guide-video-title">{video.title}</h2>
+  </div>
+  <div class="guide-video-frame">
+    <iframe
+      src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}`}
+      title={video.title}
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    ></iframe>
+  </div>
+  <p class="guide-video-credit">
+    {video.credit}
+    {' · '}
+    <ExternalLink href={video.watchUrl}>Ver en YouTube ↗</ExternalLink>
+  </p>
+</section>
+
+<style>
+  .guide-video {
+    padding: 1rem 0 2rem;
+  }
+
+  .gallery-heading {
+    margin-bottom: 1.5rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: var(--font-size-section-heading);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -0.05em;
+    line-height: 1.02;
+    overflow-wrap: anywhere;
+  }
+
+  .guide-video-frame {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border-radius: 1rem;
+    background: var(--color-ink);
+  }
+
+  .guide-video-frame iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .guide-video-credit {
+    margin: 0.7rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.82rem;
+  }
+
+  .guide-video-credit a {
+    color: var(--color-ink);
+  }
+</style>
