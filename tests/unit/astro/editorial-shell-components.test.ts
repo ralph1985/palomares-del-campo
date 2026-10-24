@@ -55,16 +55,16 @@ describe('HomeAudienceCards.astro', () => {
 });
 
 describe('HomeEditorialGuide.astro', () => {
-  it('renders the four editorial routes with their matching destinations', async () => {
+  it('hides the ball-game entry while its build feature flag is off', async () => {
     const html = await render(HomeEditorialGuide);
 
     expect(html).toContain('aria-labelledby="editorial-title"');
-    expect(html).toContain('Palomares se descubre de cuatro maneras.');
+    expect(html).toContain('Palomares se descubre de tres maneras.');
     expect(html).toContain('href="/sobre-el-pueblo/#paisaje"');
     expect(html).toContain('href="/sobre-el-pueblo/#patrimonio"');
     expect(html).toContain('href="/sobre-el-pueblo/#tradiciones"');
-    expect(html).toContain('href="/juego/"');
-    expect(html).toContain('>Jugar</h3>');
+    expect(html).not.toContain('href="/juego/"');
+    expect(html).not.toContain('>Jugar</h3>');
   });
 });
 
@@ -123,6 +123,8 @@ describe('SiteHeader.astro and SideMenu.astro', () => {
     expect(menuHtml).toContain('data-menu-backdrop');
     expect(menuHtml).toContain('aria-labelledby="menu-group-Vecinos"');
     expect(menuHtml).toContain('href="/informacion-practica/"');
+    expect(menuHtml).not.toContain('href="/juego/"');
+    expect(menuHtml).not.toContain('>Juego</h2>');
     expect(menuHtml).toContain('id="menu-scene"');
   });
 });
@@ -135,6 +137,8 @@ describe('SiteFooter.astro', () => {
     expect(html).toContain('id="contacto"');
     expect(html).toContain('aria-labelledby="footer-explore-title"');
     expect(html).toContain('href="https://palomaresdelcampo.dipucuenca.es/"');
+    expect(html).not.toContain('href="/juego/"');
+    expect(html).not.toContain('>La bola</a>');
     expect(html).toContain('href="tel:969277601"');
     expect(html).toContain('href="mailto:ayto.palomares@gmail.com"');
     expect(html).toContain('href="https://conquense.dev/"');

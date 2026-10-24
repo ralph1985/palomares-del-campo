@@ -5,6 +5,8 @@ const pageTransitionsEnabled = process.env.PUBLIC_PAGE_TRANSITIONS_ENABLED ?? 't
 process.env.PUBLIC_PAGE_TRANSITIONS_ENABLED = pageTransitionsEnabled;
 const palomarenosEnabled = process.env.PUBLIC_PALOMARENOS_ENABLED ?? 'true';
 process.env.PUBLIC_PALOMARENOS_ENABLED = palomarenosEnabled;
+const ballGameEnabled = process.env.PUBLIC_BALL_GAME_ENABLED ?? 'true';
+process.env.PUBLIC_BALL_GAME_ENABLED = ballGameEnabled;
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -37,6 +39,7 @@ export default defineConfig({
       PUBLIC_E2E_TEST_MODE: 'true',
       PUBLIC_PAGE_TRANSITIONS_ENABLED: pageTransitionsEnabled,
       PUBLIC_PALOMARENOS_ENABLED: palomarenosEnabled,
+      PUBLIC_BALL_GAME_ENABLED: ballGameEnabled,
       PUBLIC_TURNSTILE_SITE_KEY: 'e2e-test-site-key',
     },
   },
