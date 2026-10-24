@@ -85,7 +85,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
       },
       {
         label:
-          'Francisco García González · Sirvientes y criados en el mundo rural manchego (Mundo Agrario, 2017)',
+          'Francisco García González · Sirvientes y criados en el mundo rural de la España interior, 1700-1860. Desigualdad social y dependencia (Mundo Agrario, 2017)',
         href: 'https://doi.org/10.24215/15155994e071',
       },
     ],

@@ -160,7 +160,9 @@ test.describe('nearby attractions guide', () => {
       'Grabado por Rafa en homenaje a su abuelo Crescente',
     );
     await expect(
-      page.getByRole('link', { name: /Sirvientes y criados en el mundo rural manchego/ }),
+      page.getByRole('link', {
+        name: /Sirvientes y criados en el mundo rural de la España interior/,
+      }),
     ).toHaveAttribute('href', 'https://doi.org/10.24215/15155994e071');
     await expect(page.getByRole('link', { name: 'Ver en YouTube' })).toHaveAttribute(
       'href',
