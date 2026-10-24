@@ -74,6 +74,30 @@ const featuredImage = guide.images[0];
         )}
       </header>
 
+      {guide.video && (
+        <section class="guide-video" aria-labelledby="guide-video-title">
+          <div class="gallery-heading">
+            <p class="eyebrow">Una vista desde el aire</p>
+            <h2 id="guide-video-title">{guide.video.title}</h2>
+          </div>
+          <div class="guide-video-frame">
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${guide.video.youtubeId}`}
+              title={guide.video.title}
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <p class="guide-video-credit">
+            {guide.video.credit}
+            {' · '}
+            <ExternalLink href={guide.video.watchUrl}>Ver en YouTube ↗</ExternalLink>
+          </p>
+        </section>
+      )}
+
       <section class="visit-panel" aria-labelledby="visit-panel-title">
         <div>
           <p class="eyebrow">Antes de organizar la visita</p>
@@ -286,6 +310,34 @@ const featuredImage = guide.images[0];
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(2rem, 5vw, 4rem);
     padding: clamp(3rem, 7vw, 5rem) 0;
+  }
+
+  .guide-video {
+    padding: 1rem 0 2rem;
+  }
+
+  .guide-video-frame {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border-radius: 1rem;
+    background: var(--color-ink);
+  }
+
+  .guide-video-frame iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .guide-video-credit {
+    margin: 0.7rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.82rem;
+  }
+
+  .guide-video-credit a {
+    color: var(--color-ink);
   }
 
   .guide-content h2 {

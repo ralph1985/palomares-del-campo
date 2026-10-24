@@ -34,6 +34,13 @@ test.describe('nearby attractions guide', () => {
     );
     await expect(mora).not.toContainText('Ruta orientativa');
 
+    const torrebuceit = page.getByRole('article', { name: 'Castillo de Torrebuceit' });
+    await expect(torrebuceit).toContainText(/propiedad privada/i);
+    await expect(torrebuceit.getByRole('link', { name: 'Leer guía de visita' })).toHaveAttribute(
+      'href',
+      '/que-ver-cerca/castillo-torrebuceit/',
+    );
+
     const laguna = page.getByRole('article', { name: 'Laguna de El Hito' });
     await expect(laguna).toContainText(/estacional|invernal/i);
 
@@ -74,6 +81,7 @@ test.describe('nearby attractions guide', () => {
     await page.goto(placesUrl);
 
     const featuredPlaces = [
+      { name: 'Castillo de Torrebuceit', slug: 'castillo-torrebuceit' },
       { name: 'Segóbriga y Saelices', slug: 'segobriga-saelices' },
       { name: 'Mina de la Mora Encantada', slug: 'mina-mora-encantada' },
       { name: 'Villa Romana de Noheda', slug: 'villa-romana-noheda' },
@@ -95,6 +103,11 @@ test.describe('nearby attractions guide', () => {
     }
 
     const guides = [
+      {
+        path: 'castillo-torrebuceit',
+        heading: 'El castillo de Torrebuceit, vigía del Záncara',
+        images: 0,
+      },
       {
         path: 'segobriga-saelices',
         heading: 'Segóbriga: una ciudad romana en la Meseta',
@@ -119,7 +132,12 @@ test.describe('nearby attractions guide', () => {
       await expect(
         page.locator('main figure a[href*="commons.wikimedia.org/wiki/File:"]'),
       ).toHaveCount(guide.images);
-      await expect(page.locator('main figure img').first()).toHaveJSProperty('naturalWidth', 1280);
+      if (guide.images > 0) {
+        await expect(page.locator('main figure img').first()).toHaveJSProperty(
+          'naturalWidth',
+          1280,
+        );
+      }
       await expect(page.getByRole('link', { name: 'Volver a Qué ver cerca' })).toHaveAttribute(
         'href',
         placesUrl,
@@ -130,6 +148,18 @@ test.describe('nearby attractions guide', () => {
       );
     }
 
+    await page.goto('/que-ver-cerca/castillo-torrebuceit/');
+    const video = page.getByTitle('Torrebuceit desde el aire');
+    await expect(video).toHaveAttribute(
+      'src',
+      'https://www.youtube-nocookie.com/embed/d5C1apoWJ9w',
+    );
+    await expect(page.locator('main')).toContainText('Vídeo grabado por Rafa');
+    await expect(page.getByRole('link', { name: 'Ver en YouTube' })).toHaveAttribute(
+      'href',
+      'https://youtu.be/d5C1apoWJ9w',
+    );
+
     await page.goto('/que-ver-cerca/villa-romana-noheda/');
     await expect(page.locator('main')).toContainText(/visita es guiada/i);
     await expect(page.locator('main')).toContainText(/entrada reservada online/i);
@@ -139,6 +169,7 @@ test.describe('nearby attractions guide', () => {
     );
 
     await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/que-ver-cerca/castillo-torrebuceit/');
     const hasHorizontalOverflow = await page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
     );
