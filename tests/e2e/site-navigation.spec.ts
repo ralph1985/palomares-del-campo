@@ -48,6 +48,31 @@ test.describe('web navigation', () => {
     );
   });
 
+  test('links the church heritage card to its expanded sourced guide', async ({ page }) => {
+    await page.goto('/sobre-el-pueblo/');
+
+    await page.getByRole('link', { name: 'Descubrir la iglesia' }).click();
+
+    await expect(page).toHaveURL('/sobre-el-pueblo/iglesia/');
+    await expect(
+      page.getByRole('heading', { level: 1, name: 'Iglesia de Nuestra Señora de la Asunción' }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Capillas, pintura y escultura' }),
+    ).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Qué ver · portal municipal' })).toHaveAttribute(
+      'href',
+      'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-three',
+    );
+    await expect(
+      page.getByRole('link', { name: 'Ficha de la parroquia · Diócesis de Cuenca' }),
+    ).toHaveAttribute(
+      'href',
+      'https://www.diocesisdecuenca.es/parroquia/parroquia-de-ntra-sra-de-la-asuncion-58/',
+    );
+    await expect(page.getByText(/no horarios ni condiciones de acceso/)).toBeVisible();
+  });
+
   test('exposes official Palomares municipal services in the footer', async ({ page }) => {
     await page.goto('/');
 
