@@ -102,6 +102,7 @@ src/pages/
 ├── alojamientos/index.astro            /alojamientos/
 ├── rutas/index.astro                   /rutas/
 ├── que-ver-cerca/index.astro           /que-ver-cerca/
+├── que-ver-cerca/[slug].astro           /que-ver-cerca/<guía>/
 ├── juego/index.astro                   /juego/
 ├── avisos/index.astro                  /avisos/ (redirección 301)
 ├── noticias/index.astro                /noticias/
@@ -142,6 +143,9 @@ src/components/
 │   └── HeritageCard.astro
 ├── accommodations/
 │   └── AccommodationCard.astro
+├── nearby/
+│   ├── NearbyPlaceCard.astro
+│   └── NearbyPlaceGuide.astro
 ├── current-affairs/
 │   ├── AgendaFilters.astro
 │   ├── AgendaItemCard.astro

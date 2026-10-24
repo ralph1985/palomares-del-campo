@@ -18,6 +18,7 @@ export interface NearbyPlace {
   summary: string;
   visitNote?: string;
   routeEstimate?: NearbyPlaceRouteEstimate;
+  guidePath?: string;
   sources: NearbyPlaceSource[];
 }
 
@@ -49,6 +50,7 @@ export const nearbyPlaces: NearbyPlace[] = [
       'Una mina romana de lapis specularis, el yeso translúcido que se extraía en esta zona y que estuvo ligado al desarrollo de Segóbriga.',
     visitNote:
       'La visita requiere reserva o confirmación previa. Comprueba las condiciones en la ficha oficial antes de desplazarte.',
+    guidePath: '/que-ver-cerca/mina-mora-encantada/',
     sources: [
       {
         label: 'Ficha oficial de la mina',
@@ -86,6 +88,7 @@ export const nearbyPlaces: NearbyPlace[] = [
       durationMinutes: 38,
       destinationLabel: 'Parque Arqueológico de Segóbriga',
     },
+    guidePath: '/que-ver-cerca/segobriga-saelices/',
     sources: [
       {
         label: 'Parque Arqueológico de Segóbriga',
@@ -220,6 +223,7 @@ export const nearbyPlaces: NearbyPlace[] = [
       durationMinutes: 50,
       destinationLabel: 'Villa Romana de Noheda',
     },
+    guidePath: '/que-ver-cerca/villa-romana-noheda/',
     sources: [
       {
         label: 'Ficha oficial de la Villa Romana de Noheda',
