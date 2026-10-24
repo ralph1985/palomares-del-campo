@@ -39,19 +39,22 @@ const formatDuration = (minutes: number) => {
     </p>
   )}
 
-  <nav class="nearby-card-sources" aria-label={`Fuentes oficiales de ${place.name}`}>
-    {place.sources.map((source) => (
-      <ExternalLink href={source.href}>
-        {source.label} <span aria-hidden="true">↗</span>
-      </ExternalLink>
-    ))}
-  </nav>
-
   {place.guidePath && (
-    <ActionLink class="nearby-card-guide" href={place.guidePath} variant="underline">
-      Guía de visita <span aria-hidden="true">↗</span>
+    <ActionLink class="nearby-card-guide" href={place.guidePath} variant="solid">
+      Leer guía de visita <span aria-hidden="true">↗</span>
     </ActionLink>
   )}
+
+  <div class="nearby-card-source-group">
+    <p class="nearby-card-source-label">Fuentes oficiales</p>
+    <nav class="nearby-card-sources" aria-label={`Fuentes oficiales de ${place.name}`}>
+      {place.sources.map((source) => (
+        <ExternalLink href={source.href}>
+          {source.label} <span aria-hidden="true">↗</span>
+        </ExternalLink>
+      ))}
+    </nav>
+  </div>
 </article>
 
 <style>
@@ -111,22 +114,34 @@ const formatDuration = (minutes: number) => {
     color: var(--color-ink);
   }
 
-  .nearby-card-sources {
-    display: grid;
-    gap: 0.65rem;
+  .nearby-card-source-group {
     margin-top: auto;
     padding-top: 1.4rem;
   }
 
+  .nearby-card-source-label {
+    margin: 0 0 0.6rem;
+    color: var(--color-muted);
+    font-size: 0.72rem;
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .nearby-card-sources {
+    display: grid;
+    gap: 0.65rem;
+  }
+
   .nearby-card-sources a {
     color: var(--color-forest);
-    font-size: 0.9rem;
-    font-weight: var(--font-weight-strong);
+    font-size: 0.82rem;
+    font-weight: var(--font-weight-medium);
   }
 
   .nearby-card-guide {
     align-self: flex-start;
-    margin-top: 1rem;
+    margin-top: 1.25rem;
   }
 
   @media (max-width: 38rem) {
