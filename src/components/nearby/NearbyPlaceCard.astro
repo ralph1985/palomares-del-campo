@@ -1,5 +1,6 @@
 ---
 import ExternalLink from '../ui/ExternalLink.astro';
+import ActionLink from '../ui/ActionLink.astro';
 import type { NearbyPlace } from '../../data/nearby-places';
 
 interface Props {
@@ -45,6 +46,12 @@ const formatDuration = (minutes: number) => {
       </ExternalLink>
     ))}
   </nav>
+
+  {place.guidePath && (
+    <ActionLink class="nearby-card-guide" href={place.guidePath} variant="underline">
+      Guía de visita <span aria-hidden="true">↗</span>
+    </ActionLink>
+  )}
 </article>
 
 <style>
@@ -115,6 +122,11 @@ const formatDuration = (minutes: number) => {
     color: var(--color-forest);
     font-size: 0.9rem;
     font-weight: var(--font-weight-strong);
+  }
+
+  .nearby-card-guide {
+    align-self: flex-start;
+    margin-top: 1rem;
   }
 
   @media (max-width: 38rem) {

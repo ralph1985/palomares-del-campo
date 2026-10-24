@@ -6,6 +6,10 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ### 2026-10-24
 
+#### Added
+
+- Añadidas guías ampliadas de Segóbriga, la Mina de la Mora Encantada y Noheda, con fotografías licenciadas y créditos visibles, fuentes oficiales y condiciones de visita.
+
 #### Changed
 
 - Ampliado el borrador del aviso legal para aclarar el alcance informativo del sitio y marcar los datos institucionales pendientes de verificación sin conservar identificadores ficticios.

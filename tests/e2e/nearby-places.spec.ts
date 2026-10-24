@@ -67,4 +67,73 @@ test.describe('nearby attractions guide', () => {
       placesUrl,
     );
   });
+
+  test('links featured places to detailed guides with credited images and official visit information', async ({
+    page,
+  }) => {
+    await page.goto(placesUrl);
+
+    const featuredPlaces = [
+      { name: 'Segóbriga y Saelices', slug: 'segobriga-saelices' },
+      { name: 'Mina de la Mora Encantada', slug: 'mina-mora-encantada' },
+      { name: 'Villa Romana de Noheda', slug: 'villa-romana-noheda' },
+    ];
+    for (const place of featuredPlaces) {
+      const card = page.getByRole('article', { name: place.name });
+      await expect(card.getByRole('link', { name: 'Guía de visita' })).toHaveAttribute(
+        'href',
+        `/que-ver-cerca/${place.slug}/`,
+      );
+    }
+
+    const guides = [
+      {
+        path: 'segobriga-saelices',
+        heading: 'Segóbriga: una ciudad romana en la Meseta',
+        images: 2,
+      },
+      {
+        path: 'mina-mora-encantada',
+        heading: 'La Mora Encantada y el lapis specularis',
+        images: 1,
+      },
+      {
+        path: 'villa-romana-noheda',
+        heading: 'Noheda: mosaicos y vida en una villa romana',
+        images: 2,
+      },
+    ];
+
+    for (const guide of guides) {
+      await page.goto(`/que-ver-cerca/${guide.path}/`);
+      await expect(page.getByRole('heading', { level: 1, name: guide.heading })).toBeVisible();
+      await expect(page.locator('main figure')).toHaveCount(guide.images);
+      await expect(
+        page.locator('main figure a[href*="commons.wikimedia.org/wiki/File:"]'),
+      ).toHaveCount(guide.images);
+      await expect(page.locator('main figure img').first()).toHaveJSProperty('naturalWidth', 1280);
+      await expect(page.getByRole('link', { name: 'Volver a Qué ver cerca' })).toHaveAttribute(
+        'href',
+        placesUrl,
+      );
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+        'href',
+        new RegExp(`/que-ver-cerca/${guide.path}/$`),
+      );
+    }
+
+    await page.goto('/que-ver-cerca/villa-romana-noheda/');
+    await expect(page.locator('main')).toContainText(/visita es guiada/i);
+    await expect(page.locator('main')).toContainText(/entrada reservada online/i);
+    await expect(page.getByRole('link', { name: 'Reservas oficiales de Noheda' })).toHaveAttribute(
+      'href',
+      'https://www.villanoheda.org/entradas/',
+    );
+
+    await page.setViewportSize({ width: 375, height: 812 });
+    const hasHorizontalOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    );
+    expect(hasHorizontalOverflow).toBe(false);
+  });
 });
