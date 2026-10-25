@@ -4,6 +4,12 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-10-25
+
+#### Changed
+
+- Unificados los controles de acción del sitio con una base visual compartida; los enlaces externos conservan la misma pestaña por defecto y solo abren otra con indicación accesible explícita.
+
 ### 2026-10-24
 
 #### Added

@@ -1,11 +1,18 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-interface Props extends Omit<HTMLAttributes<'a'>, 'href'> {
+interface Props extends Omit<HTMLAttributes<'a'>, 'href' | 'target' | 'rel'> {
   href: string;
+  newTab?: boolean;
 }
 
-const { href, class: className, ...linkAttributes } = Astro.props;
+const {
+  href,
+  newTab = false,
+  'aria-label': ariaLabel,
+  class: className,
+  ...linkAttributes
+} = Astro.props;
 ---
 
 <a
@@ -13,10 +20,11 @@ const { href, class: className, ...linkAttributes } = Astro.props;
   href={href}
   class:list={['ui-external-link', className]}
   data-ui-external-link
-  target="_blank"
-  rel="noopener noreferrer"
+  aria-label={newTab && ariaLabel ? `${ariaLabel} (se abre en una pestaña nueva)` : ariaLabel}
+  {...(newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
 >
   <slot />
+  {newTab && !ariaLabel && <span class="ui-visually-hidden"> (se abre en una pestaña nueva)</span>}
 </a>
 
 <style is:global>

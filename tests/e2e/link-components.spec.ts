@@ -1,9 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('shared link components', () => {
-  test('protects external links with a new browsing context and opener protection', async ({
-    page,
-  }) => {
+  test('keeps external links in the current browsing context by default', async ({ page }) => {
     await page.goto('/sobre-el-pueblo/');
 
     const externalLinks = page.locator('[data-ui-external-link]');
@@ -15,9 +13,19 @@ test.describe('shared link components', () => {
     );
 
     expect(externalAttributes.length).toBeGreaterThan(0);
-    expect(externalAttributes.every(({ target }) => target === '_blank')).toBe(true);
-    expect(externalAttributes.every(({ rel }) => rel?.includes('noopener'))).toBe(true);
-    expect(externalAttributes.every(({ rel }) => rel?.includes('noreferrer'))).toBe(true);
+    expect(externalAttributes.every(({ target }) => target === null)).toBe(true);
+    expect(externalAttributes.every(({ rel }) => rel === null)).toBe(true);
+  });
+
+  test('gives primary site actions a consistent 44px minimum target size', async ({ page }) => {
+    await page.goto('/informacion-practica/');
+
+    const callLink = page.getByRole('link', { name: 'Llamar al Ayuntamiento' });
+    const box = await callLink.boundingBox();
+
+    expect(box).not.toBeNull();
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+    expect(box?.width).toBeGreaterThanOrEqual(44);
   });
 
   test('uses the breadcrumb instead of a duplicate back-link on news detail', async ({ page }) => {
