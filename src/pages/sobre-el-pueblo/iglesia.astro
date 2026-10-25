@@ -46,16 +46,13 @@ const churchPhotoLicenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
   description="Historia y patrimonio de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo: construcción, capillas funerarias y obras destacadas."
   socialImage={churchImage}
   socialImageAlt="Fachada de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo"
+  breadcrumbs={[
+    { name: 'Inicio', path: '/' },
+    { name: 'Sobre el pueblo', path: '/sobre-el-pueblo/' },
+    { name: 'La iglesia', path: '/sobre-el-pueblo/iglesia/' },
+  ]}
 >
   <main class="church-page">
-    <nav class="church-breadcrumbs" aria-label="Migas de pan">
-      <a href="/">Inicio</a>
-      <span aria-hidden="true">/</span>
-      <a href="/sobre-el-pueblo/">Sobre el pueblo</a>
-      <span aria-hidden="true">/</span>
-      <span aria-current="page">La iglesia</span>
-    </nav>
-
     <header class="church-hero">
       <div class="church-hero-copy">
         <p class="eyebrow">Patrimonio · Palomares del Campo</p>
@@ -64,9 +61,6 @@ const churchPhotoLicenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
           Un templo renacentista levantado a lo largo de varias generaciones, donde conviven la
           arquitectura «a la romana», las bóvedas góticas y obras de los siglos XVI al XVIII.
         </p>
-        <a class="back-link" href="/sobre-el-pueblo/#patrimonio">
-          <span aria-hidden="true">←</span> Volver al patrimonio del pueblo
-        </a>
       </div>
       <figure class="church-photo">
         <img
@@ -238,7 +232,6 @@ const churchPhotoLicenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
     background: var(--color-paper);
   }
 
-  .church-breadcrumbs,
   .church-hero,
   .church-gallery,
   .church-history,
@@ -248,17 +241,6 @@ const churchPhotoLicenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
     margin-inline: auto;
   }
 
-  .church-breadcrumbs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    padding: 1.25rem 0;
-    color: var(--color-muted);
-    font-size: 0.8rem;
-  }
-
-  .church-breadcrumbs a,
-  .back-link,
   .source-links a {
     color: var(--color-forest);
     font-weight: var(--font-weight-strong);
@@ -382,13 +364,6 @@ const churchPhotoLicenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
     color: var(--color-muted);
     font-size: clamp(1.05rem, 1.5vw, 1.25rem);
     line-height: 1.7;
-  }
-
-  .back-link {
-    display: inline-flex;
-    gap: 0.65rem;
-    margin-top: 2rem;
-    font-size: 0.9rem;
   }
 
   .church-photo {
@@ -604,7 +579,6 @@ const churchPhotoLicenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
   }
 
   @media (max-width: 420px) {
-    .church-breadcrumbs,
     .church-hero,
     .church-gallery,
     .church-history,

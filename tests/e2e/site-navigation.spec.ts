@@ -54,6 +54,16 @@ test.describe('web navigation', () => {
     await page.getByRole('link', { name: 'Descubrir la iglesia' }).click();
 
     await expect(page).toHaveURL('/sobre-el-pueblo/iglesia/');
+    const breadcrumbs = page.getByRole('navigation', { name: 'Migas de pan' });
+    await expect(breadcrumbs.getByRole('link', { name: 'Inicio' })).toHaveAttribute('href', '/');
+    await expect(breadcrumbs.getByRole('link', { name: 'Sobre el pueblo' })).toHaveAttribute(
+      'href',
+      '/sobre-el-pueblo/',
+    );
+    await expect(breadcrumbs.getByText('La iglesia')).toHaveAttribute('aria-current', 'page');
+    await expect(
+      page.getByRole('link', { name: 'Volver al patrimonio del pueblo', exact: true }),
+    ).toHaveCount(0);
     await expect(
       page.getByRole('heading', { level: 1, name: 'Iglesia de Nuestra Señora de la Asunción' }),
     ).toBeVisible();

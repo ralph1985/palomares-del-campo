@@ -1,0 +1,68 @@
+---
+interface Breadcrumb {
+  name: string;
+  path: string;
+}
+
+interface Props {
+  items: Breadcrumb[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumbs" aria-label="Migas de pan">
+  <ol>
+    {items.map((item, index) => (
+      <li>
+        {index === items.length - 1 ? (
+          <span aria-current="page">{item.name}</span>
+        ) : (
+          <a href={item.path}>{item.name}</a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs {
+    width: min(100% - 2.5rem, 72rem);
+    margin-inline: auto;
+    padding-block: 1.25rem;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+  }
+
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  li + li::before {
+    color: var(--color-muted);
+    content: '/';
+  }
+
+  a {
+    color: var(--color-forest);
+    font-weight: var(--font-weight-strong);
+    text-underline-offset: 0.22rem;
+  }
+
+  @media (max-width: 420px) {
+    .breadcrumbs {
+      width: min(100% - 2rem, 72rem);
+    }
+  }
+</style>

@@ -137,10 +137,11 @@ test.describe('nearby attractions guide', () => {
           await expect(image).toHaveJSProperty('naturalWidth', 1280);
         }
       }
-      await expect(page.getByRole('link', { name: 'Volver a Qué ver cerca' })).toHaveAttribute(
-        'href',
-        placesUrl,
-      );
+      const breadcrumbs = page.getByRole('navigation', { name: 'Migas de pan' });
+      await expect(
+        breadcrumbs.getByRole('link', { name: 'Qué ver cerca', exact: true }),
+      ).toHaveAttribute('href', placesUrl);
+      await expect(page.getByRole('link', { name: '← Volver a Qué ver cerca' })).toHaveCount(0);
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
         'href',
         new RegExp(`/que-ver-cerca/${guide.path}/$`),
