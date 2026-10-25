@@ -62,6 +62,9 @@ test.describe('web navigation', () => {
     );
     await expect(breadcrumbs.getByText('La iglesia')).toHaveAttribute('aria-current', 'page');
     await expect(
+      page.getByRole('link', { name: 'Volver al patrimonio del pueblo', exact: true }),
+    ).toHaveCount(0);
+    await expect(
       page.getByRole('heading', { level: 1, name: 'Iglesia de Nuestra Señora de la Asunción' }),
     ).toBeVisible();
     await expect(
