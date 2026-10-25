@@ -4,6 +4,7 @@ test.describe('home information architecture', () => {
   test('explains the site and puts useful tasks within reach', async ({ page }) => {
     await page.goto('/');
 
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Piedra, campo y vida.');
     await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName(
       'Piedra, campo y vida.',
     );
