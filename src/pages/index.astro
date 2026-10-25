@@ -10,21 +10,29 @@ import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
 
 <BaseLayout
   title="Palomares del Campo"
-  description="Palomares del Campo: un nuevo espacio digital para el pueblo."
+  description="Consulta servicios municipales, agenda y bandos, y descubre la historia, las rutas y los alojamientos de Palomares del Campo."
   schema="website"
 >
   <main id="inicio">
-    <EditorialHero id="proyecto" labelledBy="intro-title" variant="sage-tall">
+    <EditorialHero id="proyecto" labelledBy="intro-title" variant="sage-display">
       <p slot="eyebrow" class="eyebrow">
         Palomares del Campo · Cuenca
       </p>
       <h1 slot="title" id="intro-title">
-        Un nuevo espacio para descubrir el pueblo.
+        Palomares, en un mismo lugar.
       </h1>
       <p slot="summary" class="hero-intro">
-        Este proyecto está tomando forma. Aquí reuniremos información, lugares e historias de
-        Palomares del Campo en una experiencia clara y cercana.
+        Consulta servicios municipales, agenda y bandos; descubre la historia, las rutas y los
+        alojamientos de Palomares del Campo.
       </p>
+      <div slot="actions" class="home-actions">
+        <ActionLink variant="solid" href="/agenda/">
+          Consultar la agenda <span aria-hidden="true">→</span>
+        </ActionLink>
+        <ActionLink variant="underline" href="/informacion-practica/">
+          Servicios municipales <span aria-hidden="true">→</span>
+        </ActionLink>
+      </div>
       {PUBLIC_BALL_GAME_ENABLED && (
         <ActionLink slot="actions" variant="underline" href="/juego/">
           Probar el mapa del juego <span aria-hidden="true">→</span>
@@ -39,6 +47,13 @@ import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
 </BaseLayout>
 
 <style>
+  .home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     :global(html) {
       scroll-behavior: auto;
@@ -46,9 +61,10 @@ import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
   }
 
   @media (max-width: 38rem) {
-    .intro,
-    .footer-inner {
-      width: min(100% - 2rem, 72rem);
+    .home-actions {
+      display: grid;
+      justify-items: start;
+      gap: 1rem;
     }
   }
 </style>

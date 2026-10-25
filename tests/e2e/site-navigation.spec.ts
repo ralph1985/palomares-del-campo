@@ -5,7 +5,9 @@ test.describe('web navigation', () => {
     await page.goto('/');
 
     await expect(page).toHaveTitle(/Palomares del Campo/);
-    await expect(page.getByRole('heading', { name: /Un nuevo espacio/ })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 1, name: 'Palomares, en un mismo lugar.' }),
+    ).toBeVisible();
     await expect(
       page.getByRole('link', { name: 'Web realizada por conquense.dev' }),
     ).toHaveAttribute('href', 'https://conquense.dev/');
