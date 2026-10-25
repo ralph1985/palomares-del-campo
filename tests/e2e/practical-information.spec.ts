@@ -18,7 +18,7 @@ test.describe('practical municipal information', () => {
     ).toHaveAttribute('href', 'mailto:ayto.palomares@gmail.com');
     await expect(
       page.getByRole('link', { name: 'Abrir ubicación en OpenStreetMap' }),
-    ).toHaveAttribute('target', '_blank');
+    ).not.toHaveAttribute('target', '_blank');
 
     const services = page.getByRole('heading', { name: 'Trámites y canales oficiales' });
     await expect(services).toBeVisible();

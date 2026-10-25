@@ -61,6 +61,16 @@ Los tokens de ritmo (`--line-height-body`, `--line-height-heading`, `--tracking-
 - `SplitHero.astro` comparte la retícula de dos columnas con slots `copy` y `visual`. Sus variantes `heritage` y `game` mantienen las composiciones fotográfica/3D y de partida interactiva sin trasladar su contenido o estado al componente.
 - Las páginas conservan textos y datos; las excepciones de ancho de título o introducción se expresan con modificadores tipados, no con selectores globales ni CSS repetido.
 
+## Botones y enlaces
+
+- Usa enlaces (`<a>`) para navegar a una URL, y botones (`<button>`) para ejecutar acciones; no conviertas uno en el otro solo por su apariencia.
+- `SiteButton` ofrece variantes primaria/secundaria y `ActionLink` con variante `solid` usa la primaria; ambos comparten `ui-control`, con alto/ancho mínimos de 2,75 rem, foco visible, hover y `prefers-reduced-motion`. Los botones añaden estado deshabilitado. El tamaño elegido apunta a un objetivo táctil cómodo de 44 px; WCAG 2.2 AA fija 24 × 24 CSS px como mínimo general con excepciones, no 44 px como requisito universal.
+- `SiteButton` exige `type` (`button`, `submit` o `reset`) para evitar envíos accidentales. `Button.astro` se reserva al tema oscuro del juego y conserva sus variantes de partida.
+- Los enlaces externos usan el contexto actual por defecto. `ExternalLink newTab` es optativo; cuando se activa, el componente añade `target="_blank"`, `rel="noopener noreferrer"` y anuncia “se abre en una pestaña nueva” de forma accesible. Evitar nuevas pestañas inesperadas es el valor predeterminado.
+- Mantener enlaces inline, de navegación, de fuentes y de tarjetas con sus tratamientos editoriales cuando su contrato visual sea diferente; no forzar cada `<a>` a convertirse en botón.
+
+Estas decisiones siguen la semántica HTML de [MDN para enlaces](https://developer.mozilla.org/es/docs/Web/HTML/Reference/Elements/a), la recomendación de [GOV.UK de evitar pestañas nuevas y anunciarlas si se necesitan](https://design-system.service.gov.uk/styles/links/), los criterios WCAG de [foco visible](https://www.w3.org/WAI/WCAG22/Understanding/focus-visible) y [tamaño mínimo de objetivo](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum), y el uso de texto de acción en sentence case recomendado por [GOV.UK para botones](https://design-system.service.gov.uk/components/button/).
+
 ## QA visual y excepciones
 
 La comprobación reproducible se ejecuta con `pnpm qa:visual` mientras el servidor Astro esté disponible. Recorre quince rutas en escritorio (`1440×900`) y móvil (`375×812`), incluidos los patrones Hero editoriales, divididos, de agenda y legales, el directorio de alojamientos, el formulario del mapa mundial y un bando con URL larga. Verifica HTTP 200, ausencia de overflow horizontal, focus visible, contraste aproximado WCAG y errores de consola.

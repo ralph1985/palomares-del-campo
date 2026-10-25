@@ -1,4 +1,6 @@
 ---
+import SiteButton from './ui/SiteButton.astro';
+
 interface Props {
   scope: 'bando' | 'news';
   label: string;
@@ -49,9 +51,9 @@ const yearId = `${scope}-year`;
         spellcheck="false"
       />
       <div class="search-actions">
-        <button type="button" data-search-clear hidden>
+        <SiteButton type="button" variant="secondary" data-search-clear hidden>
           Limpiar búsqueda
-        </button>
+        </SiteButton>
       </div>
     </div>
   </div>
@@ -116,28 +118,7 @@ const yearId = `${scope}-year`;
     flex-wrap: wrap;
     gap: 0.5rem;
   }
-  .search-actions button {
-    min-height: 2.75rem;
-    padding: 0.65rem 0.8rem;
-    border: 1px solid var(--color-forest);
-    border-radius: 0.55rem;
-    color: var(--color-forest);
-    background: transparent;
-    font: inherit;
-    font-size: 0.82rem;
-    font-weight: var(--font-weight-strong);
-    cursor: pointer;
-  }
-  .search-actions button:hover,
-  .search-actions button:focus-visible {
-    border-color: var(--color-clay);
-    color: var(--color-surface);
-    background: var(--color-clay);
-  }
-  .search-actions button:focus-visible {
-    outline: 3px solid rgb(160 92 50 / 28%);
-    outline-offset: 2px;
-  }
+
   .filter-field label {
     color: var(--color-muted);
     font-size: 0.78rem;

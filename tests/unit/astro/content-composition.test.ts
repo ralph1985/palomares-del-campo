@@ -104,8 +104,8 @@ describe('BandoCard.astro', () => {
     expect(html).toContain('href="/bandos/bando-prueba"');
     expect(html).toContain('Palomares del Campo Informa');
     expect(html).toContain('href="https://example.test/bando-original"');
-    expect(html).toContain('target="_blank"');
-    expect(html).toContain('rel="noopener noreferrer"');
+    expect(html).not.toContain('target="_blank"');
+    expect(html).not.toContain('rel="noopener noreferrer"');
   });
 
   it('keeps the search index valid when an entry has no markdown body', async () => {

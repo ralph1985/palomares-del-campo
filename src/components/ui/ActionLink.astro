@@ -14,7 +14,12 @@ const { href, variant = 'text', class: className, ...linkAttributes } = Astro.pr
 <a
   {...linkAttributes}
   href={href}
-  class:list={['ui-action-link', `ui-action-link-${variant}`, className]}
+  class:list={[
+    'ui-action-link',
+    `ui-action-link-${variant}`,
+    variant === 'solid' && 'ui-control ui-control-primary',
+    className,
+  ]}
   data-ui-link
   data-ui-variant={variant}
 >
@@ -32,7 +37,7 @@ const { href, variant = 'text', class: className, ...linkAttributes } = Astro.pr
 
   .ui-action-link:focus-visible {
     outline: 3px solid var(--color-clay);
-    outline-offset: 5px;
+    outline-offset: 3px;
   }
 
   .ui-action-link > span[aria-hidden='true'] {
@@ -61,22 +66,6 @@ const { href, variant = 'text', class: className, ...linkAttributes } = Astro.pr
     border-bottom: 1px solid var(--color-clay);
     color: var(--color-clay);
     font-size: var(--font-size-small);
-  }
-
-  .ui-action-link-solid {
-    padding: 0.75rem 1rem;
-    border: 1px solid rgb(229 183 126 / 45%);
-    border-radius: 0.55rem;
-    color: var(--color-ink);
-    background: var(--color-ochre);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-bold);
-    text-transform: uppercase;
-  }
-
-  .ui-action-link-solid:hover,
-  .ui-action-link-solid:focus-visible {
-    background: var(--color-night-highlight);
   }
 
   @media (prefers-reduced-motion: reduce) {

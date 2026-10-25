@@ -1,4 +1,6 @@
 ---
+import SiteButton from '../ui/SiteButton.astro';
+
 interface Props {
   categories: string[];
   years: string[];
@@ -47,9 +49,9 @@ const { categories, years } = Astro.props;
       </select>
     </div>
   </div>
-  <button class="agenda-clear" type="button" data-agenda-clear>
+  <SiteButton class="agenda-clear" type="button" variant="secondary" data-agenda-clear>
     Limpiar filtros
-  </button>
+  </SiteButton>
 </form>
 
 <style>
@@ -98,23 +100,6 @@ const { categories, years } = Astro.props;
 
   .agenda-filter-field {
     min-width: 0;
-  }
-
-  .agenda-clear {
-    min-height: 2.9rem;
-    padding: 0.65rem 1rem;
-    border: 1px solid var(--color-forest);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--color-ink);
-    font: inherit;
-    font-weight: var(--font-weight-strong);
-    cursor: pointer;
-  }
-
-  .agenda-clear:hover {
-    background: var(--color-forest);
-    color: var(--color-surface);
   }
 
   .agenda-filters :focus-visible {
