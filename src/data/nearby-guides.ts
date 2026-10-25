@@ -1,5 +1,15 @@
+import type { ImageMetadata } from 'astro';
+import segobrigaTeatro from '../assets/nearby-guides/Segobriga_teatro.webp';
+import segobrigaAnfi from '../assets/nearby-guides/Segobriga_anfi.webp';
+import minaMoraEncantada from '../assets/nearby-guides/Mina_de_la_Mora_Encantada.webp';
+import nohedaMosaico from '../assets/nearby-guides/Noheda_mosaico.webp';
+import nohedaEscenas from '../assets/nearby-guides/Noheda_mosaico_escenas.webp';
+import torrebuceit01 from '../assets/nearby-guides/Torrebuceit_01.webp';
+import torrebuceit02 from '../assets/nearby-guides/Torrebuceit_02.webp';
+import torrebuceit03 from '../assets/nearby-guides/Torrebuceit_03.webp';
+
 export interface NearbyGuideImage {
-  src: string;
+  src: ImageMetadata;
   alt: string;
   caption: string;
   author: string;
@@ -64,7 +74,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
     ],
     images: [
       {
-        src: '/nearby-guides/Torrebuceit_01.webp',
+        src: torrebuceit01,
         alt: 'Vista general de Torrebuceit desde la carretera, con el caserío y una señal de propiedad privada',
         caption: 'Vista general del conjunto desde la carretera.',
         author: '19Tarrestnom65',
@@ -73,7 +83,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
         licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
       },
       {
-        src: '/nearby-guides/Torrebuceit_02.webp',
+        src: torrebuceit02,
         alt: 'Fachada porticada de Torrebuceit delante de un muro de mampostería',
         caption: 'Detalle de la fachada porticada y los muros de piedra.',
         author: '19Tarrestnom65',
@@ -82,7 +92,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
         licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
       },
       {
-        src: '/nearby-guides/Torrebuceit_03.webp',
+        src: torrebuceit03,
         alt: 'Vista lateral del caserío de Torrebuceit entre árboles, junto a la señal que identifica el lugar',
         caption: 'Vista lateral del caserío y el camino de entrada.',
         author: '19Tarrestnom65',
@@ -144,7 +154,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
     ],
     images: [
       {
-        src: '/nearby-guides/Segobriga_teatro.webp',
+        src: segobrigaTeatro,
         alt: 'Vista del teatro romano de Segóbriga entre las estructuras arqueológicas',
         caption: 'Teatro romano de Segóbriga.',
         author: 'VIATOR IMPERI from HISPANIA',
@@ -153,7 +163,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
         licenseUrl: 'https://creativecommons.org/licenses/by-sa/2.0/',
       },
       {
-        src: '/nearby-guides/Segobriga_anfi.webp',
+        src: segobrigaAnfi,
         alt: 'Vista general del anfiteatro romano de Segóbriga',
         caption: 'Anfiteatro de Segóbriga.',
         author: 'Malopez 21',
@@ -211,7 +221,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
     ],
     images: [
       {
-        src: '/nearby-guides/Mina_de_la_Mora_Encantada.webp',
+        src: minaMoraEncantada,
         alt: 'Interior de una galería de la Mina de la Mora Encantada, en Torrejoncillo del Rey',
         caption: 'Galería de la Mina de la Mora Encantada.',
         author: '19Tarrestnom65',
@@ -264,7 +274,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
     ],
     images: [
       {
-        src: '/nearby-guides/Noheda_mosaico.webp',
+        src: nohedaMosaico,
         alt: 'Detalle del mosaico romano de la Villa de Noheda, con figuras y decoración geométrica',
         caption: 'Detalle del mosaico de la villa.',
         author: 'Ernestobanpiroa',
@@ -273,7 +283,7 @@ export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
         licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
       },
       {
-        src: '/nearby-guides/Noheda_mosaico_escenas.webp',
+        src: nohedaEscenas,
         alt: 'Escena del mosaico de Noheda con una troupe de mimos y pantomimos',
         caption: 'Escena de mimos y pantomimos en el mosaico.',
         author: 'Fotografía de Rodelar, retocada por Égoïté',

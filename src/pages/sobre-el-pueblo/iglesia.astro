@@ -1,37 +1,58 @@
 ---
+import { getImage, Image, inferRemoteSize } from 'astro:assets';
 import ExternalLink from '../../components/ui/ExternalLink.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import churchEntryDetail from '../../assets/church-gallery/church-entry-detail.jpg';
+import churchSideTower from '../../assets/church-gallery/church-side-tower.jpg';
+import churchSideWall from '../../assets/church-gallery/church-side-wall.jpg';
+import { getResponsiveImageWidths, optimizeRemoteImage } from '../../images';
 
 const municipalSource = 'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-three';
 const parishSource =
   'https://www.diocesisdecuenca.es/parroquia/parroquia-de-ntra-sra-de-la-asuncion-58/';
 const churchImage =
   'https://palomaresdelcampo.dipucuenca.es/images/PALOMARES_DEL_CAMPO/NUESTRA_SE%C3%91ORA_DE_LA_ASUNCION_2.jpg';
+const optimizedChurchImage = await optimizeRemoteImage(
+  churchImage,
+  () =>
+    import.meta.env.PROD
+      ? inferRemoteSize(churchImage)
+      : Promise.resolve({ width: 592, height: 890 }),
+  (dimensions) =>
+    getImage({
+      src: churchImage,
+      width: dimensions.width,
+      height: dimensions.height,
+      widths: getResponsiveImageWidths(dimensions.width, [320, 480, 592]),
+      sizes: '(max-width: 48rem) calc(100vw - 2rem), 40vw',
+      format: 'webp',
+      quality: 85,
+    }),
+  (error) =>
+    console.warn(
+      `Could not optimize the church-page hero; preserving its source URL: ${churchImage}`,
+      error,
+    ),
+);
 const churchGalleryImages = [
   {
-    src: '/church-gallery/church-entry-detail.jpg',
+    src: churchEntryDetail,
     alt: 'Detalle escultórico labrado sobre la portada de la iglesia',
     caption: 'Detalle de la portada principal.',
-    width: 960,
-    height: 720,
     title: 'Imágenes de Palomares del Campo 07.jpg',
     fileUrl: 'https://commons.wikimedia.org/wiki/File:Im%C3%A1genes_de_Palomares_del_Campo_07.jpg',
   },
   {
-    src: '/church-gallery/church-side-tower.jpg',
+    src: churchSideTower,
     alt: 'Vista lateral de la iglesia y su torre campanario',
     caption: 'El lateral del templo y la torre campanario.',
-    width: 960,
-    height: 1280,
     title: 'Fotos de Palomares del Campo 03.jpg',
     fileUrl: 'https://commons.wikimedia.org/wiki/File:Fotos_de_Palomares_del_Campo_03.jpg',
   },
   {
-    src: '/church-gallery/church-side-wall.jpg',
+    src: churchSideWall,
     alt: 'Vista exterior del muro lateral de la iglesia',
     caption: 'Muro lateral del templo.',
-    width: 960,
-    height: 720,
     title: 'Imágenes de Palomares del Campo 06.jpg',
     fileUrl: 'https://commons.wikimedia.org/wiki/File:Im%C3%A1genes_de_Palomares_del_Campo_06.jpg',
   },
@@ -44,7 +65,7 @@ const churchPhotoLicenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
 <BaseLayout
   title="Iglesia de Nuestra Señora de la Asunción · Palomares del Campo"
   description="Historia y patrimonio de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo: construcción, capillas funerarias y obras destacadas."
-  socialImage={churchImage}
+  socialImage={optimizedChurchImage.transformed?.src ?? optimizedChurchImage.source}
   socialImageAlt="Fachada de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo"
   breadcrumbs={[
     { name: 'Inicio', path: '/' },
@@ -64,10 +85,14 @@ const churchPhotoLicenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
       </div>
       <figure class="church-photo">
         <img
-          src={churchImage}
+          src={optimizedChurchImage.transformed?.src ?? optimizedChurchImage.source}
+          srcset={optimizedChurchImage.transformed?.srcSet.attribute}
+          sizes="(max-width: 48rem) calc(100vw - 2rem), 40vw"
           alt="Fachada de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo"
-          width="592"
-          height="890"
+          width={optimizedChurchImage.transformed?.options.width ?? 592}
+          height={optimizedChurchImage.transformed?.options.height ?? 890}
+          fetchpriority="high"
+          decoding="async"
         />
         <figcaption>
           <ExternalLink href={municipalSource}>
@@ -91,11 +116,13 @@ const churchPhotoLicenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
       <div class="church-gallery-grid">
         {churchGalleryImages.map((image) => (
           <figure class="church-gallery-item">
-            <img
+            <Image
               src={image.src}
               alt={image.alt}
-              width={image.width}
-              height={image.height}
+              widths={[320, 480, 640, 960]}
+              sizes="(max-width: 26.25rem) calc(100vw - 2rem), (max-width: 43.75rem) calc((100vw - 3.5rem) / 2), 23rem"
+              format="webp"
+              quality={85}
               loading="lazy"
               decoding="async"
             />

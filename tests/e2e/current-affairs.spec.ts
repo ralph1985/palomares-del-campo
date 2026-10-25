@@ -158,7 +158,7 @@ test.describe('current affairs sections', () => {
 
   test('renders images and documents attached to a bando', async ({ page }) => {
     const attachmentResponse = page.waitForResponse((response) =>
-      response.url().includes('/userFiles/'),
+      response.url().includes('/_image'),
     );
     await page.goto('/bandos/1648341-clase-practica/');
     const imageResponse = await attachmentResponse;
@@ -167,7 +167,7 @@ test.describe('current affairs sections', () => {
     const attachedImage = page.locator('.article-attachments img');
     await expect(attachedImage).toBeVisible();
     await expect(attachedImage).toHaveAttribute('alt', /.+/);
-    expect(imageResponse.headers()['x-e2e-bando-asset']).toBe('fixture');
+    expect(imageResponse.headers()['x-e2e-astro-image']).toBe('fixture');
 
     await page.goto('/bandos/1658990-horarios-autobus-de-linea/');
     await expect(page.getByRole('heading', { name: 'Recursos del comunicado' })).toBeVisible();

@@ -132,10 +132,14 @@ test.describe('nearby attractions guide', () => {
       await expect(
         page.locator('main figure a[href*="commons.wikimedia.org/wiki/File:"]'),
       ).toHaveCount(guide.images);
-      if (guide.images > 0) {
-        for (const image of await page.locator('main figure img').all()) {
-          await expect(image).toHaveJSProperty('naturalWidth', 1280);
-        }
+      for (const image of await page.locator('main figure img').all()) {
+        await expect
+          .poll(() =>
+            image.evaluate((element) =>
+              element instanceof HTMLImageElement ? element.naturalWidth : 0,
+            ),
+          )
+          .toBeGreaterThan(0);
       }
       const breadcrumbs = page.getByRole('navigation', { name: 'Migas de pan' });
       await expect(

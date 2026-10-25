@@ -154,7 +154,10 @@ describe('ConquenseCredit.astro', () => {
 
     expect(html).toContain('href="https://conquense.dev/"');
     expect(html).toContain('aria-label="Web realizada por conquense.dev"');
-    expect(html).toContain('src="/brand/conquense-dev-logo-light.webp"');
+    expect(html).toContain('src="/_image?');
+    expect(html).toContain('srcset="/_image?');
+    expect(html).toContain('data-conquense-logo-texture-src="/_image?');
+    expect(html).toContain('data-conquense-logo-height-src="/_image?');
     expect(html).toContain('alt="conquense.dev"');
     expect(html).toContain('data-conquense-logo-canvas');
     expect(html).toContain('aria-hidden="true"');

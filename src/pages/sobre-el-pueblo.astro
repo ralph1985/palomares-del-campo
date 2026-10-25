@@ -1,17 +1,66 @@
 ---
+import { getImage, inferRemoteSize } from 'astro:assets';
 import ExternalLink from '../components/ui/ExternalLink.astro';
 import AboutEmblem from '../components/about/AboutEmblem.astro';
 import HeritageCard from '../components/about/HeritageCard.astro';
 import SplitHero from '../components/hero/SplitHero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { aboutPalomares } from '../data/about-palomares';
+import { getResponsiveImageWidths, optimizeRemoteImage } from '../images';
 import '../styles/pages/sobre-el-pueblo.css';
+
+const optimizeAboutImage = (
+  source: string,
+  imageDimensions: { width: number; height: number },
+  candidateWidths: number[],
+  sizes: string,
+) =>
+  optimizeRemoteImage(
+    source,
+    () => (import.meta.env.PROD ? inferRemoteSize(source) : Promise.resolve(imageDimensions)),
+    (sourceDimensions) =>
+      getImage({
+        src: source,
+        width: imageDimensions.width,
+        height: imageDimensions.height,
+        widths: getResponsiveImageWidths(sourceDimensions.width, candidateWidths),
+        sizes,
+        format: 'webp',
+        quality: 85,
+      }),
+    (error) =>
+      console.warn(
+        `Could not optimize an about-page image; preserving its source URL: ${source}`,
+        error,
+      ),
+  );
+
+const [heroImage, landscapeImage, traditionsImage] = await Promise.all([
+  optimizeAboutImage(
+    aboutPalomares.heroImage.src,
+    { width: 592, height: 890 },
+    [320, 480, 592, 890],
+    '(max-width: 48rem) calc(100vw - 2rem), 40vw',
+  ),
+  optimizeAboutImage(
+    aboutPalomares.landscape.image.src,
+    { width: 755, height: 566 },
+    [320, 480, 755, 1000],
+    '(max-width: 48rem) calc(100vw - 2rem), 50vw',
+  ),
+  optimizeAboutImage(
+    aboutPalomares.traditions.image.src,
+    { width: 687, height: 456 },
+    [320, 480, 687, 900],
+    '(max-width: 48rem) calc(100vw - 2rem), 42vw',
+  ),
+]);
 ---
 
 <BaseLayout
   title={`${aboutPalomares.pageTitle} · Palomares del Campo`}
   description={aboutPalomares.pageDescription}
-  socialImage={aboutPalomares.heroImage.src}
+  socialImage={heroImage.transformed?.src ?? heroImage.source}
   socialImageAlt={aboutPalomares.heroImage.alt}
 >
   <main>
@@ -31,10 +80,14 @@ import '../styles/pages/sobre-el-pueblo.css';
         <div class="hero-emblem-orbit hero-emblem-orbit--two" aria-hidden="true"></div>
         <figure class="hero-photo">
           <img
-            src={aboutPalomares.heroImage.src}
+            src={heroImage.transformed?.src ?? heroImage.source}
+            srcset={heroImage.transformed?.srcSet.attribute}
+            sizes="(max-width: 48rem) calc(100vw - 2rem), 40vw"
+            width={heroImage.transformed?.options.width ?? 592}
+            height={heroImage.transformed?.options.height ?? 890}
             alt={aboutPalomares.heroImage.alt}
-            width="592"
-            height="890"
+            fetchpriority="high"
+            decoding="async"
           />
           <figcaption>
             <ExternalLink href={aboutPalomares.heroImage.sourceHref}>
@@ -87,11 +140,14 @@ import '../styles/pages/sobre-el-pueblo.css';
       <div class="about-shell landscape-grid">
         <figure class="landscape-photo">
           <img
-            src={aboutPalomares.landscape.image.src}
+            src={landscapeImage.transformed?.src ?? landscapeImage.source}
+            srcset={landscapeImage.transformed?.srcSet.attribute}
+            sizes="(max-width: 48rem) calc(100vw - 2rem), 50vw"
+            width={landscapeImage.transformed?.options.width ?? 755}
+            height={landscapeImage.transformed?.options.height ?? 566}
             alt={aboutPalomares.landscape.image.alt}
-            width="755"
-            height="566"
             loading="lazy"
+            decoding="async"
           />
           <figcaption>
             <ExternalLink href={aboutPalomares.landscape.image.sourceHref}>
@@ -134,11 +190,14 @@ import '../styles/pages/sobre-el-pueblo.css';
           ))}
           <figure class="traditions-photo">
             <img
-              src={aboutPalomares.traditions.image.src}
+              src={traditionsImage.transformed?.src ?? traditionsImage.source}
+              srcset={traditionsImage.transformed?.srcSet.attribute}
+              sizes="(max-width: 48rem) calc(100vw - 2rem), 42vw"
+              width={traditionsImage.transformed?.options.width ?? 687}
+              height={traditionsImage.transformed?.options.height ?? 456}
               alt={aboutPalomares.traditions.image.alt}
-              width="687"
-              height="456"
               loading="lazy"
+              decoding="async"
             />
             <figcaption>
               <ExternalLink href={aboutPalomares.traditions.image.sourceHref}>
