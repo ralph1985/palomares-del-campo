@@ -6,7 +6,7 @@ test.describe('web navigation', () => {
 
     await expect(page).toHaveTitle(/Palomares del Campo/);
     await expect(
-      page.getByRole('heading', { level: 1, name: 'Palomares, en un mismo lugar.' }),
+      page.getByRole('heading', { level: 1, name: 'Piedra, campo y vida.' }),
     ).toBeVisible();
     await expect(
       page.getByRole('link', { name: 'Web realizada por conquense.dev' }),
@@ -18,7 +18,7 @@ test.describe('web navigation', () => {
 
     const surfaces = await page.evaluate(() => {
       const header = document.querySelector('.site-header');
-      const hero = document.querySelector('.editorial-hero');
+      const hero = document.querySelector('.home-hero');
 
       if (!(header instanceof HTMLElement) || !(hero instanceof HTMLElement)) {
         throw new Error('Expected the site header and home hero to render');

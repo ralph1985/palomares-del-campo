@@ -4,17 +4,22 @@ test.describe('home information architecture', () => {
   test('explains the site and puts useful tasks within reach', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-      'Palomares, en un mismo lugar.',
+    await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName(
+      'Piedra, campo y vida.',
     );
-    await expect(page.getByText(/servicios municipales, agenda y bandos/)).toBeVisible();
-    await expect(page.getByRole('link', { name: /Consultar la agenda/ })).toHaveAttribute(
+    await expect(page.getByText(/La agenda, los servicios y las historias/)).toBeVisible();
+    await expect(page.getByRole('img', { name: /Fachada de la iglesia/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: /Fotografía: portal municipal/ })).toHaveAttribute(
+      'href',
+      'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-three',
+    );
+    await expect(page.getByRole('link', { name: /Ver la agenda/ })).toHaveAttribute(
       'href',
       '/agenda/',
     );
-    await expect(page.getByRole('link', { name: /Servicios municipales/ }).first()).toHaveAttribute(
+    await expect(page.getByRole('link', { name: /Descubrir el pueblo/ })).toHaveAttribute(
       'href',
-      '/informacion-practica/',
+      '/sobre-el-pueblo/',
     );
   });
 
