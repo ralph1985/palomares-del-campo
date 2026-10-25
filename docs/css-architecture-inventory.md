@@ -9,6 +9,7 @@ Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refac
 - 14 páginas Astro contienen un bloque `<style>` scoped.
 - 33 componentes Astro contienen un bloque `<style>` scoped.
 - Hay una hoja CSS externa específica de página: `src/styles/pages/sobre-el-pueblo.css`.
+- `src/styles/controls.css` contiene la base visual reutilizada por `SiteButton` y `ActionLink` sólido; se importa una vez desde la base global.
 - Los estilos compartidos de layout, UI, archivo y tarjetas permanecen junto a sus componentes porque Astro los encapsula.
 - La Fase 2 extrajo responsabilidades independientes del juego y la tarjeta de alojamiento repetida sin crear una hoja global monolítica.
 - La Fase 3 comparte la metadata visual de las tarjetas editoriales mediante `src/components/ui/CollectionCardMeta.astro`, sin fusionar los dominios de bandos y noticias.
@@ -39,9 +40,10 @@ Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refac
 | `src/components/layout/SideMenu.astro`                          | Shell global         | Mantener scoped junto al DOM, accesibilidad y estados del menú.                                |
 | `src/components/layout/SiteFooter.astro`                        | Shell global         | Mantener scoped; revisar tamaño en la Fase 2 antes de separar responsabilidades.               |
 | `src/components/layout/ConquenseCredit.astro`                   | Shell global         | Mantener scoped junto a su fallback y carga visual.                                            |
-| `src/components/ui/Button.astro`                                | UI reutilizable      | Mantener scoped; nuevos estados deben consumir tokens.                                         |
-| `src/components/ui/ActionLink.astro`                            | UI reutilizable      | Mantener scoped; no fusionarlo con enlaces externos sin contrato común.                        |
-| `src/components/ui/ExternalLink.astro`                          | UI reutilizable      | Mantener scoped y conservar seguridad/atribución.                                              |
+| `src/components/ui/Button.astro`                                | Control del juego    | Mantener el tema oscuro y sus estados específicos separados de la paleta clara del sitio.      |
+| `src/components/ui/SiteButton.astro`                            | Control compartido   | Usar para acciones claras repetidas; exige `type` y comparte la base de `controls.css`.        |
+| `src/components/ui/ActionLink.astro`                            | Enlace de acción     | Mantener variantes de navegación; `solid` comparte la base visual, no la semántica del botón.  |
+| `src/components/ui/ExternalLink.astro`                          | Enlace externo       | Misma pestaña por defecto; nueva pestaña optativa, anunciada y con `noopener noreferrer`.      |
 | `src/components/CollectionSearch.astro`                         | Control compartido   | Mantener scoped; lo comparte más de un archivo de colección.                                   |
 | `src/components/CollectionArchive.astro`                        | Archivo compartido   | Mantener scoped; conserva filtros y estados vacíos de las colecciones.                         |
 | `src/components/BandoCard.astro`                                | Tarjeta editorial    | Mantener separado de `NewsCard.astro`; consume `CollectionCardMeta` para el patrón común.      |
@@ -78,6 +80,10 @@ Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refac
 | Archivo                                | Clasificación                | Decisión de Fase 1                                                                                                                                   |
 | -------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `src/styles/pages/sobre-el-pueblo.css` | Variante exclusiva de página | Mantener externa porque ya tiene una responsabilidad de página clara; se importa solo desde `sobre-el-pueblo.astro` y no se convierte en CSS global. |
+
+## Hoja de base compartida
+
+`src/styles/controls.css` se importa desde `src/styles/global.css` porque `SiteButton` y los enlaces de acción sólidos comparten dimensiones, estados y foco, aunque conservan elementos HTML y contratos distintos. No absorbe enlaces inline/editoriales, controles de menú ni el tema oscuro del juego.
 
 ## Evaluación de hojas externas — Fase 4
 

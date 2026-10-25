@@ -178,7 +178,8 @@ src/components/
     ├── Breadcrumbs.astro
     ├── Button.astro
     ├── CollectionCardMeta.astro
-    └── ExternalLink.astro
+    ├── ExternalLink.astro
+    └── SiteButton.astro
 ```
 
 Los componentes de `layout/` forman el shell común. `EditorialHero` comparte la estructura de una columna de las páginas editoriales y `SplitHero` el patrón de dos columnas de Sobre el pueblo y La bola; ambos conservan el contenido mediante slots. `CurrentAffairsEmptyState` usa `EditorialHero` para mantener su aviso y atributos de estado. `AgendaFilters` presenta búsqueda y filtros para el archivo estático de Agenda; `agenda.ts` los combina con la paginación accesible, mantiene los filtros en la URL y recalcula la separación entre fechas vigentes y pasadas en `Europe/Madrid`. `CollectionArchive` y `CollectionSearch` son compartidos por noticias y bandos. Los componentes de `game/` componen la superficie del juego; la lógica del mapa y la comunicación con Convex están en scripts de cliente separados.
@@ -208,12 +209,13 @@ src/scripts/
 
 ```text
 src/styles/
+├── controls.css
 ├── global.css
 ├── tokens.css
 └── pages/sobre-el-pueblo.css
 ```
 
-`tokens.css` contiene colores, tipografías, pesos, escala y superficies del juego. `global.css` importa los tokens y define el reset mínimo, la tipografía base, el foco visible y `prefers-reduced-motion`. Los componentes Astro mantienen la mayor parte de sus estilos en bloques scoped. `/sobre-el-pueblo/` importa una hoja de página específica.
+`tokens.css` contiene colores, tipografías, pesos, escala y superficies del juego. `global.css` importa los tokens y `controls.css`, y define el reset mínimo, la tipografía base, el foco visible y `prefers-reduced-motion`. `controls.css` contiene solo la base visual compartida por los controles de acción del sitio; sus primitivas mantienen la semántica y los atributos en Astro. Los componentes Astro mantienen la mayor parte de sus estilos junto al marcado. `/sobre-el-pueblo/` importa una hoja de página específica.
 
 No existe `src/styles/typography.css` actualmente.
 
