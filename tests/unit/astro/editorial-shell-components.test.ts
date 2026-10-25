@@ -59,7 +59,11 @@ describe('HomeEditorialGuide.astro', () => {
     const html = await render(HomeEditorialGuide);
 
     expect(html).toContain('aria-labelledby="editorial-title"');
-    expect(html).toContain('Palomares se descubre de tres maneras.');
+    expect(html).toMatch(
+      /<h2 id="editorial-title"[^>]*>Empieza por <em[^>]*>donde quieras\.<\/em><\/h2>/,
+    );
+    expect(html).toMatch(/<ul class="editorial-grid"[^>]*>/);
+    expect(html).toMatch(/<li class="editorial-item editorial-item--landscape"[^>]*>/);
     expect(html).toContain('href="/sobre-el-pueblo/#paisaje"');
     expect(html).toContain('href="/sobre-el-pueblo/#patrimonio"');
     expect(html).toContain('href="/sobre-el-pueblo/#tradiciones"');
