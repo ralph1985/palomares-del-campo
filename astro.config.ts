@@ -30,6 +30,12 @@ export default defineConfig({
         optional: true,
         default: false,
       }),
+      PUBLIC_BALL_GAME_ENABLED: envField.boolean({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: false,
+      }),
     },
   },
   site: 'https://palomaresdelcampo.conquense.dev',
@@ -38,7 +44,9 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      filter: (page) => !page.endsWith('/avisos/'),
+      filter: (page) =>
+        !page.endsWith('/avisos/') &&
+        (process.env.PUBLIC_BALL_GAME_ENABLED === 'true' || !page.endsWith('/juego/')),
     }),
   ],
 });

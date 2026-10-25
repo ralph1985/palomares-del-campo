@@ -15,29 +15,47 @@ describe('getResponsiveImageWidths', () => {
 describe('optimizeRemoteImage', () => {
   it('returns the transformed image when the source can be processed', async () => {
     const transformed = { src: '/_astro/image.hash.webp' };
-
+    const dimensions = { width: 1200, height: 800 };
+    const preflight = vi.fn().mockResolvedValue(dimensions);
+    const transform = vi.fn().mockResolvedValue(transformed);
     const onError = vi.fn();
 
     await expect(
-      optimizeRemoteImage(
-        'https://images.example.test/poster.png',
-        async () => transformed,
-        onError,
-      ),
+      optimizeRemoteImage('https://images.example.test/poster.png', preflight, transform, onError),
     ).resolves.toEqual({
       source: 'https://images.example.test/poster.png',
       transformed,
     });
+    expect(preflight).toHaveBeenCalledOnce();
+    expect(transform).toHaveBeenCalledWith(dimensions);
     expect(onError).not.toHaveBeenCalled();
   });
 
-  it('keeps the original remote URL when image processing fails', async () => {
+  it('keeps the original URL and skips transformation when the remote preflight fails', async () => {
+    const error = new Error('image source unavailable');
+    const preflight = vi.fn().mockRejectedValue(error);
+    const transform = vi.fn();
+    const onError = vi.fn();
+
+    await expect(
+      optimizeRemoteImage('https://images.example.test/poster.png', preflight, transform, onError),
+    ).resolves.toEqual({
+      source: 'https://images.example.test/poster.png',
+      transformed: null,
+    });
+    expect(transform).not.toHaveBeenCalled();
+    expect(onError).toHaveBeenCalledWith(error);
+  });
+
+  it('keeps the original remote URL when Astro image setup fails', async () => {
     const error = new Error('image source unavailable');
     const onError = vi.fn();
+    const preflight = vi.fn().mockResolvedValue({ width: 800, height: 600 });
 
     await expect(
       optimizeRemoteImage(
         'https://images.example.test/poster.png',
+        preflight,
         async () => {
           throw error;
         },

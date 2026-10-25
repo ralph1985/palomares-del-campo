@@ -1,5 +1,5 @@
 ---
-import { getImage } from 'astro:assets';
+import { getImage, inferRemoteSize } from 'astro:assets';
 import ExternalLink from '../components/ui/ExternalLink.astro';
 import AboutEmblem from '../components/about/AboutEmblem.astro';
 import HeritageCard from '../components/about/HeritageCard.astro';
@@ -12,17 +12,18 @@ import '../styles/pages/sobre-el-pueblo.css';
 const optimizeAboutImage = (
   source: string,
   imageDimensions: { width: number; height: number },
-  widths: number[],
+  candidateWidths: number[],
   sizes: string,
 ) =>
   optimizeRemoteImage(
     source,
-    () =>
+    () => (import.meta.env.PROD ? inferRemoteSize(source) : Promise.resolve(imageDimensions)),
+    (sourceDimensions) =>
       getImage({
         src: source,
         width: imageDimensions.width,
         height: imageDimensions.height,
-        widths,
+        widths: getResponsiveImageWidths(sourceDimensions.width, candidateWidths),
         sizes,
         format: 'webp',
         quality: 85,
@@ -38,19 +39,19 @@ const [heroImage, landscapeImage, traditionsImage] = await Promise.all([
   optimizeAboutImage(
     aboutPalomares.heroImage.src,
     { width: 592, height: 890 },
-    getResponsiveImageWidths(592, [320, 480, 592, 890]),
+    [320, 480, 592, 890],
     '(max-width: 48rem) calc(100vw - 2rem), 40vw',
   ),
   optimizeAboutImage(
     aboutPalomares.landscape.image.src,
     { width: 755, height: 566 },
-    getResponsiveImageWidths(755, [320, 480, 755, 1000]),
+    [320, 480, 755, 1000],
     '(max-width: 48rem) calc(100vw - 2rem), 50vw',
   ),
   optimizeAboutImage(
     aboutPalomares.traditions.image.src,
     { width: 687, height: 456 },
-    getResponsiveImageWidths(687, [320, 480, 687, 900]),
+    [320, 480, 687, 900],
     '(max-width: 48rem) calc(100vw - 2rem), 42vw',
   ),
 ]);

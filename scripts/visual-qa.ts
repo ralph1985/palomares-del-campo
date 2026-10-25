@@ -6,6 +6,7 @@ const baseUrl = process.env.VISUAL_QA_BASE_URL ?? 'http://127.0.0.1:4321';
 const routes = [
   '/',
   '/sobre-el-pueblo/',
+  '/sobre-el-pueblo/iglesia/',
   '/bandos/',
   '/bandos/1646075-visita-virgen-de-lourdes-a-nuestro-pueblo/',
   '/noticias/',
@@ -16,12 +17,13 @@ const routes = [
   '/politica-de-cookies/',
   '/privacidad/',
   '/que-ver-cerca/',
+  '/que-ver-cerca/castillo-torrebuceit/',
   '/que-ver-cerca/segobriga-saelices/',
   '/que-ver-cerca/mina-mora-encantada/',
   '/que-ver-cerca/villa-romana-noheda/',
   '/alojamientos/',
   '/palomarenos-por-el-mundo/',
-  '/juego/',
+  ...(process.env.PUBLIC_BALL_GAME_ENABLED === 'true' ? ['/juego/'] : []),
 ];
 const viewports = [
   { name: 'desktop', width: 1440, height: 900 },

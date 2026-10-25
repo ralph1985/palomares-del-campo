@@ -231,6 +231,7 @@ describe('BaseLayout.astro composition', () => {
         breadcrumbs: [
           { name: 'Inicio', path: '/' },
           { name: 'Noticias', path: '/noticias/' },
+          { name: 'Noticia de prueba', path: '/noticias/noticia-de-prueba/' },
         ],
       },
       {
@@ -251,6 +252,9 @@ describe('BaseLayout.astro composition', () => {
     expect(html).toContain('property="article:published_time"');
     expect(html).toContain('"@type":"Article"');
     expect(html).toContain('"@type":"BreadcrumbList"');
+    expect(html).toContain('class="breadcrumbs" aria-label="Migas de pan"');
+    expect(html).toContain('href="/noticias/"');
+    expect(html).toMatch(/aria-current="page"[^>]*>Noticia de prueba<\/span>/);
     expect(html).toContain('class="article-page"');
     expect(html).toContain('name="fixture-head" content="present"');
     expect(html).toContain('<main id="page-content">Contenido de prueba</main>');
@@ -272,5 +276,6 @@ describe('BaseLayout.astro composition', () => {
     expect(html).toContain('name="twitter:card" content="summary"');
     expect(html).toContain('<main>Contenido de portada</main>');
     expect(html).not.toContain('type="application/ld+json"');
+    expect(html).not.toContain('aria-label="Migas de pan"');
   });
 });

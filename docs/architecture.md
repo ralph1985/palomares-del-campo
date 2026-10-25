@@ -126,7 +126,7 @@ src/layouts/
 └── BaseLayout.astro
 ```
 
-`BaseLayout` es el único layout compartido. Inserta el documento HTML, `SEO.astro`, `SiteHeader`, el slot principal y `SiteFooter`. Acepta `bodyClass`, datos de Open Graph, configuración de schema, `noindex`, datos de artículo, breadcrumbs y un slot nombrado `head`.
+`BaseLayout` es el único layout compartido. Inserta el documento HTML, `SEO.astro`, `SiteHeader`, las migas visibles cuando la ruta proporciona breadcrumbs, el slot principal y `SiteFooter`. La misma prop alimenta el componente accesible `Breadcrumbs.astro` y el esquema `BreadcrumbList` de SEO. Acepta `bodyClass`, datos de Open Graph, configuración de schema, `noindex`, datos de artículo, breadcrumbs y un slot nombrado `head`.
 
 ### `src/components/`
 
@@ -175,6 +175,7 @@ src/components/
 │   └── SiteHeader.astro
 └── ui/
     ├── ActionLink.astro
+    ├── Breadcrumbs.astro
     ├── Button.astro
     ├── CollectionCardMeta.astro
     └── ExternalLink.astro
@@ -327,7 +328,7 @@ Todas las páginas de contenido importan `BaseLayout.astro` y componen su conten
 - `/alojamientos/` usa `ruralAccommodations` y separa opciones del municipio y alrededores.
 - `/informacion-practica/` usa `municipalInfo` para contacto, servicios oficiales y horarios de transporte.
 - `/agenda/` combina eventos, servicios públicos y plazos con procedencia visible; separa las fechas vigentes, las pasadas en un `<details>` cerrado por defecto y las canceladas. Recalcula el corte con la fecha de `Europe/Madrid` en cada visita, también después de un build estático.
-- `/juego/` calcula `hasRemoteGame` a partir de `import.meta.env.CONVEX_URL` y compone la experiencia local o remota.
+- `/juego/` solo muestra el juego cuando `PUBLIC_BALL_GAME_ENABLED` está activada en el build; apagada, devuelve una página 404 no indexable sin montar la experiencia. La flag también controla sus enlaces en menú, portada, pie y rutas, y excluye la ruta del sitemap. Activarla en el sitio estático requiere un nuevo build. Cuando está activa, calcula `hasRemoteGame` a partir de `import.meta.env.CONVEX_URL` y compone la experiencia local o remota.
 - `/avisos/` ejecuta `Astro.redirect('/bandos/', 301)` y no genera contenido editorial propio.
 
 ### Content Collections
@@ -538,12 +539,12 @@ El importador convierte HTML a Markdown, valida URLs HTTPS, restringe los adjunt
 - Con `prefers-reduced-motion`, la navegación es normal; si la escena no carga, se usa una cobertura CSS y se continúa navegando. El menú saliente permanece abierto durante el giro y el destino real empieza cerrado.
 - El logo del pie, el emblema de `/sobre-el-pueblo/` y la bola del juego cargan Three.js con `import()` cuando sus elementos son visibles o entran en el margen del viewport.
 - Cada escena mantiene una imagen o dibujo CSS de fallback y oculta el canvas si WebGL o la carga de recursos falla.
-- Las imágenes raster de páginas y metadatos sociales se transforman con `astro:assets` y Sharp durante el build estático; las variantes responsive se publican como archivos versionados en `/_astro/`, con dimensiones inferidas para evitar CLS. Las imágenes locales viven en `src/assets/`; las fuentes remotas de Dipucuenca y Bandomovil están limitadas por `image.remotePatterns` y se convierten a WebP. Si una fuente remota no se puede transformar, se conserva su URL original con una advertencia. Las imágenes fuera de las páginas (por ejemplo, teselas de Leaflet) no pasan por este pipeline.
+- Las imágenes raster de páginas y metadatos sociales se transforman con `astro:assets` y Sharp durante el build estático; las variantes responsive se publican como archivos versionados en `/_astro/`, con dimensiones inferidas para evitar CLS. Las imágenes locales viven en `src/assets/`; las fuentes remotas de Dipucuenca y Bandomovil están limitadas por `image.remotePatterns` y se convierten a WebP. Si falla el sondeo remoto o la preparación inicial de Astro, se conserva la URL original con una advertencia. Astro genera las transformaciones estáticas después de renderizar las páginas: si esa descarga o conversión diferida falla, el build falla y no se aplica el fallback. Las imágenes fuera de las páginas (por ejemplo, teselas de Leaflet) no pasan por este pipeline.
 - Las imágenes secundarias usan `loading="lazy"`; las imágenes principales mantienen prioridad alta. La imagen fallback del crédito 3D y sus texturas también usan assets generados/versionados.
 - El juego y los mapas cargan Leaflet solo en las rutas que los incluyen.
 - `prefers-reduced-motion` desactiva o reduce las animaciones de CSS y Three.js donde está contemplado.
 
-No hay una integración del servicio de optimización de imágenes de Vercel ni una regla CDN explícita. Astro genera y versiona las transformaciones estáticas; la política HTTP final la aplica el hosting. Si no se puede transformar una imagen de los orígenes remotos autorizados, el build conserva su URL original y emite una advertencia; en ese caso, la disponibilidad de esa imagen vuelve a depender del servidor de origen.
+No hay una integración del servicio de optimización de imágenes de Vercel ni una regla CDN explícita. Astro genera y versiona las transformaciones estáticas; la política HTTP final la aplica el hosting. El fallback a la URL de origen cubre fallos detectados durante el sondeo remoto o la preparación de la transformación. La descarga y codificación final ocurren después, durante la generación de assets: si esa fase falla, el build también falla. El sitio depende de que los orígenes remotos autorizados respondan durante el build o exista una entrada válida en la caché de Astro.
 
 El build observado emite una advertencia de Vite por chunks superiores a 500 kB. No se debe afirmar que la división de código ha eliminado ese coste; la optimización de bundles queda como tarea independiente.
 

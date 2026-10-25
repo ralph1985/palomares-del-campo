@@ -1,7 +1,7 @@
 ---
 import { getImage, Image } from 'astro:assets';
-import ActionLink from '../ui/ActionLink.astro';
 import ExternalLink from '../ui/ExternalLink.astro';
+import NearbyPlaceVideo from './NearbyPlaceVideo.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import type { NearbyPlace } from '../../data/nearby-places';
 import type { NearbyPlaceGuide as Guide } from '../../data/nearby-guides';
@@ -52,10 +52,6 @@ const socialImage = featuredImage
 >
   <main class="guide-shell">
     <article>
-      <ActionLink class="guide-back-link" variant="text" href="/que-ver-cerca/">
-        ← Volver a Qué ver cerca
-      </ActionLink>
-
       <header class="guide-header">
         <div class="guide-heading">
           <p class="eyebrow">{guide.eyebrow}</p>
@@ -87,6 +83,8 @@ const socialImage = featuredImage
           </figure>
         )}
       </header>
+
+      {guide.video && <NearbyPlaceVideo video={guide.video} />}
 
       <section class="visit-panel" aria-labelledby="visit-panel-title">
         <div>
@@ -159,7 +157,7 @@ const socialImage = featuredImage
             pueden cambiar.
           </p>
         </div>
-        <nav aria-label={`Fuentes oficiales de ${place.name}`}>
+        <nav aria-label={`Fuentes y referencias de ${place.name}`}>
           {guide.sources.map((source) => (
             <ExternalLink href={source.href}>{source.label} ↗</ExternalLink>
           ))}
@@ -174,10 +172,6 @@ const socialImage = featuredImage
     width: min(100% - 2.5rem, 72rem);
     margin: 0 auto;
     padding: var(--spacing-section-y) 0 4rem;
-  }
-
-  .guide-back-link {
-    margin-bottom: 2rem;
   }
 
   .guide-header {

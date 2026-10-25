@@ -8,12 +8,20 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 #### Added
 
+- Añadido el control de build `PUBLIC_BALL_GAME_ENABLED`, desactivado por defecto; al activarlo muestra el juego y sus accesos en portada, navegación, pie y rutas.
+- Añadida una guía ampliada de la iglesia de Nuestra Señora de la Asunción, enlazada desde la tarjeta de patrimonio y con fuentes institucionales visibles.
+- Ampliada la guía de la iglesia con tres fotografías exteriores de Wikimedia Commons, crédito visible y licencia CC BY-SA 4.0.
+- Añadida una guía del Castillo de Torrebuceit a «Qué ver cerca», con el testimonio familiar sobre Crescente y Eusebia, contexto documentado sobre el trabajo en la finca, cautelas de acceso y vídeo grabado por Rafa en homenaje a su abuelo Crescente.
+- Añadidas tres fotografías de Torrebuceit con atribución a 19Tarrestnom65 y licencia CC BY-SA 4.0; las copias WebP locales enlazan a sus originales y a la licencia.
 - Añadidas guías ampliadas de Segóbriga, la Mina de la Mora Encantada y Noheda, con fotografías licenciadas y créditos visibles, fuentes oficiales y condiciones de visita.
 
 #### Changed
 
-- Convertidas las imágenes raster locales, municipales y de bandos a variantes WebP responsive de Astro; se conservan las fuentes originales y se añaden URLs estáticas versionadas.
+- Convertidas las imágenes raster locales, municipales y de bandos a variantes WebP responsive de Astro; se conservan las fuentes originales y se añaden URLs estáticas versionadas. Los fallos detectados en el sondeo inicial conservan la URL de origen.
+- Reforzada la identidad de la cabecera con el escudo enmarcado, el nombre en dos niveles y un botón «Explorar» destacado, manteniendo el conjunto compacto en móvil.
+- Aplicada una superficie verde salvia al hero de portada para separarlo de la cabecera clara y conservar su composición vertical.
 - Priorizado el acceso a las guías internas de «Qué ver cerca» frente a los enlaces externos de fuentes en las tarjetas.
+- Centralizadas las migas de pan de las páginas jerárquicas y eliminados los enlaces de retorno redundantes en noticias, bandos, guías cercanas y la página de la iglesia.
 - Ampliado el borrador del aviso legal para aclarar el alcance informativo del sitio y marcar los datos institucionales pendientes de verificación sin conservar identificadores ficticios.
 
 ### 2026-10-22

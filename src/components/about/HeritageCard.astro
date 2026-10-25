@@ -6,7 +6,7 @@ interface Props extends HeritageFeature {
   index: number;
 }
 
-const { eyebrow, title, description, body, source, index } = Astro.props;
+const { eyebrow, title, description, body, source, detailHref, index } = Astro.props;
 ---
 
 <article class:list={['heritage-card', { 'heritage-card--offset': index % 2 === 1 }]}>
@@ -14,9 +14,16 @@ const { eyebrow, title, description, body, source, index } = Astro.props;
   <h3>{title}</h3>
   <p class="heritage-card-description">{description}</p>
   <p class="heritage-card-body">{body}</p>
-  <ExternalLink href={source.href}>
-    {source.label} <span aria-hidden="true">↗</span>
-  </ExternalLink>
+  <div class="heritage-card-actions">
+    {detailHref && (
+      <a class="heritage-card-detail" href={detailHref}>
+        Descubrir la iglesia <span aria-hidden="true">→</span>
+      </a>
+    )}
+    <ExternalLink href={source.href}>
+      {source.label} <span aria-hidden="true">↗</span>
+    </ExternalLink>
+  </div>
 </article>
 
 <style>
@@ -67,13 +74,26 @@ const { eyebrow, title, description, body, source, index } = Astro.props;
     line-height: 1.7;
   }
 
+  .heritage-card-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+    margin-top: auto;
+  }
+
   a {
     width: fit-content;
-    margin-top: auto;
     color: var(--color-ink);
     font-size: 0.78rem;
     font-weight: var(--font-weight-strong);
     text-decoration: none;
+  }
+
+  .heritage-card-detail {
+    padding: 0.7rem 0;
+    color: var(--color-clay);
+    font-size: 0.9rem;
   }
 
   a span {

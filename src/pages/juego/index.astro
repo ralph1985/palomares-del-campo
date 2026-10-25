@@ -6,66 +6,110 @@ import GameBallVisual from '../../components/game/GameBallVisual.astro';
 import GameMap from '../../components/game/GameMap.astro';
 import GamePrivacyNotice from '../../components/game/GamePrivacyNotice.astro';
 import GameRules from '../../components/game/GameRules.astro';
+import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
+
+if (!PUBLIC_BALL_GAME_ENABLED) Astro.response.status = 404;
 const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
 ---
 
 <BaseLayout
-  title="La bola · Palomares del Campo"
-  description="Prototipo del juego de geoposicionamiento de Palomares del Campo."
-  bodyClass="game-page"
+  title={
+    PUBLIC_BALL_GAME_ENABLED
+      ? 'La bola · Palomares del Campo'
+      : 'Página no encontrada · Palomares del Campo'
+  }
+  description={
+    PUBLIC_BALL_GAME_ENABLED
+      ? 'Prototipo del juego de geoposicionamiento de Palomares del Campo.'
+      : 'La página solicitada no existe.'
+  }
+  {...(PUBLIC_BALL_GAME_ENABLED ? { bodyClass: 'game-page' } : {})}
+  noindex={!PUBLIC_BALL_GAME_ENABLED}
 >
-  <main>
-    <SplitHero variant="game" labelledBy="page-title">
-      <div slot="copy" class="game-hero-copy">
-        <div class="game-kicker">
-          <span aria-hidden="true"></span>
-          {hasRemoteGame ? 'Partida en directo · Palomares' : 'Modo local · Palomares'}
-        </div>
-        <h1 id="page-title">
-          La bola está
-          <br />
-          en juego.
-        </h1>
-        <p>Encuentra la ubicación. Llega antes que el resto. Captura y sube puestos.</p>
-        <ActionLink class="game-hero-cta" variant="solid" href="#game-map">
-          Entrar en la partida <span aria-hidden="true">↓</span>
-        </ActionLink>
-      </div>
-
-      <div slot="visual" class="match-card" aria-label="Estado de la partida">
-        <div class="match-card-topline">
-          <span class="match-card-live">
+  {PUBLIC_BALL_GAME_ENABLED ? (
+    <main>
+      <SplitHero variant="game" labelledBy="page-title">
+        <div slot="copy" class="game-hero-copy">
+          <div class="game-kicker">
             <span aria-hidden="true"></span>
-            {hasRemoteGame ? 'LIVE MATCH' : 'LOCAL MATCH'}
-          </span>
-          <span>EU · 01</span>
+            {hasRemoteGame ? 'Partida en directo · Palomares' : 'Modo local · Palomares'}
+          </div>
+          <h1 id="page-title">
+            La bola está
+            <br />
+            en juego.
+          </h1>
+          <p>Encuentra la ubicación. Llega antes que el resto. Captura y sube puestos.</p>
+          <ActionLink class="game-hero-cta" variant="solid" href="#game-map">
+            Entrar en la partida <span aria-hidden="true">↓</span>
+          </ActionLink>
         </div>
-        <GameBallVisual />
-        <strong>LA BOLA</strong>
-        <p>El objetivo cambia de punto cuando alguien captura.</p>
-        <div class="match-card-stats">
-          <span>
-            <small>FORMATO</small>
-            <b>GPS / REAL</b>
-          </span>
-          <span>
-            <small>ESTADO</small>
-            <b>{hasRemoteGame ? 'EN JUEGO' : 'DEMO LOCAL'}</b>
-          </span>
-        </div>
-      </div>
-    </SplitHero>
 
-    <GameMap />
-    <GameRules />
-    <GamePrivacyNotice hasRemoteGame={hasRemoteGame} />
-  </main>
+        <div slot="visual" class="match-card" aria-label="Estado de la partida">
+          <div class="match-card-topline">
+            <span class="match-card-live">
+              <span aria-hidden="true"></span>
+              {hasRemoteGame ? 'LIVE MATCH' : 'LOCAL MATCH'}
+            </span>
+            <span>EU · 01</span>
+          </div>
+          <GameBallVisual />
+          <strong>LA BOLA</strong>
+          <p>El objetivo cambia de punto cuando alguien captura.</p>
+          <div class="match-card-stats">
+            <span>
+              <small>FORMATO</small>
+              <b>GPS / REAL</b>
+            </span>
+            <span>
+              <small>ESTADO</small>
+              <b>{hasRemoteGame ? 'EN JUEGO' : 'DEMO LOCAL'}</b>
+            </span>
+          </div>
+        </div>
+      </SplitHero>
+
+      <GameMap />
+      <GameRules />
+      <GamePrivacyNotice hasRemoteGame={hasRemoteGame} />
+    </main>
+  ) : (
+    <main class="game-disabled">
+      <section aria-labelledby="page-title">
+        <h1 id="page-title">Página no encontrada</h1>
+        <p>La página solicitada no existe.</p>
+        <a href="/">Volver al inicio</a>
+      </section>
+    </main>
+  )}
 </BaseLayout>
 
 <style>
   main {
     overflow: hidden;
     background: var(--color-night);
+  }
+
+  .game-disabled {
+    display: grid;
+    min-height: 50vh;
+    place-items: center;
+    padding: var(--spacing-section-y) 1.25rem;
+    color: var(--color-ink);
+    background: var(--color-paper);
+  }
+
+  .game-disabled section {
+    width: min(100%, 48rem);
+  }
+
+  .game-disabled p {
+    color: var(--color-muted);
+  }
+
+  .game-disabled a {
+    color: var(--color-forest);
+    font-weight: var(--font-weight-emphasis);
   }
 
   :global(.game-page .site-header) {

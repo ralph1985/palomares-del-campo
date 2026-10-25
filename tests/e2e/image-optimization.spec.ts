@@ -36,12 +36,30 @@ test.describe('optimized raster images', () => {
     await expect(guideImage).toHaveAttribute('fetchpriority', 'high');
     await expect(guideImage).toHaveAttribute('loading', 'eager');
 
+    await page.goto('/que-ver-cerca/castillo-torrebuceit/');
+    const torrebuceitImages = page.locator('.guide-featured-image img, .gallery-grid img');
+    await expect(torrebuceitImages).toHaveCount(3);
+    for (const image of await torrebuceitImages.all()) {
+      await expect(image).toHaveAttribute('srcset', /_image/);
+    }
+
     await page.goto('/sobre-el-pueblo/');
     const municipalHero = page.locator('.hero-photo img');
     await expect(municipalHero).toHaveAttribute('srcset', /_image/);
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /_image/);
     await expect(municipalHero).toHaveAttribute('width', '592');
     await expect(municipalHero).toHaveAttribute('height', '890');
+
+    await page.goto('/sobre-el-pueblo/iglesia/');
+    const churchHero = page.locator('.church-photo img');
+    await expect(churchHero).toHaveAttribute('srcset', /_image/);
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /_image/);
+    const churchGalleryImages = page.locator('.church-gallery-item img');
+    await expect(churchGalleryImages).toHaveCount(3);
+    for (const image of await churchGalleryImages.all()) {
+      await expect(image).toHaveAttribute('srcset', /_image/);
+      await expect(image).toHaveAttribute('alt', /.+/);
+    }
 
     await page.goto('/bandos/1648341-clase-practica/');
     const bandoImage = page.locator('.article-attachments img');
