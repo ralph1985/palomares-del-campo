@@ -4,6 +4,13 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-10-26
+
+#### Changed
+
+- Ajustado el menú lateral: accesos algo más compactos en móvil y escudo visible en escritorio.
+- Añadido al menú el acceso a Inicio fuera de la portada y una marca accesible de la página o sección actual.
+
 ### 2026-10-25
 
 #### Changed
