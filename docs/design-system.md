@@ -4,19 +4,20 @@ Este documento registra el lenguaje visual actual de la web. Los tokens se impor
 
 ## Colores
 
-| Token                  | Valor actual | Uso previsto                                                     |
-| ---------------------- | ------------ | ---------------------------------------------------------------- |
-| `--color-ink`          | `#19342d`    | Texto principal, cabecera y superficies institucionales oscuras. |
-| `--color-forest`       | `#2f6652`    | Acciones, enlaces y elementos interactivos.                      |
-| `--color-muted`        | `#4a685b`    | Texto secundario, descripciones y metadatos.                     |
-| `--color-paper`        | `#f4f1e9`    | Fondo general de la web.                                         |
-| `--color-surface`      | `#fffdf8`    | Superficies claras, tarjetas y mastheads interiores.             |
-| `--color-surface-soft` | `#eff5ed`    | Superficies claras suaves y texto claro sobre fondos oscuros.    |
-| `--color-sage`         | `#d8e6d6`    | Fondos verdes claros de secciones.                               |
-| `--color-sage-light`   | `#b7d0bc`    | Texto claro secundario sobre fondos oscuros.                     |
-| `--color-clay`         | `#a05c32`    | Acento terracota decorativo y estados destacados.                |
-| `--color-clay-text`    | `#914f2c`    | Texto terracota con contraste AA sobre papel y salvia.           |
-| `--color-ochre`        | `#e5b77e`    | Acento cálido sobre fondos oscuros.                              |
+| Token                        | Valor actual | Uso previsto                                                     |
+| ---------------------------- | ------------ | ---------------------------------------------------------------- |
+| `--color-ink`                | `#19342d`    | Texto principal, cabecera y superficies institucionales oscuras. |
+| `--color-forest`             | `#2f6652`    | Acciones, enlaces y elementos interactivos.                      |
+| `--color-muted`              | `#4a685b`    | Texto secundario, descripciones y metadatos.                     |
+| `--color-paper`              | `#f4f1e9`    | Fondo general de la web.                                         |
+| `--color-surface`            | `#fffdf8`    | Superficies claras, tarjetas y mastheads interiores.             |
+| `--color-surface-soft`       | `#eff5ed`    | Superficies claras suaves y texto claro sobre fondos oscuros.    |
+| `--color-sage`               | `#d8e6d6`    | Fondos verdes claros de secciones.                               |
+| `--color-sage-light`         | `#b7d0bc`    | Texto claro secundario sobre fondos oscuros.                     |
+| `--color-surface-traditions` | `#efe6d6`    | Fondo cálido de la sección de fiestas patronales.                |
+| `--color-clay`               | `#a05c32`    | Acento terracota decorativo y estados destacados.                |
+| `--color-clay-text`          | `#914f2c`    | Texto terracota con contraste AA sobre papel y salvia.           |
+| `--color-ochre`              | `#e5b77e`    | Acento cálido sobre fondos oscuros.                              |
 
 - `--color-night` | `#0a1513` | Fondo principal del tema oscuro del juego. |
   | `--color-night-surface` | `#10231f` | Superficie oscura del tablero y tarjetas del juego. |
@@ -86,7 +87,7 @@ La comprobación reproducible se ejecuta con `pnpm qa:visual` mientras el servid
 
 Se conservan dos familias de excepciones documentadas:
 
-- `src/styles/pages/sobre-el-pueblo.css` mantiene dos superficies cálidas/verde oscuro ajustadas a sus fotografías (`#315f4e` y `#efe6d6`); no son colores de interfaz compartidos.
+- Los estilos scoped de `/sobre-el-pueblo/` conservan una superficie verde oscuro ajustada a sus fotografías (`#315f4e`); no es un color de interfaz compartido.
 - `src/scripts/route-map.ts` y `src/scripts/game-map.ts` mantienen valores hexadecimales para las opciones de color de Leaflet creadas en JavaScript. Son valores de una API de visualización y reflejan tokens ya definidos; no son declaraciones CSS independientes.
 
 ## Reglas de evolución

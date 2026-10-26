@@ -3,6 +3,7 @@ import { getImage, inferRemoteSize } from 'astro:assets';
 import ExternalLink from '../components/ui/ExternalLink.astro';
 import AboutEmblem from '../components/about/AboutEmblem.astro';
 import HeritageCard from '../components/about/HeritageCard.astro';
+import PatronalFestivities from '../components/about/PatronalFestivities.astro';
 import SplitHero from '../components/hero/SplitHero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { aboutPalomares } from '../data/about-palomares';
@@ -35,7 +36,7 @@ const optimizeAboutImage = (
       ),
   );
 
-const [heroImage, landscapeImage, traditionsImage] = await Promise.all([
+const [heroImage, landscapeImage] = await Promise.all([
   optimizeAboutImage(
     aboutPalomares.heroImage.src,
     { width: 592, height: 890 },
@@ -47,12 +48,6 @@ const [heroImage, landscapeImage, traditionsImage] = await Promise.all([
     { width: 755, height: 566 },
     [320, 480, 755, 1000],
     '(max-width: 48rem) calc(100vw - 2rem), 50vw',
-  ),
-  optimizeAboutImage(
-    aboutPalomares.traditions.image.src,
-    { width: 687, height: 456 },
-    [320, 480, 687, 900],
-    '(max-width: 48rem) calc(100vw - 2rem), 42vw',
   ),
 ]);
 ---
@@ -171,46 +166,7 @@ const [heroImage, landscapeImage, traditionsImage] = await Promise.all([
       </div>
     </section>
 
-    <section class="traditions-section" id="tradiciones" aria-labelledby="traditions-title">
-      <div class="about-shell traditions-grid">
-        <div>
-          <p class="eyebrow">{aboutPalomares.traditions.eyebrow}</p>
-          <h2 id="traditions-title">{aboutPalomares.traditions.title}</h2>
-          <p class="traditions-description">{aboutPalomares.traditions.description}</p>
-        </div>
-        <div class="traditions-list">
-          {aboutPalomares.traditions.items.map((item, index) => (
-            <article class="tradition-item">
-              <span class="tradition-number">0{index + 1}</span>
-              <div>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </div>
-            </article>
-          ))}
-          <figure class="traditions-photo">
-            <img
-              src={traditionsImage.transformed?.src ?? traditionsImage.source}
-              srcset={traditionsImage.transformed?.srcSet.attribute}
-              sizes="(max-width: 48rem) calc(100vw - 2rem), 42vw"
-              width={traditionsImage.transformed?.options.width ?? 687}
-              height={traditionsImage.transformed?.options.height ?? 456}
-              alt={aboutPalomares.traditions.image.alt}
-              loading="lazy"
-              decoding="async"
-            />
-            <figcaption>
-              <ExternalLink href={aboutPalomares.traditions.image.sourceHref}>
-                {aboutPalomares.traditions.image.sourceLabel} <span aria-hidden="true">↗</span>
-              </ExternalLink>
-            </figcaption>
-          </figure>
-          <ExternalLink class="source-link" href={aboutPalomares.traditions.source.href}>
-            {aboutPalomares.traditions.source.label} <span aria-hidden="true">↗</span>
-          </ExternalLink>
-        </div>
-      </div>
-    </section>
+    <PatronalFestivities />
 
     <section class="sources-section" aria-labelledby="sources-title">
       <div class="about-shell sources-inner">
