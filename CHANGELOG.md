@@ -8,6 +8,7 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 #### Changed
 
+- Rediseñada la portada con un hero editorial, accesos claros para vecinos y visitantes y una guía tipográfica para descubrir el pueblo.
 - Unificados los controles de acción del sitio con una base visual compartida; los enlaces externos conservan la misma pestaña por defecto y solo abren otra con indicación accesible explícita.
 
 ### 2026-10-24

@@ -1,54 +1,21 @@
 ---
-import ActionLink from '../components/ui/ActionLink.astro';
-import EditorialHero from '../components/hero/EditorialHero.astro';
 import HomeAudienceCards from '../components/home/HomeAudienceCards.astro';
+import HomeHero from '../components/home/HomeHero.astro';
 import HomeEditorialGuide from '../components/home/HomeEditorialGuide.astro';
 import NewsSection from '../components/NewsSection.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
 ---
 
 <BaseLayout
   title="Palomares del Campo"
-  description="Palomares del Campo: un nuevo espacio digital para el pueblo."
+  description="Consulta servicios municipales, agenda y bandos, y descubre la historia, las rutas y los alojamientos de Palomares del Campo."
   schema="website"
 >
   <main id="inicio">
-    <EditorialHero id="proyecto" labelledBy="intro-title" variant="sage-tall">
-      <p slot="eyebrow" class="eyebrow">
-        Palomares del Campo · Cuenca
-      </p>
-      <h1 slot="title" id="intro-title">
-        Un nuevo espacio para descubrir el pueblo.
-      </h1>
-      <p slot="summary" class="hero-intro">
-        Este proyecto está tomando forma. Aquí reuniremos información, lugares e historias de
-        Palomares del Campo en una experiencia clara y cercana.
-      </p>
-      {PUBLIC_BALL_GAME_ENABLED && (
-        <ActionLink slot="actions" variant="underline" href="/juego/">
-          Probar el mapa del juego <span aria-hidden="true">→</span>
-        </ActionLink>
-      )}
-    </EditorialHero>
+    <HomeHero />
 
     <HomeAudienceCards />
     <HomeEditorialGuide />
     <NewsSection />
   </main>
 </BaseLayout>
-
-<style>
-  @media (prefers-reduced-motion: reduce) {
-    :global(html) {
-      scroll-behavior: auto;
-    }
-  }
-
-  @media (max-width: 38rem) {
-    .intro,
-    .footer-inner {
-      width: min(100% - 2rem, 72rem);
-    }
-  }
-</style>

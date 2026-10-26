@@ -1,0 +1,254 @@
+---
+import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
+import { aboutPalomares } from '../../data/about-palomares';
+import ActionLink from '../ui/ActionLink.astro';
+import ExternalLink from '../ui/ExternalLink.astro';
+---
+
+<section class="home-hero" aria-labelledby="home-title">
+  <div class="home-hero__shell">
+    <div class="home-hero__copy">
+      <p class="home-hero__eyebrow">
+        <span>Palomares del Campo</span>
+        <span aria-hidden="true">·</span>
+        <span>Cuenca</span>
+      </p>
+      <h1 id="home-title" aria-label="Piedra, campo y vida.">
+        <span>Piedra,</span>
+        <span> campo</span>
+        <span class="home-hero__accent"> y vida.</span>
+      </h1>
+      <p class="home-hero__summary">
+        La agenda, los servicios y las historias que te acercan a Palomares.
+      </p>
+      <div class="home-hero__actions">
+        <ActionLink variant="solid" href="/agenda/">
+          Ver la agenda <span aria-hidden="true">↗</span>
+        </ActionLink>
+        <ActionLink variant="underline" href="/sobre-el-pueblo/">
+          Descubrir el pueblo <span aria-hidden="true">↓</span>
+        </ActionLink>
+        {PUBLIC_BALL_GAME_ENABLED && (
+          <ActionLink variant="underline" href="/juego/">
+            Jugar a La bola <span aria-hidden="true">↗</span>
+          </ActionLink>
+        )}
+      </div>
+    </div>
+
+    <figure class="home-hero__photo">
+      <img
+        src={aboutPalomares.heroImage.src}
+        width="592"
+        height="890"
+        alt={aboutPalomares.heroImage.alt}
+        fetchpriority="high"
+        decoding="async"
+      />
+      <figcaption>
+        <div class="home-hero__caption-title">
+          <span>Patrimonio</span>
+          <strong>Iglesia de Nuestra Señora de la Asunción</strong>
+        </div>
+        <ExternalLink href={aboutPalomares.heroImage.sourceHref}>
+          Fotografía: portal municipal <span aria-hidden="true">↗</span>
+        </ExternalLink>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .home-hero {
+    overflow: hidden;
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
+  }
+
+  .home-hero__shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.92fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
+    width: min(100% - 2.5rem, 80rem);
+    min-height: min(44rem, calc(100vh - 5.25rem));
+    margin: 0 auto;
+    padding-block: clamp(2rem, 4vw, 4rem);
+  }
+
+  .home-hero__copy {
+    position: relative;
+    z-index: 1;
+    padding-block: 1rem;
+  }
+
+  .home-hero__eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    align-items: center;
+    margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+    color: var(--color-ochre);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    display: grid;
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(4.6rem, 8vw, 6rem);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -0.085em;
+    line-height: 0.84;
+  }
+
+  .home-hero__accent {
+    color: var(--color-ochre);
+  }
+
+  .home-hero__summary {
+    max-width: 28rem;
+    margin: clamp(1.5rem, 3vw, 2rem) 0 0;
+    color: var(--color-sage-light);
+    font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .home-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+
+  .home-hero__actions :global(.ui-action-link-underline) {
+    color: var(--color-surface-soft);
+    border-color: var(--color-ochre);
+  }
+
+  .home-hero__actions :global(.ui-action-link-underline:hover),
+  .home-hero__actions :global(.ui-action-link-underline:focus-visible) {
+    color: var(--color-ochre);
+  }
+
+  .home-hero__photo {
+    position: relative;
+    min-width: 0;
+    margin: 0;
+    padding: 0.65rem;
+    background: var(--color-ochre);
+    transform: rotate(1deg);
+  }
+
+  .home-hero__photo img {
+    display: block;
+    width: 100%;
+    height: clamp(28rem, 40vw, 34rem);
+    object-fit: cover;
+    object-position: center 42%;
+  }
+
+  .home-hero__photo figcaption {
+    position: absolute;
+    right: 1.15rem;
+    bottom: 1.15rem;
+    left: 1.15rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem 1.25rem;
+    align-items: end;
+    padding: 1rem 1.1rem;
+    color: var(--color-surface-soft);
+    background: var(--color-ink);
+  }
+
+  .home-hero__caption-title {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .home-hero__caption-title > span {
+    color: var(--color-ochre);
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .home-hero__caption-title strong {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: var(--font-weight-medium);
+  }
+
+  .home-hero__photo figcaption :global(a) {
+    color: var(--color-surface-soft);
+    font-size: 0.7rem;
+  }
+
+  .home-hero__photo figcaption :global(a:focus-visible) {
+    outline-color: var(--color-ochre);
+  }
+
+  @media (max-width: 54rem) {
+    .home-hero__shell {
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.82fr);
+      gap: 2rem;
+    }
+
+    h1 {
+      font-size: clamp(4.2rem, 8vw, 5.5rem);
+    }
+
+    .home-hero__photo img {
+      height: clamp(26rem, 50vw, 31rem);
+    }
+  }
+
+  @media (max-width: 42rem) {
+    .home-hero__shell {
+      grid-template-columns: 1fr;
+      width: min(100% - 2rem, 72rem);
+      gap: 2rem;
+      padding-block: 2.5rem 2rem;
+    }
+
+    .home-hero__eyebrow {
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: clamp(4.2rem, 19vw, 6.5rem);
+      line-height: 0.88;
+    }
+
+    .home-hero__summary {
+      max-width: 25rem;
+      margin-top: 1.5rem;
+    }
+
+    .home-hero__actions {
+      gap: 1.1rem 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .home-hero__photo {
+      transform: none;
+    }
+
+    .home-hero__photo img {
+      height: clamp(22rem, 100vw, 29rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html) {
+      scroll-behavior: auto;
+    }
+  }
+</style>

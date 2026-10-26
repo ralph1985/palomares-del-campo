@@ -10,136 +10,196 @@ const visibleEntries = homeEditorialEntries.filter(
 
 <section class="editorial-section" aria-labelledby="editorial-title">
   <div class="editorial-shell">
-    <div class="editorial-heading">
-      <p class="audience-eyebrow">Una primera guía</p>
+    <header class="editorial-heading">
+      <p class="editorial-eyebrow">Una primera guía</p>
       <h2 id="editorial-title">
-        Palomares se descubre de {PUBLIC_BALL_GAME_ENABLED ? 'cuatro' : 'tres'} maneras.
+        Empieza por <em>donde quieras.</em>
       </h2>
-    </div>
+      <p class="editorial-intro">
+        Un paseo, una historia, sus tradiciones o una partida. Elige tu primer paso.
+      </p>
+    </header>
 
-    <div class="editorial-grid">
+    <ul class="editorial-grid">
       {visibleEntries.map((entry, index) => (
-        <article class:list={['editorial-card', `editorial-card--${entry.accent}`]}>
-          <span class="editorial-index">0{index + 1}</span>
-          <div>
-            <p class="audience-card-kicker">{entry.eyebrow}</p>
-            <h3>{entry.title}</h3>
-            <p>{entry.description}</p>
-          </div>
-          <ActionLink variant="underline" href={entry.href}>
-            {entry.linkLabel} <span aria-hidden="true">→</span>
-          </ActionLink>
-        </article>
+        <li class:list={['editorial-item', `editorial-item--${entry.accent}`]}>
+          <span class="editorial-index" aria-hidden="true">
+            0{index + 1}
+          </span>
+          <article class="editorial-card">
+            <div>
+              <p class="editorial-card-kicker">{entry.eyebrow}</p>
+              <h3>{entry.title}</h3>
+              <p class="editorial-description">{entry.description}</p>
+            </div>
+            <ActionLink variant="underline" href={entry.href}>
+              {entry.linkLabel} <span aria-hidden="true">→</span>
+            </ActionLink>
+          </article>
+        </li>
       ))}
-    </div>
+    </ul>
   </div>
 </section>
 
 <style>
   .editorial-section {
+    border-top: 1px solid var(--color-border);
     padding: var(--spacing-section-y) 0;
     color: var(--color-ink);
-    background: var(--color-sage);
+    background: var(--color-paper);
   }
 
   .editorial-shell {
-    width: min(100% - 2.5rem, 72rem);
+    display: grid;
+    grid-template-columns: minmax(15rem, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2.5rem, 7vw, 6rem);
+    align-items: start;
+    width: min(100% - 2.5rem, 80rem);
     margin: 0 auto;
   }
 
   .editorial-heading {
-    display: grid;
-    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
-    gap: 2rem;
-    align-items: end;
-    margin-bottom: 2.5rem;
+    position: sticky;
+    top: 2rem;
+  }
+
+  .editorial-eyebrow,
+  .editorial-card-kicker {
+    margin: 0 0 0.8rem;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
   }
 
   .editorial-heading h2 {
-    max-width: 15ch;
+    max-width: 8ch;
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 4.4vw, 4rem);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -0.075em;
+    line-height: 0.9;
+  }
+
+  .editorial-heading h2 em {
+    color: var(--color-forest);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .editorial-intro {
+    max-width: 25rem;
+    margin: 1.5rem 0 0;
+    color: var(--color-muted);
+    line-height: var(--line-height-body);
   }
 
   .editorial-grid {
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .editorial-card {
-    display: flex;
-    min-height: 20rem;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: clamp(1.5rem, 4vw, 2.5rem);
-    border-radius: 1.5rem;
+  .editorial-grid::before {
+    position: absolute;
+    top: 2.75rem;
+    bottom: 2.75rem;
+    left: 1.38rem;
+    border-left: 1px dashed var(--color-sage-light);
+    content: '';
+    pointer-events: none;
+  }
+
+  .editorial-item {
+    display: grid;
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: center;
+    padding: 1.35rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .editorial-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .editorial-index {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 2.8rem;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    color: var(--color-clay);
     background: var(--color-paper);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.08em;
+    transition:
+      color 180ms ease,
+      background-color 180ms ease,
+      border-color 180ms ease;
   }
 
-  .editorial-card--landscape {
-    background: var(--color-surface-soft);
-  }
-
-  .editorial-card--heritage {
-    background: var(--color-paper);
-  }
-
-  .editorial-card--traditions {
+  .editorial-item:hover .editorial-index {
+    border-color: var(--color-forest);
     color: var(--color-surface-soft);
     background: var(--color-forest);
   }
 
-  .editorial-card--game {
-    color: var(--color-surface-soft);
-    background: var(--color-ink);
+  .editorial-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem 1.5rem;
+    align-items: center;
   }
 
-  .editorial-index {
-    color: var(--color-clay);
-    font-size: 0.72rem;
-    font-weight: var(--font-weight-strong);
-    letter-spacing: 0.14em;
-  }
-
-  .editorial-card--traditions .editorial-index,
-  .editorial-card--game .editorial-index {
-    color: var(--color-ochre);
+  .editorial-card-kicker {
+    margin-bottom: 0.35rem;
+    font-size: 0.65rem;
   }
 
   .editorial-card h3 {
-    margin: 0 0 0.8rem;
-    font-family: var(--font-serif);
-    font-size: clamp(2rem, 3.5vw, 3rem);
-    font-weight: 500;
-    letter-spacing: -0.06em;
-    line-height: 0.95;
-  }
-
-  .editorial-card p:not(.audience-card-kicker) {
-    max-width: 24rem;
     margin: 0;
-    color: var(--color-muted);
-    line-height: 1.6;
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 3.3vw, 3.25rem);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -0.06em;
+    line-height: 0.98;
   }
 
-  .editorial-card--traditions p:not(.audience-card-kicker),
-  .editorial-card--game p:not(.audience-card-kicker) {
-    color: var(--color-surface-soft);
+  .editorial-description {
+    max-width: 30rem;
+    margin: 0.45rem 0 0;
+    color: var(--color-muted);
+    font-size: var(--font-size-small);
+    line-height: 1.55;
   }
 
   .editorial-card .ui-action-link {
-    align-self: flex-start;
-    margin-top: 2rem;
-  }
-
-  .editorial-card--traditions .ui-action-link,
-  .editorial-card--game .ui-action-link {
-    color: var(--color-ochre);
+    align-self: center;
+    white-space: nowrap;
   }
 
   @media (max-width: 50rem) {
-    .editorial-heading {
+    .editorial-shell {
       grid-template-columns: 1fr;
-      gap: 1.25rem;
+      gap: 2rem;
+    }
+
+    .editorial-heading {
+      position: static;
+    }
+
+    .editorial-heading h2 {
+      max-width: 12ch;
+      font-size: clamp(3rem, 9vw, 4.5rem);
     }
   }
 
@@ -148,8 +208,38 @@ const visibleEntries = homeEditorialEntries.filter(
       width: min(100% - 2rem, 72rem);
     }
 
-    .editorial-grid {
+    .editorial-item {
+      grid-template-columns: 2.5rem minmax(0, 1fr);
+      gap: 0.85rem;
+      align-items: start;
+    }
+
+    .editorial-index {
+      width: 2.4rem;
+      margin-top: 0.2rem;
+    }
+
+    .editorial-grid::before {
+      left: 1.18rem;
+    }
+
+    .editorial-card {
       grid-template-columns: 1fr;
+      gap: 0.65rem;
+    }
+
+    .editorial-card h3 {
+      font-size: 2.1rem;
+    }
+
+    .editorial-card .ui-action-link {
+      justify-self: start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .editorial-index {
+      transition: none;
     }
   }
 </style>

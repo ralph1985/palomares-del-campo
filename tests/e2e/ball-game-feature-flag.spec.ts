@@ -8,7 +8,7 @@ test('shows the ball-game entry points when its feature flag is enabled', async 
 
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Jugar' })).toBeVisible();
-  await expect(page.getByRole('link', { name: /Probar el mapa del juego/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Jugar a La bola/ })).toBeVisible();
   await expect(page.locator('footer').getByRole('link', { name: 'La bola' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Explorar' }).click();
@@ -30,7 +30,7 @@ test('hides every ball-game entry point when its feature flag is disabled', asyn
 
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Jugar' })).toHaveCount(0);
-  await expect(page.getByRole('link', { name: /Probar el mapa del juego/ })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /Jugar a La bola/ })).toHaveCount(0);
   await expect(page.locator('footer').getByRole('link', { name: 'La bola' })).toHaveCount(0);
 
   await page.getByRole('button', { name: 'Explorar' }).click();
