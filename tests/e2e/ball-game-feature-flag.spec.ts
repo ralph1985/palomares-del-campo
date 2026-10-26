@@ -6,6 +6,7 @@ test('shows the ball-game entry points when its feature flag is enabled', async 
     'Run with PUBLIC_BALL_GAME_ENABLED=true to verify the enabled state.',
   );
 
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Jugar' })).toBeVisible();
   await expect(page.getByRole('link', { name: /Jugar a La bola/ })).toBeVisible();
@@ -28,6 +29,7 @@ test('hides every ball-game entry point when its feature flag is disabled', asyn
     'Run with PUBLIC_BALL_GAME_ENABLED=false to verify the disabled state.',
   );
 
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Jugar' })).toHaveCount(0);
   await expect(page.getByRole('link', { name: /Jugar a La bola/ })).toHaveCount(0);

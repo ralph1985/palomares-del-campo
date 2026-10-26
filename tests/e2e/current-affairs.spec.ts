@@ -275,6 +275,7 @@ test.describe('current affairs sections', () => {
     await page.goto('/avisos/');
     await expect(page).toHaveURL(/\/bandos\/$/);
 
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
     await page.getByRole('button', { name: 'Explorar' }).click();
     const menu = page.locator('#site-menu');

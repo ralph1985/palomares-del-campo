@@ -260,7 +260,7 @@ const visibleExploreLinks = footerExploreLinks.filter(
 
   .back-to-top {
     position: fixed;
-    right: clamp(1rem, 3vw, 2rem);
+    right: calc(var(--desktop-menu-width, 0rem) + clamp(1rem, 3vw, 2rem));
     bottom: clamp(1rem, 3vw, 2rem);
     z-index: 1050;
     display: grid;
