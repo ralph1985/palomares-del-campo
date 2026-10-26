@@ -2,6 +2,7 @@
 import { navigationGroups } from '../../data/navigation';
 import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
 
+const currentPath = Astro.url.pathname;
 const visibleNavigationGroups = navigationGroups
   .map((group) => ({
     ...group,
@@ -40,13 +41,31 @@ const visibleNavigationGroups = navigationGroups
     <div class="side-menu-content">
       <nav aria-label="Secciones del sitio">
         <div class="side-nav-groups">
+          {currentPath !== '/' && (
+            <ul class="side-nav side-nav--home">
+              <li>
+                <a href="/">Inicio</a>
+              </li>
+            </ul>
+          )}
           {visibleNavigationGroups.map((group) => (
             <section class="side-nav-group" aria-labelledby={`menu-group-${group.label}`}>
               <h2 id={`menu-group-${group.label}`}>{group.label}</h2>
               <ul class="side-nav">
                 {group.links.map((link) => (
                   <li>
-                    <a href={link.href}>{link.label}</a>
+                    <a
+                      href={link.href}
+                      aria-current={
+                        currentPath === link.href
+                          ? 'page'
+                          : currentPath.startsWith(link.href)
+                            ? 'location'
+                            : undefined
+                      }
+                    >
+                      {link.label}
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -224,6 +243,13 @@ const visibleNavigationGroups = navigationGroups
   .side-nav a:hover,
   .side-nav a:focus-visible {
     color: var(--color-ochre);
+  }
+
+  .side-nav a[aria-current] {
+    color: var(--color-ochre);
+    text-decoration: underline;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.2em;
   }
 
   .menu-visual {

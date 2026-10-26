@@ -17,10 +17,30 @@ test.describe('accessible site menu', () => {
       '/brand/escudo-palomares-del-campo.svg',
     );
     await expect(menu.locator('.side-nav a span')).toHaveCount(0);
+    await expect(menu.getByRole('link', { name: 'Inicio' })).toHaveCount(0);
     await expect(page.locator('[data-menu-toggle]')).toBeHidden();
     await expect
       .poll(() => link.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize)))
       .toBeLessThan(22);
+  });
+
+  test('offers a home link off-home and marks the current section', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/sobre-el-pueblo/iglesia/');
+
+    const menu = page.locator('#site-menu');
+    await expect(menu.getByRole('link', { name: 'Inicio' })).toHaveAttribute('href', '/');
+    await expect(menu.getByRole('link', { name: 'Sobre el pueblo' })).toHaveAttribute(
+      'aria-current',
+      'location',
+    );
+    await expect(menu.getByRole('link', { name: 'Sobre el pueblo' })).toHaveCSS(
+      'text-decoration-line',
+      'underline',
+    );
+
+    await page.goto('/rutas/');
+    await expect(menu.getByRole('link', { name: 'Rutas' })).toHaveAttribute('aria-current', 'page');
   });
 
   test('opens, exposes navigation groups and returns focus on close', async ({ page }) => {
