@@ -50,6 +50,7 @@ describe('design tokens', () => {
       '--color-border',
       '--color-sage',
       '--color-sage-light',
+      '--color-surface-traditions',
       '--color-clay',
       '--color-clay-text',
       '--color-ochre',

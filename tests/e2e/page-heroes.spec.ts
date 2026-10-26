@@ -268,6 +268,12 @@ test('keeps heritage links readable on hover and keyboard focus', async ({ page 
     const link = page.locator(item.linkSelector).first();
     await expect(link).toBeVisible();
     await link.hover();
+    const linkBounds = await link.boundingBox();
+    if (!linkBounds) throw new Error(`Missing hover bounds: ${item.linkSelector}`);
+    await page.mouse.move(
+      linkBounds.x + linkBounds.width / 2,
+      linkBounds.y + linkBounds.height / 2,
+    );
     await expect(link).toHaveCSS('color', 'rgb(145, 79, 44)');
 
     await page.evaluate(() => {
