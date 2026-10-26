@@ -10,7 +10,7 @@ Este documento registra el lenguaje visual actual de la web. Los tokens se impor
 | `--color-forest`       | `#2f6652`    | Acciones, enlaces y elementos interactivos.                      |
 | `--color-muted`        | `#4a685b`    | Texto secundario, descripciones y metadatos.                     |
 | `--color-paper`        | `#f4f1e9`    | Fondo general de la web.                                         |
-| `--color-surface`      | `#fffdf8`    | Superficies claras y tarjetas.                                   |
+| `--color-surface`      | `#fffdf8`    | Superficies claras, tarjetas y mastheads interiores.             |
 | `--color-surface-soft` | `#eff5ed`    | Superficies claras suaves y texto claro sobre fondos oscuros.    |
 | `--color-sage`         | `#d8e6d6`    | Fondos verdes claros de secciones.                               |
 | `--color-sage-light`   | `#b7d0bc`    | Texto claro secundario sobre fondos oscuros.                     |
@@ -58,7 +58,7 @@ Los tokens de ritmo (`--line-height-body`, `--line-height-heading`, `--tracking-
 
 ## Componentes Hero
 
-- `EditorialHero.astro` comparte el patrón de una columna con slots para antetítulo, H1, introducción, aviso y acciones. Usa superficies `paper` o `sage`, un acento lineal y la escala secundaria común; `paper-compact` conserva el fondo papel y reduce el espaciado vertical. `fullHeight` se reserva a estados vacíos que necesiten ocupar parte de la ventana.
+- `EditorialHero.astro` comparte el patrón de una columna con slots para antetítulo, H1, introducción, aviso y acciones. Las variantes `paper` y `paper-compact` usan `--color-surface` para distinguir el masthead de la cabecera en `--color-paper`; `sage` usa `--color-sage`. Todas conservan el acento lineal y la escala secundaria común; `paper-compact` reduce el espaciado vertical. `fullHeight` se reserva a estados vacíos que necesiten ocupar parte de la ventana.
 - `SplitHero.astro` comparte la retícula de dos columnas con slots `copy` y `visual`. `heritage` usa salvia clara y escala interior; `game` conserva la composición y el tema oscuro de la partida.
 - Las páginas conservan textos y datos; las excepciones de ancho de título o introducción se expresan con modificadores tipados, no con selectores globales ni CSS repetido.
 

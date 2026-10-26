@@ -103,6 +103,56 @@ test('keeps the homepage spotlight while using a quieter interior masthead', asy
   expect(homeMobileTitleSize).toBeGreaterThan(interiorMobileTitleSize);
 });
 
+test('separates paper editorial heroes from the shared site header', async ({ page }) => {
+  const routes = [
+    '/noticias/',
+    '/bandos/',
+    '/agenda/',
+    '/rutas/',
+    '/que-ver-cerca/',
+    '/aviso-legal/',
+    '/politica-de-cookies/',
+    '/privacidad/',
+  ];
+  const viewports = [
+    { name: 'desktop', width: 1440, height: 900 },
+    { name: 'mobile', width: 390, height: 844 },
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    for (const route of routes) {
+      await page.goto(route);
+      const surfaces = await page.evaluate(() => {
+        const header = document.querySelector<HTMLElement>('.site-header');
+        const hero = document.querySelector<HTMLElement>('main .editorial-hero');
+        if (!header || !hero) throw new Error('Missing site header or editorial hero');
+        const resolveToken = (token: string): string => {
+          const probe = document.createElement('span');
+          probe.style.backgroundColor = `var(${token})`;
+          document.body.append(probe);
+          const color = getComputedStyle(probe).backgroundColor;
+          probe.remove();
+          return color;
+        };
+        return {
+          header: getComputedStyle(header).backgroundColor,
+          hero: getComputedStyle(hero).backgroundColor,
+          paper: resolveToken('--color-paper'),
+          surface: resolveToken('--color-surface'),
+        };
+      });
+
+      expect(surfaces.header, `${route} header should use the paper token`).toBe(surfaces.paper);
+      expect(surfaces.hero, `${route} hero should use the surface token`).toBe(surfaces.surface);
+      expect(
+        surfaces.hero,
+        `${route} should separate its hero from the ${viewport.name} header`,
+      ).not.toBe(surfaces.header);
+    }
+  }
+});
+
 test('keeps editorial eyebrow labels at AA contrast on their rendered surfaces', async ({
   page,
 }) => {
