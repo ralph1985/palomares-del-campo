@@ -40,7 +40,7 @@ const festivalPhotos = [
           </article>
         ))}
         <p class="programme-note">
-          Los horarios y actos concretos cambian cada edición. Consulta los
+          Los horarios y actos concretos cambian cada edición. Consulta los{' '}
           <a href="/bandos/">bandos municipales</a> antes de organizar la visita.
         </p>
       </div>
@@ -55,8 +55,7 @@ const festivalPhotos = [
         <p>
           Dos vistas de la ermita de la Virgen de la Cabeza. No son fotografías de los actos
           festivos; las imágenes de celebraciones publicadas por el Ayuntamiento pueden consultarse
-          en su
-          <ExternalLink href={municipalFestivalSource.href}>portal municipal</ExternalLink>.
+          en su <ExternalLink href={municipalFestivalSource.href}>portal municipal</ExternalLink>.
         </p>
       </div>
 
@@ -78,9 +77,9 @@ const festivalPhotos = [
               <p class="traditions-photo-credit">
                 <ExternalLink href={photo.fileUrl}>
                   {photo.author} · Wikimedia Commons ({photo.title})
-                </ExternalLink>
-                <span aria-hidden="true">·</span>
-                <ExternalLink href={photo.licenseUrl}>{photo.license}</ExternalLink>
+                </ExternalLink>{' '}
+                <span aria-hidden="true">·</span>{' '}
+                <ExternalLink href={photo.licenseUrl}>{photo.license}</ExternalLink>{' '}
                 <span>{photo.changeNote}</span>
               </p>
             </figcaption>

@@ -11,6 +11,14 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 - Ajustado el menú lateral: accesos algo más compactos en móvil y escudo visible en escritorio.
 - Añadido al menú el acceso a Inicio fuera de la portada y una marca accesible de la página o sección actual.
 
+#### Added
+
+- Ampliada la guía de las fiestas patronales con historia local, programas municipales y fotografías de la ermita con atribución y licencia visibles.
+
+#### Fixed
+
+- Corregidos espacios omitidos entre texto y enlaces, y entre los créditos y las licencias de las fotografías, en la página «Sobre el pueblo».
+
 ### 2026-10-25
 
 #### Changed
