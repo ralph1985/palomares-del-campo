@@ -11,7 +11,7 @@ const pageDescription =
 
 <BaseLayout title={`${pageTitle} · Palomares del Campo`} description={pageDescription}>
   <main>
-    <EditorialHero labelledBy="page-title" variant="ink-compact">
+    <EditorialHero labelledBy="page-title" variant="paper-compact">
       <p slot="eyebrow" class="eyebrow">
         Información jurídica
       </p>
@@ -212,7 +212,7 @@ const pageDescription =
 
   .eyebrow {
     margin: 0 0 0.9rem;
-    color: var(--color-ochre);
+    color: var(--color-clay-text);
     font-size: var(--font-size-label);
     font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
@@ -220,17 +220,21 @@ const pageDescription =
   }
 
   .legal-section:not(.legal-section-dark) .eyebrow {
-    color: var(--color-clay);
+    color: var(--color-clay-text);
+  }
+
+  .legal-section-dark .eyebrow {
+    color: var(--color-ochre);
   }
 
   .draft-warning {
     max-width: 52rem;
     margin: 1.75rem 0 0;
-    border: 2px solid #f2bf61;
+    border: 2px solid var(--color-clay);
     border-radius: 0.75rem;
     padding: 1rem 1.1rem;
-    color: #fff2cc;
-    background: rgb(242 191 97 / 12%);
+    color: var(--color-ink);
+    background: var(--color-surface-soft);
     font-weight: var(--font-weight-strong);
     line-height: 1.5;
   }

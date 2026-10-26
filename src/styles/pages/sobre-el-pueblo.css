@@ -5,14 +5,17 @@
 
 .eyebrow {
   margin: 0 0 1.25rem;
-  color: var(--color-clay);
+  color: var(--color-clay-text);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-strong);
   letter-spacing: 0.15em;
   text-transform: uppercase;
 }
 
-.split-hero--heritage .eyebrow,
+.split-hero--heritage .eyebrow {
+  color: var(--color-clay-text);
+}
+
 .landscape-section .eyebrow {
   color: var(--color-ochre);
 }
@@ -47,7 +50,7 @@ h2 {
 .hero-intro {
   max-width: 31rem;
   margin: 1.5rem 0 0;
-  color: var(--color-sage-light);
+  color: var(--color-muted);
   font-size: clamp(1rem, 1.3vw, 1.1rem);
   line-height: 1.55;
 }
@@ -64,12 +67,17 @@ h2 {
   gap: 0.8rem;
   align-items: center;
   margin-top: 2.5rem;
-  color: var(--color-ochre);
+  color: var(--color-forest);
   font-size: 0.85rem;
 }
 
 .hero-link:hover,
-.hero-link:focus-visible,
+.hero-link:focus-visible {
+  color: var(--color-clay-text);
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
 .source-link:hover,
 .source-link:focus-visible,
 .button-link:hover,
@@ -89,6 +97,11 @@ h2 {
   outline-offset: 4px;
 }
 
+.source-link:hover,
+.source-link:focus-visible {
+  color: var(--color-clay-text);
+}
+
 .hero-emblem {
   position: relative;
   display: grid;
@@ -102,7 +115,7 @@ h2 {
   z-index: -1;
   width: min(22rem, 85vw);
   height: min(22rem, 85vw);
-  border: 1px solid rgb(229 183 126 / 48%);
+  border: 1px solid var(--color-border);
   border-radius: 50%;
   content: '';
 }
@@ -216,7 +229,7 @@ h2 {
 }
 
 .source-link {
-  color: var(--color-clay);
+  color: var(--color-clay-text);
   font-size: 0.78rem;
 }
 
@@ -380,7 +393,7 @@ h2 {
 
 .tradition-number {
   padding-top: 0.2rem;
-  color: var(--color-clay);
+  color: var(--color-clay-text);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-strong);
   letter-spacing: 0.12em;
@@ -464,10 +477,6 @@ h2 {
 @media (max-width: 38rem) {
   .about-shell {
     width: min(100% - 2rem, 72rem);
-  }
-
-  h1 {
-    font-size: clamp(3.5rem, 17vw, 5.2rem);
   }
 
   h2 {

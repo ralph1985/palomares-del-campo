@@ -11,7 +11,7 @@ const pageDescription =
 
 <BaseLayout title={`${pageTitle} · Palomares del Campo`} description={pageDescription}>
   <main>
-    <EditorialHero labelledBy="page-title" variant="ink-compact">
+    <EditorialHero labelledBy="page-title" variant="paper-compact">
       <p slot="eyebrow" class="eyebrow">
         Información transparente
       </p>
@@ -165,7 +165,7 @@ const pageDescription =
 
   .eyebrow {
     margin: 0 0 0.9rem;
-    color: var(--color-ochre);
+    color: var(--color-clay-text);
     font-size: var(--font-size-label);
     font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
@@ -173,7 +173,11 @@ const pageDescription =
   }
 
   .cookies-section:not(.cookies-section-dark) .eyebrow {
-    color: var(--color-clay);
+    color: var(--color-clay-text);
+  }
+
+  .cookies-section-dark .eyebrow {
+    color: var(--color-ochre);
   }
 
   .cookies-grid {
