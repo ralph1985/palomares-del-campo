@@ -11,6 +11,7 @@ test.describe('accessible site menu', () => {
     await expect(menu).toHaveAttribute('aria-hidden', 'false');
     await expect(menu).not.toHaveAttribute('inert');
     await expect(link).toBeVisible();
+    await expect(menu.locator('.side-nav a span')).toHaveCount(0);
     await expect(page.locator('[data-menu-toggle]')).toBeHidden();
     await expect
       .poll(() => link.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize)))
