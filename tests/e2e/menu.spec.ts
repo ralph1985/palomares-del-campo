@@ -11,6 +11,11 @@ test.describe('accessible site menu', () => {
     await expect(menu).toHaveAttribute('aria-hidden', 'false');
     await expect(menu).not.toHaveAttribute('inert');
     await expect(link).toBeVisible();
+    await expect(menu.locator('.menu-crest')).toBeVisible();
+    await expect(menu.locator('.menu-crest')).toHaveAttribute(
+      'src',
+      '/brand/escudo-palomares-del-campo.svg',
+    );
     await expect(menu.locator('.side-nav a span')).toHaveCount(0);
     await expect(page.locator('[data-menu-toggle]')).toBeHidden();
     await expect
@@ -36,6 +41,20 @@ test.describe('accessible site menu', () => {
     await expect(toggle).toHaveAttribute('aria-expanded', 'true');
     await expect(menu).toHaveAttribute('aria-hidden', 'false');
     await expect(menu).not.toHaveAttribute('inert');
+    await expect
+      .poll(() =>
+        menu
+          .getByRole('link', { name: 'Sobre el pueblo' })
+          .evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize)),
+      )
+      .toBeGreaterThanOrEqual(24);
+    await expect
+      .poll(() =>
+        menu
+          .getByRole('link', { name: 'Sobre el pueblo' })
+          .evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize)),
+      )
+      .toBeLessThan(30);
     await expect(closeButton).toBeFocused();
     await expect(menu.getByRole('heading', { name: 'Vecinos' })).toBeVisible();
     await expect(menu.getByRole('heading', { name: 'Visita' })).toBeVisible();

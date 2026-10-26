@@ -21,7 +21,17 @@ const visibleNavigationGroups = navigationGroups
 <aside class="side-menu" id="site-menu" aria-label="Menú lateral" aria-hidden="true" inert>
   <div class="side-menu-inner">
     <div class="side-menu-header">
-      <p class="menu-kicker">Palomares del Campo</p>
+      <div class="menu-brand">
+        <img
+          class="menu-crest"
+          src="/brand/escudo-palomares-del-campo.svg"
+          alt=""
+          aria-hidden="true"
+          width="32"
+          height="56"
+        />
+        <p class="menu-kicker">Palomares del Campo</p>
+      </div>
       <button class="menu-close" type="button" data-menu-close aria-label="Cerrar menú">
         <span aria-hidden="true">×</span>
       </button>
@@ -128,6 +138,21 @@ const visibleNavigationGroups = navigationGroups
     font-weight: var(--font-weight-strong);
     letter-spacing: 0.16em;
     text-transform: uppercase;
+  }
+
+  .menu-brand {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .menu-crest {
+    display: none;
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 3.5rem;
+    object-fit: contain;
   }
 
   .menu-close {
@@ -279,6 +304,10 @@ const visibleNavigationGroups = navigationGroups
       padding-right: 1.25rem;
       padding-left: 1.25rem;
     }
+
+    .side-nav a {
+      font-size: clamp(1.5rem, 6vw, 1.75rem);
+    }
   }
 
   @media (min-width: 72rem) {
@@ -301,6 +330,10 @@ const visibleNavigationGroups = navigationGroups
 
     .side-menu-inner {
       padding: 1.5rem 1.75rem;
+    }
+
+    .menu-crest {
+      display: block;
     }
 
     .side-menu-content {

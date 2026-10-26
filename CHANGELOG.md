@@ -4,6 +4,12 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-10-26
+
+#### Changed
+
+- Ajustado el menú lateral: accesos algo más compactos en móvil y escudo visible en escritorio.
+
 ### 2026-10-25
 
 #### Changed
