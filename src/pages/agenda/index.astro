@@ -2,6 +2,7 @@
 import AgendaFilters from '../../components/current-affairs/AgendaFilters.astro';
 import AgendaItemCard from '../../components/current-affairs/AgendaItemCard.astro';
 import CurrentAffairsEmptyState from '../../components/current-affairs/CurrentAffairsEmptyState.astro';
+import EditorialHero from '../../components/hero/EditorialHero.astro';
 import SiteButton from '../../components/ui/SiteButton.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { agendaItems } from '../../data/current-affairs';
@@ -22,116 +23,124 @@ const years = [...new Set(agendaItems.map((item) => item.startDate.slice(0, 4)))
 >
   <main>
     {hasAgenda ? (
-      <section class="agenda-section" aria-labelledby="agenda-title" data-agenda>
-        <div class="agenda-shell">
-          <p class="eyebrow">Actualidad · Agenda</p>
-          <h1 id="agenda-title">Agenda</h1>
-          <p class="agenda-intro">
+      <div class="agenda-page" data-agenda>
+        <EditorialHero labelledBy="agenda-title" variant="paper">
+          <p slot="eyebrow" class="eyebrow">
+            Actualidad · Agenda
+          </p>
+          <h1 slot="title" id="agenda-title">
+            Agenda
+          </h1>
+          <p slot="summary" class="hero-intro">
             Actividades, servicios y plazos públicos con fechas confirmadas y enlace a su fuente.
           </p>
+        </EditorialHero>
 
-          <AgendaFilters categories={categories} years={years} />
-          <p class="agenda-results" role="status" aria-live="polite" data-agenda-results></p>
+        <div class="agenda-section">
+          <div class="agenda-shell">
+            <AgendaFilters categories={categories} years={years} />
+            <p class="agenda-results" role="status" aria-live="polite" data-agenda-results></p>
 
-          <section
-            class="agenda-group"
-            aria-labelledby="upcoming-title"
-            data-agenda-section="upcoming"
-          >
-            <h2 id="upcoming-title">Próximas fechas</h2>
-            <p
-              class="empty-upcoming"
-              data-agenda-empty-upcoming
-              hidden={sections.upcoming.length > 0}
+            <section
+              class="agenda-group"
+              aria-labelledby="upcoming-title"
+              data-agenda-section="upcoming"
             >
-              No hay próximas actividades ni plazos confirmados.
-            </p>
-            <div class="agenda-list" data-agenda-list="upcoming">
-              {sections.upcoming.map((item) => (
-                <AgendaItemCard item={item} />
-              ))}
-            </div>
-            <nav
-              class="agenda-pagination"
-              aria-label="Páginas de próximas fechas"
-              data-pagination
-              hidden
-            >
-              <SiteButton type="button" variant="secondary" data-page-previous>
-                Anterior
-              </SiteButton>
-              <span data-page-label></span>
-              <SiteButton type="button" variant="secondary" data-page-next>
-                Siguiente
-              </SiteButton>
-            </nav>
-          </section>
+              <h2 id="upcoming-title">Próximas fechas</h2>
+              <p
+                class="empty-upcoming"
+                data-agenda-empty-upcoming
+                hidden={sections.upcoming.length > 0}
+              >
+                No hay próximas actividades ni plazos confirmados.
+              </p>
+              <div class="agenda-list" data-agenda-list="upcoming">
+                {sections.upcoming.map((item) => (
+                  <AgendaItemCard item={item} />
+                ))}
+              </div>
+              <nav
+                class="agenda-pagination"
+                aria-label="Páginas de próximas fechas"
+                data-pagination
+                hidden
+              >
+                <SiteButton type="button" variant="secondary" data-page-previous>
+                  Anterior
+                </SiteButton>
+                <span data-page-label></span>
+                <SiteButton type="button" variant="secondary" data-page-next>
+                  Siguiente
+                </SiteButton>
+              </nav>
+            </section>
 
-          <details
-            class="agenda-archive"
-            data-agenda-section="past"
-            hidden={sections.past.length === 0}
-          >
-            <summary>
-              Fechas pasadas{' '}
-              <span class="archive-count" data-agenda-count="past">
-                {sections.past.length}
-              </span>
-            </summary>
-            <div class="agenda-list" data-agenda-list="past">
-              {sections.past.map((item) => (
-                <AgendaItemCard item={item} />
-              ))}
-            </div>
-            <nav
-              class="agenda-pagination"
-              aria-label="Páginas de fechas pasadas"
-              data-pagination
-              hidden
+            <details
+              class="agenda-archive"
+              data-agenda-section="past"
+              hidden={sections.past.length === 0}
             >
-              <SiteButton type="button" variant="secondary" data-page-previous>
-                Anterior
-              </SiteButton>
-              <span data-page-label></span>
-              <SiteButton type="button" variant="secondary" data-page-next>
-                Siguiente
-              </SiteButton>
-            </nav>
-          </details>
+              <summary>
+                Fechas pasadas{' '}
+                <span class="archive-count" data-agenda-count="past">
+                  {sections.past.length}
+                </span>
+              </summary>
+              <div class="agenda-list" data-agenda-list="past">
+                {sections.past.map((item) => (
+                  <AgendaItemCard item={item} />
+                ))}
+              </div>
+              <nav
+                class="agenda-pagination"
+                aria-label="Páginas de fechas pasadas"
+                data-pagination
+                hidden
+              >
+                <SiteButton type="button" variant="secondary" data-page-previous>
+                  Anterior
+                </SiteButton>
+                <span data-page-label></span>
+                <SiteButton type="button" variant="secondary" data-page-next>
+                  Siguiente
+                </SiteButton>
+              </nav>
+            </details>
 
-          <details
-            class="agenda-archive"
-            data-agenda-section="cancelled"
-            hidden={sections.cancelled.length === 0}
-          >
-            <summary>
-              Actividades canceladas{' '}
-              <span class="archive-count" data-agenda-count="cancelled">
-                {sections.cancelled.length}
-              </span>
-            </summary>
-            <div class="agenda-list" data-agenda-list="cancelled">
-              {sections.cancelled.map((item) => (
-                <AgendaItemCard item={item} />
-              ))}
-            </div>
-            <nav
-              class="agenda-pagination"
-              aria-label="Páginas de actividades canceladas"
-              data-pagination
-              hidden
+            <details
+              class="agenda-archive"
+              data-agenda-section="cancelled"
+              hidden={sections.cancelled.length === 0}
             >
-              <SiteButton type="button" variant="secondary" data-page-previous>
-                Anterior
-              </SiteButton>
-              <span data-page-label></span>
-              <SiteButton type="button" variant="secondary" data-page-next>
-                Siguiente
-              </SiteButton>
-            </nav>
-          </details>
+              <summary>
+                Actividades canceladas{' '}
+                <span class="archive-count" data-agenda-count="cancelled">
+                  {sections.cancelled.length}
+                </span>
+              </summary>
+              <div class="agenda-list" data-agenda-list="cancelled">
+                {sections.cancelled.map((item) => (
+                  <AgendaItemCard item={item} />
+                ))}
+              </div>
+              <nav
+                class="agenda-pagination"
+                aria-label="Páginas de actividades canceladas"
+                data-pagination
+                hidden
+              >
+                <SiteButton type="button" variant="secondary" data-page-previous>
+                  Anterior
+                </SiteButton>
+                <span data-page-label></span>
+                <SiteButton type="button" variant="secondary" data-page-next>
+                  Siguiente
+                </SiteButton>
+              </nav>
+            </details>
+          </div>
         </div>
-      </section>
+      </div>
     ) : (
       <CurrentAffairsEmptyState
         section="agenda"
@@ -150,7 +159,6 @@ const years = [...new Set(agendaItems.map((item) => item.startDate.slice(0, 4)))
 
 <style>
   .agenda-section {
-    min-height: min(36rem, calc(100vh - 5.25rem));
     padding: var(--spacing-section-y) 0;
     background: var(--color-sage);
   }
@@ -160,34 +168,11 @@ const years = [...new Set(agendaItems.map((item) => item.startDate.slice(0, 4)))
     margin: 0 auto;
   }
 
-  .eyebrow {
-    margin: 0 0 1.2rem;
-    color: var(--color-clay);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-strong);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  h1,
   h2 {
     margin: 0;
     font-family: var(--font-serif);
     font-weight: 500;
     letter-spacing: -0.06em;
-  }
-
-  h1 {
-    font-size: var(--font-size-page-title);
-    line-height: 0.95;
-  }
-
-  .agenda-intro {
-    max-width: 42rem;
-    margin: 1.5rem 0 0;
-    color: var(--color-muted);
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    line-height: 1.6;
   }
 
   .agenda-group {

@@ -17,7 +17,7 @@ const formatDate = (date: string) =>
   description="Yacimientos, pueblos y espacios naturales para descubrir desde Palomares del Campo, con fuentes oficiales y condiciones de visita."
 >
   <main>
-    <EditorialHero labelledBy="page-title" variant="ink-display" summaryWidth="wide">
+    <EditorialHero labelledBy="page-title" variant="paper" summaryWidth="wide">
       <p slot="eyebrow" class="eyebrow">
         Palomares del Campo · Visita
       </p>
@@ -91,7 +91,7 @@ const formatDate = (date: string) =>
 
   .eyebrow {
     margin: 0 0 1.1rem;
-    color: var(--color-ochre);
+    color: var(--color-clay-text);
     font-size: var(--font-size-label);
     font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
@@ -115,7 +115,11 @@ const formatDate = (date: string) =>
 
   .nearby-story .eyebrow,
   .nearby-section-heading .eyebrow {
-    color: var(--color-clay);
+    color: var(--color-clay-text);
+  }
+
+  .nearby-section--alternate .nearby-section-heading .eyebrow {
+    color: var(--color-ink);
   }
 
   .nearby-story {

@@ -14,7 +14,7 @@ const { section, eyebrow, title, description, emptyMessage } = Astro.props;
 
 <EditorialHero
   class="current-affairs-empty"
-  variant="ink-display"
+  variant="paper"
   fullHeight
   labelledBy={`${section}-title`}
   data-current-affairs-empty
@@ -43,16 +43,17 @@ const { section, eyebrow, title, description, emptyMessage } = Astro.props;
     max-width: 100%;
     margin: 3rem 0 0;
     padding: 1.2rem 1.4rem;
-    border: 1px solid rgb(229 183 126 / 55%);
+    border: 1px solid var(--color-border);
     border-radius: 0.75rem;
-    color: var(--color-ochre);
+    color: var(--color-forest);
+    background: var(--color-surface-soft);
     font-weight: 700;
   }
 
   .back-link {
     display: inline-block;
     margin-top: 0;
-    color: var(--color-ochre);
+    color: var(--color-forest);
     font-weight: var(--font-weight-strong);
     text-underline-offset: 0.25em;
   }

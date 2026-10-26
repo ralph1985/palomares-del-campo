@@ -50,7 +50,7 @@ Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refac
 | `src/components/NewsCard.astro`                                 | Tarjeta editorial    | Mantener separado de `BandoCard.astro`; consume `CollectionCardMeta` para el patrón común.     |
 | `src/components/ui/CollectionCardMeta.astro`                    | Metadata editorial   | Compartir fecha y contexto visual entre las dos colecciones sin mezclar sus contratos.         |
 | `src/components/NewsSection.astro`                              | Sección editorial    | Mantener scoped; candidato a revisar si aparece un segundo consumidor.                         |
-| `src/components/hero/EditorialHero.astro`                       | Hero editorial       | Compartir antetítulo, H1, introducción, avisos y acciones mediante slots y variantes acotadas. |
+| `src/components/hero/EditorialHero.astro`                       | Hero editorial       | Compartir antetítulo, H1, introducción, avisos y acciones con superficies interiores acotadas. |
 | `src/components/hero/SplitHero.astro`                           | Hero de dos columnas | Compartir la retícula de los Hero multimedia/estado sin mover sus contenidos propios.          |
 | `src/components/current-affairs/CurrentAffairsEmptyState.astro` | Estado editorial     | Componer el Hero con `EditorialHero`; mantener su aviso y atributos de estado locales.         |
 
@@ -113,7 +113,7 @@ La Fase 2 materializó tres responsabilidades independientes: `GameMapCanvas` ag
 
 La Fase 3 extrajo solo `CollectionCardMeta`: el patrón tiene dos consumidores, la misma semántica visual y estados compatibles. No se creó una tarjeta editorial genérica porque bandos y noticias conservan datos, enlaces, búsquedas y contratos públicos distintos.
 
-La refactorización de Hero extrae el esqueleto repetido de doce secciones con clase `*-hero`, la portada y el estado vacío de agenda. `EditorialHero` cubre la composición de una columna y `SplitHero` la composición multimedia/estado; las variaciones del juego y de Sobre el pueblo permanecen acotadas. Visual QA cubre quince rutas en dos viewports, incluidas las tres páginas legales.
+La refactorización de Hero extrae el esqueleto repetido de doce secciones con clase `*-hero`, la portada y el estado vacío de agenda. `EditorialHero` cubre la composición de una columna con variantes paper/sage/compact; `SplitHero` cubre la composición multimedia/estado. La portada conserva su display oscuro fotográfico, patrimonio usa salvia clara y el juego mantiene sus tokens nocturnos. Visual QA cubre 19 rutas en dos viewports, incluidas las tres páginas legales.
 
 La repetición de una declaración no basta para crear una abstracción. En la Fase 3 solo se extraerán patrones que tengan más de un consumidor con la misma semántica y estados compatibles.
 
