@@ -7,6 +7,7 @@ const sceneCanvas = document.querySelector<HTMLCanvasElement>('#menu-scene');
 if (toggle && closeButton && menu && backdrop) {
   let isOpen = false;
   let sceneInitialization: Promise<void> | undefined;
+  const desktopMenu = window.matchMedia('(min-width: 72rem)');
 
   const loadScene = () => {
     if (!sceneCanvas || !menu) return Promise.resolve();
@@ -36,6 +37,24 @@ if (toggle && closeButton && menu && backdrop) {
       toggle.focus();
     }
   };
+
+  const syncDesktopMenu = () => {
+    if (desktopMenu.matches) {
+      isOpen = true;
+      toggle.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-hidden', 'false');
+      menu.classList.add('is-open');
+      menu.removeAttribute('inert');
+      backdrop.hidden = true;
+      document.body.classList.remove('menu-is-open');
+      return;
+    }
+
+    if (isOpen) setMenuOpen(false);
+  };
+
+  syncDesktopMenu();
+  desktopMenu.addEventListener('change', syncDesktopMenu);
 
   toggle.addEventListener('click', () => setMenuOpen(!isOpen));
   closeButton.addEventListener('click', () => setMenuOpen(false));

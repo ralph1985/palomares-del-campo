@@ -26,6 +26,7 @@ test.describe('local ball game', () => {
   });
 
   test('switches between the standard and immersive game modes', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/juego/');
 
     await page.getByRole('button', { name: 'Inmersivo' }).click();

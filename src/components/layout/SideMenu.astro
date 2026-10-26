@@ -290,4 +290,45 @@ const visibleNavigationGroups = navigationGroups
       padding-left: 1.25rem;
     }
   }
+
+  @media (min-width: 72rem) {
+    body {
+      --desktop-menu-width: 21rem;
+      padding-right: var(--desktop-menu-width);
+    }
+
+    .menu-backdrop,
+    .menu-visual,
+    .menu-close {
+      display: none;
+    }
+
+    .side-menu {
+      width: var(--desktop-menu-width);
+      transform: none;
+      box-shadow: -1rem 0 3rem rgb(13 29 25 / 12%);
+    }
+
+    .side-menu-inner {
+      padding: 1.5rem 1.75rem;
+    }
+
+    .side-menu-content {
+      justify-content: flex-start;
+      gap: 2rem;
+      padding-top: 2.25rem;
+    }
+
+    .side-nav-groups {
+      gap: 1.25rem;
+    }
+
+    .side-nav a {
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+  }
 </style>

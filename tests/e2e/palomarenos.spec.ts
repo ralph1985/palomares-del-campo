@@ -247,6 +247,7 @@ test.describe('Palomareños por el mundo', () => {
   });
 
   test('keeps the menu usable while the map sits under the sticky header', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/palomarenos-por-el-mundo/');
 
     const map = page.locator('[data-palomarenos-map]');

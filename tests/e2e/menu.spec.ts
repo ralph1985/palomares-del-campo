@@ -1,7 +1,24 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('accessible site menu', () => {
+  test('keeps navigation visible and compact on desktop', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    const menu = page.locator('#site-menu');
+    const link = menu.getByRole('link', { name: 'Sobre el pueblo' });
+
+    await expect(menu).toHaveAttribute('aria-hidden', 'false');
+    await expect(menu).not.toHaveAttribute('inert');
+    await expect(link).toBeVisible();
+    await expect(page.locator('[data-menu-toggle]')).toBeHidden();
+    await expect
+      .poll(() => link.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize)))
+      .toBeLessThan(22);
+  });
+
   test('opens, exposes navigation groups and returns focus on close', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
 
     const toggle = page.getByRole('button', { name: 'Explorar' });

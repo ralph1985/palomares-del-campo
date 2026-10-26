@@ -112,6 +112,7 @@ test.describe('web navigation', () => {
     const pageErrors: string[] = [];
     page.on('pageerror', (error) => pageErrors.push(error.message));
     await page.route('**/src/scripts/menu-scene.ts', (route) => route.abort());
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
 
     const failedSceneRequest = page.waitForEvent('requestfailed', (request) =>
