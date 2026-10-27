@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["classifications"],
+  "properties": {
+    "classifications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceId", "kind"],
+        "properties": {
+          "sourceId": { "type": "string", "pattern": "^[0-9]+$" },
+          "kind": {
+            "type": "string",
+            "enum": ["event", "service", "deadline", "not_agenda"]
+          }
+        }
+      }
+    }
+  }
+}
