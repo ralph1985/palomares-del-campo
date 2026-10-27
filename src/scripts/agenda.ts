@@ -95,16 +95,11 @@ function initAgenda(): void {
     );
   };
 
-  const sortGroupCards = (
-    groupCards: HTMLElement[],
-    name: (typeof groups)[number]['name'],
-  ): HTMLElement[] =>
+  const sortGroupCards = (groupCards: HTMLElement[]): HTMLElement[] =>
     groupCards.sort((left, right) => {
       const leftDate = left.dataset.startDate ?? '';
       const rightDate = right.dataset.startDate ?? '';
-      return name === 'upcoming'
-        ? leftDate.localeCompare(rightDate)
-        : rightDate.localeCompare(leftDate);
+      return rightDate.localeCompare(leftDate);
     });
 
   const update = (announce = true) => {
@@ -115,8 +110,8 @@ function initAgenda(): void {
     for (const group of groups) {
       const groupCards = sortGroupCards(
         visibleCards.filter((card) => card.closest('[data-agenda-list]') === group.list),
-        group.name,
       );
+      group.list?.append(...groupCards);
       const pageCount = Math.max(1, Math.ceil(groupCards.length / PAGE_SIZE));
       const start = (group.page - 1) * PAGE_SIZE;
       for (const card of groupCards.slice(start, start + PAGE_SIZE)) card.hidden = false;
@@ -183,7 +178,6 @@ function initAgenda(): void {
     if (!group || !group.list) return;
     const groupCards = sortGroupCards(
       cards.filter((card) => card.closest('[data-agenda-list]') === group.list && matches(card)),
-      group.name,
     );
     const pageCount = Math.max(1, Math.ceil(groupCards.length / PAGE_SIZE));
     group.page = Math.min(group.page, pageCount);
