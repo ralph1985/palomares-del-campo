@@ -1,6 +1,6 @@
 ---
 title: 'CAMPEONATO DE PÁDEL'
-description: 'El Campeonato de Pádel será el viernes 25 y el sábado 26 de julio a partir de las 19:00 horas. Archivo adjunto:'
+description: 'El Campeonato de Pádel será el viernes 25 y el sábado 26 de julio a partir de las 19:00 horas.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-07-22T10:21:00.000Z
 category: 'Deportes'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 El Campeonato de Pádel será el viernes 25 y el sábado 26 de julio a partir de las 19:00 horas.
-Archivo adjunto:

@@ -8,8 +8,15 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 #### Changed
 
+- Simplificados los textos de portada, patrimonio, alojamientos, rutas y «Palomareños por el mundo», con descripciones más concretas y menos lemas genéricos.
+- Sustituidas las notas de desarrollo visibles en el juego por descripciones para jugadores y retiradas referencias técnicas innecesarias.
 - Optimizadas las imágenes principales y la galería de la iglesia con variantes WebP responsivas; la escena Three.js del escudo no se carga en móvil o con movimiento reducido, y los vídeos de YouTube se cargan al reproducirlos.
 - Mejorado el contraste de las etiquetas editoriales en portada, iglesia e información práctica.
+
+#### Fixed
+
+- Eliminados los rótulos vacíos de adjuntos de los textos y resúmenes de los bandos, junto con 9 instrucciones de truncado; cuando el texto fuente está incompleto, la página lo indica y enlaza al comunicado original.
+- Reescrito el aviso de borrador legal para que se dirija a visitantes y no incluya instrucciones de publicación; los datos oficiales pendientes siguen marcados como no confirmados.
 
 ### 2026-10-26
 

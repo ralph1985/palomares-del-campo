@@ -1,6 +1,6 @@
 ---
 title: 'TEATRO AMBIENTAL 2025'
-description: 'El sábado 26 a las 11:00 horas en el Polideportivo de la Plaza de toros de Palomares del Campo. Archivo adjunto:'
+description: 'El sábado 26 a las 11:00 horas en el Polideportivo de la Plaza de toros de Palomares del Campo.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-07-22T11:20:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 El sábado 26 a las 11:00 horas en el Polideportivo de la Plaza de toros de Palomares del Campo.
-Archivo adjunto:

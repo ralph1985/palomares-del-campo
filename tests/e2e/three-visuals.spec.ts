@@ -55,7 +55,10 @@ test.describe('optional WebGL fallbacks', () => {
     await expect(emblem).toHaveAttribute('aria-hidden', 'true');
     await expect(emblem.locator('img')).toBeVisible();
     await expect(
-      page.getByRole('heading', { level: 1, name: 'Un pueblo con muchas capas de historia.' }),
+      page.getByRole('heading', {
+        level: 1,
+        name: 'Historia, patrimonio y vida en Palomares del Campo',
+      }),
     ).toBeVisible();
   });
 

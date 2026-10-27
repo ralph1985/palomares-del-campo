@@ -20,7 +20,4 @@ Mañana, sábado 26 a las 11:00h tendrá lugar el teatro ambiental "LA ACADEMIA 
 
 SINOPSIS:
 
-¡Es el día de la gran graduación en la Academia del Musgo Verde! Todo está listo: los hechizos, las capas, los diplomas, pero algo va terriblemente mal. Los conjuros fallan, los profesores se han vuelto majaretas y la magia natural está desapareciendo. Luna, una aprendiz de maga, tan torpe(...)
-
-...Haga click para ver completo.
-Archivo adjunto:
+¡Es el día de la gran graduación en la Academia del Musgo Verde! Todo está listo: los hechizos, las capas, los diplomas, pero algo va terriblemente mal. Los conjuros fallan, los profesores se han vuelto majaretas y la magia natural está desapareciendo. La sinopsis también menciona a Luna, una aprendiz de maga descrita como torpe. El resto no aparece completo en esta reproducción; consulta la publicación original.

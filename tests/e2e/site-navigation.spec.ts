@@ -6,7 +6,7 @@ test.describe('web navigation', () => {
 
     await expect(page).toHaveTitle(/Palomares del Campo/);
     await expect(
-      page.getByRole('heading', { level: 1, name: 'Piedra, campo y vida.' }),
+      page.getByRole('heading', { level: 1, name: 'Palomares del Campo.' }),
     ).toBeVisible();
     await expect(
       page.getByRole('link', { name: 'Web realizada por conquense.dev' }),
@@ -39,7 +39,10 @@ test.describe('web navigation', () => {
 
     await expect(page).toHaveTitle(/Sobre Palomares del Campo/);
     await expect(
-      page.getByRole('heading', { level: 1, name: 'Un pueblo con muchas capas de historia.' }),
+      page.getByRole('heading', {
+        level: 1,
+        name: 'Historia, patrimonio y vida en Palomares del Campo',
+      }),
     ).toBeVisible();
     await expect(
       page.getByRole('heading', { name: 'Una historia ligada al territorio' }),

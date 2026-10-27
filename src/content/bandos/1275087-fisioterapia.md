@@ -1,6 +1,6 @@
 ---
 title: 'FISIOTERAPIA'
-description: 'Miércoles, 12 de febrero. Los interesados deben llamar al teléfono indicado para pedir cita. Archivo adjunto:'
+description: 'Miércoles, 12 de febrero. Los interesados deben llamar al teléfono indicado para pedir cita.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-02-04T10:28:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Miércoles, 12 de febrero. Los interesados deben llamar al teléfono indicado para pedir cita.
-Archivo adjunto:

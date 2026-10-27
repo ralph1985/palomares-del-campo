@@ -11,6 +11,4 @@ attachments: []
 ---
 
 Desde el Ayuntamiento de Palomares del Campo, se hace un llamamiento a los niños y jovenes del municipio para fomentar el respeto y la convivencia. Se solicita encarecidamente que se evite tocar los timbres y porracear las puertas, asi se evitan desperfectos y se garantiza el descanso de todos los vecinos. A los padres y abuelos que les digan a sus hijos o nietos, que eviten este tipo de actos, inculcandoles el respeto hacia los demás para tener una convivencia armoniosa.
-Agradecem(...)
-
-...Haga click para ver completo.
+El comunicado está incompleto en esta reproducción. Consulta la publicación original para leerlo completo.

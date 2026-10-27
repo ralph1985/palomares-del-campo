@@ -1,6 +1,6 @@
 ---
 title: 'Actuación Asociación de Mujeres'
-description: 'El próximo domingo en la Plaza del Coso. Archivo adjunto:'
+description: 'El próximo domingo en la Plaza del Coso.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-08-07T12:07:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 El próximo domingo en la Plaza del Coso.
-Archivo adjunto:

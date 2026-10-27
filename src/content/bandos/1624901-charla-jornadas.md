@@ -1,6 +1,6 @@
 ---
 title: 'CHARLA JORNADAS'
-description: 'EL PRÓXIMO VIERNES, 21 DE AGOSTO, A LAS 19:30 HORAS. Archivo adjunto:'
+description: 'EL PRÓXIMO VIERNES, 21 DE AGOSTO, A LAS 19:30 HORAS.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-08-18T10:22:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 EL PRÓXIMO VIERNES, 21 DE AGOSTO, A LAS 19:30 HORAS.
-Archivo adjunto:

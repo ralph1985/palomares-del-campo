@@ -1,6 +1,6 @@
 ---
 title: 'Palomares con Ceuta'
-description: 'Palomares con Ceuta Archivo adjunto:'
+description: 'Palomares con Ceuta'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-09-03T11:35:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Palomares con Ceuta
-Archivo adjunto:

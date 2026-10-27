@@ -4,11 +4,11 @@ test.describe('home information architecture', () => {
   test('explains the site and puts useful tasks within reach', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Piedra, campo y vida.');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Palomares del Campo.');
     await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName(
-      'Piedra, campo y vida.',
+      'Palomares del Campo.',
     );
-    await expect(page.getByText(/La agenda, los servicios y las historias/)).toBeVisible();
+    await expect(page.getByText('Agenda, servicios e historias del pueblo.')).toBeVisible();
     await expect(page.getByRole('img', { name: /Fachada de la iglesia/ })).toBeVisible();
     await expect(page.getByRole('link', { name: /Fotografía: portal municipal/ })).toHaveAttribute(
       'href',

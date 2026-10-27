@@ -16,5 +16,3 @@ attachments:
 
 Quienes quieran acogerse a la adhesión pueden venir al Ayuntamiento para firmar la solicitud.
 La Reunión informativa será el 4 de abril a las 18:30 en el Salón Cultural de El Hito.
-
-Archivo adjunto:

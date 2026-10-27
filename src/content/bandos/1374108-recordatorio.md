@@ -1,6 +1,6 @@
 ---
 title: 'RECORDATORIO'
-description: 'LES RECORDAMOS QUE ESTÁ PROHIBIDO DEPOSITAR BASURA FUERA DE LOS CONTENEDORES. Archivo adjunto:'
+description: 'LES RECORDAMOS QUE ESTÁ PROHIBIDO DEPOSITAR BASURA FUERA DE LOS CONTENEDORES.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-07-21T10:17:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 LES RECORDAMOS QUE ESTÁ PROHIBIDO DEPOSITAR BASURA FUERA DE LOS CONTENEDORES.
-Archivo adjunto:

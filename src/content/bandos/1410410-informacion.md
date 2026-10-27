@@ -1,6 +1,6 @@
 ---
 title: 'Información'
-description: 'Escuela de Música Archivo adjunto:'
+description: 'Escuela de Música'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-09-10T08:48:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Escuela de Música
-Archivo adjunto:

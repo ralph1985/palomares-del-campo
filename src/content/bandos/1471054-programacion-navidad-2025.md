@@ -14,5 +14,4 @@ attachments:
 ---
 
 Cartel Programación Navidad 2025.
-Archivo adjunto:
 CARTELPROGRAMACIONNAVIDAD2025.pdf

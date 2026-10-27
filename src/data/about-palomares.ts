@@ -35,9 +35,9 @@ export const aboutPalomares = {
   pageDescription:
     'Historia, patrimonio, paisaje y fiestas de Palomares del Campo, en la provincia de Cuenca.',
   landingEyebrow: 'Palomares del Campo · Cuenca',
-  landingTitle: 'Un pueblo con muchas capas de historia.',
+  landingTitle: 'Historia, patrimonio y vida en Palomares del Campo',
   landingIntro:
-    'Palomares del Campo reúne paisaje agrícola, memoria romana, patrimonio religioso y fiestas que siguen poniendo al pueblo en movimiento.',
+    'Palomares del Campo conserva restos de época romana, edificios religiosos y tradiciones ligadas a la vida del municipio.',
   heroImage: {
     src: 'https://palomaresdelcampo.dipucuenca.es/images/PALOMARES_DEL_CAMPO/NUESTRA_SE%C3%91ORA_DE_LA_ASUNCION_2.jpg',
     alt: 'Fachada de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo',
@@ -96,7 +96,7 @@ export const aboutPalomares = {
     eyebrow: 'La vida del pueblo',
     title: 'Dos fiestas patronales, una misma memoria',
     description:
-      'Abril y septiembre reúnen devoción, música, danza y convivencia en torno a las dos imágenes patronales de Palomares del Campo.',
+      'Las fiestas de abril y septiembre se celebran en honor a las dos patronas de Palomares del Campo.',
     items: [
       {
         title: 'Virgen de la Cabeza',
