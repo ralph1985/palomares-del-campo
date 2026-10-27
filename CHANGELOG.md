@@ -17,6 +17,12 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 - Eliminados los rótulos vacíos de adjuntos de los textos y resúmenes de los bandos, junto con 9 instrucciones de truncado; cuando el texto fuente está incompleto, la página lo indica y enlaza al comunicado original.
 - Reescrito el aviso de borrador legal para que se dirija a visitantes y no incluya instrucciones de publicación; los datos oficiales pendientes siguen marcados como no confirmados.
+- Recuperar adjuntos de las fichas oficiales aunque el RSS no los incluya y conservar el PDF de los talleres de salud.
+- Clasificar en la Agenda los talleres fechados en plural y registrar desde el cartel el lugar confirmado, sin duplicar el evento.
+
+#### Added
+
+- Añadido un último recurso de clasificación Codex para bandos oficiales no resueltos con fecha vigente; no decide datos de calendario y exige una respuesta JSON validada.
 
 ### 2026-10-26
 
