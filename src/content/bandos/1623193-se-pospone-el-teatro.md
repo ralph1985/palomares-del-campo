@@ -1,6 +1,6 @@
 ---
 title: 'Se pospone el Teatro...'
-description: '"Novios de Internet", "Secretico de confesión" y "Ganas de reñir" representadas por el grupo de teatro de nuestro pueblo, al próximo sábado. Archivo adjunto:'
+description: '"Novios de Internet", "Secretico de confesión" y "Ganas de reñir" representadas por el grupo de teatro de nuestro pueblo, al próximo sábado.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-08-15T18:31:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 "Novios de Internet", "Secretico de confesión" y "Ganas de reñir" representadas por el grupo de teatro de nuestro pueblo, al próximo sábado.
-Archivo adjunto:

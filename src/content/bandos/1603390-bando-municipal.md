@@ -12,6 +12,4 @@ attachments: []
 
 El ayuntamiento recuerda a todos los vecinos, la obligación de depositar correctamente los residuos en el interior de los contenedores.
 Se ruega encarecidamente que **no se abandonen bolsas de basura, enseres, jugetes, muebles, ni ningun otro tipo de residuo fuera de los contenedores,** ya que esta práctica perjudica la imagen de nuestro pueblo, genera problemas de higiene y dificulta las labores de limpieza.
-En caso de que un contenedor este lleno, se utiliza otro cercano o (...)
-
-...Haga click para ver completo.
+Si un contenedor está lleno, utiliza otro cercano. El resto de las indicaciones no aparece completo en esta reproducción; consulta el comunicado original.

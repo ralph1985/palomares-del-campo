@@ -17,8 +17,6 @@ attachments:
 
 https://youtu.be/hrdxO096LXc?si=OSVGwm5HxwF9lA6D
 
-- Sainete "Fea y con gracia" de los Hermanos Álvarez Quintero, representado por el "Grupo de Teatro de Nuestro Pueblo" Palomare(...)
+El sainete «Fea y con gracia», de los Hermanos Álvarez Quintero, fue representado por el Grupo de Teatro de Nuestro Pueblo de Palomares del Campo. El listado de vídeos está incompleto; consulta la publicación original para verlo completo.
 
-...Haga click para ver completo.
-Archivo adjunto:
 ProgramaTeatro17-08-2025.pdf

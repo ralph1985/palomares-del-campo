@@ -1,6 +1,6 @@
 ---
 title: 'JORNADAS'
-description: 'Jornadas históricas sobre la Cofradía del Santísimo. Archivo adjunto:'
+description: 'Jornadas históricas sobre la Cofradía del Santísimo.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-08-07T08:38:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Jornadas históricas sobre la Cofradía del Santísimo.
-Archivo adjunto:

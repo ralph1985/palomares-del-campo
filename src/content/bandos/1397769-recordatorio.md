@@ -14,5 +14,4 @@ attachments:
 ---
 
 RECORDATORIO PUNTO LIMPIO
-Archivo adjunto:
 RECORDATORIOPUNTOLIMPIO.pdf

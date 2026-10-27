@@ -14,5 +14,4 @@ attachments:
 ---
 
 La concentración será mañana (miércoles, 2 de septiembre) a las 20:00 horas en la puerta del Ayuntamiento.
-Archivo adjunto:
 CONVOCATORIACEUTA.pdf

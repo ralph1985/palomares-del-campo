@@ -1,6 +1,6 @@
 ---
 title: 'TERMALISMO IMSERSO 2026'
-description: 'Abierto el plazo para presentar solicitudes. Archivo adjunto:'
+description: 'Abierto el plazo para presentar solicitudes.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-02-20T10:14:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Abierto el plazo para presentar solicitudes.
-Archivo adjunto:

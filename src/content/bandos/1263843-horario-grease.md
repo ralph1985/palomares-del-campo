@@ -1,6 +1,6 @@
 ---
 title: 'Horario Grease'
-description: 'Horario salida y comienzo del musical Archivo adjunto:'
+description: 'Horario salida y comienzo del musical'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-01-09T16:29:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Horario salida y comienzo del musical
-Archivo adjunto:

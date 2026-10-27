@@ -20,7 +20,7 @@ export const gameLocations: GameLocation[] = [
     latitude: 39.9463,
     longitude: -2.5988,
     radiusMeters: 55,
-    description: 'El corazón del pueblo para empezar la partida.',
+    description: 'Punto situado en la Plaza del Coso.',
   },
   {
     id: 'iglesia-nuestra-senora',
@@ -29,7 +29,7 @@ export const gameLocations: GameLocation[] = [
     latitude: 39.94791,
     longitude: -2.59881,
     radiusMeters: 55,
-    description: 'Una nueva coordenada junto a la iglesia.',
+    description: 'Punto situado junto a la iglesia de Nuestra Señora de la Asunción.',
   },
   {
     id: 'ayuntamiento',
@@ -38,7 +38,7 @@ export const gameLocations: GameLocation[] = [
     latitude: 39.94647,
     longitude: -2.59881,
     radiusMeters: 50,
-    description: 'La bola puede aparecer junto a la casa consistorial.',
+    description: 'Punto situado junto al Ayuntamiento de Palomares del Campo.',
   },
   {
     id: 'ermita',
@@ -47,7 +47,7 @@ export const gameLocations: GameLocation[] = [
     latitude: 39.94644,
     longitude: -2.59802,
     radiusMeters: 50,
-    description: 'El recorrido se adentra un poco más en el casco urbano.',
+    description: 'Punto situado junto a la ermita.',
   },
   {
     id: 'el-jardinillo',
@@ -56,7 +56,7 @@ export const gameLocations: GameLocation[] = [
     latitude: 39.94358,
     longitude: -2.59687,
     radiusMeters: 65,
-    description: 'Un punto abierto para cambiar de ritmo.',
+    description: 'Punto situado en El Jardinillo.',
   },
   {
     id: 'polideportivo',
@@ -65,6 +65,6 @@ export const gameLocations: GameLocation[] = [
     latitude: 39.94479,
     longitude: -2.59923,
     radiusMeters: 60,
-    description: 'Una última parada provisional para el circuito.',
+    description: 'Punto situado en el polideportivo municipal.',
   },
 ];

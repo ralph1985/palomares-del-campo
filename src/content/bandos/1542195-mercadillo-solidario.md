@@ -1,6 +1,6 @@
 ---
 title: 'Mercadillo Solidario'
-description: 'Mujeres Rurales: Mercado de Emprendedoras Archivo adjunto:'
+description: 'Mujeres Rurales: Mercado de Emprendedoras'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-04-23T09:34:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Mujeres Rurales: Mercado de Emprendedoras
-Archivo adjunto:

@@ -15,5 +15,4 @@ attachments:
 
 Todo nuestro apoyo a CEUTA desde PALOMARES DEL CAMPO (Cuenca).
 
-Archivo adjunto:
 VID-20260905-WA0002.mp4

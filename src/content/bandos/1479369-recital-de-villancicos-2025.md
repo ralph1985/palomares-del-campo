@@ -1,6 +1,6 @@
 ---
 title: 'Recital de Villancicos 2025'
-description: 'Esta tarde a las 19:00 horas en la Iglesia de Nuestra Señora de la Asunción. Archivo adjunto:'
+description: 'Esta tarde a las 19:00 horas en la Iglesia de Nuestra Señora de la Asunción.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-01-02T13:19:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Esta tarde a las 19:00 horas en la Iglesia de Nuestra Señora de la Asunción.
-Archivo adjunto:

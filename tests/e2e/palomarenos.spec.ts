@@ -125,7 +125,7 @@ test.describe('Palomareños por el mundo', () => {
     await page.goto('/aviso-legal/');
 
     await expect(page.locator('#page-title')).toHaveText('Aviso legal');
-    await expect(page.getByRole('note')).toContainText('pendiente de validación');
+    await expect(page.getByRole('note')).toContainText('Aviso provisional');
     await expect(page.getByRole('heading', { name: 'Objeto del sitio' })).toBeVisible();
     await expect(page.getByText('Pendiente de confirmación oficial').first()).toBeVisible();
     await expect(page.getByText('P0000000X')).toHaveCount(0);

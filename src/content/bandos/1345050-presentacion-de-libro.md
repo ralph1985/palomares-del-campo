@@ -1,6 +1,6 @@
 ---
 title: 'Presentación de Libro'
-description: 'Presentación del libro "Anochecer teñido de rojo" de Roberto Sanz Argudo. Archivo adjunto:'
+description: 'Presentación del libro "Anochecer teñido de rojo" de Roberto Sanz Argudo.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-06-09T08:52:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Presentación del libro "Anochecer teñido de rojo" de Roberto Sanz Argudo.
-Archivo adjunto:

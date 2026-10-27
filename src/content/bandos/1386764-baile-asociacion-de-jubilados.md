@@ -1,6 +1,6 @@
 ---
 title: 'Baile Asociación de Jubilados'
-description: 'El próximo sábado a las 20:30 horas. Archivo adjunto:'
+description: 'El próximo sábado a las 20:30 horas.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-08-06T11:31:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 El próximo sábado a las 20:30 horas.
-Archivo adjunto:

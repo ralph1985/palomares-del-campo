@@ -1,6 +1,6 @@
 ---
 title: 'AVISO MUSICAL "EL FANTASMA DE LA ÓPERA"'
-description: 'POR FAVOR, QUE SE PONGAN EN CONTACTO CON MONTSE TODOS LOS QUE VAN A IR AL MUSICAL. Archivo adjunto:'
+description: 'POR FAVOR, QUE SE PONGAN EN CONTACTO CON MONTSE TODOS LOS QUE VAN A IR AL MUSICAL.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-07-11T11:37:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 POR FAVOR, QUE SE PONGAN EN CONTACTO CON MONTSE TODOS LOS QUE VAN A IR AL MUSICAL.
-Archivo adjunto:
