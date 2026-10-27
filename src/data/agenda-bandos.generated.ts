@@ -678,4 +678,18 @@ export const agendaBandosItems: AgendaItem[] = [
       publishedAt: '2026-10-07T08:29:32.000Z',
     },
   },
+  {
+    id: 'bando:1668814:1',
+    kind: 'event',
+    title: 'Talleres de Salud y Actividades Comunitarias',
+    startDate: '2026-11-03',
+    startTime: '10:00',
+    category: 'Actividad pública',
+    summary: 'Martes, 3 de noviembre a las 10:00 horas.',
+    source: {
+      label: 'Palomares del Campo Informa',
+      href: 'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1668814',
+      publishedAt: '2026-10-27T10:17:26.000Z',
+    },
+  },
 ];
