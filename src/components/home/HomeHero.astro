@@ -1,8 +1,33 @@
 ---
+import { getImage, inferRemoteSize } from 'astro:assets';
 import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
 import { aboutPalomares } from '../../data/about-palomares';
+import { getResponsiveImageWidths, optimizeRemoteImage } from '../../images';
 import ActionLink from '../ui/ActionLink.astro';
 import ExternalLink from '../ui/ExternalLink.astro';
+
+const heroImage = await optimizeRemoteImage(
+  aboutPalomares.heroImage.src,
+  () =>
+    import.meta.env.PROD
+      ? inferRemoteSize(aboutPalomares.heroImage.src)
+      : Promise.resolve({ width: 592, height: 890 }),
+  (dimensions) =>
+    getImage({
+      src: aboutPalomares.heroImage.src,
+      width: 592,
+      height: 890,
+      widths: getResponsiveImageWidths(dimensions.width, [320, 480, 592, 890]),
+      sizes: '(max-width: 42rem) calc(100vw - 2rem), 40vw',
+      format: 'webp',
+      quality: 85,
+    }),
+  (error) =>
+    console.warn(
+      `Could not optimize the homepage hero image; preserving its source URL: ${aboutPalomares.heroImage.src}`,
+      error,
+    ),
+);
 ---
 
 <section class="home-hero" aria-labelledby="home-title">
@@ -35,7 +60,9 @@ import ExternalLink from '../ui/ExternalLink.astro';
 
     <figure class="home-hero__photo">
       <img
-        src={aboutPalomares.heroImage.src}
+        src={heroImage.transformed?.src ?? heroImage.source}
+        srcset={heroImage.transformed?.srcSet.attribute}
+        sizes="(max-width: 42rem) calc(100vw - 2rem), 40vw"
         width="592"
         height="890"
         alt={aboutPalomares.heroImage.alt}

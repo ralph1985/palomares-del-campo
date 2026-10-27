@@ -17,6 +17,39 @@ const registerAstroImageFixture = async (page: import('@playwright/test').Page):
 };
 
 test.describe('optimized raster images', () => {
+  test('serves a responsive optimized image for the homepage hero', async ({ page }) => {
+    await registerAstroImageFixture(page);
+
+    const imageResponses: import('@playwright/test').Response[] = [];
+    page.on('response', (response) => {
+      if (response.url().includes('/_image')) imageResponses.push(response);
+    });
+    await page.goto('/');
+
+    const heroImage = page.locator('.home-hero__photo img');
+    await expect(heroImage).toHaveAttribute('srcset', /_image/);
+    await expect(heroImage).toHaveAttribute('width', '592');
+    await expect(heroImage).toHaveAttribute('height', '890');
+    await expect(heroImage).toHaveAttribute('fetchpriority', 'high');
+    expect(imageResponses[0]?.headers()['x-e2e-astro-image']).toBe('fixture');
+  });
+
+  test('offers a gallery source sized for high-density mobile screens', async ({ page }) => {
+    await registerAstroImageFixture(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/sobre-el-pueblo/iglesia/');
+
+    const galleryImages = page.locator('.church-gallery-item img');
+    await expect(galleryImages).toHaveCount(3);
+    for (const image of await galleryImages.all()) {
+      await expect(image).toHaveAttribute('sizes', /calc\(100vw - 2rem\)/);
+      await expect(image).toHaveAttribute('loading', 'lazy');
+      await expect(image).toHaveAttribute('srcset', /800w/);
+      await expect(image).toHaveAttribute('srcset', /w=800[^,]*q=65&f=webp/);
+      await expect(image).not.toHaveAttribute('srcset', /960w/);
+    }
+  });
+
   test('serves responsive images for guide, municipal and bando content', async ({ page }) => {
     await registerAstroImageFixture(page);
 

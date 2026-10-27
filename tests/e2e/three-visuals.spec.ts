@@ -28,6 +28,24 @@ const expectWebGLBlocked = async (page: Page) => {
 };
 
 test.describe('optional WebGL fallbacks', () => {
+  test('keeps the mobile about-page emblem static without loading Three.js', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const threeRequests: string[] = [];
+    page.on('request', (request) => {
+      if (/three(?:\.module)?(?:[./?_-]|$)/i.test(request.url())) {
+        threeRequests.push(request.url());
+      }
+    });
+
+    await page.goto('/sobre-el-pueblo/');
+    await page.waitForLoadState('networkidle');
+
+    const emblem = page.locator('[data-about-emblem]');
+    await expect(emblem.locator('img')).toBeVisible();
+    await expect(emblem.locator('canvas')).toHaveCount(0);
+    expect(threeRequests).toEqual([]);
+  });
+
   test('keeps the about-page emblem visible when WebGL is unavailable', async ({ page }) => {
     await blockWebGL(page);
     await page.goto('/sobre-el-pueblo/');
