@@ -1,6 +1,6 @@
 ---
 title: 'Sorteo Casetas 2025'
-description: 'Sorteo Casetas 2025 Archivo adjunto:'
+description: 'Sorteo Casetas 2025'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-09-01T10:34:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Sorteo Casetas 2025
-Archivo adjunto:

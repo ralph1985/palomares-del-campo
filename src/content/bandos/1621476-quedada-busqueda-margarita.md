@@ -1,6 +1,6 @@
 ---
 title: 'QUEDADA BÚSQUEDA MARGARITA'
-description: 'ESTA TARDE A LAS 18:00 EN LA PLAZA DEL AYUNTAMIENTO. Archivo adjunto:'
+description: 'ESTA TARDE A LAS 18:00 EN LA PLAZA DEL AYUNTAMIENTO.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-08-13T11:55:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 ESTA TARDE A LAS 18:00 EN LA PLAZA DEL AYUNTAMIENTO.
-Archivo adjunto:

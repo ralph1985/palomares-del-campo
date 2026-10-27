@@ -22,7 +22,4 @@ ESCUELA DE VERANO DE PALOMARES DEL CAMPO 2025.
 
 Todos los niños que quieran asistir a la Escuela de Verano deberán rellenar el formulario de inscripción hasta el 13 de julio en el siguiente enlace:
 
-https://docs.google.com/forms/d/e/1FAIpQLSepL29428HyN5gz2AHsvY8tCE4SqEYbhY76OqEZfc40OgF48Q/viewform(...)
-
-...Haga click para ver completo.
-Archivos adjuntos:
+El enlace al formulario está incompleto en esta reproducción. Consulta la publicación original para acceder a él.

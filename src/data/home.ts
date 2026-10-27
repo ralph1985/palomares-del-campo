@@ -11,7 +11,7 @@ export const homeEditorialEntries: HomeEditorialEntry[] = [
   {
     title: 'Pasear',
     eyebrow: 'Paisaje y situación',
-    description: 'Lomas suaves, caminos rurales y un territorio para recorrer sin prisa.',
+    description: 'Caminos rurales y campos de cultivo alrededor del pueblo.',
     href: '/sobre-el-pueblo/#paisaje',
     linkLabel: 'Ver el paisaje',
     accent: 'landscape',
@@ -19,24 +19,23 @@ export const homeEditorialEntries: HomeEditorialEntry[] = [
   {
     title: 'Descubrir',
     eyebrow: 'Patrimonio e historia',
-    description: 'Iglesias, ermitas, memoria romana y lugares que explican el pueblo.',
+    description: 'La iglesia, las ermitas y los restos de la historia local.',
     href: '/sobre-el-pueblo/#patrimonio',
     linkLabel: 'Ver el patrimonio',
     accent: 'heritage',
   },
   {
     title: 'Celebrar',
-    eyebrow: 'Fiestas y memoria viva',
-    description: 'Tradiciones, música y encuentros que siguen poniendo Palomares en movimiento.',
+    eyebrow: 'Fiestas y tradiciones',
+    description: 'Las fiestas patronales, sus danzas y los actos de cada año.',
     href: '/sobre-el-pueblo/#tradiciones',
     linkLabel: 'Ver las fiestas',
     accent: 'traditions',
   },
   {
     title: 'Jugar',
-    eyebrow: 'Experiencia interactiva',
-    description:
-      'Una partida geolocalizada para moverse por el pueblo y competir con otros jugadores.',
+    eyebrow: 'Juego geolocalizado',
+    description: 'Encuentra lugares del pueblo y juega desde el mapa.',
     href: '/juego/',
     linkLabel: 'Entrar en el juego',
     accent: 'game',

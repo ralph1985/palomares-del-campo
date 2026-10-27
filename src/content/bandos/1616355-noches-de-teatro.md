@@ -1,6 +1,6 @@
 ---
 title: 'NOCHES DE TEATRO'
-description: '"Novios de Internet", "Secretico de confesión" y "Ganas de reñir" representadas por el grupo de teatro de nuestro pueblo. Archivo adjunto:'
+description: '"Novios de Internet", "Secretico de confesión" y "Ganas de reñir" representadas por el grupo de teatro de nuestro pueblo.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-08-08T11:50:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 "Novios de Internet", "Secretico de confesión" y "Ganas de reñir" representadas por el grupo de teatro de nuestro pueblo.
-Archivo adjunto:

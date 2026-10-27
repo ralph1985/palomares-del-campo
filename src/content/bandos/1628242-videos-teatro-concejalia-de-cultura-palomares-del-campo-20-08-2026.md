@@ -20,7 +20,4 @@ https://youtu.be/8KZgsS4KGMY?si=AKz7XPMjiJ6C-AHw
 
 - Sainete "Ganas de reñir" de los Hermanos Álvarez Quintero, representado por el "Grupo de Teatro de Nuestro Pueblo" Palomares del Campo.
 
-(...)
-
-...Haga click para ver completo.
-Archivo adjunto:
+El comunicado está incompleto en esta reproducción. Consulta la publicación original para ver el contenido completo.

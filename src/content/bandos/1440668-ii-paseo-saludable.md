@@ -1,6 +1,6 @@
 ---
 title: 'II PASEO SALUDABLE'
-description: 'MAÑANA VIERNES (31 DE OCTUBRE) A LAS 9:00 HORAS Archivo adjunto:'
+description: 'MAÑANA VIERNES (31 DE OCTUBRE) A LAS 9:00 HORAS'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-10-30T10:08:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 MAÑANA VIERNES (31 DE OCTUBRE) A LAS 9:00 HORAS
-Archivo adjunto:

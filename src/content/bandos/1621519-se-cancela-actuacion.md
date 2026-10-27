@@ -1,6 +1,6 @@
 ---
 title: 'Se cancela actuación'
-description: 'Se cancela la actuación de Yesvi Manjavacas programada para esta noche... Archivo adjunto:'
+description: 'Se cancela la actuación de Yesvi Manjavacas programada para esta noche...'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-08-13T12:10:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Se cancela la actuación de Yesvi Manjavacas programada para esta noche...
-Archivo adjunto:

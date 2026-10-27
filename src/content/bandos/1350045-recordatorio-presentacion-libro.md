@@ -1,6 +1,6 @@
 ---
 title: 'Recordatorio Presentación Libro'
-description: 'Os esperamos esta tarde en la presentación del libro "Anochecer teñido de rojo" de Roberto Sanz Argudo. Archivo adjunto:'
+description: 'Os esperamos esta tarde en la presentación del libro "Anochecer teñido de rojo" de Roberto Sanz Argudo.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-06-16T09:07:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Os esperamos esta tarde en la presentación del libro "Anochecer teñido de rojo" de Roberto Sanz Argudo.
-Archivo adjunto:

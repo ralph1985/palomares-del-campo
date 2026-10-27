@@ -182,6 +182,56 @@ test.describe('current affairs sections', () => {
     }
   });
 
+  test('cleans imported labels and preserves known details in clipped source notices', async ({
+    page,
+  }) => {
+    await page.goto('/bandos/1259942-carglass/');
+
+    await expect(page.locator('.article-content')).not.toContainText('Archivo adjunto:');
+    await expect(page.locator('meta[name="description"]')).not.toHaveAttribute(
+      'content',
+      /Archivo adjunto:/,
+    );
+    await expect(page.getByRole('heading', { name: 'Recursos del comunicado' })).toBeVisible();
+
+    await page.goto('/bandos/1600989-bando-municipal/');
+    const articleContent = page.locator('.article-content');
+    await expect(articleContent).toContainText(
+      'El comunicado está incompleto en esta reproducción. Consulta la publicación original para leerlo completo.',
+    );
+    await expect(articleContent).not.toContainText('Haga click para ver completo.');
+    await expect(articleContent).not.toContainText('Agradecem(...)');
+
+    await page.goto('/bandos/1425221-pago-musicales/');
+    await expect(page.locator('.article-content')).toContainText('ponte en contacto con Montse');
+    await expect(page.locator('.article-content')).toContainText(
+      'instrucciones de pago no aparece completo',
+    );
+
+    await page.goto(
+      '/bandos/1398895-videos-teatro-concejalia-de-cultura-palomares-del-campo-17-08-2025/',
+    );
+    await expect(page.locator('.article-content')).toContainText('Fea y con gracia');
+    await expect(page.locator('.article-content')).toContainText('Hermanos Álvarez Quintero');
+
+    await page.goto('/bandos/1607408-bando-municipal/');
+    await expect(articleContent).toContainText('no podrá celebrarse la Escuela de Verano');
+    await expect(articleContent).toContainText('27-07-2026');
+    await expect(articleContent).toContainText(
+      'sin la escuela y sin tiempo para buscar otras alternativas',
+    );
+    await page.goto('/bandos/1603390-bando-municipal/');
+    await expect(page.locator('.article-content')).toContainText('utiliza otro cercano');
+    await page.goto('/bandos/1377442-recordatorio-teatro-ambiental/');
+    await expect(page.locator('.article-content')).toContainText('Luna, una aprendiz de maga');
+    await page.setViewportSize({ width: 375, height: 812 });
+    const widths = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      document: document.documentElement.scrollWidth,
+    }));
+    expect(widths.document).toBeLessThanOrEqual(widths.viewport);
+  });
+
   test('filters bandos by publication year and restores it from the URL', async ({ page }) => {
     await page.goto('/bandos/');
 
