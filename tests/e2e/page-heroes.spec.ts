@@ -291,11 +291,6 @@ test('keeps heritage links readable on hover and keyboard focus', async ({ page 
     );
     await expect(link).toHaveCSS('color', 'rgb(145, 79, 44)');
 
-    await page.evaluate(() => {
-      const activeElement = document.activeElement;
-      if (activeElement instanceof HTMLElement) activeElement.blur();
-    });
-
     let focused = false;
     for (let attempt = 0; attempt < 30 && !focused; attempt += 1) {
       await page.mouse.move(0, 0);
