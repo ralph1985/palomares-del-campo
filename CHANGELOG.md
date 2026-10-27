@@ -12,6 +12,7 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 - Sustituidas las notas de desarrollo visibles en el juego por descripciones para jugadores y retiradas referencias técnicas innecesarias.
 - Optimizadas las imágenes principales y la galería de la iglesia con variantes WebP responsivas; la escena Three.js del escudo no se carga en móvil o con movimiento reducido, y los vídeos de YouTube se cargan al reproducirlos.
 - Mejorado el contraste de las etiquetas editoriales en portada, iglesia e información práctica.
+- Acortados los títulos SEO de 28 noticias y bandos, desambiguadas por fecha las publicaciones con títulos repetidos y reforzada su comprobación en el build.
 
 #### Fixed
 

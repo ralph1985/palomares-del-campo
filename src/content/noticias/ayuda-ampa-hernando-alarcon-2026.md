@@ -1,5 +1,6 @@
 ---
 title: 'La AMPA Hernando de Alarcón recibe una ayuda provincial de 1.045 euros'
+seoTitle: 'Ayuda provincial de 1.045 € para la AMPA Hernando de Alarcón'
 description: 'La Diputación de Cuenca incluye a la asociación de Palomares del Campo entre las beneficiarias de su convocatoria de actividades educativas, culturales y de convivencia.'
 author: 'Redacción'
 date: 2026-08-04

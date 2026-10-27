@@ -1,5 +1,6 @@
 ---
 title: 'El Gobierno regional felicita las fiestas de Palomares del Campo'
+seoTitle: 'El Gobierno regional felicita las fiestas del Santo Cristo'
 description: 'El Ejecutivo autonómico destacó la importancia de conservar las tradiciones durante las fiestas en honor al Santo Cristo de la Paz.'
 author: 'Gobierno de Castilla-La Mancha'
 date: 2025-09-26

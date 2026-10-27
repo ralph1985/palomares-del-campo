@@ -1,5 +1,6 @@
 ---
 title: 'La búsqueda de una vecina desaparecida continúa un mes después'
+seoTitle: 'Continúa la búsqueda de la vecina desaparecida'
 description: 'Las Noticias de Cuenca informa de que, tras las primeras batidas ciudadanas, la investigación continúa bajo responsabilidad de las fuerzas de seguridad.'
 author: 'EFE'
 date: 2026-09-11

@@ -1,5 +1,6 @@
 ---
 title: 'Exposición "Arte de grabados en madera"'
+seoTitle: 'Exposición de grabados de Felipe Zamora'
 description: 'Con obras de nuestro paisano Felipe Zamora Malla.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-08-07T12:15:00.000Z

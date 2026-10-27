@@ -15,6 +15,7 @@ const noticias = defineCollection({
   }),
   schema: z.object({
     title: z.string(),
+    seoTitle: z.string().optional(),
     description: z.string(),
     author: z.string().default('Redacción'),
     authorType: z.enum(['Person', 'Organization']).default('Organization'),
@@ -33,6 +34,7 @@ const bandos = defineCollection({
   }),
   schema: z.object({
     title: z.string(),
+    seoTitle: z.string().optional(),
     description: z.string(),
     author: z.string().default('Ayuntamiento de Palomares del Campo'),
     authorType: z.enum(['Person', 'Organization']).default('Organization'),

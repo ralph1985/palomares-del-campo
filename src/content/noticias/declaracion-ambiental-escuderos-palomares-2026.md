@@ -1,5 +1,6 @@
 ---
 title: 'El proyecto eólico Escuderos recibe una declaración de impacto ambiental desfavorable'
+seoTitle: 'Evaluación ambiental desfavorable para el proyecto eólico Escuderos'
 description: 'El BOE publica la resolución ambiental del proyecto, que sitúa tres aerogeneradores de Escuderos I Híbrido en el término de Palomares del Campo.'
 author: 'Dirección General de Calidad y Evaluación Ambiental'
 date: 2026-07-03
