@@ -1,5 +1,5 @@
 import type { AgendaItem, AgendaItemKind } from '../src/data/current-affairs.ts';
-import { mergeAgendaItems } from '../src/data/agenda-utils.ts';
+import { getDateInTimeZone, mergeAgendaItems } from '../src/data/agenda-utils.ts';
 
 export interface BandoAgendaSource {
   title: string;
@@ -10,6 +10,10 @@ export interface BandoAgendaSource {
   sourceId: string;
   body: string;
 }
+
+export type AgendaFallbackClassifier = (
+  sources: readonly BandoAgendaSource[],
+) => Promise<ReadonlyMap<string, AgendaItemKind | null>>;
 
 const months: Record<string, number> = {
   enero: 1,
@@ -307,9 +311,7 @@ function getAgendaDatesFromBando(source: BandoAgendaSource): AgendaDateRange[] {
 
 function getKind(source: BandoAgendaSource): AgendaItemKind | null {
   const text = normalize(`${source.title} ${source.body}`);
-  if (/\b(cancelad[oa]|se cancela|pospon\w*|aplaz\w*)\b/.test(text)) return null;
-  if (/\b(horarios? de autobus|suministro de agua|corte de agua|residuos)\b/.test(text))
-    return null;
+  if (isExplicitlyExcluded(source)) return null;
   const explicitDeadline =
     /\b(fecha limite|hasta el|fecha de cierre|fecha fin|presentar ofertas|presentacion de ofertas|licitacion)\b/.test(
       text,
@@ -318,13 +320,21 @@ function getKind(source: BandoAgendaSource): AgendaItemKind | null {
   if (/\b(dni electronico|vacunacion|dentista|servicio|cita|consulta)\b/.test(text))
     return 'service';
   if (
-    /\b(concierto|teatro|curso|taller|charlas?|jornadas?|festival|fiestas?|campeonatos?|clase|ajuste|actividad|visita|eclipse|reunion|salida|montaje|retirada|exposicion|actuacion|ludoteca|escuela|concentracion|belen)\b/.test(
+    /\b(concierto|teatro|curso|taller(?:es)?|charlas?|jornadas?|festival|fiestas?|campeonatos?|clase|ajuste|actividad(?:es)?|visita|eclipse|reunion|salida|montaje|retirada|exposicion|actuacion|ludoteca|escuela|concentracion|belen)\b/.test(
       text,
     )
   ) {
     return 'event';
   }
   return null;
+}
+
+function isExplicitlyExcluded(source: BandoAgendaSource): boolean {
+  const text = normalize(`${source.title} ${source.body}`);
+  return (
+    /\b(cancelad[oa]|se cancela|pospon\w*|aplaz\w*)\b/.test(text) ||
+    /\b(horarios? de autobus|suministro de agua|corte de agua|residuos)\b/.test(text)
+  );
 }
 
 function getCategory(kind: AgendaItemKind, sourceCategory: string): string {
@@ -502,7 +512,13 @@ function getAgendaTitle(source: BandoAgendaSource): string {
 }
 
 export function deriveAgendaItemsFromBando(source: BandoAgendaSource): AgendaItem[] {
-  const kind = getKind(source);
+  return deriveAgendaItemsWithKind(source, getKind(source));
+}
+
+function deriveAgendaItemsWithKind(
+  source: BandoAgendaSource,
+  kind: AgendaItemKind | null,
+): AgendaItem[] {
   if (!kind || !isVerifiedBandoSource(source)) return [];
   const dates = getAgendaDatesFromBando(source);
   if (dates.length === 0) return [];
@@ -541,6 +557,43 @@ export function buildAgendaProjection(
   });
   const sourceIds = new Set(sources.map((source) => source.sourceId));
   const discovered = sources.flatMap(deriveAgendaItemsFromBando);
+  const preservedExisting = existingItems.filter((item) => {
+    const sourceId = item.id.match(/^bando:(\d+):\d+$/)?.[1];
+    return !sourceId || !sourceIds.has(sourceId);
+  });
+
+  return mergeAgendaItems(preservedExisting, discovered);
+}
+
+export async function buildAgendaProjectionWithFallback(
+  bandoMarkdown: readonly string[],
+  existingItems: readonly AgendaItem[],
+  classify: AgendaFallbackClassifier,
+  today = getDateInTimeZone(new Date(), 'Europe/Madrid'),
+): Promise<AgendaItem[]> {
+  const sources = bandoMarkdown.flatMap((markdown) => {
+    const source = parseBandoMarkdown(markdown);
+    return source ? [source] : [];
+  });
+  const fallbackCandidates = sources.filter(
+    (source) =>
+      getKind(source) === null &&
+      !isExplicitlyExcluded(source) &&
+      isVerifiedBandoSource(source) &&
+      getAgendaDatesFromBando(source).some(
+        ({ startDate, endDate }) => (endDate ?? startDate) >= today,
+      ),
+  );
+  const classifications =
+    fallbackCandidates.length > 0
+      ? await classify(fallbackCandidates)
+      : new Map<string, AgendaItemKind | null>();
+  const sourceIds = new Set(sources.map((source) => source.sourceId));
+  const discovered = sources.flatMap((source) => {
+    const deterministicKind = getKind(source);
+    const kind = deterministicKind ?? classifications.get(source.sourceId) ?? null;
+    return deriveAgendaItemsWithKind(source, kind);
+  });
   const preservedExisting = existingItems.filter((item) => {
     const sourceId = item.id.match(/^bando:(\d+):\d+$/)?.[1];
     return !sourceId || !sourceIds.has(sourceId);

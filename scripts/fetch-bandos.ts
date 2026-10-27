@@ -470,12 +470,55 @@ export function escapeYaml(value: string): string {
     .replaceAll('\r', '\\r');
 }
 
+const MAX_DETAIL_REDIRECTS = 5;
+
 async function fetchText(url: string): Promise<string> {
-  const response = await fetch(url, { signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
-  if (!response.ok) {
-    throw new Error(`Bandomovil request failed with HTTP ${response.status}: ${url}`);
+  let currentUrl = new URL(url);
+  assertOfficialBandomovilUrl(currentUrl);
+
+  for (let redirects = 0; ; redirects += 1) {
+    const response = await fetch(currentUrl.href, {
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      redirect: 'manual',
+    });
+    if (response.status >= 300 && response.status < 400) {
+      if (redirects >= MAX_DETAIL_REDIRECTS) {
+        await response.body?.cancel();
+        throw new Error('Bandomovil request exceeded the redirect limit.');
+      }
+      const location = response.headers.get('location');
+      if (!location) {
+        await response.body?.cancel();
+        throw new Error('Bandomovil redirect did not include a destination.');
+      }
+      await response.body?.cancel();
+      const redirectUrl = new URL(location, currentUrl);
+      assertOfficialBandomovilUrl(redirectUrl);
+      currentUrl = redirectUrl;
+      continue;
+    }
+    if (!response.ok) {
+      throw new Error(`Bandomovil request failed with HTTP ${response.status}: ${currentUrl.href}`);
+    }
+    return response.text();
   }
-  return response.text();
+}
+
+export async function fetchBandomovilText(url: string): Promise<string> {
+  return fetchText(url);
+}
+
+function assertOfficialBandomovilUrl(url: URL): void {
+  const officialHost = new URL(ARCHIVE_ORIGIN).hostname;
+  if (
+    url.protocol !== 'https:' ||
+    url.hostname !== officialHost ||
+    (url.port !== '' && url.port !== '443') ||
+    url.username !== '' ||
+    url.password !== ''
+  ) {
+    throw new Error('Bandomovil URL or redirect escapes the official HTTPS host.');
+  }
 }
 
 function parseArchivePageCount(html: string): number {
@@ -546,11 +589,31 @@ async function fetchRSSItems(): Promise<ImportedBandoItem[]> {
     throw new Error('The Bandomovil RSS did not contain any bandos');
   }
 
-  return items;
+  return mapWithConcurrency(items, DETAIL_CONCURRENCY, async (item) => {
+    const detailUrl = new URL(item.link);
+    if (detailUrl.protocol !== 'https:' || detailUrl.hostname !== 'www.bandomovil.com') {
+      throw new Error(`Unexpected Bandomovil detail URL: ${item.link}`);
+    }
+    const detailPage = await fetchText(detailUrl.href);
+    return mergeRSSDetailAttachments(item, detailPage);
+  });
 }
 
 export function getImportMode(value = process.env.BANDOS_IMPORT_MODE): ImportMode {
   return value === 'archive' ? 'archive' : 'rss';
+}
+
+export function mergeRSSDetailAttachments(
+  item: ImportedBandoItem,
+  detailPage: string,
+): ImportedBandoItem {
+  const attachments = [...item.attachments, ...extractAttachments(detailPage)];
+  return {
+    ...item,
+    attachments: [
+      ...new Map(attachments.map((attachment) => [attachment.url, attachment])).values(),
+    ],
+  };
 }
 
 async function loadImportItems(
