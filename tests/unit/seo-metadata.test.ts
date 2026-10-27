@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { validateRouteSpecificSeo } from '../../scripts/seo-metadata.ts';
+import {
+  isIndexableRobotsDirective,
+  validateRouteSpecificSeo,
+} from '../../scripts/seo-metadata.ts';
 
 const websiteJsonLd = JSON.stringify({
   '@type': 'WebSite',
@@ -87,5 +90,18 @@ describe('validateRouteSpecificSeo', () => {
 
     expect(errors).toContain('about page Open Graph image must use HTTPS');
     expect(errors).toContain('about page must use the summary_large_image Twitter card');
+  });
+});
+
+describe('isIndexableRobotsDirective', () => {
+  it('recognizes indexable directives regardless of case and spacing', () => {
+    expect(isIndexableRobotsDirective('index, follow')).toBe(true);
+    expect(isIndexableRobotsDirective('INDEX,FOLLOW')).toBe(true);
+  });
+
+  it('rejects noindex, none, and missing directives', () => {
+    expect(isIndexableRobotsDirective('noindex,follow')).toBe(false);
+    expect(isIndexableRobotsDirective('none')).toBe(false);
+    expect(isIndexableRobotsDirective(undefined)).toBe(false);
   });
 });

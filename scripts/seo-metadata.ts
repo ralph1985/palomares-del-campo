@@ -33,6 +33,15 @@ const getCanonicalUrl = (html: string): string | undefined => {
 
 const isUnknownArray = (value: unknown): value is unknown[] => Array.isArray(value);
 
+export const isIndexableRobotsDirective = (directive: string | undefined): boolean => {
+  if (directive === undefined) return false;
+  const directives = directive
+    .toLowerCase()
+    .split(',')
+    .map((value) => value.trim());
+  return !directives.includes('noindex') && !directives.includes('none');
+};
+
 const getJsonLdEntries = (html: string): unknown[] => {
   const entries: unknown[] = [];
   for (const match of html.matchAll(

@@ -2,7 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateJsonLdContent } from './seo-json-ld';
-import { validateRouteSpecificSeo } from './seo-metadata';
+import { isIndexableRobotsDirective, validateRouteSpecificSeo } from './seo-metadata';
 
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
 const failures: string[] = [];
@@ -42,6 +42,7 @@ function firstMatch(text: string, pattern: RegExp, label: string): string {
 }
 
 const htmlFiles = (await walk(root)).filter((path: string) => path.endsWith('.html'));
+const indexableCanonicalUrls = new Set<string>();
 for (const path of htmlFiles) {
   const route = `/${relative(root, path)
     .replaceAll('\\', '/')
@@ -76,6 +77,14 @@ for (const path of htmlFiles) {
   const canonical = firstMatch(html, /<link rel="canonical" href="([^"]+)"/, `${route} canonical`);
   if (canonical && !canonical.startsWith('https://palomaresdelcampo.conquense.dev/')) {
     failures.push(`${route}: canonical is not on the production domain`);
+  }
+  const robotsDirective = firstMatch(
+    html,
+    /<meta name="robots" content="([^"]+)"/,
+    `${route} robots directive`,
+  );
+  if (isIndexableRobotsDirective(robotsDirective) && canonical) {
+    indexableCanonicalUrls.add(canonical);
   }
 
   for (const image of html.matchAll(/property="og:image" content="([^"]+)"/g)) {
@@ -134,6 +143,17 @@ if (sitemapUrls.some((url) => url.includes('/avisos/'))) {
 if (sitemapUrls.some((url) => !url.startsWith('https://palomaresdelcampo.conquense.dev/'))) {
   failures.push('Sitemap contains a non-absolute or non-production URL');
 }
+const sitemapUrlSet = new Set(sitemapUrls);
+for (const canonical of indexableCanonicalUrls) {
+  if (!sitemapUrlSet.has(canonical)) {
+    failures.push(`Sitemap is missing indexable canonical URL ${canonical}`);
+  }
+}
+for (const url of sitemapUrlSet) {
+  if (!indexableCanonicalUrls.has(url)) {
+    failures.push(`Sitemap includes a URL without an indexable HTML page: ${url}`);
+  }
+}
 
 const robots = await readFile(join(root, 'robots.txt'), 'utf8');
 if (!robots.includes('Allow: /')) {
@@ -149,5 +169,5 @@ if (failures.length > 0) {
 }
 
 console.log(
-  `SEO verification passed: ${htmlFiles.length - 1} indexable HTML pages and ${sitemapUrls.length} sitemap URLs.`,
+  `SEO verification passed: ${indexableCanonicalUrls.size} indexable HTML pages and ${sitemapUrls.length} sitemap URLs.`,
 );
