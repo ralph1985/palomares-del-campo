@@ -128,6 +128,23 @@ describe('agenda date sections', () => {
     expect(event[0]?.summary).toContain('de 10:00 a 13:00');
   });
 
+  it('adds the verified venue from the health workshops poster without duplicating the bando', () => {
+    const workshops = agendaItems.filter((agendaItem) =>
+      agendaItem.source.href.endsWith('id=1668814'),
+    );
+
+    expect(workshops).toHaveLength(1);
+    expect(workshops[0]).toMatchObject({
+      title: 'Talleres de Salud y Actividades Comunitarias',
+      startDate: '2026-11-03',
+      startTime: '10:00',
+      location: 'Biblioteca de Palomares',
+      source: {
+        href: 'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1668814',
+      },
+    });
+  });
+
   it('replaces a dated entry when the same Bando source is corrected', () => {
     const original: AgendaItem = {
       id: 'bando:44:1',

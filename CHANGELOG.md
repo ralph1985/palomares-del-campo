@@ -4,6 +4,17 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-10-27
+
+#### Fixed
+
+- Recuperar adjuntos de las fichas oficiales aunque el RSS no los incluya y conservar el PDF de los talleres de salud.
+- Clasificar en la Agenda los talleres fechados en plural y registrar desde el cartel el lugar confirmado, sin duplicar el evento.
+
+#### Added
+
+- Añadido un último recurso de clasificación Codex para bandos oficiales no resueltos con fecha vigente; no decide datos de calendario y exige una respuesta JSON validada.
+
 ### 2026-10-22
 
 #### Added

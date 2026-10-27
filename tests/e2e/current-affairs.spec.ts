@@ -165,6 +165,31 @@ test.describe('current affairs sections', () => {
     await expect(page.locator('article time')).toHaveAttribute('datetime', publishedAt);
   });
 
+  test('shows the official poster attachment on the health workshops bando', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/bandos/');
+    const title = 'Talleres de Salud y Actividades Comunitarias';
+    const card = page.getByRole('article').filter({
+      has: page.getByRole('heading', { name: title, exact: true }),
+    });
+
+    await card.getByRole('link', { name: title, exact: true }).click();
+    await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();
+
+    const attachments = page.getByRole('region', { name: 'Recursos del comunicado' });
+    await expect(
+      attachments.getByRole('link', { name: /qCWceCartelconLogoextra-PalomaresdelCampo\.pdf/ }),
+    ).toHaveAttribute(
+      'href',
+      'https://www.bandomovil.com/userFiles/qC/qCWceCartelconLogoextra-PalomaresdelCampo.pdf',
+    );
+    const viewport = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+    expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.clientWidth + 1);
+  });
+
   test('shows sourced municipal bandos and keeps the old path compatible', async ({ page }) => {
     await page.goto('/bandos/');
 

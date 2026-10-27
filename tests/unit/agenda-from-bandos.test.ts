@@ -51,6 +51,29 @@ describe('agenda extraction from municipal notices', () => {
     ]);
   });
 
+  it('classifies the plural form “talleres” from the merged bando', () => {
+    expect(
+      deriveAgendaItemsFromBando({
+        title: 'Talleres de Salud y Actividades Comunitarias',
+        category: 'Info General',
+        publishedAt: '2026-10-27T10:17:26.000Z',
+        sourceName: 'Palomares del Campo Informa',
+        sourceUrl:
+          'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1668814',
+        sourceId: '1668814',
+        body: 'Martes, 3 de noviembre a las 10:00 horas.',
+      }),
+    ).toMatchObject([
+      {
+        id: 'bando:1668814:1',
+        kind: 'event',
+        title: 'Talleres de Salud y Actividades Comunitarias',
+        startDate: '2026-11-03',
+        startTime: '10:00',
+      },
+    ]);
+  });
+
   it('uses the quoted programme title from a generic jornadas notice', () => {
     expect(
       deriveAgendaItemsFromBando({

@@ -7,7 +7,10 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1668814'
 sourceId: '1668814'
-attachments: []
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/qC/qCWceCartelconLogoextra-PalomaresdelCampo.pdf'
+    label: 'qCWceCartelconLogoextra-PalomaresdelCampo.pdf'
 ---
 
 Martes, 3 de noviembre a las 10:00 horas.

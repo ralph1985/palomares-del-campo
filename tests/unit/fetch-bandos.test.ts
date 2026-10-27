@@ -1,9 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   createBandoMarkdown,
+  fetchBandomovilText,
   generateFilename,
   getBandomovilPublicationYear,
   getImportMode,
+  mergeRSSDetailAttachments,
   mergeExistingAttachments,
   parseArchiveItems,
   parseBandomovilDate,
@@ -35,6 +37,10 @@ const archivePage = `
   </li>
 `;
 
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+
 describe('import mode', () => {
   it('uses incremental RSS by default and allows explicit archive backfill', () => {
     expect(getImportMode(undefined)).toBe('rss');
@@ -56,6 +62,66 @@ describe('fetch bandos', () => {
       guid: 'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=123',
     });
     expect(item.description).toContain('<br>');
+  });
+
+  it('rejects a cross-host redirect after revalidating each redirect hop', async () => {
+    let requests = 0;
+    vi.stubGlobal('fetch', async (_input: RequestInfo | URL, init?: RequestInit) => {
+      requests += 1;
+      expect(init?.redirect).toBe('manual');
+      return new Response(null, {
+        status: 302,
+        headers: {
+          location:
+            requests === 1 ? '/palomaresdelcampo/123/canonical' : 'http://127.0.0.1:8080/metadata',
+        },
+      });
+    });
+
+    await expect(
+      fetchBandomovilText('https://www.bandomovil.com/palomaresdelcampo/123/0'),
+    ).rejects.toThrow(/redirect.*host/i);
+    expect(requests).toBe(2);
+  });
+
+  it('follows a same-host HTTPS redirect manually', async () => {
+    let requests = 0;
+    vi.stubGlobal('fetch', async (_input: RequestInfo | URL, init?: RequestInit) => {
+      requests += 1;
+      expect(init?.redirect).toBe('manual');
+      return requests === 1
+        ? new Response(null, {
+            status: 302,
+            headers: { location: '/palomaresdelcampo/123/canonical' },
+          })
+        : new Response('official page', { status: 200 });
+    });
+
+    await expect(
+      fetchBandomovilText('https://www.bandomovil.com/palomaresdelcampo/123/0'),
+    ).resolves.toBe('official page');
+    expect(requests).toBe(2);
+  });
+
+  it('recovers document attachments from the official RSS detail page', () => {
+    const [item] = parseRSSItems(rss);
+    if (!item) throw new Error('RSS fixture should contain an item.');
+
+    expect(
+      mergeRSSDetailAttachments(
+        item,
+        '<a href="https://www.bandomovil.com/userFiles/qC/cartel.pdf">cartel.pdf</a>',
+      ),
+    ).toMatchObject({
+      description: item.description,
+      attachments: [
+        {
+          type: 'document',
+          url: 'https://www.bandomovil.com/userFiles/qC/cartel.pdf',
+          label: 'cartel.pdf',
+        },
+      ],
+    });
   });
 
   it('parses archive entries and their Spanish publication dates', () => {

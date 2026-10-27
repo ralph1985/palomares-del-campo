@@ -36,6 +36,12 @@ const historicalTalkSource = {
   publishedAt: '2026-08-18T10:22:00.000Z',
 };
 
+const healthWorkshopsSource = {
+  label: 'Palomares del Campo Informa',
+  href: 'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1668814',
+  publishedAt: '2026-10-27T10:17:26.000Z',
+};
+
 const elderJornadasSource = {
   label: 'Palomares del Campo Informa',
   href: 'https://www.bandomovil.com/palomaresdelcampo/1432518/0',
@@ -48,6 +54,17 @@ const elderJornadasSource = {
  */
 /* El aviso específico del eclipse cita 19:00 y 19:30; se conserva sin hora única. */
 export const manualAgendaItems: AgendaItem[] = [
+  {
+    id: 'municipal:health-workshops-2026',
+    kind: 'event',
+    title: 'Talleres de Salud y Actividades Comunitarias',
+    startDate: '2026-11-03',
+    startTime: '10:00',
+    category: 'Actividad pública',
+    location: 'Biblioteca de Palomares',
+    summary: 'Talleres sobre actividad física, alimentación saludable y bienestar emocional.',
+    source: healthWorkshopsSource,
+  },
   {
     id: 'municipal:summer-2026-flamenco',
     kind: 'event',
