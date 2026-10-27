@@ -14,5 +14,4 @@ attachments:
 ---
 
 Bando Fiestas Abril 2025
-Archivo adjunto:
 BANDOCIRCULACIONYAPARCAMIENTOFIESTAS.pdf

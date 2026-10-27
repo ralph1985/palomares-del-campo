@@ -14,5 +14,4 @@ attachments:
 ---
 
 Días 9, 10 y 11 de febrero.
-Archivo adjunto:
 Carglass.pdf

@@ -1,6 +1,6 @@
 ---
 title: 'DENTISTA'
-description: 'Los interesados en el servicio de Dentista "Ruraldent**Móvil**" deberán apuntarse en el Ayuntamiento. Archivo adjunto:'
+description: 'Los interesados en el servicio de Dentista "Ruraldent**Móvil**" deberán apuntarse en el Ayuntamiento.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-02-26T11:52:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Los interesados en el servicio de Dentista "Ruraldent**Móvil**" deberán apuntarse en el Ayuntamiento.
-Archivo adjunto:

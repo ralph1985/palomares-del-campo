@@ -1,6 +1,6 @@
 ---
 title: 'MUSICALES EN EL AUDITORIO'
-description: 'Los interesados deberán apuntarse antes del martes 30 de septiembre. Archivo adjunto:'
+description: 'Los interesados deberán apuntarse antes del martes 30 de septiembre.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-09-24T10:59:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Los interesados deberán apuntarse antes del martes 30 de septiembre.
-Archivo adjunto:

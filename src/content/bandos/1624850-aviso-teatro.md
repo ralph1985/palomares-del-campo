@@ -1,6 +1,6 @@
 ---
 title: 'AVISO TEATRO'
-description: 'LA REPRESENTACIÓN DE LAS OBRAS DE TEATRO SERÁ EL PRÓXIMO JUEVES, 20 DE AGOSTO. Archivos adjuntos:'
+description: 'LA REPRESENTACIÓN DE LAS OBRAS DE TEATRO SERÁ EL PRÓXIMO JUEVES, 20 DE AGOSTO.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-08-18T09:57:00.000Z
 category: 'Cultura'
@@ -19,4 +19,3 @@ attachments:
 ---
 
 LA REPRESENTACIÓN DE LAS OBRAS DE TEATRO SERÁ EL PRÓXIMO JUEVES, 20 DE AGOSTO.
-Archivos adjuntos:

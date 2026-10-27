@@ -1,6 +1,6 @@
 ---
 title: 'JORNADAS'
-description: '"Cantemos al amor de los amores" Jornadas históricas sobre la Cofradía del Santísimo (2026). Archivos adjuntos:'
+description: '"Cantemos al amor de los amores" Jornadas históricas sobre la Cofradía del Santísimo (2026).'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-08-04T15:55:00.000Z
 category: 'Cultura'
@@ -19,4 +19,3 @@ attachments:
 ---
 
 "Cantemos al amor de los amores" Jornadas históricas sobre la Cofradía del Santísimo (2026).
-Archivos adjuntos:

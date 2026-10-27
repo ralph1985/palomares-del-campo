@@ -1,6 +1,6 @@
 ---
 title: 'Salida a Madrid'
-description: 'Salida a Madrid el 17 de mayo. Archivo adjunto:'
+description: 'Salida a Madrid el 17 de mayo.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-03-26T14:12:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Salida a Madrid el 17 de mayo.
-Archivo adjunto:

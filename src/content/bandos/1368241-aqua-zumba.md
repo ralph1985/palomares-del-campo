@@ -1,6 +1,6 @@
 ---
 title: 'AQUA ZUMBA'
-description: 'AQUA ZUMBA (DEL 16 DE JULIO AL 18 DE AGOSTO). LOS INTERESADOS DEBERÁN APUNTARSE EN EL NÚMERO 622 43 30 67. Archivo adjunto:'
+description: 'AQUA ZUMBA (DEL 16 DE JULIO AL 18 DE AGOSTO). LOS INTERESADOS DEBERÁN APUNTARSE EN EL NÚMERO 622 43 30 67.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-07-11T11:23:00.000Z
 category: 'Info General'
@@ -16,4 +16,3 @@ attachments:
 
 AQUA ZUMBA (DEL 16 DE JULIO AL 18 DE AGOSTO).
 LOS INTERESADOS DEBERÁN APUNTARSE EN EL NÚMERO 622 43 30 67.
-Archivo adjunto:

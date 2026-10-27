@@ -1,6 +1,6 @@
 ---
 title: 'AVISO ESCUELA DE VERANO'
-description: 'AVISO ESCUELA DE VERANO Archivo adjunto:'
+description: 'AVISO ESCUELA DE VERANO'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-07-24T08:34:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 AVISO ESCUELA DE VERANO
-Archivo adjunto:

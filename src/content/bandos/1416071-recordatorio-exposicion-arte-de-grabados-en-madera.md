@@ -81,5 +81,4 @@ attachments:
 ---
 
 Recordatorio de la Exposición "Arte de grabados en madera", con obras de nuestro paisano Felipe Zamora Malla.
-Archivos adjuntos:
 VID-20250819-WA0015.mp4VID-20250819-WA0016.mp4

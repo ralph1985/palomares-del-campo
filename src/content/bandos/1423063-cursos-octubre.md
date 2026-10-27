@@ -1,6 +1,6 @@
 ---
 title: 'Cursos Octubre'
-description: 'Cursos "USA TU MOVIL CON CONFIANZA" y "LA INTELIGENCIA ARTIFICIAL AL ALCANCE DE TU MANO". LUGAR POR DETERMINAR. Archivos adjuntos:'
+description: 'Cursos "USA TU MOVIL CON CONFIANZA" y "LA INTELIGENCIA ARTIFICIAL AL ALCANCE DE TU MANO". LUGAR POR DETERMINAR.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-10-01T09:53:00.000Z
 category: 'Info General'
@@ -20,5 +20,3 @@ attachments:
 
 Cursos "USA TU MOVIL CON CONFIANZA" y "LA INTELIGENCIA
 ARTIFICIAL AL ALCANCE DE TU MANO". LUGAR POR DETERMINAR.
-
-Archivos adjuntos:

@@ -4,7 +4,7 @@ test.describe('home editorial entry points', () => {
   test('connects the four ways to discover Palomares', async ({ page }) => {
     await page.goto('/');
 
-    const guide = page.getByRole('region', { name: 'Empieza por donde quieras.' });
+    const guide = page.getByRole('region', { name: '¿Qué quieres consultar?' });
     await expect(guide).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Pasear' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Descubrir', exact: true })).toBeVisible();

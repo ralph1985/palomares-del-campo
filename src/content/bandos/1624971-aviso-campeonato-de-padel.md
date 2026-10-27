@@ -1,6 +1,6 @@
 ---
 title: 'AVISO CAMPEONATO DE PÁDEL'
-description: 'TENDRÁ LUGAR EL VIERNES 28 Y EL SÁBADO 29 A LAS 18:00 HORAS. Archivos adjuntos:'
+description: 'TENDRÁ LUGAR EL VIERNES 28 Y EL SÁBADO 29 A LAS 18:00 HORAS.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-08-18T11:05:00.000Z
 category: 'Deportes'
@@ -19,4 +19,3 @@ attachments:
 ---
 
 TENDRÁ LUGAR EL VIERNES 28 Y EL SÁBADO 29 A LAS 18:00 HORAS.
-Archivos adjuntos:

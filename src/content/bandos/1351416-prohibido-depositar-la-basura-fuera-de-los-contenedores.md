@@ -1,6 +1,6 @@
 ---
 title: 'PROHIBIDO DEPOSITAR LA BASURA FUERA DE LOS CONTENEDORES'
-description: 'PROHIBIDO DEPOSITAR LA BASURA FUERA DE LOS CONTENEDORES. Archivo adjunto:'
+description: 'PROHIBIDO DEPOSITAR LA BASURA FUERA DE LOS CONTENEDORES.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-06-17T10:53:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 PROHIBIDO DEPOSITAR LA BASURA FUERA DE LOS CONTENEDORES.
-Archivo adjunto:

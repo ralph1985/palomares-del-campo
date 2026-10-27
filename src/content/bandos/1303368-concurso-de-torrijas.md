@@ -1,6 +1,6 @@
 ---
 title: 'CONCURSO DE TORRIJAS'
-description: 'DÍA 2 DE ABRIL A LAS 17H. Archivo adjunto:'
+description: 'DÍA 2 DE ABRIL A LAS 17H.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-03-28T11:59:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 DÍA 2 DE ABRIL A LAS 17H.
-Archivo adjunto:

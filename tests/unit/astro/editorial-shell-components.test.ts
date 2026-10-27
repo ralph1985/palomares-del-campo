@@ -60,7 +60,7 @@ describe('HomeEditorialGuide.astro', () => {
 
     expect(html).toContain('aria-labelledby="editorial-title"');
     expect(html).toMatch(
-      /<h2 id="editorial-title"[^>]*>Empieza por <em[^>]*>donde quieras\.<\/em><\/h2>/,
+      /<h2 id="editorial-title"[^>]*>¿Qué quieres <em[^>]*>consultar\?<\/em><\/h2>/,
     );
     expect(html).toMatch(/<ul class="editorial-grid"[^>]*>/);
     expect(html).toMatch(/<li class="editorial-item editorial-item--landscape"[^>]*>/);

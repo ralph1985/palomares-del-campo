@@ -15,5 +15,4 @@ attachments:
 
 El teatro ambiental tendrá lugar el próximo lunes, 3 de agosto, a las 11:00 de la mañana en el Polideportivo de la Plaza de toros de Palomares del Campo.
 
-Archivo adjunto:
 CARTELTEATROAMBIENTAL2026.pdf

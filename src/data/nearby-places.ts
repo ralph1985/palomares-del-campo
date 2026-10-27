@@ -29,13 +29,12 @@ export const nearbyPlaceGroups = [
     id: 'nearby',
     title: 'Cerca de Palomares',
     intro:
-      'Patrimonio y paisaje para descubrir en el entorno inmediato. Algunas fichas no incluyen una distancia: preferimos eso a dar una ruta hasta un punto equivocado.',
+      'Lugares de interés cercanos. La distancia solo se indica cuando hay un punto de acceso concreto que se puede verificar.',
   },
   {
     id: 'day-trip',
     title: 'Escapadas para dedicarles más tiempo',
-    intro:
-      'Lugares conocidos de la provincia que pueden completar una visita de medio día o una jornada.',
+    intro: 'Lugares de la provincia que requieren más tiempo de desplazamiento y visita.',
   },
 ] as const;
 

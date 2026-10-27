@@ -14,5 +14,4 @@ attachments:
 ---
 
 Licitación piscina 2025
-Archivo adjunto:
 ANUNCIOLICITACIONPISCINA2025.pdf

@@ -1,6 +1,6 @@
 ---
 title: 'COLOCACIÓN VALLAS FIESTAS 2025'
-description: 'Se colocarán las vallas el sábado 20 de septiembre a las 8:00 de la mañana. Archivo adjunto:'
+description: 'Se colocarán las vallas el sábado 20 de septiembre a las 8:00 de la mañana.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-09-16T07:49:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Se colocarán las vallas el sábado 20 de septiembre a las 8:00 de la mañana.
-Archivo adjunto:

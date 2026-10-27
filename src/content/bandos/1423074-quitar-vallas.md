@@ -1,6 +1,6 @@
 ---
 title: 'Quitar vallas'
-description: 'El próximo sábado a las 8:30 de la mañana. Archivo adjunto:'
+description: 'El próximo sábado a las 8:30 de la mañana.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-10-01T09:57:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 El próximo sábado a las 8:30 de la mañana.
-Archivo adjunto:
