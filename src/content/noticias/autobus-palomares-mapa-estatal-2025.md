@@ -1,5 +1,6 @@
 ---
 title: 'El nuevo mapa estatal de autobuses plantea cambios en las paradas de Palomares del Campo'
+seoTitle: 'Nuevo mapa de autobuses prevé cambios en paradas de Palomares'
 description: 'El debate sobre la reorganización del transporte regular por carretera incluyó a Palomares del Campo entre las localidades afectadas.'
 author: 'Carmen Bachiller'
 authorType: 'Person'

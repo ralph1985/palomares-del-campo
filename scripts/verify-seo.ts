@@ -43,6 +43,7 @@ function firstMatch(text: string, pattern: RegExp, label: string): string {
 
 const htmlFiles = (await walk(root)).filter((path: string) => path.endsWith('.html'));
 const indexableCanonicalUrls = new Set<string>();
+const editorialArticleTitles = new Map<string, string>();
 for (const path of htmlFiles) {
   const route = `/${relative(root, path)
     .replaceAll('\\', '/')
@@ -67,6 +68,16 @@ for (const path of htmlFiles) {
   for (const [label, pattern] of requiredMetadata) {
     if (count(html, pattern) !== 1) {
       failures.push(`${route}: expected exactly one ${label}`);
+    }
+  }
+
+  if (/^\/(noticias|bandos)\/[^/]+\/$/.test(route)) {
+    const articleTitle = firstMatch(html, /<title>(.*?)<\/title>/s, `${route} title`);
+    const existingRoute = editorialArticleTitles.get(articleTitle);
+    if (existingRoute) {
+      failures.push(`${route}: SEO title duplicates ${existingRoute}`);
+    } else if (articleTitle) {
+      editorialArticleTitles.set(articleTitle, route);
     }
   }
 

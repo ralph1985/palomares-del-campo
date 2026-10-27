@@ -1,5 +1,6 @@
 ---
 title: 'Un incendio en el término municipal de Palomares del Campo moviliza medios de extinción'
+seoTitle: 'Incendio en Palomares moviliza medios de extinción'
 description: 'El fuego fue detectado durante la madrugada del 12 de agosto y el expediente quedó pendiente de concretar la superficie afectada y la causa.'
 author: 'Voces de Cuenca'
 date: 2026-08-12

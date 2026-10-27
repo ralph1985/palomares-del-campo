@@ -1,5 +1,6 @@
 ---
 title: 'Palomares del Campo solicitará ser zona gravemente afectada tras arrasar las lluvias sus caminos'
+seoTitle: 'Palomares solicitará la declaración de zona afectada por lluvias'
 description: 'El Ayuntamiento solicitará ayudas al Gobierno central para reparar los caminos agrícolas dañados por las lluvias; todavía no se habían podido valorar todos los desperfectos.'
 author: 'Lucía Álvaro'
 authorType: 'Person'

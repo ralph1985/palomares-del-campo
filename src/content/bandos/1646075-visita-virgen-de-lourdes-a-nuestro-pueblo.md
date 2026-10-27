@@ -1,5 +1,6 @@
 ---
 title: 'Visita Virgen de Lourdes a nuestro pueblo'
+seoTitle: 'Visita de la Hospitalidad de Lourdes de Cuenca'
 description: 'Muchas gracias "Hospitalidad de Lourdes de Cuenca" por la visita. https://www.facebook.com/ayuntamiento.palomaresdelcampo?locale=es_ES'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-09-21T09:25:30.000Z

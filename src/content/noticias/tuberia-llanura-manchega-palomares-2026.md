@@ -1,5 +1,6 @@
 ---
 title: 'Palomares del Campo figura entre los municipios que recibirán agua de la Tubería Manchega'
+seoTitle: 'Tubería Manchega prevé abastecer Palomares desde septiembre'
 description: 'El ramal de la Llanura Manchega está previsto para abastecer desde septiembre a varios municipios conquenses próximos al acueducto Tajo-Segura.'
 author: 'David Romero'
 authorType: 'Person'

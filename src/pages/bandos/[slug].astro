@@ -7,13 +7,33 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('bandos');
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+  const titleCounts = new Map<string, number>();
+  for (const post of posts) {
+    titleCounts.set(post.data.title, (titleCounts.get(post.data.title) ?? 0) + 1);
+  }
+  const duplicateTitleDate = new Intl.DateTimeFormat('es-ES', {
+    timeZone: 'Europe/Madrid',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
+  return posts.map((post) => {
+    const duplicateTitleCount = titleCounts.get(post.data.title) ?? 0;
+    const seoTitle =
+      post.data.seoTitle ??
+      (duplicateTitleCount > 1
+        ? `${post.data.title} · ${duplicateTitleDate.format(post.data.date)} · Palomares del Campo`
+        : `${post.data.title} · Bandos · Palomares del Campo`);
+
+    return {
+      params: { slug: post.id },
+      props: { post, seoTitle },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, seoTitle } = Astro.props;
 const { Content } = await render(post);
 const {
   title,
@@ -76,7 +96,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 ---
 
 <BaseLayout
-  title={`${title} · Bandos · Palomares del Campo`}
+  title={seoTitle}
   description={description}
   canonicalPath={`/bandos/${post.id}/`}
   type="article"

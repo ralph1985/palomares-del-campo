@@ -1,5 +1,6 @@
 ---
 title: 'La seguridad ciudadana centra una visita a Palomares del Campo'
+seoTitle: 'Robos y seguridad ciudadana centran una visita a Palomares'
 description: 'El encuentro abordó la preocupación vecinal por los robos y la necesidad de reforzar la presencia de la Guardia Civil.'
 author: 'Redacción'
 date: 2026-03-16

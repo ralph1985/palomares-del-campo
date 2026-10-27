@@ -1,5 +1,6 @@
 ---
 title: 'Trasladado a Toledo un menor herido en Palomares del Campo'
+seoTitle: 'Menor herido en Palomares es trasladado a Toledo'
 description: 'Europa Press informó del traslado hospitalario de un niño de ocho años tras clavarse un hierro en una pierna.'
 author: 'Europa Press Castilla-La Mancha'
 date: 2025-09-26

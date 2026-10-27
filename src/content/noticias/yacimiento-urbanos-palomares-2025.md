@@ -1,5 +1,6 @@
 ---
 title: 'El yacimiento de Urbanos se presenta en el Museo de Cuenca'
+seoTitle: 'El yacimiento de Urbanos, en el Museo de Cuenca'
 description: 'Una conferencia explicó los resultados de la intervención arqueológica vinculada a una planta solar en los campos de Torrejoncillo del Rey y Palomares del Campo.'
 author: 'Portal de Cultura de Castilla-La Mancha'
 date: 2025-12-04
