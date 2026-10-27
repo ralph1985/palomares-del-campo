@@ -215,6 +215,21 @@ test('keeps editorial eyebrow labels at AA contrast on their rendered surfaces',
       label: '.editorial-hero--sage .eyebrow',
     },
     {
+      route: '/',
+      surface: '.news-section',
+      label: '.news-section .news-eyebrow',
+    },
+    {
+      route: '/sobre-el-pueblo/iglesia/',
+      surface: '.art-card--chapels',
+      label: '.art-card--chapels .card-index',
+    },
+    {
+      route: '/informacion-practica/',
+      surface: '.services-section',
+      label: '.services-section .service-index',
+    },
+    {
       route: '/que-ver-cerca/castillo-torrebuceit/',
       surface: '.visit-panel',
       label: '.visit-panel .eyebrow',
@@ -310,4 +325,45 @@ test('keeps heritage links readable on hover and keyboard focus', async ({ page 
       `${item.linkSelector} on ${item.surfaceSelector} with keyboard focus`,
     ).toBeGreaterThanOrEqual(4.5);
   }
+});
+
+test('keeps the deferred video control at AA contrast on hover and keyboard focus', async ({
+  page,
+}) => {
+  await page.goto('/que-ver-cerca/castillo-torrebuceit/');
+
+  const button = page.getByRole('button', {
+    name: 'Reproducir vídeo: Torrebuceit desde el aire',
+  });
+  await expect(button).toBeVisible();
+
+  const checkContrast = async () => {
+    const colors = await page.evaluate(() => {
+      const control = document.querySelector<HTMLElement>('.video-launch');
+      const surface = control?.parentElement;
+      if (!control || !surface) throw new Error('Missing deferred video control surface');
+      return {
+        foreground: getComputedStyle(control).color,
+        background: getComputedStyle(surface).backgroundColor,
+      };
+    });
+    expect(contrastRatio(colors.foreground, colors.background)).toBeGreaterThanOrEqual(4.5);
+  };
+
+  await checkContrast();
+  await button.hover();
+  await checkContrast();
+
+  await page.evaluate(() => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+  });
+  let focused = false;
+  for (let attempt = 0; attempt < 30 && !focused; attempt += 1) {
+    await page.mouse.move(0, 0);
+    await page.keyboard.press('Tab');
+    focused = await button.evaluate((element) => document.activeElement === element);
+  }
+  expect(focused).toBe(true);
+  await expect(button).toHaveCSS('outline-style', 'solid');
+  await checkContrast();
 });

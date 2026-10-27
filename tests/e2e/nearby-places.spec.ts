@@ -152,14 +152,27 @@ test.describe('nearby attractions guide', () => {
       );
     }
 
+    await page.route('https://www.youtube-nocookie.com/embed/**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: '<!doctype html><title>fixture</title>',
+      }),
+    );
     await page.goto('/que-ver-cerca/castillo-torrebuceit/');
     await expect(page.locator('main figure img[alt*="Torrebuceit"]')).toHaveCount(3);
     await expect(page.getByRole('link', { name: '19Tarrestnom65' })).toHaveCount(3);
     await expect(page.getByRole('link', { name: /CC BY-SA 4\.0/ })).toHaveCount(3);
+    const playVideo = page.getByRole('button', {
+      name: 'Reproducir vídeo: Torrebuceit desde el aire',
+    });
+    await expect(playVideo).toBeVisible();
+    await expect(page.getByTitle('Torrebuceit desde el aire')).toHaveCount(0);
+    await playVideo.click();
     const video = page.getByTitle('Torrebuceit desde el aire');
     await expect(video).toHaveAttribute(
       'src',
-      'https://www.youtube-nocookie.com/embed/d5C1apoWJ9w',
+      'https://www.youtube-nocookie.com/embed/d5C1apoWJ9w?autoplay=1',
     );
     await expect(page.locator('main')).toContainText('Rafa, nieto de Crescente y Eusebia');
     await expect(page.locator('main')).toContainText('28 personas');

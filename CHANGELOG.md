@@ -4,6 +4,13 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-10-27
+
+#### Changed
+
+- Optimizadas las imágenes principales y la galería de la iglesia con variantes WebP responsivas; la escena Three.js del escudo no se carga en móvil o con movimiento reducido, y los vídeos de YouTube se cargan al reproducirlos.
+- Mejorado el contraste de las etiquetas editoriales en portada, iglesia e información práctica.
+
 ### 2026-10-26
 
 #### Changed
