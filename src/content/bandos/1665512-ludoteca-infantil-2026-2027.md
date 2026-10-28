@@ -7,7 +7,10 @@ category: 'Info General'
 sourceName: 'Palomares del Campo Informa'
 sourceUrl: 'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1665512'
 sourceId: '1665512'
-attachments: []
+attachments:
+  - type: 'document'
+    url: 'https://www.bandomovil.com/userFiles/0N/0NJ96cartel2026ludotecapalomares.pdf'
+    label: '0NJ96cartel2026ludotecapalomares.pdf'
 ---
 
 Enlace al formulario de inscripción:
