@@ -10,10 +10,10 @@ sourceId: '1658990'
 attachments:
   - type: 'document'
     url: 'https://www.bandomovil.com/userFiles/hz/hz1v1HORARIOSOCUELLAMOSCUENCAFUENTELESPINO.pdf'
-    label: 'HORARIOSOCUELLAMOSCUENCAFUENTELESPINO.pdf'
+    label: 'hz1v1HORARIOSOCUELLAMOSCUENCAFUENTELESPINO.pdf'
   - type: 'document'
     url: 'https://www.bandomovil.com/userFiles/mB/mBdnlHORARIOSOCUELLAMOSCUENCAHORCAJO.pdf'
-    label: 'HORARIOSOCUELLAMOSCUENCAHORCAJO.pdf'
+    label: 'mBdnlHORARIOSOCUELLAMOSCUENCAHORCAJO.pdf'
 ---
 
 HORARIOS ACTUALIZADOS DEL AUTOBÚS DE LÍNEA
