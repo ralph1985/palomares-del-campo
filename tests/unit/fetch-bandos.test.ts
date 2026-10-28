@@ -251,5 +251,6 @@ describe('fetch bandos', () => {
 
   it('drops the contents of an unclosed dangerous HTML element', () => {
     expect(htmlToMarkdown('<script>alert(2)')).not.toContain('alert(2)');
+    expect(htmlToMarkdown('<unclosed')).not.toContain('<');
   });
 });

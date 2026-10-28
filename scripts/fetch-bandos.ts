@@ -421,6 +421,8 @@ export function htmlToMarkdown(html: string): string {
     .replaceAll(/[ \t]+/g, ' ')
     .replaceAll(/\n[ \t]+/g, '\n')
     .replaceAll(/\n{3,}/g, '\n\n')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
     .trim();
 
   return content;
