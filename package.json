@@ -31,11 +31,11 @@
   },
   "dependencies": {
     "@types/leaflet": "1.9.20",
-    "astro": "7.3.8",
+    "astro": "7.4.0",
     "convex": "1.46.0",
     "dotenv": "17.2.3",
     "leaflet": "1.9.4",
-    "nodemailer": "10.0.10",
+    "nodemailer": "10.1.4",
     "sharp": "0.35.5",
     "three": "0.186.1"
   },
@@ -46,6 +46,7 @@
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.64.0",
     "@types/node": "24.19.2",
+    "@types/sanitize-html": "2.16.2",
     "@types/three": "0.186.0",
     "@vitest/coverage-v8": "5.0.3",
     "convex-test": "0.0.62",
@@ -56,9 +57,17 @@
     "husky": "9.1.7",
     "prettier": "3.9.10",
     "prettier-plugin-astro": "1.1.1",
+    "sanitize-html": "2.18.1",
     "tsx": "4.23.15",
     "typescript": "6.0.3",
     "typescript-eslint": "8.71.1",
     "vitest": "5.0.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "fast-uri": "3.1.9",
+      "undici@8": "8.12.3",
+      "zod@4": "4.6.7"
+    }
   }
 }

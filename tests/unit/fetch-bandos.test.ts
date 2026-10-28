@@ -5,6 +5,7 @@ import {
   generateFilename,
   getBandomovilPublicationYear,
   getImportMode,
+  htmlToMarkdown,
   mergeRSSDetailAttachments,
   mergeExistingAttachments,
   parseArchiveItems,
@@ -246,5 +247,9 @@ describe('fetch bandos', () => {
     expect(markdown).toContain('Habrá un corte.');
     expect(markdown).toContain('**De 9:00 a 12:00**');
     expect(markdown).not.toContain('<script>');
+  });
+
+  it('drops the contents of an unclosed dangerous HTML element', () => {
+    expect(htmlToMarkdown('<script>alert(2)')).not.toContain('alert(2)');
   });
 });

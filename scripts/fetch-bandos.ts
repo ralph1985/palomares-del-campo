@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import sanitizeHtml from 'sanitize-html';
 
 export const RSS_URL = 'https://www.bandomovil.com/rss.php?codigo=palomaresdelcampo';
 export const ARCHIVE_URL = 'https://www.bandomovil.com/web.php?municipio=palomaresdelcampo&pag=';
@@ -393,8 +394,22 @@ export function cleanHTML(html: string): string {
 }
 
 export function htmlToMarkdown(html: string): string {
-  let content = decodeXmlEntities(html ?? '');
-  content = stripDangerousBlocks(content)
+  const content = sanitizeHtml(html ?? '', {
+    allowedTags: ['br', 'p', 'strong', 'b', 'em', 'i'],
+    allowedAttributes: {},
+    disallowedTagsMode: 'discard',
+    nonTextTags: [
+      'script',
+      'style',
+      'textarea',
+      'option',
+      'iframe',
+      'object',
+      'embed',
+      'svg',
+      'math',
+    ],
+  })
     .replaceAll(/<br\s*\/?>(?=\s*)/gi, '\n')
     .replaceAll(/<\/?p[^>]*>/gi, '\n\n')
     .replaceAll(/<strong[^>]*>([\s\S]*?)<\/strong>/gi, '**$1**')
@@ -447,10 +462,6 @@ export function decodeXmlEntities(value: string): string {
     }
     return namedEntities[entity.toLowerCase()] ?? match;
   });
-}
-
-export function stripDangerousBlocks(value: string): string {
-  return value.replaceAll(/<(script|style|iframe|object|embed|svg)[^>]*>[\s\S]*?<\/\1>/gi, '');
 }
 
 export function sanitizeHttpsUrl(value: string): string {
