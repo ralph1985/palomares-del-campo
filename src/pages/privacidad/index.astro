@@ -11,7 +11,7 @@ const pageDescription =
 
 <BaseLayout title={`${pageTitle} · Palomares del Campo`} description={pageDescription}>
   <main>
-    <EditorialHero labelledBy="page-title" variant="ink-compact">
+    <EditorialHero labelledBy="page-title" variant="paper-compact">
       <p slot="eyebrow" class="eyebrow">
         Información transparente
       </p>
@@ -191,7 +191,7 @@ const pageDescription =
 
 <style>
   .privacy-section {
-    padding: clamp(3.5rem, 8vw, 7rem) 0;
+    padding: var(--spacing-section-y) 0;
   }
 
   .privacy-shell {
@@ -204,7 +204,7 @@ const pageDescription =
     margin: 0;
     color: inherit;
     font-family: var(--font-serif);
-    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-size: var(--font-size-section-heading);
     font-weight: 500;
     letter-spacing: -0.06em;
     line-height: 0.96;
@@ -212,7 +212,7 @@ const pageDescription =
 
   .eyebrow {
     margin: 0 0 0.9rem;
-    color: var(--color-ochre);
+    color: var(--color-clay-text);
     font-size: var(--font-size-label);
     font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
@@ -220,7 +220,11 @@ const pageDescription =
   }
 
   .privacy-section:not(.privacy-section-dark) .eyebrow {
-    color: var(--color-clay);
+    color: var(--color-clay-text);
+  }
+
+  .privacy-section-dark .eyebrow {
+    color: var(--color-ochre);
   }
 
   .privacy-grid {
@@ -231,7 +235,7 @@ const pageDescription =
 
   .privacy-section h2 {
     color: var(--color-ink);
-    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-size: var(--font-size-section-heading);
   }
 
   .privacy-section-dark {

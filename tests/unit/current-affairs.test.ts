@@ -245,17 +245,20 @@ describe('agenda date sections', () => {
   it('keeps today and ongoing items active, moves ended items to the archive, and separates cancellations', () => {
     const sections = splitAgendaItems(
       [
+        item({ id: 'past-older', startDate: '2026-10-19' }),
         item({ id: 'past', startDate: '2026-10-20' }),
         item({ id: 'today', startDate: '2026-10-21' }),
         item({ id: 'ongoing', startDate: '2026-10-15', endDate: '2026-10-21' }),
-        item({ id: 'cancelled', startDate: '2026-10-22', status: 'cancelled' }),
+        item({ id: 'future', startDate: '2026-10-24' }),
+        item({ id: 'cancelled-older', startDate: '2026-10-22', status: 'cancelled' }),
+        item({ id: 'cancelled', startDate: '2026-10-25', status: 'cancelled' }),
       ],
       '2026-10-21',
     );
 
-    expect(sections.upcoming.map(({ id }) => id)).toEqual(['ongoing', 'today']);
-    expect(sections.past.map(({ id }) => id)).toEqual(['past']);
-    expect(sections.cancelled.map(({ id }) => id)).toEqual(['cancelled']);
+    expect(sections.upcoming.map(({ id }) => id)).toEqual(['future', 'today', 'ongoing']);
+    expect(sections.past.map(({ id }) => id)).toEqual(['past', 'past-older']);
+    expect(sections.cancelled.map(({ id }) => id)).toEqual(['cancelled', 'cancelled-older']);
   });
 
   it('calculates the civil date in the requested timezone instead of the host timezone', () => {

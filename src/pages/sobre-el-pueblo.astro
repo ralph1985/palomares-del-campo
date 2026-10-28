@@ -1,17 +1,61 @@
 ---
+import { getImage, inferRemoteSize } from 'astro:assets';
 import ExternalLink from '../components/ui/ExternalLink.astro';
 import AboutEmblem from '../components/about/AboutEmblem.astro';
 import HeritageCard from '../components/about/HeritageCard.astro';
+import PatronalFestivities from '../components/about/PatronalFestivities.astro';
 import SplitHero from '../components/hero/SplitHero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { aboutPalomares } from '../data/about-palomares';
+import { getResponsiveImageWidths, optimizeRemoteImage } from '../images';
 import '../styles/pages/sobre-el-pueblo.css';
+
+const optimizeAboutImage = (
+  source: string,
+  imageDimensions: { width: number; height: number },
+  candidateWidths: number[],
+  sizes: string,
+) =>
+  optimizeRemoteImage(
+    source,
+    () => (import.meta.env.PROD ? inferRemoteSize(source) : Promise.resolve(imageDimensions)),
+    (sourceDimensions) =>
+      getImage({
+        src: source,
+        width: imageDimensions.width,
+        height: imageDimensions.height,
+        widths: getResponsiveImageWidths(sourceDimensions.width, candidateWidths),
+        sizes,
+        format: 'webp',
+        quality: 85,
+      }),
+    (error) =>
+      console.warn(
+        `Could not optimize an about-page image; preserving its source URL: ${source}`,
+        error,
+      ),
+  );
+
+const [heroImage, landscapeImage] = await Promise.all([
+  optimizeAboutImage(
+    aboutPalomares.heroImage.src,
+    { width: 592, height: 890 },
+    [320, 480, 592, 890],
+    '(max-width: 48rem) calc(100vw - 2rem), 40vw',
+  ),
+  optimizeAboutImage(
+    aboutPalomares.landscape.image.src,
+    { width: 755, height: 566 },
+    [320, 480, 755, 1000],
+    '(max-width: 48rem) calc(100vw - 2rem), 50vw',
+  ),
+]);
 ---
 
 <BaseLayout
   title={`${aboutPalomares.pageTitle} · Palomares del Campo`}
   description={aboutPalomares.pageDescription}
-  socialImage={aboutPalomares.heroImage.src}
+  socialImage={heroImage.transformed?.src ?? heroImage.source}
   socialImageAlt={aboutPalomares.heroImage.alt}
 >
   <main>
@@ -31,10 +75,14 @@ import '../styles/pages/sobre-el-pueblo.css';
         <div class="hero-emblem-orbit hero-emblem-orbit--two" aria-hidden="true"></div>
         <figure class="hero-photo">
           <img
-            src={aboutPalomares.heroImage.src}
+            src={heroImage.transformed?.src ?? heroImage.source}
+            srcset={heroImage.transformed?.srcSet.attribute}
+            sizes="(max-width: 48rem) calc(100vw - 2rem), 40vw"
+            width={heroImage.transformed?.options.width ?? 592}
+            height={heroImage.transformed?.options.height ?? 890}
             alt={aboutPalomares.heroImage.alt}
-            width="592"
-            height="890"
+            fetchpriority="high"
+            decoding="async"
           />
           <figcaption>
             <ExternalLink href={aboutPalomares.heroImage.sourceHref}>
@@ -87,11 +135,14 @@ import '../styles/pages/sobre-el-pueblo.css';
       <div class="about-shell landscape-grid">
         <figure class="landscape-photo">
           <img
-            src={aboutPalomares.landscape.image.src}
+            src={landscapeImage.transformed?.src ?? landscapeImage.source}
+            srcset={landscapeImage.transformed?.srcSet.attribute}
+            sizes="(max-width: 48rem) calc(100vw - 2rem), 50vw"
+            width={landscapeImage.transformed?.options.width ?? 755}
+            height={landscapeImage.transformed?.options.height ?? 566}
             alt={aboutPalomares.landscape.image.alt}
-            width="755"
-            height="566"
             loading="lazy"
+            decoding="async"
           />
           <figcaption>
             <ExternalLink href={aboutPalomares.landscape.image.sourceHref}>
@@ -115,43 +166,7 @@ import '../styles/pages/sobre-el-pueblo.css';
       </div>
     </section>
 
-    <section class="traditions-section" id="tradiciones" aria-labelledby="traditions-title">
-      <div class="about-shell traditions-grid">
-        <div>
-          <p class="eyebrow">{aboutPalomares.traditions.eyebrow}</p>
-          <h2 id="traditions-title">{aboutPalomares.traditions.title}</h2>
-          <p class="traditions-description">{aboutPalomares.traditions.description}</p>
-        </div>
-        <div class="traditions-list">
-          {aboutPalomares.traditions.items.map((item, index) => (
-            <article class="tradition-item">
-              <span class="tradition-number">0{index + 1}</span>
-              <div>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </div>
-            </article>
-          ))}
-          <figure class="traditions-photo">
-            <img
-              src={aboutPalomares.traditions.image.src}
-              alt={aboutPalomares.traditions.image.alt}
-              width="687"
-              height="456"
-              loading="lazy"
-            />
-            <figcaption>
-              <ExternalLink href={aboutPalomares.traditions.image.sourceHref}>
-                {aboutPalomares.traditions.image.sourceLabel} <span aria-hidden="true">↗</span>
-              </ExternalLink>
-            </figcaption>
-          </figure>
-          <ExternalLink class="source-link" href={aboutPalomares.traditions.source.href}>
-            {aboutPalomares.traditions.source.label} <span aria-hidden="true">↗</span>
-          </ExternalLink>
-        </div>
-      </div>
-    </section>
+    <PatronalFestivities />
 
     <section class="sources-section" aria-labelledby="sources-title">
       <div class="about-shell sources-inner">

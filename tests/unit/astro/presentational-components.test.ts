@@ -10,6 +10,7 @@ import ActionLink from '../../../src/components/ui/ActionLink.astro';
 import Button from '../../../src/components/ui/Button.astro';
 import CollectionCardMeta from '../../../src/components/ui/CollectionCardMeta.astro';
 import ExternalLink from '../../../src/components/ui/ExternalLink.astro';
+import SiteButton from '../../../src/components/ui/SiteButton.astro';
 import type { HeritageFeature } from '../../../src/data/about-palomares';
 import type { RuralAccommodation } from '../../../src/data/accommodations';
 
@@ -133,8 +134,8 @@ describe('HeritageCard.astro', () => {
     expect(evenHtml).not.toContain('heritage-card--offset');
     expect(oddHtml).toContain('heritage-card--offset');
     expect(oddHtml).toContain('Iglesia de prueba');
-    expect(oddHtml).toContain('target="_blank"');
-    expect(oddHtml).toContain('rel="noopener noreferrer"');
+    expect(oddHtml).not.toContain('target="_blank"');
+    expect(oddHtml).not.toContain('rel="noopener noreferrer"');
   });
 });
 
@@ -163,13 +164,14 @@ describe('ActionLink.astro', () => {
     expect(underlineHtml).toContain('ui-action-link-underline');
     expect(underlineHtml).toContain('data-ui-variant="underline"');
     expect(solidHtml).toContain('ui-action-link-solid');
+    expect(solidHtml).toContain('ui-control ui-control-primary');
     expect(solidHtml).toContain('custom-action');
     expect(solidHtml).toContain('>Jugar</a>');
   });
 });
 
 describe('ExternalLink.astro', () => {
-  it('opens external destinations safely and forwards descriptive attributes', async () => {
+  it('keeps external destinations in the current tab by default', async () => {
     const html = await render(
       ExternalLink,
       {
@@ -183,9 +185,67 @@ describe('ExternalLink.astro', () => {
     expect(html).toContain('href="https://example.test/recurso"');
     expect(html).toContain('title="Abrir el recurso externo"');
     expect(html).toContain('class="ui-external-link source-link"');
+    expect(html).not.toContain('target="_blank"');
+    expect(html).not.toContain('rel="noopener noreferrer"');
+    expect(html).toContain('>Fuente</a>');
+  });
+
+  it('announces an intentional new tab and protects its opener relationship', async () => {
+    const html = await render(
+      ExternalLink,
+      {
+        href: 'https://example.test/recurso',
+        newTab: true,
+        'aria-label': 'Ver la fuente',
+      },
+      { default: 'Fuente' },
+    );
+
+    expect(html).toContain('aria-label="Ver la fuente (se abre en una pestaña nueva)"');
     expect(html).toContain('target="_blank"');
     expect(html).toContain('rel="noopener noreferrer"');
-    expect(html).toContain('>Fuente</a>');
+    expect(html).not.toContain('ui-visually-hidden');
+  });
+
+  it('adds a visually hidden new-tab notice when there is no aria-label override', async () => {
+    const html = await render(
+      ExternalLink,
+      { href: 'https://example.test/recurso', newTab: true },
+      { default: 'Fuente' },
+    );
+
+    expect(html).toContain('class="ui-visually-hidden"> (se abre en una pestaña nueva)</span>');
+  });
+});
+
+describe('SiteButton.astro', () => {
+  it('preserves the required native type and forwards state and ARIA attributes', async () => {
+    const html = await render(
+      SiteButton,
+      { type: 'submit', variant: 'primary', disabled: true, 'aria-label': 'Enviar propuesta' },
+      { default: 'Enviar propuesta' },
+    );
+
+    expect(html).toContain('class="ui-control ui-control-primary site-button"');
+    expect(html).toContain('type="submit"');
+    expect(html).toContain('disabled');
+    expect(html).toContain('aria-label="Enviar propuesta"');
+    expect(html).toContain('data-ui-button');
+    expect(html).toContain('data-ui-variant="primary"');
+    expect(html).toContain('>Enviar propuesta</button>');
+  });
+
+  it('renders the secondary appearance without changing the native button contract', async () => {
+    const html = await render(
+      SiteButton,
+      { type: 'button', variant: 'secondary', 'data-test-control': 'clear' },
+      { default: 'Limpiar filtros' },
+    );
+
+    expect(html).toContain('class="ui-control ui-control-secondary site-button"');
+    expect(html).toContain('type="button"');
+    expect(html).toContain('data-test-control="clear"');
+    expect(html).toContain('data-ui-variant="secondary"');
   });
 });
 

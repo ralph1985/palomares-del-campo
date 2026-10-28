@@ -1,6 +1,7 @@
 ---
 title: 'La Orden de Santiago. Su importancia en nuestro territorio'
-description: 'Conferencia y película "Los Caballeros de Santiago" (Sábado, 24 de mayo a las 18:00 horas en el Salón de actos de la Biblioteca). Archivo adjunto:'
+seoTitle: 'La Orden de Santiago: importancia en el territorio'
+description: 'Conferencia y película "Los Caballeros de Santiago" (Sábado, 24 de mayo a las 18:00 horas en el Salón de actos de la Biblioteca).'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-05-20T09:58:00.000Z
 category: 'Cultura'
@@ -15,4 +16,3 @@ attachments:
 ---
 
 Conferencia y película "Los Caballeros de Santiago" (Sábado, 24 de mayo a las 18:00 horas en el Salón de actos de la Biblioteca).
-Archivo adjunto:

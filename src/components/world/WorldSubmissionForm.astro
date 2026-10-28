@@ -1,5 +1,6 @@
 ---
 import { isE2EFixtureMode } from '../../scripts/e2e-fixture-mode';
+import SiteButton from '../ui/SiteButton.astro';
 const isE2EFixture = isE2EFixtureMode({
   development: import.meta.env.DEV,
   flag: import.meta.env.PUBLIC_E2E_TEST_MODE,
@@ -107,7 +108,9 @@ const convexUrl = isE2EFixture ? '' : (import.meta.env.CONVEX_URL ?? '');
     </div>
 
     <div class="world-form-actions">
-      <button type="submit">Enviar propuesta</button>
+      <SiteButton class="world-form-submit" type="submit" variant="primary">
+        Enviar propuesta
+      </SiteButton>
       <p data-form-status aria-live="polite">
         La propuesta quedará pendiente de revisión.
       </p>
@@ -317,19 +320,7 @@ const convexUrl = isE2EFixture ? '' : (import.meta.env.CONVEX_URL ?? '');
     flex-wrap: wrap;
   }
 
-  button {
-    min-height: 2.8rem;
-    border: 1px solid var(--color-ochre);
-    border-radius: 999px;
-    padding: 0.7rem 1rem;
-    color: var(--color-ink);
-    background: var(--color-ochre);
-    cursor: pointer;
-    font: inherit;
-    font-weight: var(--font-weight-strong);
-  }
-
-  button:disabled {
+  .world-form-submit:disabled {
     cursor: wait;
     opacity: 0.6;
   }

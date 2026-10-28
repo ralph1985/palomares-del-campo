@@ -121,11 +121,16 @@ test.describe('Palomareños por el mundo', () => {
     ).toHaveAttribute('href', '/privacidad/#palomarenos-por-el-mundo');
   });
 
-  test('exposes the legal notice with development data warnings', async ({ page }) => {
+  test('exposes the legal notice as a draft with unverified identity data', async ({ page }) => {
     await page.goto('/aviso-legal/');
 
     await expect(page.locator('#page-title')).toHaveText('Aviso legal');
-    await expect(page.getByRole('note')).toContainText('datos de prueba');
+    await expect(page.getByRole('note')).toContainText('Aviso provisional');
+    await expect(page.getByRole('heading', { name: 'Objeto del sitio' })).toBeVisible();
+    await expect(page.getByText('Pendiente de confirmación oficial').first()).toBeVisible();
+    await expect(page.getByText('P0000000X')).toHaveCount(0);
+    await expect(page.getByText('L00000000')).toHaveCount(0);
+    await expect(page.getByText('dpd-prueba@example.invalid')).toHaveCount(0);
   });
 
   test('does not load real Turnstile on an unauthorized development hostname', async ({ page }) => {
@@ -242,6 +247,7 @@ test.describe('Palomareños por el mundo', () => {
   });
 
   test('keeps the menu usable while the map sits under the sticky header', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/palomarenos-por-el-mundo/');
 
     const map = page.locator('[data-palomarenos-map]');

@@ -1,5 +1,14 @@
 ---
 import { navigationGroups } from '../../data/navigation';
+import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
+
+const currentPath = Astro.url.pathname;
+const visibleNavigationGroups = navigationGroups
+  .map((group) => ({
+    ...group,
+    links: group.links.filter((link) => PUBLIC_BALL_GAME_ENABLED || link.href !== '/juego/'),
+  }))
+  .filter((group) => group.links.length > 0);
 ---
 
 <button
@@ -13,7 +22,17 @@ import { navigationGroups } from '../../data/navigation';
 <aside class="side-menu" id="site-menu" aria-label="Menú lateral" aria-hidden="true" inert>
   <div class="side-menu-inner">
     <div class="side-menu-header">
-      <p class="menu-kicker">Palomares del Campo</p>
+      <div class="menu-brand">
+        <img
+          class="menu-crest"
+          src="/brand/escudo-palomares-del-campo.svg"
+          alt=""
+          aria-hidden="true"
+          width="32"
+          height="56"
+        />
+        <p class="menu-kicker">Palomares del Campo</p>
+      </div>
       <button class="menu-close" type="button" data-menu-close aria-label="Cerrar menú">
         <span aria-hidden="true">×</span>
       </button>
@@ -22,14 +41,29 @@ import { navigationGroups } from '../../data/navigation';
     <div class="side-menu-content">
       <nav aria-label="Secciones del sitio">
         <div class="side-nav-groups">
-          {navigationGroups.map((group) => (
+          {currentPath !== '/' && (
+            <ul class="side-nav side-nav--home">
+              <li>
+                <a href="/">Inicio</a>
+              </li>
+            </ul>
+          )}
+          {visibleNavigationGroups.map((group) => (
             <section class="side-nav-group" aria-labelledby={`menu-group-${group.label}`}>
               <h2 id={`menu-group-${group.label}`}>{group.label}</h2>
               <ul class="side-nav">
-                {group.links.map((link, index) => (
+                {group.links.map((link) => (
                   <li>
-                    <a href={link.href}>
-                      <span>{String(index + 1).padStart(2, '0')}</span>
+                    <a
+                      href={link.href}
+                      aria-current={
+                        currentPath === link.href
+                          ? 'page'
+                          : currentPath.startsWith(link.href)
+                            ? 'location'
+                            : undefined
+                      }
+                    >
                       {link.label}
                     </a>
                   </li>
@@ -125,6 +159,21 @@ import { navigationGroups } from '../../data/navigation';
     text-transform: uppercase;
   }
 
+  .menu-brand {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .menu-crest {
+    display: none;
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 3.5rem;
+    object-fit: contain;
+  }
+
   .menu-close {
     display: grid;
     width: 2.75rem;
@@ -191,16 +240,16 @@ import { navigationGroups } from '../../data/navigation';
     text-decoration: none;
   }
 
-  .side-nav a span {
-    color: var(--color-sage-light);
-    font-family: var(--font-sans);
-    font-size: var(--font-size-label);
-    letter-spacing: 0.08em;
-  }
-
   .side-nav a:hover,
   .side-nav a:focus-visible {
     color: var(--color-ochre);
+  }
+
+  .side-nav a[aria-current] {
+    color: var(--color-ochre);
+    text-decoration: underline;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.2em;
   }
 
   .menu-visual {
@@ -280,6 +329,55 @@ import { navigationGroups } from '../../data/navigation';
     .side-menu-inner {
       padding-right: 1.25rem;
       padding-left: 1.25rem;
+    }
+
+    .side-nav a {
+      font-size: clamp(1.5rem, 6vw, 1.75rem);
+    }
+  }
+
+  @media (min-width: 72rem) {
+    body {
+      --desktop-menu-width: 21rem;
+      padding-right: var(--desktop-menu-width);
+    }
+
+    .menu-backdrop,
+    .menu-visual,
+    .menu-close {
+      display: none;
+    }
+
+    .side-menu {
+      width: var(--desktop-menu-width);
+      transform: none;
+      box-shadow: -1rem 0 3rem rgb(13 29 25 / 12%);
+    }
+
+    .side-menu-inner {
+      padding: 1.5rem 1.75rem;
+    }
+
+    .menu-crest {
+      display: block;
+    }
+
+    .side-menu-content {
+      justify-content: flex-start;
+      gap: 2rem;
+      padding-top: 2.25rem;
+    }
+
+    .side-nav-groups {
+      gap: 1.25rem;
+    }
+
+    .side-nav a {
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+      letter-spacing: -0.025em;
+      line-height: 1.2;
     }
   }
 </style>

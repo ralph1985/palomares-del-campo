@@ -10,12 +10,24 @@ export interface AboutImage {
   sourceHref: string;
 }
 
+export interface PatronalFestivalPhoto {
+  title: string;
+  alt: string;
+  caption: string;
+  author: string;
+  fileUrl: string;
+  license: string;
+  licenseUrl: string;
+  changeNote: string;
+}
+
 export interface HeritageFeature {
   eyebrow: string;
   title: string;
   description: string;
   body: string;
   source: AboutSource;
+  detailHref?: string;
 }
 
 export const aboutPalomares = {
@@ -23,9 +35,9 @@ export const aboutPalomares = {
   pageDescription:
     'Historia, patrimonio, paisaje y fiestas de Palomares del Campo, en la provincia de Cuenca.',
   landingEyebrow: 'Palomares del Campo · Cuenca',
-  landingTitle: 'Un pueblo con muchas capas de historia.',
+  landingTitle: 'Historia, patrimonio y vida en Palomares del Campo',
   landingIntro:
-    'Palomares del Campo reúne paisaje agrícola, memoria romana, patrimonio religioso y fiestas que siguen poniendo al pueblo en movimiento.',
+    'Palomares del Campo conserva restos de época romana, edificios religiosos y tradiciones ligadas a la vida del municipio.',
   heroImage: {
     src: 'https://palomaresdelcampo.dipucuenca.es/images/PALOMARES_DEL_CAMPO/NUESTRA_SE%C3%91ORA_DE_LA_ASUNCION_2.jpg',
     alt: 'Fachada de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo',
@@ -52,6 +64,7 @@ export const aboutPalomares = {
       title: 'Iglesia de Nuestra Señora de la Asunción',
       description: 'Un templo renacentista que conserva capas artísticas de varios siglos.',
       body: 'Su construcción comenzó en 1553 y la fachada se terminó en 1638. El conjunto reúne arquitectura, capillas funerarias, retablos, pintura y escultura de los siglos XVI al XVIII.',
+      detailHref: '/sobre-el-pueblo/iglesia/',
       source: {
         label: 'Qué ver en el portal municipal',
         href: 'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-three',
@@ -81,29 +94,71 @@ export const aboutPalomares = {
   ] satisfies HeritageFeature[],
   traditions: {
     eyebrow: 'La vida del pueblo',
-    title: 'Fiestas y memoria viva',
+    title: 'Dos fiestas patronales, una misma memoria',
     description:
-      'Las fiestas patronales mantienen una relación directa con la música, las cuadrillas, la danza y el encuentro entre generaciones.',
-    image: {
-      src: 'https://palomaresdelcampo.dipucuenca.es/images/PALOMARES_DEL_CAMPO/FIESTAS_1.jpg',
-      alt: 'Escena de las fiestas de Palomares del Campo',
-      sourceLabel: 'Fotografía: portal municipal',
-      sourceHref: 'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-three',
-    } satisfies AboutImage,
+      'Las fiestas de abril y septiembre se celebran en honor a las dos patronas de Palomares del Campo.',
     items: [
       {
         title: 'Virgen de la Cabeza',
-        text: 'Se celebra el último fin de semana de abril. Los tunos, danzantes y gitanillas forman parte de una tradición que incluye paloteos y otros bailes.',
+        period: 'Último domingo de abril',
+        text: 'El portal municipal recoge que ya en 1614 se celebraba en honor a la Virgen el «postrer domingo de abril». La fiesta tiene su epicentro en la ermita y se extiende alrededor de ese domingo.',
+        detail:
+          'Dulzainas y castañuelas anuncian la llegada de la fiesta; tunos, danzantes y gitanillas interpretan sus danzas, entre ellas el paloteo llamado «espá». La crónica de 2021 y el programa municipal de 2026 describen varios días de actos: hoguera, traslado y procesión, ofrecimiento de los niños y bendición de las casas.',
       },
       {
         title: 'Santo Cristo de la Paz',
-        text: 'Tiene lugar el último fin de semana de septiembre y reúne a peñas, vecinos y visitantes alrededor de las fiestas del patrón.',
+        period: 'Último fin de semana de septiembre',
+        text: 'Las fiestas reúnen a las peñas y a vecinos de distintas generaciones. El portal municipal también destaca los festejos taurinos del fin de semana.',
+        detail:
+          'El programa municipal de 2026, del 24 al 27 de septiembre, combinó ofrenda floral y procesión con actividades de las peñas, música y festejos taurinos. Es una muestra de una edición concreta, no un calendario permanente: los actos y horarios cambian cada año.',
       },
     ],
-    source: {
-      label: 'Fiestas y patrimonio de Palomares',
-      href: 'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-three',
-    },
+    photos: [
+      {
+        title: 'Imágenes de Palomares del Campo 09.jpg',
+        alt: 'Vista general de la antigua ermita de la Virgen de la Cabeza en Palomares del Campo',
+        caption: 'Vista general de la ermita, lugar central de las celebraciones de abril.',
+        author: '19Tarrestnom65',
+        fileUrl:
+          'https://commons.wikimedia.org/wiki/File:Im%C3%A1genes_de_Palomares_del_Campo_09.jpg',
+        license: 'CC BY-SA 4.0',
+        licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+        changeNote: 'Fotografía orientada, redimensionada y convertida a WebP.',
+      },
+      {
+        title: 'Imágenes de Palomares del Campo 10.jpg',
+        alt: 'Espadaña de la antigua ermita de la Virgen de la Cabeza en Palomares del Campo',
+        caption: 'Detalle de la espadaña de la ermita.',
+        author: '19Tarrestnom65',
+        fileUrl:
+          'https://commons.wikimedia.org/wiki/File:Im%C3%A1genes_de_Palomares_del_Campo_10.jpg',
+        license: 'CC BY-SA 4.0',
+        licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+        changeNote: 'Fotografía orientada, redimensionada y convertida a WebP.',
+      },
+    ] satisfies [PatronalFestivalPhoto, PatronalFestivalPhoto],
+    sources: [
+      {
+        label: 'Fiestas y patrimonio · portal municipal',
+        href: 'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-three',
+      },
+      {
+        label: 'Programa Virgen de la Cabeza 2026 · Ayuntamiento',
+        href: 'https://www.bandomovil.com/palomaresdelcampo/1538742/0',
+      },
+      {
+        label: 'Programa Santo Cristo de la Paz 2026 · Ayuntamiento',
+        href: 'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1646002',
+      },
+      {
+        label: 'Crónica de CMM sobre la procesión del ofrecimiento · 2026',
+        href: 'https://www.cmmedia.es/noticias/castilla-la-mancha/cuenca/palomares-campo-cierra-fiestas-bendicion-patrona.html',
+      },
+      {
+        label: 'La Virgen de la Cabeza en Palomares · Mirando al Santuario, 2021',
+        href: 'https://www.virgendelacabeza.net/palomares-del-campo/',
+      },
+    ],
   },
   landscape: {
     eyebrow: 'Paisaje y situación',

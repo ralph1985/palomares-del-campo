@@ -5,14 +5,17 @@
 
 .eyebrow {
   margin: 0 0 1.25rem;
-  color: var(--color-clay);
+  color: var(--color-clay-text);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-strong);
   letter-spacing: 0.15em;
   text-transform: uppercase;
 }
 
-.split-hero--heritage .eyebrow,
+.split-hero--heritage .eyebrow {
+  color: var(--color-clay-text);
+}
+
 .landscape-section .eyebrow {
   color: var(--color-ochre);
 }
@@ -35,20 +38,20 @@ h3 {
 }
 
 h1 {
-  max-width: 8ch;
-  font-size: clamp(4rem, 9vw, 8.6rem);
+  max-width: 11ch;
+  font-size: var(--font-size-page-title);
 }
 
 h2 {
   max-width: 12ch;
-  font-size: clamp(3rem, 6vw, 5.8rem);
+  font-size: var(--font-size-section-heading);
 }
 
 .hero-intro {
   max-width: 31rem;
-  margin: 2.25rem 0 0;
-  color: var(--color-sage-light);
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  margin: 1.5rem 0 0;
+  color: var(--color-muted);
+  font-size: clamp(1rem, 1.3vw, 1.1rem);
   line-height: 1.55;
 }
 
@@ -64,12 +67,17 @@ h2 {
   gap: 0.8rem;
   align-items: center;
   margin-top: 2.5rem;
-  color: var(--color-ochre);
+  color: var(--color-forest);
   font-size: 0.85rem;
 }
 
 .hero-link:hover,
-.hero-link:focus-visible,
+.hero-link:focus-visible {
+  color: var(--color-clay-text);
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
 .source-link:hover,
 .source-link:focus-visible,
 .button-link:hover,
@@ -89,6 +97,11 @@ h2 {
   outline-offset: 4px;
 }
 
+.source-link:hover,
+.source-link:focus-visible {
+  color: var(--color-clay-text);
+}
+
 .hero-emblem {
   position: relative;
   display: grid;
@@ -102,7 +115,7 @@ h2 {
   z-index: -1;
   width: min(22rem, 85vw);
   height: min(22rem, 85vw);
-  border: 1px solid rgb(229 183 126 / 48%);
+  border: 1px solid var(--color-border);
   border-radius: 50%;
   content: '';
 }
@@ -175,9 +188,8 @@ h2 {
 
 .history-section,
 .heritage-section,
-.traditions-section,
 .sources-section {
-  padding: clamp(5rem, 10vw, 9rem) 0;
+  padding: var(--spacing-section-y) 0;
 }
 
 .history-section {
@@ -200,8 +212,7 @@ h2 {
 }
 
 .history-copy p,
-.landscape-copy > p:not(.eyebrow),
-.traditions-description {
+.landscape-copy > p:not(.eyebrow) {
   color: var(--color-muted);
   font-size: 1.08rem;
   line-height: 1.75;
@@ -216,7 +227,7 @@ h2 {
 }
 
 .source-link {
-  color: var(--color-clay);
+  color: var(--color-clay-text);
   font-size: 0.78rem;
 }
 
@@ -259,16 +270,14 @@ h2 {
   gap: clamp(3rem, 8vw, 8rem);
 }
 
-.landscape-photo,
-.traditions-photo {
+.landscape-photo {
   margin: 0;
   overflow: hidden;
   border: 1px solid rgb(229 183 126 / 28%);
   background: #315f4e;
 }
 
-.landscape-photo img,
-.traditions-photo img {
+.landscape-photo img {
   display: block;
   width: 100%;
   height: auto;
@@ -279,15 +288,13 @@ h2 {
   aspect-ratio: 4 / 3;
 }
 
-.landscape-photo figcaption,
-.traditions-photo figcaption {
+.landscape-photo figcaption {
   padding: 0.7rem 0.85rem 0.8rem;
   color: var(--color-sage-light);
   background: var(--color-ink);
 }
 
-.landscape-photo a,
-.traditions-photo a {
+.landscape-photo a {
   color: var(--color-ochre);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-strong);
@@ -295,16 +302,14 @@ h2 {
 }
 
 .landscape-photo a:hover,
-.landscape-photo a:focus-visible,
-.traditions-photo a:hover,
-.traditions-photo a:focus-visible {
+.landscape-photo a:focus-visible {
   color: var(--color-surface-soft);
   text-decoration: underline;
   text-underline-offset: 0.2rem;
 }
 
 .landscape-photo a:focus-visible,
-.traditions-photo a:focus-visible {
+.landscape-photo a:focus-visible {
   outline: 3px solid var(--color-clay);
   outline-offset: 3px;
 }
@@ -346,64 +351,9 @@ h2 {
   font-size: 0.78rem;
 }
 
-.traditions-section {
-  background: #efe6d6;
-}
-
-.traditions-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp(3rem, 10vw, 10rem);
-}
-
-.traditions-description {
-  max-width: 25rem;
-  margin-top: 2rem;
-}
-
-.traditions-list {
-  display: grid;
-  gap: 0;
-}
-
-.tradition-item {
-  display: grid;
-  grid-template-columns: 3rem 1fr;
-  gap: 1.25rem;
-  padding: 1.5rem 0;
-  border-top: 1px solid rgb(25 52 45 / 20%);
-}
-
-.tradition-item:last-of-type {
-  border-bottom: 1px solid rgb(25 52 45 / 20%);
-}
-
-.tradition-number {
-  padding-top: 0.2rem;
-  color: var(--color-clay);
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-strong);
-  letter-spacing: 0.12em;
-}
-
-.tradition-item h3 {
-  font-size: clamp(2rem, 4vw, 3.4rem);
-}
-
-.tradition-item p {
-  max-width: 31rem;
-  margin: 1rem 0 0;
-  color: var(--color-muted);
-  line-height: 1.7;
-}
-
-.traditions-list .source-link {
-  margin-top: 2rem;
-}
-
 .sources-section {
-  padding-top: clamp(3.5rem, 7vw, 6rem);
-  padding-bottom: clamp(3.5rem, 7vw, 6rem);
+  padding-top: var(--spacing-section-y);
+  padding-bottom: var(--spacing-section-y);
   background: var(--color-paper);
 }
 
@@ -431,7 +381,6 @@ h2 {
 @media (max-width: 52rem) {
   .history-grid,
   .landscape-grid,
-  .traditions-grid,
   .sources-inner {
     grid-template-columns: 1fr;
   }
@@ -464,10 +413,6 @@ h2 {
 @media (max-width: 38rem) {
   .about-shell {
     width: min(100% - 2rem, 72rem);
-  }
-
-  h1 {
-    font-size: clamp(3.5rem, 17vw, 5.2rem);
   }
 
   h2 {

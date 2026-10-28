@@ -34,6 +34,13 @@ test.describe('nearby attractions guide', () => {
     );
     await expect(mora).not.toContainText('Ruta orientativa');
 
+    const torrebuceit = page.getByRole('article', { name: 'Castillo de Torrebuceit' });
+    await expect(torrebuceit).toContainText(/propiedad privada/i);
+    await expect(torrebuceit.getByRole('link', { name: 'Leer guía de visita' })).toHaveAttribute(
+      'href',
+      '/que-ver-cerca/castillo-torrebuceit/',
+    );
+
     const laguna = page.getByRole('article', { name: 'Laguna de El Hito' });
     await expect(laguna).toContainText(/estacional|invernal/i);
 
@@ -66,5 +73,135 @@ test.describe('nearby attractions guide', () => {
       'href',
       placesUrl,
     );
+  });
+
+  test('links featured places to detailed guides with credited images and official visit information', async ({
+    page,
+  }) => {
+    await page.goto(placesUrl);
+
+    const featuredPlaces = [
+      { name: 'Castillo de Torrebuceit', slug: 'castillo-torrebuceit' },
+      { name: 'Segóbriga y Saelices', slug: 'segobriga-saelices' },
+      { name: 'Mina de la Mora Encantada', slug: 'mina-mora-encantada' },
+      { name: 'Villa Romana de Noheda', slug: 'villa-romana-noheda' },
+    ];
+    for (const place of featuredPlaces) {
+      const card = page.getByRole('article', { name: place.name });
+      const guideLink = card.getByRole('link', { name: 'Leer guía de visita' });
+      await expect(card.getByRole('link').first()).toHaveAttribute(
+        'href',
+        `/que-ver-cerca/${place.slug}/`,
+      );
+      await expect(guideLink).toHaveAttribute('data-ui-variant', 'solid');
+      await expect(
+        card
+          .getByRole('navigation', { name: `Fuentes oficiales de ${place.name}` })
+          .getByRole('link')
+          .first(),
+      ).toBeVisible();
+    }
+
+    const guides = [
+      {
+        path: 'castillo-torrebuceit',
+        heading: 'El castillo de Torrebuceit, vigía del Záncara',
+        images: 3,
+      },
+      {
+        path: 'segobriga-saelices',
+        heading: 'Segóbriga: una ciudad romana en la Meseta',
+        images: 2,
+      },
+      {
+        path: 'mina-mora-encantada',
+        heading: 'La Mora Encantada y el lapis specularis',
+        images: 1,
+      },
+      {
+        path: 'villa-romana-noheda',
+        heading: 'Noheda: mosaicos y vida en una villa romana',
+        images: 2,
+      },
+    ];
+
+    for (const guide of guides) {
+      await page.goto(`/que-ver-cerca/${guide.path}/`);
+      await expect(page.getByRole('heading', { level: 1, name: guide.heading })).toBeVisible();
+      await expect(page.locator('main figure')).toHaveCount(guide.images);
+      await expect(
+        page.locator('main figure a[href*="commons.wikimedia.org/wiki/File:"]'),
+      ).toHaveCount(guide.images);
+      for (const image of await page.locator('main figure img').all()) {
+        await expect
+          .poll(() =>
+            image.evaluate((element) =>
+              element instanceof HTMLImageElement ? element.naturalWidth : 0,
+            ),
+          )
+          .toBeGreaterThan(0);
+      }
+      const breadcrumbs = page.getByRole('navigation', { name: 'Migas de pan' });
+      await expect(
+        breadcrumbs.getByRole('link', { name: 'Qué ver cerca', exact: true }),
+      ).toHaveAttribute('href', placesUrl);
+      await expect(page.getByRole('link', { name: '← Volver a Qué ver cerca' })).toHaveCount(0);
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+        'href',
+        new RegExp(`/que-ver-cerca/${guide.path}/$`),
+      );
+    }
+
+    await page.route('https://www.youtube-nocookie.com/embed/**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: '<!doctype html><title>fixture</title>',
+      }),
+    );
+    await page.goto('/que-ver-cerca/castillo-torrebuceit/');
+    await expect(page.locator('main figure img[alt*="Torrebuceit"]')).toHaveCount(3);
+    await expect(page.getByRole('link', { name: '19Tarrestnom65' })).toHaveCount(3);
+    await expect(page.getByRole('link', { name: /CC BY-SA 4\.0/ })).toHaveCount(3);
+    const playVideo = page.getByRole('button', {
+      name: 'Reproducir vídeo: Torrebuceit desde el aire',
+    });
+    await expect(playVideo).toBeVisible();
+    await expect(page.getByTitle('Torrebuceit desde el aire')).toHaveCount(0);
+    await playVideo.click();
+    const video = page.getByTitle('Torrebuceit desde el aire');
+    await expect(video).toHaveAttribute(
+      'src',
+      'https://www.youtube-nocookie.com/embed/d5C1apoWJ9w?autoplay=1',
+    );
+    await expect(page.locator('main')).toContainText('Rafa, nieto de Crescente y Eusebia');
+    await expect(page.locator('main')).toContainText('28 personas');
+    await expect(page.locator('main')).toContainText(
+      'Grabado por Rafa en homenaje a su abuelo Crescente',
+    );
+    await expect(
+      page.getByRole('link', {
+        name: /Sirvientes y criados en el mundo rural de la España interior/,
+      }),
+    ).toHaveAttribute('href', 'https://doi.org/10.24215/15155994e071');
+    await expect(page.getByRole('link', { name: 'Ver en YouTube' })).toHaveAttribute(
+      'href',
+      'https://youtu.be/d5C1apoWJ9w',
+    );
+
+    await page.goto('/que-ver-cerca/villa-romana-noheda/');
+    await expect(page.locator('main')).toContainText(/visita es guiada/i);
+    await expect(page.locator('main')).toContainText(/entrada reservada online/i);
+    await expect(page.getByRole('link', { name: 'Reservas oficiales de Noheda' })).toHaveAttribute(
+      'href',
+      'https://www.villanoheda.org/entradas/',
+    );
+
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/que-ver-cerca/castillo-torrebuceit/');
+    const hasHorizontalOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    );
+    expect(hasHorizontalOverflow).toBe(false);
   });
 });

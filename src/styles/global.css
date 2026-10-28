@@ -1,4 +1,5 @@
 @import './tokens.css';
+@import './controls.css';
 
 :where(*, *::before, *::after) {
   box-sizing: border-box;

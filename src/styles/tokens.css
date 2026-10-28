@@ -15,7 +15,9 @@
   --color-border: rgb(25 52 45 / 15%);
   --color-sage: #d8e6d6;
   --color-sage-light: #b7d0bc;
+  --color-surface-traditions: #efe6d6;
   --color-clay: #a05c32;
+  --color-clay-text: #914f2c;
   --color-ochre: #e5b77e;
   --color-night: #0a1513;
   --color-night-surface: #10231f;
@@ -80,6 +82,9 @@
   --font-size-small: 0.85rem;
   --font-size-label: 0.7rem;
   --font-size-display: clamp(3.4rem, 8vw, 7.5rem);
+  --font-size-page-title: clamp(2.75rem, 4.5vw, 4.5rem);
+  --font-size-section-heading: clamp(2rem, 3.4vw, 3.75rem);
+  --spacing-section-y: clamp(3.5rem, 6vw, 5.5rem);
 
   /* Reading rhythm */
   --line-height-body: 1.7;

@@ -1,6 +1,7 @@
 ---
 title: 'LIBRO "Cantemos al amor de los amores"'
-description: 'A la venta el libro "Cantemos al amor de los amores" de nuestro paisano Miguel Ruiz Bricio. Archivo adjunto:'
+seoTitle: 'Libro: Cantemos al amor de los amores'
+description: 'A la venta el libro "Cantemos al amor de los amores" de nuestro paisano Miguel Ruiz Bricio.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-08-04T17:00:00.000Z
 category: 'Cultura'
@@ -15,4 +16,3 @@ attachments:
 ---
 
 A la venta el libro "Cantemos al amor de los amores" de nuestro paisano Miguel Ruiz Bricio.
-Archivo adjunto:

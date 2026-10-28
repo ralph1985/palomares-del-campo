@@ -1,6 +1,6 @@
 ---
 title: 'Cartel Concurso Decoración 2025'
-description: 'Cartel Concurso Decoración 2025 Archivo adjunto:'
+description: 'Cartel Concurso Decoración 2025'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-12-27T09:20:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Cartel Concurso Decoración 2025
-Archivo adjunto:

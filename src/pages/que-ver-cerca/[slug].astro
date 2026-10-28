@@ -1,0 +1,24 @@
+---
+import NearbyPlaceGuide from '../../components/nearby/NearbyPlaceGuide.astro';
+import { nearbyPlaces } from '../../data/nearby-places';
+import { nearbyPlaceGuides, nearbyPlaceGuidesReviewedAt } from '../../data/nearby-guides';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return nearbyPlaceGuides.map((guide) => {
+    const place = nearbyPlaces.find((nearbyPlace) => nearbyPlace.slug === guide.slug);
+    if (!place) {
+      throw new Error(`La guía ${guide.slug} no tiene una ficha en nearby-places.ts`);
+    }
+    return {
+      params: { slug: guide.slug },
+      props: { guide, place },
+    };
+  });
+}
+
+const { guide, place } = Astro.props;
+---
+
+<NearbyPlaceGuide guide={guide} place={place} reviewedAt={nearbyPlaceGuidesReviewedAt} />

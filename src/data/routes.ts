@@ -27,7 +27,7 @@ export const localRoutes: LocalRoute[] = [
     slug: 'campos-palomares-del-campo',
     title: 'Paseo por los campos de Palomares del Campo',
     summary:
-      'Recorrido a pie por el entorno agrícola de Palomares del Campo, publicado en una plataforma de rutas externa.',
+      'Recorrido a pie por los caminos rurales de Palomares del Campo. La ruta está publicada en Komoot y no es un itinerario municipal señalizado.',
     distanceKm: 5.13,
     durationMinutes: 81,
     difficulty: 'Fácil',
@@ -45,9 +45,9 @@ export const localRoutes: LocalRoute[] = [
     },
     sourceUpdatedAt: '2024-07-26',
     reviewedAt: '2026-10-11',
-    traceStatusLabel: 'GPX disponible para descarga.',
+    traceStatusLabel: 'Descarga el archivo GPX.',
     traceStatusNote:
-      'El archivo procede del trazado GPX aportado para esta ficha y permite consultar el recorrido fuera de la web.',
+      'Puedes abrir el archivo en una aplicación compatible con rutas GPX. El trazado procede de la ficha publicada en Komoot.',
     traceUrl: '/routes/campos-palomares-del-campo.gpx',
   },
 ];

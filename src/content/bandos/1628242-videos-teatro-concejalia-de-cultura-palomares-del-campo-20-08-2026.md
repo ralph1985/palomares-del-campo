@@ -1,5 +1,6 @@
 ---
 title: 'Videos Teatro Concejalía de Cultura Palomares del Campo 20/08/2026'
+seoTitle: 'Vídeos de teatro de Palomares · 20/08/2026'
 description: '- Sainete "Novios de internet" del autor José Cedena, representado por el "Grupo de Teatro de Nuestro Pueblo" Palomares del Campo. https://youtu.be/8KZgsS4KGMY?si=AKz7XPMjiJ6C-AHw…'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-08-23T20:36:00.000Z
@@ -20,7 +21,4 @@ https://youtu.be/8KZgsS4KGMY?si=AKz7XPMjiJ6C-AHw
 
 - Sainete "Ganas de reñir" de los Hermanos Álvarez Quintero, representado por el "Grupo de Teatro de Nuestro Pueblo" Palomares del Campo.
 
-(...)
-
-...Haga click para ver completo.
-Archivo adjunto:
+El comunicado está incompleto en esta reproducción. Consulta la publicación original para ver el contenido completo.

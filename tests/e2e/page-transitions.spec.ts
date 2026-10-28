@@ -135,6 +135,7 @@ test.describe('Three.js page transitions', () => {
   test('keeps the open menu on the outgoing face and closes it on the destination', async ({
     page,
   }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
     const toggle = page.getByRole('button', { name: 'Explorar' });
     const menu = page.locator('#site-menu').first();

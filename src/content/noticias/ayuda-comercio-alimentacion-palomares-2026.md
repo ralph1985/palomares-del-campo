@@ -1,5 +1,6 @@
 ---
 title: 'Un comercio de alimentación de Palomares del Campo recibe apoyo provincial'
+seoTitle: 'Apoyo provincial a un comercio de alimentación de Palomares'
 description: 'La Diputación incluye a Palomares del Campo entre los municipios beneficiarios de su programa para pequeños comercios de alimentación.'
 author: 'Redacción'
 date: 2026-01-05

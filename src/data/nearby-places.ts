@@ -18,6 +18,7 @@ export interface NearbyPlace {
   summary: string;
   visitNote?: string;
   routeEstimate?: NearbyPlaceRouteEstimate;
+  guidePath?: string;
   sources: NearbyPlaceSource[];
 }
 
@@ -28,17 +29,38 @@ export const nearbyPlaceGroups = [
     id: 'nearby',
     title: 'Cerca de Palomares',
     intro:
-      'Patrimonio y paisaje para descubrir en el entorno inmediato. Algunas fichas no incluyen una distancia: preferimos eso a dar una ruta hasta un punto equivocado.',
+      'Lugares de interés cercanos. La distancia solo se indica cuando hay un punto de acceso concreto que se puede verificar.',
   },
   {
     id: 'day-trip',
     title: 'Escapadas para dedicarles más tiempo',
-    intro:
-      'Lugares conocidos de la provincia que pueden completar una visita de medio día o una jornada.',
+    intro: 'Lugares de la provincia que requieren más tiempo de desplazamiento y visita.',
   },
 ] as const;
 
 export const nearbyPlaces: NearbyPlace[] = [
+  {
+    slug: 'castillo-torrebuceit',
+    name: 'Castillo de Torrebuceit',
+    municipality: 'Villar del Águila · Torrejoncillo del Rey',
+    category: 'Patrimonio · castillo medieval',
+    group: 'nearby',
+    summary:
+      'Un castillo medieval transformado en caserío. La guía reúne fuentes sobre la fortaleza y el recuerdo de Rafa, nieto de Crescente y Eusebia, guardeses durante años.',
+    visitNote:
+      'Es una propiedad privada y no se permiten visitas al interior. Obsérvalo únicamente desde zonas públicas y seguras; no accedas al caserío ni te detengas en la calzada.',
+    guidePath: '/que-ver-cerca/castillo-torrebuceit/',
+    sources: [
+      {
+        label: 'Castillo de Torrebuceit · Turismo de Castilla-La Mancha',
+        href: 'https://www.turismocastillalamancha.es/es/cultura-y-patrimonio/castillos/cuenca/castillo-de-torrebuceit',
+      },
+      {
+        label: 'Castillo de Torrebuceit · Asociación Española de Amigos de los Castillos',
+        href: 'https://www.xn--castillosdeespaa-lub.es/es/content/torrebuceit-castillo-de',
+      },
+    ],
+  },
   {
     slug: 'mina-mora-encantada',
     name: 'Mina de la Mora Encantada',
@@ -49,6 +71,7 @@ export const nearbyPlaces: NearbyPlace[] = [
       'Una mina romana de lapis specularis, el yeso translúcido que se extraía en esta zona y que estuvo ligado al desarrollo de Segóbriga.',
     visitNote:
       'La visita requiere reserva o confirmación previa. Comprueba las condiciones en la ficha oficial antes de desplazarte.',
+    guidePath: '/que-ver-cerca/mina-mora-encantada/',
     sources: [
       {
         label: 'Ficha oficial de la mina',
@@ -86,6 +109,7 @@ export const nearbyPlaces: NearbyPlace[] = [
       durationMinutes: 38,
       destinationLabel: 'Parque Arqueológico de Segóbriga',
     },
+    guidePath: '/que-ver-cerca/segobriga-saelices/',
     sources: [
       {
         label: 'Parque Arqueológico de Segóbriga',
@@ -220,6 +244,7 @@ export const nearbyPlaces: NearbyPlace[] = [
       durationMinutes: 50,
       destinationLabel: 'Villa Romana de Noheda',
     },
+    guidePath: '/que-ver-cerca/villa-romana-noheda/',
     sources: [
       {
         label: 'Ficha oficial de la Villa Romana de Noheda',

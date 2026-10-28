@@ -1,6 +1,6 @@
 ---
 title: 'CARTEL ACTIVIDADES VERANO 2025'
-description: 'CARTEL ACTIVIDADES VERANO 2025 Archivo adjunto:'
+description: 'CARTEL ACTIVIDADES VERANO 2025'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-07-16T11:32:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 CARTEL ACTIVIDADES VERANO 2025
-Archivo adjunto:

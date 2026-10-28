@@ -12,6 +12,24 @@ const jccmThermalismSource = {
   publishedAt: '2026-02-20T10:14:00.000Z',
 };
 
+const accessibilityGrantSource = {
+  label: 'Junta de Comunidades de Castilla-La Mancha (JCCM)',
+  href: 'https://www.jccm.es/sede/tramite/M8X',
+  publishedAt: '2026-09-30',
+};
+
+const jccmFamilyCareSource = {
+  label: 'Junta de Comunidades de Castilla-La Mancha (JCCM)',
+  href: 'https://www.jccm.es/tramites/1021976',
+  publishedAt: '2026-04-30',
+};
+
+const jccmIndefiniteHiringSource = {
+  label: 'Junta de Comunidades de Castilla-La Mancha (JCCM)',
+  href: 'https://www.jccm.es/tramites/1020657',
+  publishedAt: '2026-01-07',
+};
+
 const imsersoThermalismSource = {
   label: 'Palomares del Campo Informa',
   href: 'https://www.bandomovil.com/palomaresdelcampo/1452409/0',
@@ -195,6 +213,42 @@ export const manualAgendaItems: AgendaItem[] = [
       href: 'https://contrataciondelestado.es/wps/poc?uri=deeplink:detalle_licitacion&idEvl=7K4zNBUeDP6KeVWTb9Scog%3D%3D',
       publishedAt: '2026-10-06',
     },
+  },
+  {
+    id: 'municipal:accessibility-housing-2026',
+    kind: 'deadline',
+    title: 'Ayudas de accesibilidad en viviendas · convocatoria 2026',
+    startDate: '2026-10-01',
+    endDate: '2026-11-30',
+    category: 'Trámite público',
+    audience: 'residents',
+    summary:
+      'Ayudas para mejorar la accesibilidad en viviendas de Castilla-La Mancha. Las actuaciones deben haberse iniciado entre el 1 de julio de 2024 y el 31 de diciembre de 2025. Pueden solicitarlas personas propietarias o usufructuarias, comunidades de propietarios y, en supuestos concretos, personas arrendatarias. Plazo hasta el 30 de noviembre, salvo agotamiento previo del crédito; consulta los requisitos oficiales.',
+    source: accessibilityGrantSource,
+  },
+  {
+    id: 'municipal:jccm-family-care-2026',
+    kind: 'deadline',
+    title: 'Ayudas de conciliación · cuidados en el hogar',
+    startDate: '2026-05-23',
+    endDate: '2026-10-30',
+    category: 'Trámite público',
+    audience: 'residents',
+    summary:
+      'Subvención para familias residentes en Castilla-La Mancha que contraten indefinidamente a una persona cuidadora dada de alta en el Sistema Especial de Empleados de Hogar, para cuidar a menores de 14 años o familiares dependientes hasta segundo grado. Requiere cumplir las condiciones laborales y de renta de la convocatoria.',
+    source: jccmFamilyCareSource,
+  },
+  {
+    id: 'municipal:jccm-indefinite-hiring-2026',
+    kind: 'deadline',
+    title: 'Ayudas JCCM a la contratación indefinida · línea 1',
+    startDate: '2026-01-08',
+    endDate: '2026-11-30',
+    category: 'Trámite público',
+    audience: 'businesses',
+    summary:
+      'Subvenciones para empresas, personas autónomas, sociedades laborales o cooperativas, comunidades de bienes, sociedades civiles y entidades sin ánimo de lucro que realicen contrataciones indefinidas conforme al Decreto 37/2024. Consulta las condiciones del contrato y el plazo aplicable en la ficha oficial.',
+    source: jccmIndefiniteHiringSource,
   },
   {
     id: 'municipal:imserso-thermalism-2026-turn-1',

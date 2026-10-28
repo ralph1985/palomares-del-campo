@@ -1,10 +1,12 @@
 export {};
 
 const roots = Array.from(document.querySelectorAll<HTMLElement>('[data-about-emblem]'));
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const smallScreen = window.matchMedia('(max-width: 42rem)').matches;
 
-if (roots.length > 0) {
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
+if (reducedMotion || smallScreen) {
+  roots.forEach((root) => root.querySelector('[data-about-emblem-canvas]')?.remove());
+} else if (roots.length > 0) {
   const initialize = async (root: HTMLElement) => {
     if (root.dataset.initialized === 'true') return;
 

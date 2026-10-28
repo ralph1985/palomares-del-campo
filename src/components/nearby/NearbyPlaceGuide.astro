@@ -1,0 +1,389 @@
+---
+import { getImage, Image } from 'astro:assets';
+import ExternalLink from '../ui/ExternalLink.astro';
+import NearbyPlaceVideo from './NearbyPlaceVideo.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { NearbyPlace } from '../../data/nearby-places';
+import type { NearbyPlaceGuide as Guide } from '../../data/nearby-guides';
+
+interface Props {
+  guide: Guide;
+  place: NearbyPlace;
+  reviewedAt: string;
+}
+
+const { guide, place, reviewedAt } = Astro.props;
+const formatDate = (date: string) =>
+  new Date(`${date}T00:00:00`).toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+const formatDuration = (minutes: number) => {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  return hours > 0
+    ? `${hours} h ${remainingMinutes.toString().padStart(2, '0')} min`
+    : `${minutes} min`;
+};
+const featuredImage = guide.images[0];
+const socialImage = featuredImage
+  ? await getImage({
+      src: featuredImage.src,
+      width: featuredImage.src.width,
+      format: 'webp',
+      quality: 75,
+    })
+  : undefined;
+---
+
+<BaseLayout
+  title={`${guide.title} · Qué ver cerca de Palomares`}
+  description={guide.description}
+  canonicalPath={`/que-ver-cerca/${guide.slug}/`}
+  {...(featuredImage && socialImage
+    ? { socialImage: socialImage.src, socialImageAlt: featuredImage.alt }
+    : {})}
+  breadcrumbs={[
+    { name: 'Inicio', path: '/' },
+    { name: 'Qué ver cerca', path: '/que-ver-cerca/' },
+    { name: place.name, path: `/que-ver-cerca/${guide.slug}/` },
+  ]}
+>
+  <main class="guide-shell">
+    <article>
+      <header class="guide-header">
+        <div class="guide-heading">
+          <p class="eyebrow">{guide.eyebrow}</p>
+          <h1>{guide.title}</h1>
+          <p class="guide-introduction">{guide.introduction}</p>
+        </div>
+        {featuredImage && (
+          <figure class="guide-featured-image">
+            <Image
+              src={featuredImage.src}
+              alt={featuredImage.alt}
+              widths={[480, 768, 1024, 1280]}
+              sizes="(max-width: 48rem) calc(100vw - 2rem), 42vw"
+              format="webp"
+              quality={75}
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+            <figcaption>
+              {featuredImage.caption}
+              <span>
+                Foto:{' '}
+                <ExternalLink href={featuredImage.fileUrl}>{featuredImage.author}</ExternalLink>
+                {' · '}
+                <ExternalLink href={featuredImage.licenseUrl}>{featuredImage.license}</ExternalLink>
+              </span>
+            </figcaption>
+          </figure>
+        )}
+      </header>
+
+      {guide.video && <NearbyPlaceVideo video={guide.video} />}
+
+      <section class="visit-panel" aria-labelledby="visit-panel-title">
+        <div>
+          <p class="eyebrow">Antes de organizar la visita</p>
+          <h2 id="visit-panel-title">Comprueba el acceso</h2>
+          <p>{guide.beforeYouGo}</p>
+        </div>
+        <div class="visit-panel-meta">
+          {place.routeEstimate && (
+            <p>
+              <strong>Desde Palomares:</strong> ~
+              {place.routeEstimate.distanceKm.toLocaleString('es-ES', { maximumFractionDigits: 1 })}{' '}
+              km · ~{formatDuration(place.routeEstimate.durationMinutes)} en coche hasta{' '}
+              {place.routeEstimate.destinationLabel}.
+            </p>
+          )}
+          <ExternalLink href={guide.visitUrl}>{guide.visitLabel} ↗</ExternalLink>
+        </div>
+      </section>
+
+      <div class="guide-content">
+        {guide.sections.map((section, index) => (
+          <section aria-labelledby={`guide-section-${guide.slug}-${index + 1}`}>
+            <h2 id={`guide-section-${guide.slug}-${index + 1}`}>{section.heading}</h2>
+            {section.paragraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </section>
+        ))}
+      </div>
+
+      {guide.images.length > 1 && (
+        <section class="guide-gallery" aria-labelledby="guide-gallery-title">
+          <div class="gallery-heading">
+            <p class="eyebrow">En imágenes</p>
+            <h2 id="guide-gallery-title">Detalles del lugar</h2>
+          </div>
+          <div class="gallery-grid">
+            {guide.images.slice(1).map((image) => (
+              <figure>
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  widths={[480, 768, 1024, 1280]}
+                  sizes="(max-width: 38rem) calc(100vw - 2rem), 32vw"
+                  format="webp"
+                  quality={75}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>
+                  {image.caption}
+                  <span>
+                    Foto: <ExternalLink href={image.fileUrl}>{image.author}</ExternalLink>
+                    {' · '}
+                    <ExternalLink href={image.licenseUrl}>{image.license}</ExternalLink>
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <footer class="guide-sources">
+        <div>
+          <p class="eyebrow">Fuentes consultadas</p>
+          <p>
+            Información y condiciones revisadas el {formatDate(reviewedAt)}. Los datos de acceso
+            pueden cambiar.
+          </p>
+        </div>
+        <nav aria-label={`Fuentes y referencias de ${place.name}`}>
+          {guide.sources.map((source) => (
+            <ExternalLink href={source.href}>{source.label} ↗</ExternalLink>
+          ))}
+        </nav>
+      </footer>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .guide-shell {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+    padding: var(--spacing-section-y) 0 4rem;
+  }
+
+  .guide-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.9fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h1,
+  h2 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -0.05em;
+    line-height: 1.02;
+    overflow-wrap: anywhere;
+  }
+
+  h1 {
+    max-width: 18ch;
+    font-size: var(--font-size-page-title);
+  }
+
+  h2 {
+    font-size: var(--font-size-section-heading);
+  }
+
+  .guide-introduction {
+    max-width: 42rem;
+    margin: 1.5rem 0 0;
+    color: var(--color-muted);
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    line-height: 1.7;
+  }
+
+  figure {
+    min-width: 0;
+    margin: 0;
+  }
+
+  .guide-featured-image img,
+  .gallery-grid img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 1rem;
+    background: var(--color-surface-soft);
+    object-fit: cover;
+  }
+
+  .guide-featured-image img {
+    aspect-ratio: 1.15;
+  }
+
+  figcaption {
+    display: grid;
+    gap: 0.35rem;
+    margin-top: 0.65rem;
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+
+  figcaption span {
+    font-size: 0.72rem;
+  }
+
+  figcaption a,
+  .guide-sources a,
+  .visit-panel a {
+    color: var(--color-ink);
+  }
+
+  .visit-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.65fr);
+    gap: 2rem;
+    align-items: center;
+    padding: clamp(1.5rem, 3.5vw, 2.5rem);
+    border-radius: 1rem;
+    background: var(--color-sage-light);
+  }
+
+  .visit-panel .eyebrow {
+    margin-bottom: 0.65rem;
+    color: var(--color-ink);
+  }
+
+  .visit-panel h2 {
+    font-size: clamp(1.7rem, 3vw, 2.25rem);
+  }
+
+  .visit-panel p {
+    margin: 0.8rem 0 0;
+    color: var(--color-ink);
+    line-height: 1.65;
+  }
+
+  .visit-panel-meta {
+    display: grid;
+    gap: 0.8rem;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--color-accommodation-border);
+  }
+
+  .visit-panel-meta p {
+    margin: 0;
+  }
+
+  .guide-content {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 5vw, 4rem);
+    padding: clamp(3rem, 7vw, 5rem) 0;
+  }
+
+  .guide-content h2 {
+    max-width: 18ch;
+    margin-bottom: 1.25rem;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+  }
+
+  .guide-content p {
+    margin: 0 0 1rem;
+    color: var(--color-ink);
+    line-height: 1.8;
+  }
+
+  .guide-gallery {
+    padding: 2rem 0 3rem;
+  }
+
+  .gallery-heading {
+    margin-bottom: 1.5rem;
+  }
+
+  .gallery-heading .eyebrow {
+    margin-bottom: 0.6rem;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .guide-sources {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.8fr);
+    gap: 2rem;
+    align-items: start;
+    margin-top: 2rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--color-accommodation-border);
+  }
+
+  .guide-sources .eyebrow {
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-sources p {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.65;
+  }
+
+  .guide-sources nav {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 48rem) {
+    .guide-header,
+    .visit-panel,
+    .guide-content,
+    .guide-sources {
+      grid-template-columns: 1fr;
+    }
+
+    .guide-header {
+      align-items: start;
+    }
+
+    .guide-featured-image img {
+      aspect-ratio: 1.35;
+    }
+
+    .visit-panel-meta {
+      padding: 1.25rem 0 0;
+      border-top: 1px solid var(--color-accommodation-border);
+      border-left: 0;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .guide-shell {
+      width: min(100% - 2rem, 72rem);
+    }
+
+    .gallery-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

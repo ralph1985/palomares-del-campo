@@ -1,6 +1,6 @@
 ---
 title: 'Recital de Villancicos 2024'
-description: '2 de enero a las 19:00 horas en la Iglesia de Nuestra Señora de la Asunción. Archivo adjunto:'
+description: '2 de enero a las 19:00 horas en la Iglesia de Nuestra Señora de la Asunción.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-01-02T11:02:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 2 de enero a las 19:00 horas en la Iglesia de Nuestra Señora de la Asunción.
-Archivo adjunto:

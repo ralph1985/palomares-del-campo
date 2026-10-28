@@ -19,8 +19,10 @@ test.describe('local routes', () => {
       'href',
       '/routes/campos-palomares-del-campo.gpx',
     );
-    await expect(page.getByText('GPX disponible para descarga.')).toBeVisible();
-    await expect(page.getByText(/El archivo procede del trazado GPX aportado/)).toBeVisible();
+    await expect(page.getByText('Descarga el archivo GPX.')).toBeVisible();
+    await expect(
+      page.getByText(/Puedes abrir el archivo en una aplicación compatible con rutas GPX/),
+    ).toBeVisible();
     const routeMap = page.locator('[data-route-map]');
     await expect(routeMap).toHaveAttribute('data-map-status', 'ready');
     await expect(routeMap.locator('.leaflet-tile')).not.toHaveCount(0);

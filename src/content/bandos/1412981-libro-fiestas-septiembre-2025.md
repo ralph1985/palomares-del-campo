@@ -14,5 +14,4 @@ attachments:
 ---
 
 LIBRO DE FIESTAS PATRONALES EN HONOR AL SANTO CRISTO DE LA PAZ (Del 25 al 28 de septiembre de 2025)
-Archivo adjunto:
 FIESTAS2025-09PALOMARESDELCAMPO.pdf

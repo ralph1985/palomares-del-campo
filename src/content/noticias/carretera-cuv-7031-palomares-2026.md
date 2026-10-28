@@ -1,5 +1,6 @@
 ---
 title: 'El PP vuelve a reclamar el arreglo de la carretera entre Torrebuceit y Palomares del Campo'
+seoTitle: 'El PP reclama reparar la CUV-7031 entre Palomares y Torrebuceit'
 description: 'El Grupo Popular de la Diputación reclama actuar sobre los siete kilómetros de la carretera provincial CUV-7031.'
 author: 'Enciende Cuenca'
 date: 2026-08-26

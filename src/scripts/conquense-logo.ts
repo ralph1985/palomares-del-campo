@@ -2,7 +2,9 @@ const credits = document.querySelectorAll<HTMLElement>('[data-conquense-logo]');
 
 const initializeCredit = async (credit: HTMLElement) => {
   const canvas = credit.querySelector<HTMLCanvasElement>('[data-conquense-logo-canvas]');
-  if (!canvas) return;
+  const textureSource = credit.dataset.conquenseLogoTextureSrc;
+  const heightSource = credit.dataset.conquenseLogoHeightSrc;
+  if (!canvas || !textureSource || !heightSource) return;
 
   try {
     const THREE = await import('three');
@@ -17,14 +19,14 @@ const initializeCredit = async (credit: HTMLElement) => {
 
     const textureLoader = new THREE.TextureLoader();
     const texture = textureLoader.load(
-      '/brand/conquense-dev-logo-light.webp',
+      textureSource,
       () => credit.classList.add('is-ready'),
       undefined,
       () => {
         canvas.hidden = true;
       },
     );
-    const heightTexture = textureLoader.load('/brand/conquense-dev-logo-height.webp');
+    const heightTexture = textureLoader.load(heightSource);
     texture.colorSpace = THREE.SRGBColorSpace;
 
     const geometry = new THREE.PlaneGeometry(3.65, 1.237, 240, 80);

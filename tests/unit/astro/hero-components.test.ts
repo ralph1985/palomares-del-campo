@@ -21,7 +21,7 @@ describe('EditorialHero.astro', () => {
       {
         id: 'project-intro',
         labelledBy: 'intro-title',
-        variant: 'paper-tall',
+        variant: 'paper',
         titleWidth: 'narrow',
         summaryWidth: 'wide',
       },
@@ -35,7 +35,7 @@ describe('EditorialHero.astro', () => {
 
     expect(html).toContain('id="project-intro"');
     expect(html).toContain('aria-labelledby="intro-title"');
-    expect(html).toContain('editorial-hero--paper-tall');
+    expect(html).toContain('editorial-hero--paper');
     expect(html).toContain('editorial-hero--title-narrow');
     expect(html).toContain('editorial-hero--summary-wide');
     expect(html).toContain('class="editorial-hero__actions"');
@@ -50,7 +50,7 @@ describe('EditorialHero.astro', () => {
       EditorialHero,
       {
         labelledBy: 'agenda-title',
-        variant: 'ink-display',
+        variant: 'paper',
         fullHeight: true,
         'data-current-affairs-empty': true,
         'data-section': 'agenda',

@@ -102,6 +102,7 @@ src/pages/
 ├── alojamientos/index.astro            /alojamientos/
 ├── rutas/index.astro                   /rutas/
 ├── que-ver-cerca/index.astro           /que-ver-cerca/
+├── que-ver-cerca/[slug].astro           /que-ver-cerca/<guía>/
 ├── juego/index.astro                   /juego/
 ├── avisos/index.astro                  /avisos/ (redirección 301)
 ├── noticias/index.astro                /noticias/
@@ -125,7 +126,7 @@ src/layouts/
 └── BaseLayout.astro
 ```
 
-`BaseLayout` es el único layout compartido. Inserta el documento HTML, `SEO.astro`, `SiteHeader`, el slot principal y `SiteFooter`. Acepta `bodyClass`, datos de Open Graph, configuración de schema, `noindex`, datos de artículo, breadcrumbs y un slot nombrado `head`.
+`BaseLayout` es el único layout compartido. Inserta el documento HTML, `SEO.astro`, `SiteHeader`, las migas visibles cuando la ruta proporciona breadcrumbs, el slot principal y `SiteFooter`. La misma prop alimenta el componente accesible `Breadcrumbs.astro` y el esquema `BreadcrumbList` de SEO. Acepta `bodyClass`, datos de Open Graph, configuración de schema, `noindex`, datos de artículo, breadcrumbs y un slot nombrado `head`.
 
 ### `src/components/`
 
@@ -142,7 +143,11 @@ src/components/
 │   └── HeritageCard.astro
 ├── accommodations/
 │   └── AccommodationCard.astro
+├── nearby/
+│   ├── NearbyPlaceCard.astro
+│   └── NearbyPlaceGuide.astro
 ├── current-affairs/
+│   ├── AgendaFilters.astro
 │   ├── AgendaItemCard.astro
 │   └── CurrentAffairsEmptyState.astro
 ├── hero/
@@ -170,17 +175,20 @@ src/components/
 │   └── SiteHeader.astro
 └── ui/
     ├── ActionLink.astro
+    ├── Breadcrumbs.astro
     ├── Button.astro
     ├── CollectionCardMeta.astro
-    └── ExternalLink.astro
+    ├── ExternalLink.astro
+    └── SiteButton.astro
 ```
 
-Los componentes de `layout/` forman el shell común. `EditorialHero` comparte la estructura de una columna de las páginas editoriales y `SplitHero` el patrón de dos columnas de Sobre el pueblo y La bola; ambos conservan el contenido mediante slots. `CurrentAffairsEmptyState` usa `EditorialHero` para mantener su aviso y atributos de estado. `CollectionArchive` y `CollectionSearch` son compartidos por noticias y bandos. Los componentes de `game/` componen la superficie del juego; la lógica del mapa y la comunicación con Convex están en scripts de cliente separados.
+Los componentes de `layout/` forman el shell común. `EditorialHero` comparte la estructura de una columna con superficies interiores paper/sage/compact; la portada mantiene su display fotográfico propio. `SplitHero` comparte el patrón de dos columnas de Sobre el pueblo y La bola: patrimonio usa salvia clara y el juego conserva su tema oscuro. Ambos componentes conservan el contenido mediante slots. `CurrentAffairsEmptyState` usa `EditorialHero` para mantener su aviso y atributos de estado. Agenda separa el masthead editorial de los filtros y resultados; `AgendaFilters` presenta búsqueda y filtros para el archivo estático y `agenda.ts` los combina con la paginación accesible, mantiene los filtros en la URL y recalcula la separación entre fechas vigentes y pasadas en `Europe/Madrid`. `CollectionArchive` y `CollectionSearch` son compartidos por noticias y bandos. Los componentes de `game/` componen la superficie del juego; la lógica del mapa y la comunicación con Convex están en scripts de cliente separados.
 
 ### `src/scripts/`
 
 ```text
 src/scripts/
+├── agenda.ts             # Búsqueda, filtros y paginación de la Agenda.
 ├── auto-hide-header.ts   # Oculta/muestra la cabecera según el desplazamiento.
 ├── page-transition.ts    # Coordina la transición MPA y su fallback CSS.
 ├── page-transition-scene.ts # Cubo Three.js CSS3D con copias DOM, cargado bajo demanda.
@@ -201,12 +209,13 @@ src/scripts/
 
 ```text
 src/styles/
+├── controls.css
 ├── global.css
 ├── tokens.css
 └── pages/sobre-el-pueblo.css
 ```
 
-`tokens.css` contiene colores, tipografías, pesos, escala y superficies del juego. `global.css` importa los tokens y define el reset mínimo, la tipografía base, el foco visible y `prefers-reduced-motion`. Los componentes Astro mantienen la mayor parte de sus estilos en bloques scoped. `/sobre-el-pueblo/` importa una hoja de página específica.
+`tokens.css` contiene colores, tipografías, pesos, escala y superficies del juego. `global.css` importa los tokens y `controls.css`, y define el reset mínimo, la tipografía base, el foco visible y `prefers-reduced-motion`. `controls.css` contiene solo la base visual compartida por los controles de acción del sitio; sus primitivas mantienen la semántica y los atributos en Astro. Los componentes Astro mantienen la mayor parte de sus estilos junto al marcado. `/sobre-el-pueblo/` importa una hoja de página específica.
 
 No existe `src/styles/typography.css` actualmente.
 
@@ -321,7 +330,7 @@ Todas las páginas de contenido importan `BaseLayout.astro` y componen su conten
 - `/alojamientos/` usa `ruralAccommodations` y separa opciones del municipio y alrededores.
 - `/informacion-practica/` usa `municipalInfo` para contacto, servicios oficiales y horarios de transporte.
 - `/agenda/` combina eventos, servicios públicos y plazos con procedencia visible; separa las fechas vigentes, las pasadas en un `<details>` cerrado por defecto y las canceladas. Recalcula el corte con la fecha de `Europe/Madrid` en cada visita, también después de un build estático.
-- `/juego/` calcula `hasRemoteGame` a partir de `import.meta.env.CONVEX_URL` y compone la experiencia local o remota.
+- `/juego/` solo muestra el juego cuando `PUBLIC_BALL_GAME_ENABLED` está activada en el build; apagada, devuelve una página 404 no indexable sin montar la experiencia. La flag también controla sus enlaces en menú, portada, pie y rutas, y excluye la ruta del sitemap. Activarla en el sitio estático requiere un nuevo build. Cuando está activa, calcula `hasRemoteGame` a partir de `import.meta.env.CONVEX_URL` y compone la experiencia local o remota.
 - `/avisos/` ejecuta `Astro.redirect('/bandos/', 301)` y no genera contenido editorial propio.
 
 ### Content Collections
@@ -504,7 +513,7 @@ Las noticias son Markdown en `src/content/noticias/`. La colección exige títul
 
 Los bandos son una colección separada en `src/content/bandos/`. No se mezclan con las noticias aunque compartan el patrón de archivo y búsqueda. Cada entrada conserva autor, fecha, categoría, `sourceName`, `sourceUrl`, `sourceId` y adjuntos externos tipados.
 
-La página de detalle renderiza imágenes, documentos y vídeos según el tipo validado. Las imágenes usan `loading="lazy"` y `decoding="async"`; los documentos y vídeos se muestran como enlaces externos. `/avisos/` se conserva como redirección 301 de compatibilidad hacia `/bandos/`.
+La página de detalle renderiza imágenes, documentos y vídeos según el tipo validado. Las imágenes usan `astro:assets` con variantes WebP responsive y dimensiones inferidas; mantienen `loading="lazy"`, `decoding="async"` y el enlace al comunicado original. Documentos y vídeos continúan como enlaces externos. `/avisos/` se conserva como redirección 301 de compatibilidad hacia `/bandos/`.
 
 ### Importación externa
 
@@ -534,11 +543,12 @@ La proyección de Agenda aplica primero reglas deterministas. Para comunicados o
 - Con `prefers-reduced-motion`, la navegación es normal; si la escena no carga, se usa una cobertura CSS y se continúa navegando. El menú saliente permanece abierto durante el giro y el destino real empieza cerrado.
 - El logo del pie, el emblema de `/sobre-el-pueblo/` y la bola del juego cargan Three.js con `import()` cuando sus elementos son visibles o entran en el margen del viewport.
 - Cada escena mantiene una imagen o dibujo CSS de fallback y oculta el canvas si WebGL o la carga de recursos falla.
-- Los recursos de imagen declaran dimensiones en las superficies principales y las imágenes secundarias de algunas páginas usan `loading="lazy"`.
+- Las imágenes raster de páginas y metadatos sociales se transforman con `astro:assets` y Sharp durante el build estático; las variantes responsive se publican como archivos versionados en `/_astro/`, con dimensiones inferidas para evitar CLS. Las imágenes locales viven en `src/assets/`; las fuentes remotas de Dipucuenca y Bandomovil están limitadas por `image.remotePatterns` y se convierten a WebP. Si falla el sondeo remoto o la preparación inicial de Astro, se conserva la URL original con una advertencia. Astro genera las transformaciones estáticas después de renderizar las páginas: si esa descarga o conversión diferida falla, el build falla y no se aplica el fallback. Las imágenes fuera de las páginas (por ejemplo, teselas de Leaflet) no pasan por este pipeline.
+- Las imágenes secundarias usan `loading="lazy"`; las imágenes principales mantienen prioridad alta. La imagen fallback del crédito 3D y sus texturas también usan assets generados/versionados.
 - El juego y los mapas cargan Leaflet solo en las rutas que los incluyen.
 - `prefers-reduced-motion` desactiva o reduce las animaciones de CSS y Three.js donde está contemplado.
 
-No hay una integración de optimización de imágenes de Astro ni una estrategia de CDN definida en el repositorio. La mayoría de las imágenes proceden de `public/` o de URLs externas de los contenidos.
+No hay una integración del servicio de optimización de imágenes de Vercel ni una regla CDN explícita. Astro genera y versiona las transformaciones estáticas; la política HTTP final la aplica el hosting. El fallback a la URL de origen cubre fallos detectados durante el sondeo remoto o la preparación de la transformación. La descarga y codificación final ocurren después, durante la generación de assets: si esa fase falla, el build también falla. El sitio depende de que los orígenes remotos autorizados respondan durante el build o exista una entrada válida en la caché de Astro.
 
 El build observado emite una advertencia de Vite por chunks superiores a 500 kB. No se debe afirmar que la división de código ha eliminado ese coste; la optimización de bundles queda como tarea independiente.
 
@@ -692,7 +702,7 @@ La clasificación se basa en la comparación entre el `architecture.md` anterior
 - No hay pruebas E2E contra un deployment remoto de Convex, incluido un flujo de varios jugadores, ni una garantía de cobertura funcional del backend desplegado.
 - Los documentos legales de Palomareños siguen siendo borradores con validaciones pendientes. Desde el repositorio no se puede verificar el deployment activo de producción, la instalación de cron ni la configuración real de SMTP o Convex.
 - El build advierte de chunks grandes.
-- Las teselas y algunos adjuntos dependen de servicios externos sin caché propia.
+- Las teselas de mapa siguen dependiendo de OpenStreetMap y no tienen caché propia. Los documentos y vídeos de bandos siguen alojados en Bandomovil; las imágenes raster se transforman durante el build cuando el origen responde, con fallback explícito a la URL original si no responde.
 - El adaptador remoto sigue resolviendo el nombre, radio y descripción contra `src/data/game-locations.ts`; una temporada Convex con ubicaciones distintas puede mostrar feedback local incorrecto.
 - Las queries de estado y ranking son públicas, no hay rate limiting ni cuotas de jugador, y el índice de idempotencia no declara una restricción de unicidad en el esquema.
 - `captureBall` valida la regla de distancia y precisión sobre los valores recibidos, pero no implementa una prueba de autenticidad del GPS ni una validación explícita de rangos de coordenadas equivalente a la de `updatePresence`.

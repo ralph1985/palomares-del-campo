@@ -1,6 +1,7 @@
 ---
 title: 'Campeonatos Juegos Asociación de Mayores'
-description: 'Campeonatos de Brisca, Tute y Parchís el 13 y 14 de agosto. Archivo adjunto:'
+seoTitle: 'Campeonatos de la Asociación de Mayores'
+description: 'Campeonatos de Brisca, Tute y Parchís el 13 y 14 de agosto.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-08-07T17:57:00.000Z
 category: 'Info General'
@@ -15,4 +16,3 @@ attachments:
 ---
 
 Campeonatos de Brisca, Tute y Parchís el 13 y 14 de agosto.
-Archivo adjunto:

@@ -14,5 +14,4 @@ attachments:
 ---
 
 Denuncia Telemática
-Archivo adjunto:
 CARTELDENUNCIATELEMTICA_11.pdf

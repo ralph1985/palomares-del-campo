@@ -27,7 +27,7 @@ export const ruralAccommodations: RuralAccommodation[] = [
     capacity: 'Hasta 12 plazas',
     rooms: '5 dormitorios',
     bathrooms: '5 baños',
-    summary: 'La opción localizada dentro del municipio para alojarse en una casa rural completa.',
+    summary: 'Casa rural completa en Palomares del Campo, con cinco dormitorios y cinco baños.',
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/casa-rural-san-cristobal-f20825.htm',
@@ -45,7 +45,8 @@ export const ruralAccommodations: RuralAccommodation[] = [
     capacity: '14–15 plazas',
     rooms: '7 dormitorios',
     bathrooms: '7 baños',
-    summary: 'Alojamiento íntegro orientado a grupos grandes, según la ficha consultada.',
+    summary:
+      'Casa completa con siete dormitorios y siete baños, para grupos de hasta 14–15 personas.',
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/el-capricho-de-horcajada-f17117.htm',
@@ -59,7 +60,7 @@ export const ruralAccommodations: RuralAccommodation[] = [
     capacity: '10–12 plazas',
     rooms: '5 dormitorios',
     bathrooms: '3 baños',
-    summary: 'Casa completa identificada en la localidad de Huerta de la Obispalía.',
+    summary: 'Casa completa en Huerta de la Obispalía, con cinco dormitorios y tres baños.',
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/casa-rural-las-cuevas-f20998.htm',
@@ -73,7 +74,8 @@ export const ruralAccommodations: RuralAccommodation[] = [
     capacity: '2–11 plazas',
     rooms: '4 dormitorios',
     bathrooms: '4 baños',
-    summary: 'Permite consultar opciones de alquiler completo o por habitaciones.',
+    summary:
+      'Cuatro dormitorios y cuatro baños, con opción de alquiler completo o por habitaciones.',
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/casa-rural-tia-josefa-f20966.htm',
@@ -87,7 +89,8 @@ export const ruralAccommodations: RuralAccommodation[] = [
     capacity: '5–19 plazas',
     rooms: '10 dormitorios',
     bathrooms: '9 baños',
-    summary: 'Antigua casa de labranza restaurada, con espacios para grupos y entorno rural.',
+    summary:
+      'Antigua casa de labranza restaurada, con diez dormitorios y capacidad para hasta 19 personas.',
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/las-grullas-f3285.htm',
@@ -101,7 +104,7 @@ export const ruralAccommodations: RuralAccommodation[] = [
     capacity: 'Hasta 24 plazas',
     rooms: '11 dormitorios',
     bathrooms: '8 baños',
-    summary: 'Casona tradicional de gran tamaño con jardín, según la ficha publicada.',
+    summary: 'Casona tradicional con jardín, once dormitorios y capacidad para hasta 24 personas.',
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/casa-rural-el-jardin-de-san-bartolome-f15160.htm',
@@ -115,7 +118,8 @@ export const ruralAccommodations: RuralAccommodation[] = [
     capacity: '10–12 plazas',
     rooms: '5 dormitorios',
     bathrooms: '5 baños',
-    summary: 'Alojamiento en el casco urbano, con alquiler completo o por habitaciones.',
+    summary:
+      'En el casco urbano, con cinco dormitorios y opción de alquiler completo o por habitaciones.',
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/casa-rural-el-chalan-f20927.htm',
@@ -129,7 +133,7 @@ export const ruralAccommodations: RuralAccommodation[] = [
     capacity: '6–8 plazas',
     rooms: '3 dormitorios',
     bathrooms: '2 baños',
-    summary: 'Casa rural próxima al Parque Arqueológico de Segóbriga, según la ficha consultada.',
+    summary: 'Casa rural completa en Saelices, con tres dormitorios y capacidad para 6–8 personas.',
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/villa-segobriga-f12601.htm',
@@ -143,7 +147,7 @@ export const ruralAccommodations: RuralAccommodation[] = [
     capacity: '4–20 plazas',
     rooms: '10 dormitorios',
     bathrooms: '8 baños',
-    summary: 'Alojamiento rural en el casco urbano de Uclés, con información y contacto propios.',
+    summary: 'Apartamentos rurales en Uclés, con diez dormitorios y capacidad para 4–20 personas.',
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/apartamentos-rurales-puerta-del-agua-f507.htm',
@@ -161,7 +165,8 @@ export const ruralAccommodations: RuralAccommodation[] = [
     capacity: 'Hasta 10 plazas',
     rooms: '4 dormitorios',
     bathrooms: '5 baños',
-    summary: 'Casa rehabilitada en un edificio del siglo XVIII en el casco urbano de Huete.',
+    summary:
+      'Casa en un edificio del siglo XVIII, con cuatro dormitorios y capacidad para hasta 10 personas.',
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/casa-rural-ciudad-de-luna-f21143.htm',

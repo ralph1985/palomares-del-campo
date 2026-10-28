@@ -14,5 +14,4 @@ attachments:
 ---
 
 La inauguración será mañana martes a las 20:00 horas en la sede de la Asociación de Mujeres.
-Archivo adjunto:
 CARTELEXPOSICINMINIATURASAGOSTO2026.pdf

@@ -1,5 +1,6 @@
 ---
 title: 'Adhesión constitución cooperativa para creación de una comunidad energética'
+seoTitle: 'Adhesión a una cooperativa de energía comunitaria'
 description: 'Quienes quieran acogerse a la adhesión pueden venir al Ayuntamiento para firmar la solicitud. La Reunión informativa será el 4 de abril a las 18:30 en el Salón Cultural de El Hito.…'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-03-04T10:19:00.000Z
@@ -16,5 +17,3 @@ attachments:
 
 Quienes quieran acogerse a la adhesión pueden venir al Ayuntamiento para firmar la solicitud.
 La Reunión informativa será el 4 de abril a las 18:30 en el Salón Cultural de El Hito.
-
-Archivo adjunto:

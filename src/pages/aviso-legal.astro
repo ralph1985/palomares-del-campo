@@ -11,7 +11,7 @@ const pageDescription =
 
 <BaseLayout title={`${pageTitle} · Palomares del Campo`} description={pageDescription}>
   <main>
-    <EditorialHero labelledBy="page-title" variant="ink-compact">
+    <EditorialHero labelledBy="page-title" variant="paper-compact">
       <p slot="eyebrow" class="eyebrow">
         Información jurídica
       </p>
@@ -19,8 +19,8 @@ const pageDescription =
         {pageTitle}
       </h1>
       <p slot="summary" class="draft-warning" role="note">
-        Borrador de desarrollo: contiene datos de prueba que deben sustituirse por los datos
-        oficiales antes de publicar este aviso.
+        Aviso provisional: el Ayuntamiento aún no ha confirmado la titularidad ni los datos de
+        identificación que aparecen en esta página.
       </p>
     </EditorialHero>
 
@@ -32,7 +32,8 @@ const pageDescription =
         </div>
         <div class="legal-copy">
           <p>
-            Este sitio web es titularidad del <strong>Ayuntamiento de Palomares del Campo</strong>.
+            El Ayuntamiento de Palomares del Campo figura como titular, pendiente de confirmación
+            oficial. Los datos que siguen también están pendientes de verificación.
           </p>
           <dl class="legal-data">
             <div>
@@ -56,24 +57,45 @@ const pageDescription =
             <div>
               <dt>NIF/CIF</dt>
               <dd>
-                <strong class="test-data">P0000000X · DATO DE PRUEBA — SUSTITUIR</strong>
+                <strong class="test-data">Pendiente de confirmación oficial</strong>
               </dd>
             </div>
             <div>
               <dt>DIR3 / registro</dt>
               <dd>
-                <strong class="test-data">L00000000 · DATO DE PRUEBA — SUSTITUIR</strong>
+                <strong class="test-data">
+                  Pendiente de verificar si procede y cuál corresponde
+                </strong>
               </dd>
             </div>
             <div>
               <dt>DPD</dt>
               <dd>
-                <strong class="test-data">
-                  dpd-prueba@example.invalid · DATO DE PRUEBA — SUSTITUIR
-                </strong>
+                <strong class="test-data">Canal oficial pendiente de confirmación</strong>
               </dd>
             </div>
           </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="legal-section" aria-labelledby="purpose-title">
+      <div class="legal-shell legal-grid">
+        <div class="section-intro">
+          <p class="eyebrow">Alcance</p>
+          <h2 id="purpose-title">Objeto del sitio</h2>
+        </div>
+        <div class="legal-copy">
+          <p>
+            Este sitio reúne información sobre Palomares del Campo, contenidos editoriales y
+            experiencias interactivas. La titularidad institucional está pendiente de confirmación.
+          </p>
+          <p>
+            El contenido tiene carácter informativo y no sustituye los bandos, resoluciones,
+            notificaciones ni demás publicaciones oficiales. La web no es la sede electrónica: para
+            presentar solicitudes o realizar trámites con efectos administrativos, utiliza los
+            canales oficiales que correspondan.
+          </p>
         </div>
       </div>
     </section>
@@ -83,10 +105,10 @@ const pageDescription =
         <section>
           <h2 id="use-title">Condiciones de uso</h2>
           <p>
-            El acceso y la navegación por este sitio implican el conocimiento de este aviso legal.
-            La información se ofrece con finalidad divulgativa y de orientación; los trámites
-            administrativos formales deben realizarse a través de los canales oficiales del
-            Ayuntamiento.
+            Este aviso informa sobre el uso del sitio. La navegación no convierte esta web en sede
+            electrónica ni inicia por sí misma un trámite administrativo. La información se ofrece
+            con finalidad divulgativa y de orientación; los trámites formales deben realizarse a
+            través de los canales oficiales que correspondan.
           </p>
           <p>
             La persona usuaria se compromete a utilizar el sitio de forma lícita, respetuosa y
@@ -98,10 +120,11 @@ const pageDescription =
         <section aria-labelledby="property-title">
           <h2 id="property-title">Propiedad intelectual</h2>
           <p>
-            Los textos, diseños, logotipos y elementos gráficos del sitio pertenecen al Ayuntamiento
-            o se utilizan con la autorización correspondiente, salvo que se indique otra cosa. Los
-            contenidos de terceros conservan la autoría y las condiciones de uso que les
-            correspondan.
+            Los textos, diseños, logotipos y elementos gráficos pueden estar protegidos por derechos
+            de propiedad intelectual o industrial. Su titularidad y las condiciones de reutilización
+            se indicarán cuando se hayan confirmado; los contenidos de terceros conservan la autoría
+            y las licencias o condiciones que les correspondan. Esta cláusula no limita los usos
+            permitidos por la normativa aplicable.
           </p>
         </section>
 
@@ -109,9 +132,10 @@ const pageDescription =
           <h2 id="responsibility-title">Responsabilidad y enlaces</h2>
           <p>
             Se procura que la información esté actualizada, pero pueden existir errores, omisiones o
-            cambios posteriores a su publicación. Los enlaces externos llevan a servicios de
-            terceros y se ofrecen como orientación; sus contenidos y políticas son responsabilidad
-            de sus titulares.
+            cambios posteriores a su publicación. Para actuaciones oficiales, consulta la fuente o
+            el canal oficial correspondiente. Los enlaces externos conducen a servicios de terceros;
+            su inclusión no implica por sí sola respaldo de sus contenidos. Se aplicará en todo caso
+            la responsabilidad que establezca la normativa vigente.
           </p>
         </section>
 
@@ -144,9 +168,8 @@ const pageDescription =
         <section aria-labelledby="updates-title">
           <h2 id="updates-title">Actualizaciones</h2>
           <p>
-            Este aviso se revisará cuando cambien la titularidad, los canales oficiales, la
-            normativa o los servicios ofrecidos. La versión siguiente deberá sustituir todos los
-            datos marcados como prueba.
+            La información de este aviso puede cambiar si se modifican la titularidad, los canales
+            oficiales, la normativa o los servicios del sitio.
           </p>
         </section>
       </div>
@@ -156,7 +179,7 @@ const pageDescription =
 
 <style>
   .legal-section {
-    padding: clamp(3.5rem, 8vw, 7rem) 0;
+    padding: var(--spacing-section-y) 0;
   }
 
   .legal-section-dark {
@@ -174,7 +197,7 @@ const pageDescription =
     margin: 0;
     color: inherit;
     font-family: var(--font-serif);
-    font-size: clamp(2.4rem, 6vw, 5rem);
+    font-size: var(--font-size-section-heading);
     font-weight: 500;
     letter-spacing: -0.06em;
     line-height: 0.96;
@@ -186,7 +209,7 @@ const pageDescription =
 
   .eyebrow {
     margin: 0 0 0.9rem;
-    color: var(--color-ochre);
+    color: var(--color-clay-text);
     font-size: var(--font-size-label);
     font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
@@ -194,17 +217,21 @@ const pageDescription =
   }
 
   .legal-section:not(.legal-section-dark) .eyebrow {
-    color: var(--color-clay);
+    color: var(--color-clay-text);
+  }
+
+  .legal-section-dark .eyebrow {
+    color: var(--color-ochre);
   }
 
   .draft-warning {
     max-width: 52rem;
     margin: 1.75rem 0 0;
-    border: 2px solid #f2bf61;
+    border: 2px solid var(--color-clay);
     border-radius: 0.75rem;
     padding: 1rem 1.1rem;
-    color: #fff2cc;
-    background: rgb(242 191 97 / 12%);
+    color: var(--color-ink);
+    background: var(--color-surface-soft);
     font-weight: var(--font-weight-strong);
     line-height: 1.5;
   }
@@ -275,7 +302,7 @@ const pageDescription =
   .legal-reading h2 {
     margin-bottom: 0.8rem;
     color: var(--color-surface-soft);
-    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-size: clamp(1.5rem, 2.7vw, 2rem);
   }
 
   .legal-reading p {

@@ -14,5 +14,4 @@ attachments:
 ---
 
 ESPECTÁCULOS CHEMA
-Archivo adjunto:
 cartelPalomaresdelCampoSeptiembre2025.pdf

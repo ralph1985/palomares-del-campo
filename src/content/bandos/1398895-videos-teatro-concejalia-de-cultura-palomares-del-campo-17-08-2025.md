@@ -1,5 +1,6 @@
 ---
 title: 'Videos Teatro Concejalía de Cultura Palomares del Campo 17/08/2025'
+seoTitle: 'Vídeos de teatro de Palomares · 17/08/2025'
 description: '- Sainete "Olvido, olvídame" del autor José Cedena, representado por el "Grupo de Teatro de Nuestro Pueblo" Palomares del Campo. https://youtu.be/hrdxO096LXc?si=OSVGwm5HxwF9lA6D -…'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-08-21T11:45:00.000Z
@@ -17,8 +18,6 @@ attachments:
 
 https://youtu.be/hrdxO096LXc?si=OSVGwm5HxwF9lA6D
 
-- Sainete "Fea y con gracia" de los Hermanos Álvarez Quintero, representado por el "Grupo de Teatro de Nuestro Pueblo" Palomare(...)
+El sainete «Fea y con gracia», de los Hermanos Álvarez Quintero, fue representado por el Grupo de Teatro de Nuestro Pueblo de Palomares del Campo. El listado de vídeos está incompleto; consulta la publicación original para verlo completo.
 
-...Haga click para ver completo.
-Archivo adjunto:
 ProgramaTeatro17-08-2025.pdf

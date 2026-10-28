@@ -1,6 +1,7 @@
 ---
 title: 'Pago Musical "El Fantasma de la Ópera"'
-description: 'Hasta el 8 de abril. Archivo adjunto:'
+seoTitle: 'Pago del musical El fantasma de la ópera'
+description: 'Hasta el 8 de abril.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-04-03T14:00:00.000Z
 category: 'Cultura'
@@ -15,4 +16,3 @@ attachments:
 ---
 
 Hasta el 8 de abril.
-Archivo adjunto:

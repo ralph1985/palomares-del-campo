@@ -14,5 +14,4 @@ attachments:
 ---
 
 Abierto el plazo de solicitudes.
-Archivo adjunto:
 TERMALISMOIMSERSO2026.pdf

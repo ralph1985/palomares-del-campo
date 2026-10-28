@@ -1,6 +1,6 @@
 ---
 title: 'Curso de formación gratuito'
-description: 'Curso de Soldadura gratuito. Archivo adjunto:'
+description: 'Curso de Soldadura gratuito.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-06-06T09:57:00.000Z
 category: 'Info General'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 Curso de Soldadura gratuito.
-Archivo adjunto:

@@ -4,6 +4,7 @@ import ActionLink from '../../components/ui/ActionLink.astro';
 import ExternalLink from '../../components/ui/ExternalLink.astro';
 import EditorialHero from '../../components/hero/EditorialHero.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
 import { localRoutes } from '../../data/routes';
 
 const formatDistance = (distanceKm: number) =>
@@ -31,7 +32,7 @@ const formatDate = (date: string) =>
   description="Rutas y paseos relacionados con Palomares del Campo, con fuentes visibles y estado de verificación."
 >
   <main>
-    <EditorialHero labelledBy="page-title" variant="ink-display">
+    <EditorialHero labelledBy="page-title" variant="paper">
       <p slot="eyebrow" class="eyebrow">
         Palomares del Campo · Visita
       </p>
@@ -132,9 +133,11 @@ const formatDate = (date: string) =>
                 <ActionLink class="route-gpx-link" variant="solid" href={route.traceUrl} download>
                   Descargar GPX <span aria-hidden="true">↓</span>
                 </ActionLink>
-                <ActionLink class="route-game-link" variant="underline" href="/juego/">
-                  Probar La bola <span aria-hidden="true">→</span>
-                </ActionLink>
+                {PUBLIC_BALL_GAME_ENABLED && (
+                  <ActionLink class="route-game-link" variant="underline" href="/juego/">
+                    Probar La bola <span aria-hidden="true">→</span>
+                  </ActionLink>
+                )}
               </div>
               <p class="route-review">
                 Fuente actualizada el {formatDate(route.sourceUpdatedAt)} · ficha revisada el
@@ -169,7 +172,7 @@ const formatDate = (date: string) =>
 
   .eyebrow {
     margin: 0 0 1.2rem;
-    color: var(--color-ochre);
+    color: var(--color-clay-text);
     font-size: var(--font-size-label);
     font-weight: var(--font-weight-strong);
     letter-spacing: 0.14em;
@@ -187,7 +190,7 @@ const formatDate = (date: string) =>
   }
 
   .routes-section {
-    padding: clamp(4.5rem, 10vw, 8rem) 0;
+    padding: var(--spacing-section-y) 0;
     background: var(--color-sage);
   }
 
@@ -200,12 +203,12 @@ const formatDate = (date: string) =>
   }
 
   .routes-heading .eyebrow {
-    color: var(--color-clay);
+    color: var(--color-clay-text);
   }
 
   h2 {
     max-width: 12ch;
-    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-size: var(--font-size-section-heading);
   }
 
   .routes-heading > p {
@@ -248,7 +251,7 @@ const formatDate = (date: string) =>
 
   h3 {
     max-width: 18ch;
-    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-size: var(--font-size-section-heading);
   }
 
   .route-summary {

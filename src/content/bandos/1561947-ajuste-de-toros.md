@@ -15,4 +15,3 @@ attachments:
 ---
 
 El Sábado 20 de junio a las 8:00 de la mañana está prevista la salida al ajuste de toros. El autocar es de 55 plazas, por lo que se tendrá en cuenta el orden de inscripción.
-Archivo adjunto:

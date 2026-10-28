@@ -1,0 +1,625 @@
+---
+import { getImage, Image, inferRemoteSize } from 'astro:assets';
+import ExternalLink from '../../components/ui/ExternalLink.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import churchEntryDetail from '../../assets/church-gallery/church-entry-detail.jpg';
+import churchSideTower from '../../assets/church-gallery/church-side-tower.jpg';
+import churchSideWall from '../../assets/church-gallery/church-side-wall.jpg';
+import { getResponsiveImageWidths, optimizeRemoteImage } from '../../images';
+
+const municipalSource = 'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-three';
+const parishSource =
+  'https://www.diocesisdecuenca.es/parroquia/parroquia-de-ntra-sra-de-la-asuncion-58/';
+const churchImage =
+  'https://palomaresdelcampo.dipucuenca.es/images/PALOMARES_DEL_CAMPO/NUESTRA_SE%C3%91ORA_DE_LA_ASUNCION_2.jpg';
+const optimizedChurchImage = await optimizeRemoteImage(
+  churchImage,
+  () =>
+    import.meta.env.PROD
+      ? inferRemoteSize(churchImage)
+      : Promise.resolve({ width: 592, height: 890 }),
+  (dimensions) =>
+    getImage({
+      src: churchImage,
+      width: dimensions.width,
+      height: dimensions.height,
+      widths: getResponsiveImageWidths(dimensions.width, [320, 480, 592]),
+      sizes: '(max-width: 48rem) calc(100vw - 2rem), 40vw',
+      format: 'webp',
+      quality: 85,
+    }),
+  (error) =>
+    console.warn(
+      `Could not optimize the church-page hero; preserving its source URL: ${churchImage}`,
+      error,
+    ),
+);
+const churchGalleryImages = [
+  {
+    src: churchEntryDetail,
+    alt: 'Detalle escultórico labrado sobre la portada de la iglesia',
+    caption: 'Detalle de la portada principal.',
+    title: 'Imágenes de Palomares del Campo 07.jpg',
+    fileUrl: 'https://commons.wikimedia.org/wiki/File:Im%C3%A1genes_de_Palomares_del_Campo_07.jpg',
+  },
+  {
+    src: churchSideTower,
+    alt: 'Vista lateral de la iglesia y su torre campanario',
+    caption: 'El lateral del templo y la torre campanario.',
+    title: 'Fotos de Palomares del Campo 03.jpg',
+    fileUrl: 'https://commons.wikimedia.org/wiki/File:Fotos_de_Palomares_del_Campo_03.jpg',
+  },
+  {
+    src: churchSideWall,
+    alt: 'Vista exterior del muro lateral de la iglesia',
+    caption: 'Muro lateral del templo.',
+    title: 'Imágenes de Palomares del Campo 06.jpg',
+    fileUrl: 'https://commons.wikimedia.org/wiki/File:Im%C3%A1genes_de_Palomares_del_Campo_06.jpg',
+  },
+];
+const churchPhotoAuthor = '19Tarrestnom65';
+const churchPhotoLicense = 'CC BY-SA 4.0';
+const churchPhotoLicenseUrl = 'https://creativecommons.org/licenses/by-sa/4.0/';
+---
+
+<BaseLayout
+  title="Iglesia de Nuestra Señora de la Asunción · Palomares del Campo"
+  description="Historia y patrimonio de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo: construcción, capillas funerarias y obras destacadas."
+  socialImage={optimizedChurchImage.transformed?.src ?? optimizedChurchImage.source}
+  socialImageAlt="Fachada de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo"
+  breadcrumbs={[
+    { name: 'Inicio', path: '/' },
+    { name: 'Sobre el pueblo', path: '/sobre-el-pueblo/' },
+    { name: 'La iglesia', path: '/sobre-el-pueblo/iglesia/' },
+  ]}
+>
+  <main class="church-page">
+    <header class="church-hero">
+      <div class="church-hero-copy">
+        <p class="eyebrow">Patrimonio · Palomares del Campo</p>
+        <h1>Iglesia de Nuestra Señora de la Asunción</h1>
+        <p class="church-lead">
+          Un templo renacentista levantado a lo largo de varias generaciones, donde conviven la
+          arquitectura «a la romana», las bóvedas góticas y obras de los siglos XVI al XVIII.
+        </p>
+      </div>
+      <figure class="church-photo">
+        <img
+          src={optimizedChurchImage.transformed?.src ?? optimizedChurchImage.source}
+          srcset={optimizedChurchImage.transformed?.srcSet.attribute}
+          sizes="(max-width: 48rem) calc(100vw - 2rem), 40vw"
+          alt="Fachada de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo"
+          width={optimizedChurchImage.transformed?.options.width ?? 592}
+          height={optimizedChurchImage.transformed?.options.height ?? 890}
+          fetchpriority="high"
+          decoding="async"
+        />
+        <figcaption>
+          <ExternalLink href={municipalSource}>
+            Fotografía y fuente: portal municipal <span aria-hidden="true">↗</span>
+          </ExternalLink>
+        </figcaption>
+      </figure>
+    </header>
+
+    <section class="church-gallery" aria-labelledby="gallery-title">
+      <div class="church-gallery-heading">
+        <div>
+          <p class="eyebrow">Fotografías</p>
+          <h2 id="gallery-title">Otras vistas exteriores</h2>
+        </div>
+        <p>
+          Una mirada más cercana a la portada, la torre y el muro lateral. Estas imágenes muestran
+          el exterior del templo.
+        </p>
+      </div>
+      <div class="church-gallery-grid">
+        {churchGalleryImages.map((image) => (
+          <figure class="church-gallery-item">
+            <Image
+              src={image.src}
+              alt={image.alt}
+              widths={[320, 480, 640, 800]}
+              sizes="(max-width: 26.25rem) calc(100vw - 2rem), (max-width: 43.75rem) calc((100vw - 3.5rem) / 2), 23rem"
+              format="webp"
+              quality={65}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <p>{image.caption}</p>
+              <p class="church-photo-credit">
+                <ExternalLink href={image.fileUrl}>
+                  {churchPhotoAuthor} · {image.title} <span aria-hidden="true">↗</span>
+                </ExternalLink>
+                <span aria-hidden="true">·</span>
+                <ExternalLink href={churchPhotoLicenseUrl}>
+                  {churchPhotoLicense} <span aria-hidden="true">↗</span>
+                </ExternalLink>
+                <span>Imagen redimensionada para esta página.</span>
+              </p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <section class="church-history" aria-labelledby="history-title">
+      <div class="section-kicker">
+        <p class="eyebrow">1553—1638</p>
+        <h2 id="history-title">Una construcción de largo recorrido</h2>
+      </div>
+      <div class="history-content">
+        <p>
+          Las obras comenzaron en 1553 bajo la dirección del maestro cantero Cristóbal de Oñate. La
+          fachada se terminó en 1638 y fue diseñada por Francisco de Anchea, según la información
+          publicada por el portal municipal.
+        </p>
+        <ol class="timeline" aria-label="Hitos de construcción">
+          <li>
+            <strong>1553</strong>
+            <span>Comienza la construcción del templo.</span>
+          </li>
+          <li>
+            <strong>1638</strong>
+            <span>Se concluye la fachada, diseñada por Francisco de Anchea.</span>
+          </li>
+        </ol>
+        <p>
+          El edificio se describe como construido «a la romana», en estilo renacentista. En la nave,
+          sin embargo, se conservan bóvedas góticas: distintas etapas de la obra permanecen visibles
+          en un mismo espacio.
+        </p>
+      </div>
+    </section>
+
+    <section class="church-art" aria-labelledby="art-title">
+      <div class="art-heading">
+        <p class="eyebrow">Dentro del templo</p>
+        <h2 id="art-title">Capillas, pintura y escultura</h2>
+        <p>
+          El portal municipal destaca un conjunto de piezas de los siglos XVI al XVIII. Estas son
+          algunas de las que identifica en su descripción patrimonial.
+        </p>
+      </div>
+      <div class="art-grid">
+        <article class="art-card art-card--chapels">
+          <p class="card-index">01 · Arquitectura</p>
+          <h3>Dos capillas funerarias</h3>
+          <p>
+            Las capillas renacentistas de Ramírez de Arellano y de Los Alarcones están vinculadas a
+            la obra de los Anchea; la atribución se presenta como probable en la fuente municipal.
+          </p>
+        </article>
+        <article class="art-card">
+          <p class="card-index">02 · Pintura</p>
+          <h3>Una mirada hacia Nápoles</h3>
+          <p>
+            La fuente cita la <em>Vista de la Bahía y Puerto de Nápoles</em>, de la primera mitad
+            del siglo XVI, y un retablo de San Roque fechado en 1575, atribuido posiblemente a
+            Gonzalo Gómez.
+          </p>
+        </article>
+        <article class="art-card">
+          <p class="card-index">03 · Pintura</p>
+          <h3>Retablos y una Adoración</h3>
+          <p>
+            También menciona el retablo de la Inmaculada, obra de Gregorio Martínez, y una
+            <em>Adoración de los Reyes Magos</em> anónima fechada en 1656.
+          </p>
+        </article>
+        <article class="art-card">
+          <p class="card-index">04 · Escultura</p>
+          <h3>Imágenes y relieve</h3>
+          <p>
+            Entre las piezas escultóricas señaladas figuran una imagen anónima de Santa Quiteria y
+            el medallón de la Ascensión, situado por la fuente municipal a finales del siglo XVI.
+          </p>
+        </article>
+        <article class="art-card">
+          <p class="card-index">05 · Altar mayor</p>
+          <h3>Una obra del siglo XVIII</h3>
+          <p>
+            El altar mayor se atribuye a Joaquín Gassó y se habría concluido hacia 1780, con un
+            diseño neoclásico, según el portal municipal.
+          </p>
+        </article>
+      </div>
+      <p class="attribution-note">
+        Las atribuciones que la fuente considera posibles se indican como tales; no se presentan
+        como autorías confirmadas.
+      </p>
+    </section>
+
+    <aside class="church-sources" aria-labelledby="sources-title">
+      <div>
+        <p class="eyebrow">Fuentes y consulta</p>
+        <h2 id="sources-title">Información institucional</h2>
+      </div>
+      <div class="source-links">
+        <ExternalLink href={municipalSource}>
+          Qué ver · portal municipal <span aria-hidden="true">↗</span>
+        </ExternalLink>
+        <ExternalLink href={parishSource}>
+          Ficha de la parroquia · Diócesis de Cuenca <span aria-hidden="true">↗</span>
+        </ExternalLink>
+      </div>
+      <p class="visit-note">
+        Esta página recoge información patrimonial, no horarios ni condiciones de acceso. Consulta
+        la ficha parroquial de la Diócesis para información de contacto actualizada.
+      </p>
+    </aside>
+  </main>
+</BaseLayout>
+
+<!-- Keep this route's styles scoped here; splitting would globalize selectors without reuse. -->
+<style>
+  .church-page {
+    color: var(--color-ink);
+    background: var(--color-paper);
+  }
+
+  .church-hero,
+  .church-gallery,
+  .church-history,
+  .church-art,
+  .church-sources {
+    width: min(100% - 2.5rem, 72rem);
+    margin-inline: auto;
+  }
+
+  .source-links a {
+    color: var(--color-forest);
+    font-weight: var(--font-weight-strong);
+    text-underline-offset: 0.22rem;
+  }
+
+  a:focus-visible {
+    outline: 3px solid var(--color-clay);
+    outline-offset: 4px;
+  }
+
+  .church-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(17rem, 0.75fr);
+    gap: clamp(2.5rem, 8vw, 7rem);
+    align-items: center;
+    padding-block: clamp(2rem, 6vw, 5rem) clamp(4rem, 9vw, 8rem);
+  }
+
+  .church-gallery {
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+    border-top: 1px solid rgb(25 52 45 / 16%);
+  }
+
+  .church-gallery-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(16rem, 1fr);
+    gap: 2rem 4rem;
+    align-items: end;
+    margin-bottom: 2rem;
+  }
+
+  .church-gallery-heading > p {
+    max-width: 38rem;
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  .church-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .church-gallery-item {
+    min-width: 0;
+    margin: 0;
+    border: 1px solid rgb(25 52 45 / 14%);
+    background: var(--color-surface-soft);
+  }
+
+  .church-gallery-item img {
+    display: block;
+    width: 100%;
+    height: clamp(13rem, 22vw, 19rem);
+    object-fit: contain;
+    background: var(--color-paper);
+  }
+
+  .church-gallery-item figcaption {
+    padding: 1rem;
+  }
+
+  .church-gallery-item figcaption > p:first-child {
+    margin: 0 0 0.75rem;
+    color: var(--color-ink);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .church-photo-credit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.4rem;
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.74rem;
+    line-height: 1.5;
+  }
+
+  .church-photo-credit a {
+    color: var(--color-forest);
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.055em;
+    line-height: 0.98;
+  }
+
+  h1 {
+    max-width: 12ch;
+    font-size: var(--font-size-page-title);
+  }
+
+  h2 {
+    max-width: 15ch;
+    font-size: var(--font-size-section-heading);
+  }
+
+  h3 {
+    font-size: clamp(1.55rem, 2vw, 2rem);
+  }
+
+  .church-lead {
+    max-width: 38rem;
+    margin: 1.5rem 0 0;
+    color: var(--color-muted);
+    font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+    line-height: 1.7;
+  }
+
+  .church-photo {
+    width: min(100%, 21rem);
+    margin: 0 auto;
+    padding: 0.55rem;
+    background: var(--color-surface-soft);
+    box-shadow: 0 1.5rem 3rem rgb(7 19 16 / 16%);
+    transform: rotate(1.5deg);
+  }
+
+  .church-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+  }
+
+  figcaption {
+    padding: 0.7rem 0.45rem 0.2rem;
+    font-size: 0.74rem;
+  }
+
+  figcaption a {
+    color: var(--color-forest);
+    font-weight: var(--font-weight-strong);
+  }
+
+  .church-history {
+    display: grid;
+    grid-template-columns: minmax(13rem, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2rem, 8vw, 8rem);
+    padding-block: clamp(3rem, 8vw, 7rem);
+    border-top: 1px solid rgb(25 52 45 / 16%);
+  }
+
+  .history-content {
+    max-width: 43rem;
+  }
+
+  .history-content > p,
+  .art-heading > p:last-child,
+  .art-card > p:last-child,
+  .visit-note {
+    color: var(--color-muted);
+    line-height: 1.75;
+  }
+
+  .history-content > p:first-child {
+    margin-top: 0;
+  }
+
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .timeline li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 1.25rem;
+    border-top: 2px solid var(--color-clay);
+    background: var(--color-surface-soft);
+    line-height: 1.5;
+  }
+
+  .timeline strong {
+    color: var(--color-forest);
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+  }
+
+  .church-art {
+    padding-block: clamp(3rem, 8vw, 7rem);
+  }
+
+  .art-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(16rem, 1fr);
+    column-gap: 4rem;
+    align-items: end;
+    margin-bottom: 2.5rem;
+  }
+
+  .art-heading .eyebrow {
+    grid-column: 1 / -1;
+  }
+
+  .art-heading > p:last-child {
+    max-width: 38rem;
+    margin: 0;
+  }
+
+  .art-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .art-card {
+    min-height: 15rem;
+    padding: clamp(1.35rem, 3vw, 2rem);
+    border: 1px solid rgb(25 52 45 / 14%);
+    background: var(--color-surface-soft);
+  }
+
+  .art-card--chapels {
+    background: var(--color-forest);
+    color: var(--color-paper);
+  }
+
+  .card-index {
+    margin: 0 0 2.5rem;
+    color: var(--color-clay);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .art-card--chapels .card-index {
+    color: var(--color-surface-soft);
+  }
+
+  .art-card--chapels > p:last-child {
+    color: var(--color-paper);
+  }
+
+  .art-card > p:last-child {
+    margin-bottom: 0;
+  }
+
+  .attribution-note {
+    max-width: 50rem;
+    margin: 1.5rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .church-sources {
+    display: grid;
+    grid-template-columns: minmax(13rem, 0.8fr) minmax(0, 1.2fr);
+    gap: 1.5rem 4rem;
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+    border-top: 1px solid rgb(25 52 45 / 16%);
+  }
+
+  .source-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    align-content: start;
+  }
+
+  .visit-note {
+    grid-column: 2;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 700px) {
+    .church-hero,
+    .church-gallery-heading,
+    .church-history,
+    .church-sources {
+      grid-template-columns: 1fr;
+    }
+
+    .church-hero {
+      gap: 2.5rem;
+    }
+
+    .church-gallery-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .church-photo {
+      width: min(72vw, 19rem);
+    }
+
+    .art-heading {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .art-heading .eyebrow {
+      grid-column: auto;
+      margin-bottom: 0;
+    }
+
+    .art-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .art-card {
+      min-height: 0;
+    }
+
+    .card-index {
+      margin-bottom: 1.5rem;
+    }
+
+    .visit-note {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .church-hero,
+    .church-gallery,
+    .church-history,
+    .church-art,
+    .church-sources {
+      width: min(100% - 2rem, 72rem);
+    }
+
+    .timeline {
+      grid-template-columns: 1fr;
+    }
+
+    .church-gallery-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,13 @@
+# Créditos y licencias de imágenes de «Qué ver cerca»
+
+Las copias locales de `public/nearby-guides/` se descargaron de Wikimedia Commons el 24 de octubre de 2026, tienen un ancho máximo de 1280 px y se sirvieron en WebP para reducir su peso. Se mantienen los créditos visibles junto a cada imagen y se enlazan la ficha original y la licencia. Las versiones convertidas se distribuyen bajo la misma licencia indicada para cada original.
+
+| Archivo local                    | Archivo original                                                                                                                                             | Autoría                     | Licencia                                                        |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------- | --------------------------------------------------------------- |
+| `Mina_de_la_Mora_Encantada.webp` | [Minas de la Mora Encantada, Torrejoncillo del Rey 05.jpg](https://commons.wikimedia.org/wiki/File:Minas_de_la_Mora_Encantada,_Torrejoncillo_del_Rey_05.jpg) | 19Tarrestnom65              | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| `Segobriga_anfi.webp`            | [Segóbriga, anfiteatro, vista general.jpg](https://commons.wikimedia.org/wiki/File:Seg%C3%B3briga,_anfiteatro,_vista_general.jpg)                            | Malopez 21                  | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| `Segobriga_teatro.webp`          | [Segóbriga (36923392175).jpg](<https://commons.wikimedia.org/wiki/File:Seg%C3%B3briga_(36923392175).jpg>)                                                    | VIATOR IMPERI from HISPANIA | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) |
+| `Noheda_mosaico.webp`            | [Nohedako mosaikoa.jpg](https://commons.wikimedia.org/wiki/File:Nohedako_mosaikoa.jpg)                                                                       | Ernestobanpiroa             | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| `Noheda_mosaico_escenas.webp`    | [Villa romana de Noheda 09-revised.jpg](https://commons.wikimedia.org/wiki/File:Villa_romana_de_Noheda_09-revised.jpg)                                       | Rodelar; retoque de Égoïté  | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)       |
+
+Las páginas oficiales de cada lugar, no las fotografías de Wikimedia, son la referencia para información de visita. Se revisaron las fichas oficiales de Turismo de Castilla-La Mancha y, para Noheda, la página de venta de entradas el 24 de octubre de 2026.

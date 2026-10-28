@@ -42,17 +42,28 @@ const { labelledBy, variant, class: className, ...sectionAttributes } = Astro.pr
   }
 
   .split-hero--heritage {
-    background: var(--color-ink);
+    color: var(--color-ink);
+    background: var(--color-sage);
+    border-bottom: 1px solid var(--color-border);
   }
 
   .split-hero--heritage .split-hero__inner {
     grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
     align-items: center;
     width: min(100% - 2.5rem, 72rem);
-    min-height: min(42rem, calc(100vh - 5.25rem));
+    min-height: min(34rem, calc(100vh - 5.25rem));
     gap: 3rem;
     margin: 0 auto;
-    padding: clamp(4rem, 9vw, 8rem) 0;
+    padding: var(--spacing-section-y) 0;
+  }
+
+  .split-hero--heritage .split-hero__copy::before {
+    display: block;
+    width: 2rem;
+    height: 2px;
+    margin-bottom: 1.1rem;
+    background: var(--color-clay);
+    content: '';
   }
 
   .split-hero--game .split-hero__inner {

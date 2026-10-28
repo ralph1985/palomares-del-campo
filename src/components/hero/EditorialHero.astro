@@ -7,7 +7,7 @@ interface Props extends HTMLAttributes<'section'> {
   labelledBy: string;
   titleWidth?: 'narrow' | 'wide';
   summaryWidth?: 'wide';
-  variant: 'ink-display' | 'sage-display' | 'ink-compact' | 'paper-tall';
+  variant: 'paper' | 'sage' | 'paper-compact';
 }
 
 const {
@@ -55,7 +55,10 @@ const {
 <style>
   .editorial-hero {
     --hero-gutter: min(100% - 2.5rem, 72rem);
-    padding: clamp(5rem, 12vw, 9rem) 0 clamp(4rem, 9vw, 7rem);
+    padding: clamp(3rem, 5.5vw, 4.5rem) 0;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-ink);
+    background: var(--color-surface);
   }
 
   .editorial-hero__inner {
@@ -63,38 +66,27 @@ const {
     margin: 0 auto;
   }
 
-  .editorial-hero--ink-display {
-    color: var(--color-surface-soft);
-    background: var(--color-ink);
+  .editorial-hero__inner::before {
+    display: block;
+    width: 2rem;
+    height: 2px;
+    margin-bottom: 1.1rem;
+    background: var(--color-clay);
+    content: '';
   }
 
-  .editorial-hero--sage-display {
+  .editorial-hero--sage {
     background: var(--color-sage);
   }
 
-  .editorial-hero--ink-compact {
-    padding: clamp(3.5rem, 8vw, 7rem) 0;
-    color: var(--color-surface-soft);
-    background: var(--color-ink);
-  }
-
-  .editorial-hero--paper-tall {
-    display: grid;
-    align-content: center;
-    min-height: calc(100vh - 10.5rem);
-    padding: 6rem 0;
+  .editorial-hero--paper-compact {
+    padding: clamp(2.5rem, 4vw, 3.25rem) 0;
   }
 
   .editorial-hero--viewport {
-    min-height: calc(100vh - 10.5rem);
-    padding: clamp(5rem, 14vw, 10rem) 0;
-  }
-
-  .editorial-hero--viewport :global(h1) {
-    max-width: 10ch;
-    font-size: clamp(4rem, 12vw, 9rem);
-    letter-spacing: -0.07em;
-    line-height: 0.9;
+    display: grid;
+    align-content: center;
+    min-height: min(32rem, calc(100vh - 5.25rem));
   }
 
   .editorial-hero--viewport :global(.hero-intro) {
@@ -103,51 +95,22 @@ const {
 
   .editorial-hero :global(.eyebrow) {
     margin: 0 0 1.1rem;
-    color: var(--color-clay);
+    color: var(--color-clay-text);
     font-size: var(--font-size-label);
     font-weight: var(--font-weight-strong);
-    letter-spacing: 0.16em;
+    letter-spacing: var(--tracking-label);
     text-transform: uppercase;
   }
 
-  .editorial-hero--ink-display :global(.eyebrow),
-  .editorial-hero--ink-compact :global(.eyebrow) {
-    color: var(--color-ochre);
-    letter-spacing: 0.14em;
-  }
-
   .editorial-hero :global(h1) {
+    max-width: 15ch;
     margin: 0;
     color: var(--color-ink);
     font-family: var(--font-serif);
-    font-size: clamp(3.3rem, 8vw, 7.5rem);
+    font-size: var(--font-size-page-title);
     font-weight: var(--font-weight-medium);
     letter-spacing: -0.06em;
-    line-height: 0.96;
-  }
-
-  .editorial-hero--ink-display :global(h1) {
-    max-width: 12ch;
-    color: var(--color-surface-soft);
-    font-size: clamp(4rem, 11vw, 8rem);
-    line-height: 0.95;
-  }
-
-  .editorial-hero--sage-display :global(h1) {
-    max-width: 11ch;
-  }
-
-  .editorial-hero--ink-compact :global(h1) {
-    max-width: 18ch;
-    color: var(--color-surface-soft);
-    font-size: clamp(2.4rem, 6vw, 5rem);
-  }
-
-  .editorial-hero--paper-tall :global(h1) {
-    max-width: 11ch;
-    font-size: clamp(3.4rem, 8vw, 7.5rem);
-    letter-spacing: -0.065em;
-    line-height: 0.94;
+    line-height: 0.98;
   }
 
   .editorial-hero--title-narrow :global(h1) {
@@ -160,35 +123,18 @@ const {
 
   .editorial-hero :global(.hero-intro) {
     max-width: 38rem;
-    margin: 2rem 0 0;
+    margin: 1.5rem 0 0;
     color: var(--color-muted);
-    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    font-size: clamp(1rem, 1.3vw, 1.1rem);
     line-height: 1.7;
-  }
-
-  .editorial-hero--ink-display :global(.hero-intro) {
-    max-width: 36rem;
-    color: var(--color-sage-light);
   }
 
   .editorial-hero--summary-wide :global(.hero-intro) {
     max-width: 42rem;
   }
 
-  .editorial-hero--ink-compact :global(.hero-intro) {
-    margin-top: 1.5rem;
-    color: var(--color-night-text);
-    font-size: clamp(1.05rem, 2vw, 1.3rem);
-    line-height: 1.6;
-  }
-
-  .editorial-hero--paper-tall :global(.hero-intro) {
-    max-width: 34rem;
-    font-size: clamp(1rem, 1.5vw, 1.2rem);
-  }
-
   .editorial-hero__actions {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
 
   @media (max-width: 38rem) {
@@ -196,9 +142,8 @@ const {
       --hero-gutter: min(100% - 2rem, 72rem);
     }
 
-    .editorial-hero--paper-tall {
+    .editorial-hero--viewport {
       min-height: calc(100vh - 10.25rem);
-      padding: 4rem 0;
     }
   }
 </style>

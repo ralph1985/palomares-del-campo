@@ -1,6 +1,33 @@
 import { expect, test } from './fixtures';
 
 test.describe('current affairs sections', () => {
+  test('orders every agenda section from newest date to oldest, including filtered results', async ({
+    page,
+  }) => {
+    await page.clock.install({ time: new Date('2026-10-21T10:00:00.000Z') });
+    await page.goto('/agenda/');
+
+    const assertNewestFirst = async (selector: string, visibleOnly = false) => {
+      const dates = await page
+        .locator(selector)
+        .evaluateAll(
+          (cards, filterHidden) =>
+            cards
+              .filter((card) => !filterHidden || !card.hasAttribute('hidden'))
+              .map((card) => card.getAttribute('data-start-date') ?? ''),
+          visibleOnly,
+        );
+      expect(dates).toEqual([...dates].sort().reverse());
+    };
+
+    for (const section of ['upcoming', 'past', 'cancelled']) {
+      await assertNewestFirst(`[data-agenda-list="${section}"] [data-agenda-card]`);
+    }
+
+    await page.getByRole('combobox', { name: 'Año' }).selectOption('2025');
+    await assertNewestFirst('[data-agenda-list="past"] [data-agenda-card]', true);
+  });
+
   test('separa automáticamente las fechas pasadas en un archivo cerrado y mantiene los plazos vigentes', async ({
     page,
   }) => {
@@ -26,6 +53,18 @@ test.describe('current affairs sections', () => {
     );
 
     await pastDisclosure.locator('summary').click();
+    const archivePagination = pastDisclosure.getByRole('navigation', {
+      name: 'Páginas de fechas pasadas',
+    });
+    for (
+      let pageNumber = 1;
+      pageNumber < 10 && !(await archivedEvent.isVisible());
+      pageNumber += 1
+    ) {
+      const nextPage = archivePagination.getByRole('button', { name: 'Siguiente' });
+      if (!(await nextPage.isEnabled())) break;
+      await nextPage.click();
+    }
     await expect(archivedEvent).toBeVisible();
     await expect(archivedEvent.locator('a')).toHaveAttribute('href', /1608976/);
 
@@ -50,6 +89,58 @@ test.describe('current affairs sections', () => {
     const pastDisclosure = page.locator('details[data-agenda-section="past"]');
     await expect(pastDisclosure).toBeVisible();
     await expect(pastDisclosure).not.toHaveAttribute('open');
+  });
+
+  test('combines agenda filters, restores them from the URL and paginates the archive', async ({
+    page,
+  }) => {
+    await page.clock.install({ time: new Date('2026-10-21T10:00:00.000Z') });
+    await page.goto('/agenda/');
+
+    const search = page.getByRole('searchbox', { name: 'Buscar en toda la agenda' });
+    const kind = page.getByRole('combobox', { name: 'Tipo' });
+    const category = page.getByRole('combobox', { name: 'Categoría' });
+    const year = page.getByRole('combobox', { name: 'Año' });
+    await search.fill('dentista');
+    await kind.selectOption('service');
+    await category.selectOption('Servicio público');
+    await year.selectOption('2025');
+
+    const filteredCards = page.locator('[data-agenda-card]:visible');
+    await expect(filteredCards).not.toHaveCount(0);
+    await expect(page.locator('[data-agenda-results]')).toContainText('fechas encontradas');
+    await expect(page.locator('details[data-agenda-section="past"]')).toHaveAttribute('open', '');
+    expect(new URL(page.url()).searchParams.get('q')).toBe('dentista');
+    expect(new URL(page.url()).searchParams.get('kind')).toBe('service');
+    expect(new URL(page.url()).searchParams.get('category')).toBe('Servicio público');
+    expect(new URL(page.url()).searchParams.get('year')).toBe('2025');
+    for (const card of await filteredCards.all()) {
+      await expect(card).toHaveAttribute('data-kind', 'service');
+      await expect(card).toHaveAttribute('data-year', '2025');
+    }
+
+    await page.reload();
+    await expect(search).toHaveValue('dentista');
+    await expect(kind).toHaveValue('service');
+    await expect(category).toHaveValue('Servicio público');
+    await expect(year).toHaveValue('2025');
+
+    await page.getByRole('button', { name: 'Limpiar filtros' }).click();
+    await expect(search).toHaveValue('');
+    expect(new URL(page.url()).searchParams.has('q')).toBe(false);
+    await expect(page.locator('details[data-agenda-section="past"]')).not.toHaveAttribute('open');
+
+    const past = page.locator('details[data-agenda-section="past"]');
+    await past.locator('summary').click();
+    const pagination = past.getByRole('navigation', { name: 'Páginas de fechas pasadas' });
+    await expect(pagination).toBeVisible();
+    await pagination.getByRole('button', { name: 'Siguiente' }).click();
+    await expect(pagination).toContainText('Página 2 de');
+    expect(new URL(page.url()).searchParams.get('pastPage')).toBe('2');
+    await page.reload();
+    await expect(past).toHaveAttribute('open', '');
+    await expect(pagination).toContainText('Página 2 de');
+    await expect(pagination.getByRole('button', { name: 'Anterior' })).toBeEnabled();
   });
 
   test('wraps long URLs in bando cards on narrow screens', async ({ page }) => {
@@ -94,7 +185,7 @@ test.describe('current affairs sections', () => {
 
   test('renders images and documents attached to a bando', async ({ page }) => {
     const attachmentResponse = page.waitForResponse((response) =>
-      response.url().includes('/userFiles/'),
+      response.url().includes('/_image'),
     );
     await page.goto('/bandos/1648341-clase-practica/');
     const imageResponse = await attachmentResponse;
@@ -103,7 +194,7 @@ test.describe('current affairs sections', () => {
     const attachedImage = page.locator('.article-attachments img');
     await expect(attachedImage).toBeVisible();
     await expect(attachedImage).toHaveAttribute('alt', /.+/);
-    expect(imageResponse.headers()['x-e2e-bando-asset']).toBe('fixture');
+    expect(imageResponse.headers()['x-e2e-astro-image']).toBe('fixture');
 
     await page.goto('/bandos/1658990-horarios-autobus-de-linea/');
     await expect(page.getByRole('heading', { name: 'Recursos del comunicado' })).toBeVisible();
@@ -116,6 +207,56 @@ test.describe('current affairs sections', () => {
       await expect(link).toBeVisible();
       await expect(link).toHaveAttribute('href', /\.pdf$/i);
     }
+  });
+
+  test('cleans imported labels and preserves known details in clipped source notices', async ({
+    page,
+  }) => {
+    await page.goto('/bandos/1259942-carglass/');
+
+    await expect(page.locator('.article-content')).not.toContainText('Archivo adjunto:');
+    await expect(page.locator('meta[name="description"]')).not.toHaveAttribute(
+      'content',
+      /Archivo adjunto:/,
+    );
+    await expect(page.getByRole('heading', { name: 'Recursos del comunicado' })).toBeVisible();
+
+    await page.goto('/bandos/1600989-bando-municipal/');
+    const articleContent = page.locator('.article-content');
+    await expect(articleContent).toContainText(
+      'El comunicado está incompleto en esta reproducción. Consulta la publicación original para leerlo completo.',
+    );
+    await expect(articleContent).not.toContainText('Haga click para ver completo.');
+    await expect(articleContent).not.toContainText('Agradecem(...)');
+
+    await page.goto('/bandos/1425221-pago-musicales/');
+    await expect(page.locator('.article-content')).toContainText('ponte en contacto con Montse');
+    await expect(page.locator('.article-content')).toContainText(
+      'instrucciones de pago no aparece completo',
+    );
+
+    await page.goto(
+      '/bandos/1398895-videos-teatro-concejalia-de-cultura-palomares-del-campo-17-08-2025/',
+    );
+    await expect(page.locator('.article-content')).toContainText('Fea y con gracia');
+    await expect(page.locator('.article-content')).toContainText('Hermanos Álvarez Quintero');
+
+    await page.goto('/bandos/1607408-bando-municipal/');
+    await expect(articleContent).toContainText('no podrá celebrarse la Escuela de Verano');
+    await expect(articleContent).toContainText('27-07-2026');
+    await expect(articleContent).toContainText(
+      'sin la escuela y sin tiempo para buscar otras alternativas',
+    );
+    await page.goto('/bandos/1603390-bando-municipal/');
+    await expect(page.locator('.article-content')).toContainText('utiliza otro cercano');
+    await page.goto('/bandos/1377442-recordatorio-teatro-ambiental/');
+    await expect(page.locator('.article-content')).toContainText('Luna, una aprendiz de maga');
+    await page.setViewportSize({ width: 375, height: 812 });
+    const widths = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      document: document.documentElement.scrollWidth,
+    }));
+    expect(widths.document).toBeLessThanOrEqual(widths.viewport);
   });
 
   test('filters bandos by publication year and restores it from the URL', async ({ page }) => {
@@ -236,6 +377,7 @@ test.describe('current affairs sections', () => {
     await page.goto('/avisos/');
     await expect(page).toHaveURL(/\/bandos\/$/);
 
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
     await page.getByRole('button', { name: 'Explorar' }).click();
     const menu = page.locator('#site-menu');

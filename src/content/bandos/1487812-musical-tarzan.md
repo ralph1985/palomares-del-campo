@@ -1,6 +1,6 @@
 ---
 title: 'MUSICAL "TARZÁN"'
-description: 'MUSICAL "TARZÁN" EN EL AUDITORIO DE CUENCA. Archivo adjunto:'
+description: 'MUSICAL "TARZÁN" EN EL AUDITORIO DE CUENCA.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-01-20T10:18:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 MUSICAL "TARZÁN" EN EL AUDITORIO DE CUENCA.
-Archivo adjunto:

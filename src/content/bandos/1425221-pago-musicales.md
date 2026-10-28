@@ -15,6 +15,4 @@ attachments: []
 
 **El **precio **para los que asistan a los** dos musicales** es de **43 ****€.****
 
-**Ponerse en **contacto con Montse** para abonarle el (...)
-
-...Haga click para ver completo.
+Para pagar, ponte en contacto con Montse. El resto de las instrucciones de pago no aparece completo en esta reproducción; consulta el comunicado original.

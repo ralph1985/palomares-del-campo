@@ -1,5 +1,6 @@
 ---
 title: 'Palomares del Campo cierra sus fiestas con la bendición de la patrona'
+seoTitle: 'Fiestas de Palomares: bendición de la Virgen de la Cabeza'
 description: 'La procesión de la Virgen de la Cabeza recorrió las calles de Palomares del Campo acompañada por danzantes.'
 author: 'Redacción CMM'
 date: 2026-04-28

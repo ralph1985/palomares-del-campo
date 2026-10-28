@@ -1,6 +1,6 @@
 ---
 title: 'CONCIERTO DE ACORDEONES'
-description: 'El próximo viernes a las 22:00 horas en la Plaza del Coso Archivo adjunto:'
+description: 'El próximo viernes a las 22:00 horas en la Plaza del Coso'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2026-08-04T16:30:00.000Z
 category: 'Cultura'
@@ -15,4 +15,3 @@ attachments:
 ---
 
 El próximo viernes a las 22:00 horas en la Plaza del Coso
-Archivo adjunto:

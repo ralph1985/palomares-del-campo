@@ -23,7 +23,7 @@ const formatDate = (date: string) =>
   description="Directorio informativo de casas rurales y otros alojamientos en Palomares del Campo y localidades cercanas."
 >
   <main>
-    <EditorialHero labelledBy="page-title" variant="sage-display">
+    <EditorialHero labelledBy="page-title" variant="sage">
       <p slot="eyebrow" class="eyebrow">
         Palomares del Campo · Visita
       </p>
@@ -108,7 +108,7 @@ const formatDate = (date: string) =>
 
   .eyebrow {
     margin: 0 0 1.25rem;
-    color: var(--color-clay);
+    color: var(--color-clay-text);
     font-size: var(--font-size-label);
     font-weight: var(--font-weight-strong);
     letter-spacing: 0.16em;
@@ -127,13 +127,13 @@ const formatDate = (date: string) =>
 
   h2 {
     max-width: 14ch;
-    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-size: var(--font-size-section-heading);
   }
 
   .criteria-section,
   .list-section,
   .nearby-section {
-    padding: clamp(4.5rem, 10vw, 8rem) 0;
+    padding: var(--spacing-section-y) 0;
   }
 
   .criteria-grid {

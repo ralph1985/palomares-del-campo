@@ -10,6 +10,4 @@ sourceId: '1607408'
 attachments: []
 ---
 
-El Ayuntamiento de Palomares del Campo informa a todos los vecinos, que lamentablemente este año no podrá celebrarse la Escuela de Verano. Esto se debe a que la Diputación Provincial de Cuenca, solamente ha sacado la subvención para municipios de 1.800 a 100.000 habitantes (B.O de la Provincia del 27-07-2026), dejando a los municipios inferiores a 1.800 habitantes sin la citada Escuela de Verano y sin tiempo para poder buscar otras alternativas. Desde el Ayuntamiento lamentamos profundamente las(...)
-
-...Haga click para ver completo.
+El Ayuntamiento informa de que este año no podrá celebrarse la Escuela de Verano. El bando atribuye esta situación a que la convocatoria de subvención de la Diputación Provincial de Cuenca solo incluía municipios de 1.800 a 100.000 habitantes (B.O. de la Provincia del 27-07-2026); por ello, los municipios de menos de 1.800 habitantes se quedaron sin la escuela y sin tiempo para buscar otras alternativas. El Ayuntamiento lamenta la situación. El texto completo está disponible en la publicación original.

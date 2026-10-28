@@ -1,18 +1,39 @@
 ---
+import { getImage, inferRemoteSize } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
-import ActionLink from '../../components/ui/ActionLink.astro';
+import { getResponsiveImageWidths, optimizeRemoteImage } from '../../images';
 import ExternalLink from '../../components/ui/ExternalLink.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('bandos');
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+  const titleCounts = new Map<string, number>();
+  for (const post of posts) {
+    titleCounts.set(post.data.title, (titleCounts.get(post.data.title) ?? 0) + 1);
+  }
+  const duplicateTitleDate = new Intl.DateTimeFormat('es-ES', {
+    timeZone: 'Europe/Madrid',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
+  return posts.map((post) => {
+    const duplicateTitleCount = titleCounts.get(post.data.title) ?? 0;
+    const seoTitle =
+      post.data.seoTitle ??
+      (duplicateTitleCount > 1
+        ? `${post.data.title} · ${duplicateTitleDate.format(post.data.date)} · Palomares del Campo`
+        : `${post.data.title} · Bandos · Palomares del Campo`);
+
+    return {
+      params: { slug: post.id },
+      props: { post, seoTitle },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, seoTitle } = Astro.props;
 const { Content } = await render(post);
 const {
   title,
@@ -26,6 +47,47 @@ const {
   attachments,
 } = post.data;
 const imageAttachment = attachments.find((attachment) => attachment.type === 'image');
+const renderedAttachments = await Promise.all(
+  attachments.map(async (attachment) => {
+    if (attachment.type !== 'image') {
+      return { attachment, imageSource: null, optimizedImage: null };
+    }
+
+    const result = await optimizeRemoteImage(
+      attachment.url,
+      () =>
+        import.meta.env.PROD
+          ? inferRemoteSize(attachment.url)
+          : Promise.resolve({ width: 864, height: 576 }),
+      (dimensions) =>
+        getImage({
+          src: attachment.url,
+          width: dimensions.width,
+          height: dimensions.height,
+          widths: getResponsiveImageWidths(dimensions.width, [320, 640, 864]),
+          sizes: '(max-width: 54rem) calc(100vw - 2rem), 52rem',
+          format: 'webp',
+          quality: 85,
+        }),
+      (error) =>
+        console.warn(
+          `Could not optimize a bando image; preserving its source URL: ${attachment.url}`,
+          error,
+        ),
+    );
+
+    return {
+      attachment,
+      imageSource: result.source,
+      optimizedImage: result.transformed,
+    };
+  }),
+);
+const socialImageAttachment = renderedAttachments.find(
+  ({ attachment }) => attachment.type === 'image',
+);
+const socialImage =
+  socialImageAttachment?.optimizedImage?.src ?? socialImageAttachment?.imageSource ?? undefined;
 const formattedDate = new Intl.DateTimeFormat('es-ES', {
   day: 'numeric',
   month: 'long',
@@ -34,7 +96,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
 ---
 
 <BaseLayout
-  title={`${title} · Bandos · Palomares del Campo`}
+  title={seoTitle}
   description={description}
   canonicalPath={`/bandos/${post.id}/`}
   type="article"
@@ -47,7 +109,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     sourceUrl,
     ...(category === undefined ? {} : { section: category }),
   }}
-  {...(imageAttachment?.url === undefined ? {} : { socialImage: imageAttachment.url })}
+  {...(socialImage === undefined ? {} : { socialImage })}
   {...(imageAttachment?.label === undefined ? {} : { socialImageAlt: imageAttachment.label })}
   breadcrumbs={[
     { name: 'Inicio', path: '/' },
@@ -56,9 +118,6 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   ]}
 >
   <main class="article-shell">
-    <ActionLink class="article-back-link" variant="text" href="/bandos/">
-      ← Volver a bandos
-    </ActionLink>
     <article>
       <header class="article-header">
         <p class="eyebrow">{category}</p>
@@ -72,15 +131,19 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
         <Content />
       </div>
 
-      {attachments.length > 0 && (
+      {renderedAttachments.length > 0 && (
         <section class="article-attachments" aria-labelledby="attachments-title">
           <h2 id="attachments-title">Recursos del comunicado</h2>
           <div class="attachment-list">
-            {attachments.map((attachment) =>
+            {renderedAttachments.map(({ attachment, imageSource, optimizedImage }) =>
               attachment.type === 'image' ? (
                 <figure class="attachment-image">
                   <img
-                    src={attachment.url}
+                    src={optimizedImage?.src ?? imageSource ?? attachment.url}
+                    srcset={optimizedImage?.srcSet.attribute}
+                    sizes="(max-width: 54rem) calc(100vw - 2rem), 52rem"
+                    width={optimizedImage?.options.width}
+                    height={optimizedImage?.options.height}
                     alt={attachment.alt ?? attachment.label}
                     loading="lazy"
                     decoding="async"
@@ -114,7 +177,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
   .article-shell {
     width: min(100% - 2.5rem, 54rem);
     margin: 0 auto;
-    padding: clamp(3rem, 8vw, 7rem) 0;
+    padding: var(--spacing-section-y) 0;
   }
 
   .article-source a {
@@ -122,10 +185,6 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     font-size: 0.85rem;
     font-weight: var(--font-weight-strong);
     text-decoration: none;
-  }
-
-  :global(.article-back-link) {
-    margin-bottom: 3rem;
   }
 
   .article-source a:hover,
@@ -153,7 +212,7 @@ const formattedDate = new Intl.DateTimeFormat('es-ES', {
     max-width: 18ch;
     margin: 0;
     font-family: var(--font-serif);
-    font-size: clamp(2.8rem, 7vw, 5.7rem);
+    font-size: var(--font-size-page-title);
     font-weight: 500;
     letter-spacing: -0.06em;
     line-height: 0.96;

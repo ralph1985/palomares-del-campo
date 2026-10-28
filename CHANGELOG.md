@@ -4,10 +4,27 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-10-28
+
+#### Changed
+
+- Ordenadas las fechas de la Agenda de más reciente a más antigua en todas sus secciones, también al aplicar filtros.
+- Aislado el servidor E2E en el primer puerto libre desde 4321 para no reutilizar por accidente servidores de otros worktrees.
+
 ### 2026-10-27
+
+#### Changed
+
+- Simplificados los textos de portada, patrimonio, alojamientos, rutas y «Palomareños por el mundo», con descripciones más concretas y menos lemas genéricos.
+- Sustituidas las notas de desarrollo visibles en el juego por descripciones para jugadores y retiradas referencias técnicas innecesarias.
+- Optimizadas las imágenes principales y la galería de la iglesia con variantes WebP responsivas; la escena Three.js del escudo no se carga en móvil o con movimiento reducido, y los vídeos de YouTube se cargan al reproducirlos.
+- Mejorado el contraste de las etiquetas editoriales en portada, iglesia e información práctica.
+- Acortados los títulos SEO de 28 noticias y bandos, desambiguadas por fecha las publicaciones con títulos repetidos y reforzada su comprobación en el build.
 
 #### Fixed
 
+- Eliminados los rótulos vacíos de adjuntos de los textos y resúmenes de los bandos, junto con 9 instrucciones de truncado; cuando el texto fuente está incompleto, la página lo indica y enlaza al comunicado original.
+- Reescrito el aviso de borrador legal para que se dirija a visitantes y no incluya instrucciones de publicación; los datos oficiales pendientes siguen marcados como no confirmados.
 - Recuperar adjuntos de las fichas oficiales aunque el RSS no los incluya y conservar el PDF de los talleres de salud.
 - Clasificar en la Agenda los talleres fechados en plural y registrar desde el cartel el lugar confirmado, sin duplicar el evento.
 
@@ -15,10 +32,56 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 - Añadido un último recurso de clasificación Codex para bandos oficiales no resueltos con fecha vigente; no decide datos de calendario y exige una respuesta JSON validada.
 
+### 2026-10-26
+
+#### Changed
+
+- Ajustado el menú lateral: accesos algo más compactos en móvil y escudo visible en escritorio.
+- Añadido al menú el acceso a Inicio fuera de la portada y una marca accesible de la página o sección actual.
+
+#### Added
+
+- Ampliada la guía de las fiestas patronales con historia local, programas municipales y fotografías de la ermita con atribución y licencia visibles.
+
+#### Fixed
+
+- Corregidos espacios omitidos entre texto y enlaces, y entre los créditos y las licencias de las fotografías, en la página «Sobre el pueblo».
+
+### 2026-10-25
+
+#### Changed
+
+- Rediseñada la portada con un hero editorial, accesos claros para vecinos y visitantes y una guía tipográfica para descubrir el pueblo.
+- Unificados los controles de acción del sitio con una base visual compartida; los enlaces externos conservan la misma pestaña por defecto y solo abren otra con indicación accesible explícita.
+
+### 2026-10-24
+
+#### Added
+
+- Añadido el control de build `PUBLIC_BALL_GAME_ENABLED`, desactivado por defecto; al activarlo muestra el juego y sus accesos en portada, navegación, pie y rutas.
+- Añadida una guía ampliada de la iglesia de Nuestra Señora de la Asunción, enlazada desde la tarjeta de patrimonio y con fuentes institucionales visibles.
+- Ampliada la guía de la iglesia con tres fotografías exteriores de Wikimedia Commons, crédito visible y licencia CC BY-SA 4.0.
+- Añadida una guía del Castillo de Torrebuceit a «Qué ver cerca», con el testimonio familiar sobre Crescente y Eusebia, contexto documentado sobre el trabajo en la finca, cautelas de acceso y vídeo grabado por Rafa en homenaje a su abuelo Crescente.
+- Añadidas tres fotografías de Torrebuceit con atribución a 19Tarrestnom65 y licencia CC BY-SA 4.0; las copias WebP locales enlazan a sus originales y a la licencia.
+- Añadidas guías ampliadas de Segóbriga, la Mina de la Mora Encantada y Noheda, con fotografías licenciadas y créditos visibles, fuentes oficiales y condiciones de visita.
+
+#### Changed
+
+- Convertidas las imágenes raster locales, municipales y de bandos a variantes WebP responsive de Astro; se conservan las fuentes originales y se añaden URLs estáticas versionadas. Los fallos detectados en el sondeo inicial conservan la URL de origen.
+- Reforzada la identidad de la cabecera con el escudo enmarcado, el nombre en dos niveles y un botón «Explorar» destacado, manteniendo el conjunto compacto en móvil.
+- Aplicada una superficie verde salvia al hero de portada para separarlo de la cabecera clara y conservar su composición vertical.
+- Priorizado el acceso a las guías internas de «Qué ver cerca» frente a los enlaces externos de fuentes en las tarjetas.
+- Centralizadas las migas de pan de las páginas jerárquicas y eliminados los enlaces de retorno redundantes en noticias, bandos, guías cercanas y la página de la iglesia.
+- Ampliado el borrador del aviso legal para aclarar el alcance informativo del sitio y marcar los datos institucionales pendientes de verificación sin conservar identificadores ficticios.
+
 ### 2026-10-22
 
 #### Added
 
+- Añadida a la Agenda la búsqueda de texto y filtros combinables por tipo, categoría y año, con estado de resultados accesible y filtros restaurables desde la URL.
+- Añadida paginación progresiva a los grupos de Agenda con más de seis fechas, conservando el archivo cerrado por defecto y priorizando las fechas más recientes en el archivo.
+- Añadido a la Agenda el plazo oficial de la convocatoria 2026 de ayudas a la accesibilidad en viviendas de Castilla-La Mancha.
+- Añadidos los plazos JCCM 2026 para ayudas de conciliación mediante cuidados en el hogar y para la contratación indefinida (línea 1).
 - Añadida la feature flag de build `PUBLIC_PALOMARENOS_ENABLED`, desactivada por defecto, que oculta el mapa y el formulario hasta su activación explícita.
 
 ### 2026-10-21

@@ -1,0 +1,372 @@
+---
+import { Image } from 'astro:assets';
+import ExternalLink from '../ui/ExternalLink.astro';
+import ermitaEspadana from '../../assets/fiestas/ermita-virgen-cabeza-espadana.webp';
+import ermitaVistaGeneral from '../../assets/fiestas/ermita-virgen-cabeza-vista-general.webp';
+import { aboutPalomares } from '../../data/about-palomares';
+
+const { traditions } = aboutPalomares;
+const municipalFestivalSource = traditions.sources.find((source) =>
+  source.label.includes('portal municipal'),
+);
+if (!municipalFestivalSource) throw new Error('Missing the official festival source.');
+const festivalPhotos = [
+  { ...traditions.photos[0], src: ermitaVistaGeneral },
+  { ...traditions.photos[1], src: ermitaEspadana },
+];
+---
+
+<section class="traditions-section" id="tradiciones" aria-labelledby="traditions-title">
+  <div class="about-shell">
+    <div class="traditions-grid">
+      <div class="traditions-intro">
+        <p class="eyebrow">{traditions.eyebrow}</p>
+        <h2 id="traditions-title">{traditions.title}</h2>
+        <p class="traditions-description">{traditions.description}</p>
+      </div>
+
+      <div class="traditions-list">
+        {traditions.items.map((item, index) => (
+          <article class="tradition-item">
+            <p class="tradition-period">{item.period}</p>
+            <h3>
+              <span class="tradition-number" aria-hidden="true">
+                0{index + 1}
+              </span>
+              {item.title}
+            </h3>
+            <p>{item.text}</p>
+            <p class="tradition-detail">{item.detail}</p>
+          </article>
+        ))}
+        <p class="programme-note">
+          Los horarios y actos concretos cambian cada edición. Consulta los{' '}
+          <a href="/bandos/">bandos municipales</a> antes de organizar la visita.
+        </p>
+      </div>
+    </div>
+
+    <section class="traditions-photo-section" aria-labelledby="traditions-gallery-title">
+      <div class="traditions-photo-heading">
+        <div>
+          <p class="eyebrow">El lugar de la devoción</p>
+          <h3 id="traditions-gallery-title">La ermita en imágenes</h3>
+        </div>
+        <p>
+          Dos vistas de la ermita de la Virgen de la Cabeza. No son fotografías de los actos
+          festivos; las imágenes de celebraciones publicadas por el Ayuntamiento pueden consultarse
+          en su <ExternalLink href={municipalFestivalSource.href}>portal municipal</ExternalLink>.
+        </p>
+      </div>
+
+      <div class="traditions-gallery">
+        {festivalPhotos.map((photo) => (
+          <figure class="traditions-gallery-item">
+            <Image
+              src={photo.src}
+              alt={photo.alt}
+              widths={[240, 320, 480, 640]}
+              sizes="(max-width: 52rem) calc((100vw - 3rem) / 2), 22rem"
+              format="webp"
+              quality={82}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <p>{photo.caption}</p>
+              <p class="traditions-photo-credit">
+                <ExternalLink href={photo.fileUrl}>
+                  {photo.author} · Wikimedia Commons ({photo.title})
+                </ExternalLink>{' '}
+                <span aria-hidden="true">·</span>{' '}
+                <ExternalLink href={photo.licenseUrl}>{photo.license}</ExternalLink>{' '}
+                <span>{photo.changeNote}</span>
+              </p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <nav class="traditions-sources" aria-label="Fuentes sobre las fiestas patronales">
+      <h3>Historia y programas consultados</h3>
+      <ul>
+        {traditions.sources.map((source) => (
+          <li>
+            <ExternalLink class="source-link" href={source.href}>
+              {source.label}
+            </ExternalLink>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</section>
+
+<style>
+  .traditions-section {
+    padding: var(--spacing-section-y) 0;
+    background: var(--color-surface-traditions);
+  }
+
+  .about-shell {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    margin: 0 0 1.25rem;
+    color: var(--color-clay-text);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  h2,
+  h3,
+  p {
+    overflow-wrap: anywhere;
+  }
+
+  h2,
+  h3 {
+    margin: 0;
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -0.055em;
+    line-height: 0.98;
+  }
+
+  h2 {
+    max-width: 13ch;
+    font-size: var(--font-size-section-heading);
+  }
+
+  h3 {
+    font-size: clamp(1.55rem, 2.7vw, 2rem);
+  }
+
+  .traditions-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(3rem, 9vw, 9rem);
+  }
+
+  .traditions-description,
+  .tradition-item > p:not(.tradition-period),
+  .traditions-photo-heading > p {
+    color: var(--color-muted);
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .traditions-description {
+    max-width: 27rem;
+    margin: 2rem 0 0;
+    font-size: 1.08rem;
+  }
+
+  .tradition-item {
+    padding: 1.35rem 0 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .tradition-period {
+    margin: 0 0 0.8rem;
+    color: var(--color-clay-text);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .tradition-item h3 {
+    display: flex;
+    gap: 0.85rem;
+    align-items: baseline;
+  }
+
+  .tradition-number {
+    color: var(--color-clay-text);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.08em;
+  }
+
+  .tradition-item > p:not(.tradition-period) {
+    margin: 1rem 0 0;
+  }
+
+  .tradition-detail {
+    padding-left: 1rem;
+    border-left: 2px solid var(--color-clay);
+  }
+
+  .programme-note {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  a {
+    color: var(--color-forest);
+    text-underline-offset: 0.22em;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: var(--color-clay-text);
+  }
+
+  a:focus-visible {
+    outline: 3px solid var(--color-clay);
+    outline-offset: 4px;
+  }
+
+  :global(.traditions-sources .source-link:hover),
+  :global(.traditions-sources .source-link:focus-visible) {
+    color: var(--color-clay-text);
+  }
+
+  .traditions-photo-section {
+    margin: clamp(3rem, 7vw, 6rem) 0 0 auto;
+    width: min(100%, 48rem);
+  }
+
+  .traditions-photo-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 1rem 2rem;
+    align-items: end;
+    margin-bottom: 1.5rem;
+  }
+
+  .traditions-photo-heading .eyebrow {
+    margin-bottom: 0.8rem;
+  }
+
+  .traditions-photo-heading > p {
+    margin: 0;
+    font-size: 0.88rem;
+  }
+
+  .traditions-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .traditions-gallery-item {
+    min-width: 0;
+    margin: 0;
+    border: 1px solid var(--color-border);
+    background: var(--color-paper);
+  }
+
+  .traditions-gallery-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .traditions-gallery-item figcaption {
+    padding: 0.9rem 1rem 1rem;
+  }
+
+  .traditions-gallery-item figcaption > p:first-child {
+    margin: 0 0 0.65rem;
+    color: var(--color-ink);
+    font-size: 0.88rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.5;
+  }
+
+  .traditions-photo-credit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0.4rem;
+    margin: 0;
+    color: var(--color-muted);
+    font-size: var(--font-size-small);
+    line-height: 1.55;
+  }
+
+  .traditions-photo-credit a {
+    color: var(--color-forest);
+  }
+
+  :global(.traditions-sources a) {
+    color: var(--color-forest);
+  }
+
+  .traditions-photo-credit > span:last-child {
+    flex-basis: 100%;
+  }
+
+  .traditions-sources {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 1.5rem 2rem;
+    margin: clamp(3rem, 7vw, 6rem) 0 0;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .traditions-sources h3 {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0;
+    line-height: 1.5;
+  }
+
+  .traditions-sources ul {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .traditions-sources li {
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 52rem) {
+    .traditions-grid,
+    .traditions-sources {
+      grid-template-columns: 1fr;
+    }
+
+    .traditions-photo-heading {
+      grid-template-columns: 1fr;
+    }
+
+    .traditions-photo-heading > p {
+      max-width: 40rem;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .about-shell {
+      width: min(100% - 2rem, 72rem);
+    }
+
+    h2 {
+      font-size: clamp(2.8rem, 14vw, 4.2rem);
+    }
+
+    .traditions-gallery {
+      gap: 0.7rem;
+    }
+
+    .traditions-gallery-item figcaption {
+      padding: 0.75rem;
+    }
+  }
+</style>

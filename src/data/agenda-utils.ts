@@ -126,6 +126,11 @@ export function splitAgendaItems(items: readonly AgendaItem[], today: string): A
       sections.upcoming.push(item);
     }
   }
+  const newestFirst = (left: AgendaItem, right: AgendaItem) =>
+    right.startDate.localeCompare(left.startDate);
+  sections.upcoming.sort(newestFirst);
+  sections.past.sort(newestFirst);
+  sections.cancelled.sort(newestFirst);
   return sections;
 }
 

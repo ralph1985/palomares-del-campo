@@ -2,8 +2,12 @@
 import ConquenseCredit from './ConquenseCredit.astro';
 import ExternalLink from '../ui/ExternalLink.astro';
 import { footerExploreLinks, footerQuickLinks, municipalContact } from '../../data/site-footer';
+import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
 
 const currentYear = new Date().getFullYear();
+const visibleExploreLinks = footerExploreLinks.filter(
+  (link) => PUBLIC_BALL_GAME_ENABLED || link.href !== '/juego/',
+);
 ---
 
 <footer class="site-footer" id="contacto">
@@ -28,7 +32,7 @@ const currentYear = new Date().getFullYear();
     <nav class="footer-group" aria-labelledby="footer-explore-title">
       <h2 id="footer-explore-title">Explora</h2>
       <ul>
-        {footerExploreLinks.map((link) => (
+        {visibleExploreLinks.map((link) => (
           <li>
             <a href={link.href}>{link.label}</a>
           </li>
@@ -256,7 +260,7 @@ const currentYear = new Date().getFullYear();
 
   .back-to-top {
     position: fixed;
-    right: clamp(1rem, 3vw, 2rem);
+    right: calc(var(--desktop-menu-width, 0rem) + clamp(1rem, 3vw, 2rem));
     bottom: clamp(1rem, 3vw, 2rem);
     z-index: 1050;
     display: grid;
