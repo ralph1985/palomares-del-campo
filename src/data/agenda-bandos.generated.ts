@@ -53,7 +53,7 @@ export const agendaBandosItems: AgendaItem[] = [
     endDate: '2025-04-29',
     category: 'Actividad pública',
     summary:
-      'LIBRO DE FIESTAS PATRONALES EN HONOR A LA VIRGEN DE LA CABEZA 2025 (DEL 26 AL 29 DE ABRIL).',
+      'LIBRO DE FIESTAS PATRONALES EN HONOR A LA VIRGEN DE LA CABEZA 2025 (DEL 26 AL 29 DE ABRIL). LIBROFIESTASPALOMARESDELCAMPOABRIL2025.pdf',
     source: {
       label: 'Palomares del Campo Informa',
       href: 'https://www.bandomovil.com/palomaresdelcampo/1313870/0',
@@ -142,7 +142,7 @@ export const agendaBandosItems: AgendaItem[] = [
     startDate: '2025-07-13',
     category: 'Trámite público',
     summary:
-      'ESCUELA DE VERANO DE PALOMARES DEL CAMPO 2025. Todos los niños que quieran asistir a la Escuela de Verano deberán rellenar el formulario de inscripción hasta el 13 de julio en el siguiente enlace:',
+      'ESCUELA DE VERANO DE PALOMARES DEL CAMPO 2025. Todos los niños que quieran asistir a la Escuela de Verano deberán rellenar el formulario de inscripción hasta el 13 de julio en el siguiente enlace: El enlace al formulario está incompleto en esta reproducción. Consulta la…',
     source: {
       label: 'Palomares del Campo Informa',
       href: 'https://www.bandomovil.com/palomaresdelcampo/1358089/0',
@@ -179,12 +179,28 @@ export const agendaBandosItems: AgendaItem[] = [
     },
   },
   {
-    id: 'bando:1377442:1',
+    id: 'bando:1375087:1',
     kind: 'event',
     title: 'Teatro ambiental',
     startDate: '2025-07-26',
     startTime: '11:00',
     category: 'Cultura',
+    location: 'Polideportivo de la Plaza de toros de Palomares del Campo',
+    summary:
+      'El sábado 26 a las 11:00 horas en el Polideportivo de la Plaza de toros de Palomares del Campo.',
+    source: {
+      label: 'Palomares del Campo Informa',
+      href: 'https://www.bandomovil.com/palomaresdelcampo/1375087/0',
+      publishedAt: '2025-07-22T11:20:00.000Z',
+    },
+  },
+  {
+    id: 'bando:1377442:1',
+    kind: 'service',
+    title: 'Teatro ambiental',
+    startDate: '2025-07-26',
+    startTime: '11:00',
+    category: 'Servicio público',
     location: 'Polideportivo de la Plaza de Toros',
     summary:
       'RECORDATORIO: Mañana, sábado 26 a las 11:00h tendrá lugar el teatro ambiental "LA ACADEMIA DEL MUSGO VERDE Y LA MAGIA DE RECICLAR" en el Polideportivo de la Plaza de Toros. SINOPSIS: ¡Es el día de la gran graduación en la Academia del Musgo Verde! Todo está listo: los hechizos,…',
@@ -273,7 +289,7 @@ export const agendaBandosItems: AgendaItem[] = [
     endDate: '2025-09-28',
     category: 'Actividad pública',
     summary:
-      'LIBRO DE FIESTAS PATRONALES EN HONOR AL SANTO CRISTO DE LA PAZ (Del 25 al 28 de septiembre de 2025)',
+      'LIBRO DE FIESTAS PATRONALES EN HONOR AL SANTO CRISTO DE LA PAZ (Del 25 al 28 de septiembre de 2025) FIESTAS2025-09PALOMARESDELCAMPO.pdf',
     source: {
       label: 'Palomares del Campo Informa',
       href: 'https://www.bandomovil.com/palomaresdelcampo/1412981/0',
@@ -371,6 +387,20 @@ export const agendaBandosItems: AgendaItem[] = [
     },
   },
   {
+    id: 'bando:1425221:1',
+    kind: 'service',
+    title: 'Pago Musicales',
+    startDate: '2025-11-07',
+    category: 'Servicio público',
+    summary:
+      'MUSICAL 7 de noviembre – ANASTASIA: el precio es de 18 € por entrada. MUSICAL 1\\1 de diciembre – NINO BRAVO: el precio es de 25 € por entrada. El precio para los que asistan a los dos musicales es de 43 €. Para pagar, ponte en contacto con Montse. El resto de las instrucciones…',
+    source: {
+      label: 'Palomares del Campo Informa',
+      href: 'https://www.bandomovil.com/palomaresdelcampo/1425221/0',
+      publishedAt: '2025-10-04T21:15:00.000Z',
+    },
+  },
+  {
     id: 'bando:1451212:1',
     kind: 'event',
     title: 'Montaje Belén Iglesia',
@@ -438,7 +468,7 @@ export const agendaBandosItems: AgendaItem[] = [
     endDate: '2026-04-28',
     category: 'Actividad pública',
     summary:
-      'LIBRO DE FIESTAS PATRONALES EN HONOR A LA VIRGEN DE LA CABEZA 2026 (DEL 25 AL 28 DE ABRIL).',
+      'LIBRO DE FIESTAS PATRONALES EN HONOR A LA VIRGEN DE LA CABEZA 2026 (DEL 25 AL 28 DE ABRIL). LIBROFIESTASPALOMARESDELCAMPOABRIL2026.pdf',
     source: {
       label: 'Palomares del Campo Informa',
       href: 'https://www.bandomovil.com/palomaresdelcampo/1538742/0',
@@ -507,10 +537,10 @@ export const agendaBandosItems: AgendaItem[] = [
   },
   {
     id: 'bando:1618661:1',
-    kind: 'event',
+    kind: 'service',
     title: 'Eclipse',
     startDate: '2026-08-12',
-    category: 'Actividad pública',
+    category: 'Servicio público',
     location: 'Mirador de la Fuente',
     summary:
       "Atencion vecinos y visitantes, recordar que mañana sobre las 19'00 y 19'30 estaremos en el Mirador de la Fuente, para observar el Eclipse Solar, se repartiran gafas hasta fin de existencias, el que ya tenga gafas que se las lleve. La Delegación de Desarrollo Sostenible de…",
@@ -610,7 +640,7 @@ export const agendaBandosItems: AgendaItem[] = [
     category: 'Actividad pública',
     location: 'puerta del Ayuntamiento',
     summary:
-      'La concentración será mañana (miércoles, 2 de septiembre) a las 20:00 horas en la puerta del Ayuntamiento.',
+      'La concentración será mañana (miércoles, 2 de septiembre) a las 20:00 horas en la puerta del Ayuntamiento. CONVOCATORIACEUTA.pdf',
     source: {
       label: 'Palomares del Campo Informa',
       href: 'https://www.bandomovil.com/palomaresdelcampo/1634221/0',
