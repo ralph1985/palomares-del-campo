@@ -2,9 +2,14 @@ import { expect, test } from './fixtures';
 
 test.describe('local ball game', () => {
   test('loads the map, locations and development simulator', async ({ page }) => {
-    const tileResponse = page.waitForResponse((response) =>
-      response.url().includes('.tile.openstreetmap.org'),
-    );
+    const tileResponse = page.waitForResponse((response) => {
+      const { hostname } = new URL(response.url());
+      return [
+        'a.tile.openstreetmap.org',
+        'b.tile.openstreetmap.org',
+        'c.tile.openstreetmap.org',
+      ].includes(hostname);
+    });
     await page.goto('/juego/');
 
     await expect(page.getByRole('heading', { name: 'La bola está en juego.' })).toBeVisible();
