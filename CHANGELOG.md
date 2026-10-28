@@ -4,6 +4,13 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-10-28
+
+#### Changed
+
+- Ordenadas las fechas de la Agenda de más reciente a más antigua en todas sus secciones, también al aplicar filtros.
+- Aislado el servidor E2E en el primer puerto libre desde 4321 para no reutilizar por accidente servidores de otros worktrees.
+
 ### 2026-10-27
 
 #### Changed

@@ -1,6 +1,33 @@
 import { expect, test } from './fixtures';
 
 test.describe('current affairs sections', () => {
+  test('orders every agenda section from newest date to oldest, including filtered results', async ({
+    page,
+  }) => {
+    await page.clock.install({ time: new Date('2026-10-21T10:00:00.000Z') });
+    await page.goto('/agenda/');
+
+    const assertNewestFirst = async (selector: string, visibleOnly = false) => {
+      const dates = await page
+        .locator(selector)
+        .evaluateAll(
+          (cards, filterHidden) =>
+            cards
+              .filter((card) => !filterHidden || !card.hasAttribute('hidden'))
+              .map((card) => card.getAttribute('data-start-date') ?? ''),
+          visibleOnly,
+        );
+      expect(dates).toEqual([...dates].sort().reverse());
+    };
+
+    for (const section of ['upcoming', 'past', 'cancelled']) {
+      await assertNewestFirst(`[data-agenda-list="${section}"] [data-agenda-card]`);
+    }
+
+    await page.getByRole('combobox', { name: 'Año' }).selectOption('2025');
+    await assertNewestFirst('[data-agenda-list="past"] [data-agenda-card]', true);
+  });
+
   test('separa automáticamente las fechas pasadas en un archivo cerrado y mantiene los plazos vigentes', async ({
     page,
   }) => {
