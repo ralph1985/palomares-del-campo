@@ -5,7 +5,7 @@ La estrategia actual protege la web editorial, el shell compartido y el juego. L
 ## Configuración
 
 - `vitest.config.ts` usa `getViteConfig()` de `astro/config` para cargar la configuración Vite de Astro; ejecuta tests en Node e incluye `tests/unit/**/*.test.ts` y `tests/integration/**/*.test.ts`. Los tests de componentes Astro usan `AstroContainer` dentro de la misma suite.
-- `playwright.config.ts` ejecuta `tests/e2e/` en Chromium. Por defecto arranca `pnpm exec astro dev --host 127.0.0.1 --port 4321` y usa `http://127.0.0.1:4321`; `PLAYWRIGHT_BASE_URL` permite apuntar a un servidor ya activo, que se reutiliza si responde. No arrancar una segunda instancia del mismo proyecto sobre una Astro dev existente.
+- `playwright.config.ts` ejecuta `tests/e2e/` en Chromium. Por defecto busca el primer puerto libre desde 4321, arranca Astro en ese puerto con `--strictPort` y configura Playwright con la misma URL; así no se conecta por accidente al servidor de otro worktree. `PLAYWRIGHT_BASE_URL` permite apuntar a un servidor ya activo; al fijarlo, Playwright no arranca otro servidor.
 - En Playwright, `playwright.config.ts` activa la flag por defecto para ejercitar la animación; este valor solo se aplica al servidor aislado de pruebas, no al build de producción. `tests/e2e/page-transition-feature-flag.spec.ts` verifica el atributo del shell y, en una ejecución separada con `PUBLIC_PAGE_TRANSITIONS_ENABLED=false`, comprueba que no hay overlay ni petición de la escena, que se limpia el estado entrante obsoleto y que el enlace navega normalmente. CI y el hook pre-push ejecutan ambos modos.
 - `PUBLIC_PALOMARENOS_ENABLED` queda desactivada por defecto en los builds de Astro. El servidor aislado de Playwright la activa para la suite funcional; una ejecución separada con `PUBLIC_PALOMARENOS_ENABLED=false` comprueba que la página conserva su estado informativo pero no incluye el mapa ni el formulario. CI y el hook pre-push ejecutan esa comprobación.
 - `PUBLIC_BALL_GAME_ENABLED` queda desactivada por defecto en los builds de Astro. Playwright la activa para conservar los escenarios funcionales del juego; la suite `ball-game-feature-flag.spec.ts` comprueba en ejecuciones separadas que las entradas y la ruta desaparecen con `false` y vuelven con `true`.
@@ -80,7 +80,7 @@ Los escenarios E2E prueban la aplicación Astro real en Chromium y cubren:
 
 Las pruebas del juego usan `astro dev` y el simulador disponible en `import.meta.env.DEV`. No constituyen una prueba E2E contra un deployment remoto de Convex, ni prueban dos jugadores reales compitiendo por la misma versión de la bola.
 
-Para reutilizar un servidor ya activo (por ejemplo, uno accesible por Tailnet), asignar su URL a `PLAYWRIGHT_BASE_URL` y ejecutar `CI=1 pnpm test:e2e`; el `webServer` de Playwright comprueba esa URL y la reutiliza si responde.
+Para reutilizar un servidor ya activo (por ejemplo, uno accesible por Tailnet), asignar su URL a `PLAYWRIGHT_BASE_URL` y ejecutar `CI=1 pnpm test:e2e`; Playwright usa esa URL sin intentar iniciar otro servidor.
 
 ## Validaciones de calidad
 
