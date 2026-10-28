@@ -416,7 +416,6 @@ export function htmlToMarkdown(html: string): string {
     .replaceAll(/<b[^>]*>([\s\S]*?)<\/b>/gi, '**$1**')
     .replaceAll(/<em[^>]*>([\s\S]*?)<\/em>/gi, '*$1*')
     .replaceAll(/<i[^>]*>([\s\S]*?)<\/i>/gi, '*$1*')
-    .replaceAll(/<[^>]+>/g, '')
     .replaceAll(/\r/g, '')
     .replaceAll(/[ \t]+/g, ' ')
     .replaceAll(/\n[ \t]+/g, '\n')
