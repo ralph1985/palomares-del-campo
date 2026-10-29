@@ -1,7 +1,7 @@
 ---
 title: 'ESCUELA DE VERANO DE PALOMARES DEL CAMPO 2025'
 seoTitle: 'Escuela de verano de Palomares 2025'
-description: 'ESCUELA DE VERANO DE PALOMARES DEL CAMPO 2025. Todos los niños que quieran asistir a la Escuela de Verano deberán rellenar el formulario de inscripción hasta el 13 de julio en el s…'
+description: 'Inscripción a la Escuela de Verano 2025 mediante formulario hasta el 13 de julio.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-06-26T11:30:00.000Z
 category: 'Info General'
@@ -21,6 +21,4 @@ attachments:
 
 ESCUELA DE VERANO DE PALOMARES DEL CAMPO 2025.
 
-Todos los niños que quieran asistir a la Escuela de Verano deberán rellenar el formulario de inscripción hasta el 13 de julio en el siguiente enlace:
-
-El enlace al formulario está incompleto en esta reproducción. Consulta la publicación original para acceder a él.
+Todos los niños que quieran asistir a la Escuela de Verano deberán rellenar el formulario de inscripción hasta el 13 de julio en el siguiente enlace: [Formulario de inscripción](https://docs.google.com/forms/d/e/1FAIpQLSepL29428HyN5gz2AHsvY8tCE4SqEYbhY76OqEZfc40OgF48Q/viewform?usp=sharing&ouid=101963257660962714555).

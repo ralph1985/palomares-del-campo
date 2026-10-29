@@ -82,14 +82,20 @@ function getDateFromBody(body: string, publishedAt: string): string | null {
   if (!publishedDate) return null;
 
   const text = normalize(body);
+  const deadlineMatch = text.match(
+    /\b(?:pago|abono)\b[^\n.]{0,160}?\b(?:antes\s+del?|hasta\s+el)\s+(?:(lunes|martes|miercoles|jueves|viernes|sabado|domingo)\s+)?(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre)(?:\s+(?:de|del)\s+(\d{4}))?/,
+  );
   const dateMatch = text.match(
     /\b(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre)(?:\s+(?:de|del)\s+(\d{4}))?\b/,
   );
-  if (dateMatch) {
-    const day = Number(dateMatch[1]);
-    const monthName = dateMatch[2];
+  if (deadlineMatch || dateMatch) {
+    const dayToken = deadlineMatch?.[2] ?? dateMatch?.[1];
+    const monthName = deadlineMatch?.[3] ?? dateMatch?.[2];
+    const yearToken = deadlineMatch?.[4] ?? dateMatch?.[3];
+    if (!dayToken || !monthName) return null;
+    const day = Number(dayToken);
     const month = monthName ? months[monthName] : undefined;
-    const explicitYear = dateMatch[3] ? Number(dateMatch[3]) : publishedDate.year;
+    const explicitYear = yearToken ? Number(yearToken) : publishedDate.year;
     if (month === undefined) return null;
 
     let year = explicitYear;
@@ -98,7 +104,7 @@ function getDateFromBody(body: string, publishedAt: string): string | null {
 
     const publishedIso = isoDate(publishedDate.year, publishedDate.month, publishedDate.day);
     if (
-      !dateMatch[3] &&
+      !yearToken &&
       publishedIso &&
       result < publishedIso &&
       publishedDate.month >= 10 &&
@@ -109,11 +115,13 @@ function getDateFromBody(body: string, publishedAt: string): string | null {
     }
     if (!result) return null;
 
-    const weekdayMatch = text
-      .slice(Math.max(0, (dateMatch.index ?? 0) - 32), dateMatch.index ?? 0)
-      .match(/\b(lunes|martes|miercoles|jueves|viernes|sabado|domingo)\b[^.\n]{0,24}$/);
-    if (weekdayMatch) {
-      const expectedWeekday = weekdays[weekdayMatch[1] ?? ''];
+    const weekday =
+      deadlineMatch?.[1] ??
+      text
+        .slice(Math.max(0, (dateMatch?.index ?? 0) - 32), dateMatch?.index ?? 0)
+        .match(/\b(lunes|martes|miercoles|jueves|viernes|sabado|domingo)\b[^.\n]{0,24}$/)?.[1];
+    if (weekday) {
+      const expectedWeekday = weekdays[weekday];
       const [resultYear, resultMonth, resultDay] = result.split('-').map(Number);
       const actualWeekday = new Date(
         Date.UTC(resultYear ?? 0, (resultMonth ?? 1) - 1, resultDay ?? 1),
@@ -310,14 +318,20 @@ function getAgendaDatesFromBando(source: BandoAgendaSource): AgendaDateRange[] {
 }
 
 function getKind(source: BandoAgendaSource): AgendaItemKind | null {
+  const title = normalize(source.title);
   const text = normalize(`${source.title} ${source.body}`);
   if (isExplicitlyExcluded(source)) return null;
   const explicitDeadline =
     /\b(fecha limite|hasta el|fecha de cierre|fecha fin|presentar ofertas|presentacion de ofertas|licitacion)\b/.test(
       text,
-    ) || /\bplazo\b[^.\n]{0,80}\b(?:es|vence|termina|finaliza|acaba|hasta)\b/.test(text);
+    ) ||
+    /\bplazo\b[^.\n]{0,80}\b(?:es|vence|termina|finaliza|acaba|hasta)\b/.test(text) ||
+    /\b(?:pago|abono)\b[^.\n]{0,160}\b(?:antes\s+del?|hasta\s+el)\b/.test(text);
   if (explicitDeadline) return 'deadline';
-  if (/\b(dni electronico|vacunacion|dentista|servicio|cita|consulta)\b/.test(text))
+  if (
+    /\b(dni electronico|vacunacion|dentista|fisioterapia|servicio)\b/.test(text) ||
+    /\b(cita|consulta)\b/.test(title)
+  )
     return 'service';
   if (
     /\b(concierto|teatro|curso|taller(?:es)?|charlas?|jornadas?|festival|fiestas?|campeonatos?|clase|ajuste|actividad(?:es)?|visita|eclipse|reunion|salida|montaje|retirada|exposicion|actuacion|ludoteca|escuela|concentracion|belen)\b/.test(
@@ -359,6 +373,17 @@ function getTime(body: string): string | undefined {
   return [...times][0];
 }
 
+function getDeadlineTime(body: string): string | undefined {
+  const match = normalize(body).match(
+    /\b(?:fecha limite|fecha de cierre|fecha fin|plazo|pago|abono)\b[^.\n]{0,120}?(?:a las|hasta las)\s*(\d{1,2})(?::|['’])(\d{2})/,
+  );
+  if (!match) return undefined;
+  const hour = Number(match[1]);
+  const minute = Number(match[2]);
+  if (hour > 23 || minute > 59) return undefined;
+  return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+}
+
 function extractNamedVenue(text: string): string | undefined {
   const venue = text.match(
     /\b(?:en|al)\s+(?:(?:el|la|los|las)\s+)?((?:Plaza|Sal[oó]n|Salon|Polideportivo|Pista|Hogar|Asociaci[oó]n|Asociacion|Centro M[eé]dico|Centro Medico|Mirador|Iglesia|Puerta del Ayuntamiento|Ayuntamiento|Casa de Cultura|Auditorio)[^,.;\n()]{0,70})/i,
@@ -396,17 +421,47 @@ function getLocation(body: string): string | undefined {
   return extractNamedVenue(body);
 }
 
-function getSummary(body: string): string | undefined {
-  const summary = body
+function getSummary(body: string, kind: AgendaItemKind): string | undefined {
+  let summary = body
+    .replaceAll(/\[([^\]]+)\]\(https?:\/\/[^)]+\)/gi, '$1')
+    .replaceAll(
+      /^[\p{L}\p{N}_.-]+\.(?:pdf|docx?|xlsx?|pptx?|jpe?g|png|gif|webp|mp4|mov)[ \t]*$/gimu,
+      '',
+    )
     .replaceAll(/\s*\.{3}\s*haga click para ver completo\.?/gi, '')
     .replaceAll(/\s*haga click para ver completo\.?/gi, '')
     .replaceAll(/Archivo(?:s)? adjunto(?:s)?:[\s\S]*$/gi, '')
     .replaceAll(/https?:\/\/\S+/gi, '')
+    .replaceAll(/\b(?:en el teléfono|al teléfono)\s*\+?\d[\d\s().-]{7,}\d/gi, '')
     .replaceAll(/\b(?:\+?\d[\d\s().-]{7,}\d)\b/g, '')
     .replaceAll(/[*_`]/g, '')
     .replaceAll(/\s+/g, ' ')
     .trim();
   if (!summary) return undefined;
+  if (kind === 'deadline') {
+    const sentences = summary.match(/[^.!?]+[.!?]?/g)?.map((sentence) => sentence.trim()) ?? [];
+    const deadlineIndex = sentences.findIndex((sentence) =>
+      /\b(?:antes\s+de(?:l)?|hasta\s+el|fecha\s+(?:l[ií]mite|fin))\b/i.test(sentence),
+    );
+    if (deadlineIndex >= 0) {
+      const deadlineSentence = sentences[deadlineIndex];
+      const paymentSentences = sentences.filter(
+        (sentence, index) =>
+          index !== deadlineIndex &&
+          /\b(?:pagar|pago|abon\w*|contacto|llamar|inscrib\w*|rellenar|presentar)\b/i.test(
+            sentence,
+          ),
+      );
+      const prioritized = [deadlineSentence, ...paymentSentences].filter(
+        (sentence): sentence is string => sentence !== undefined,
+      );
+      const prioritizedSet = new Set(prioritized);
+      summary = [
+        ...prioritized,
+        ...sentences.filter((sentence) => !prioritizedSet.has(sentence)),
+      ].join(' ');
+    }
+  }
   const maxLength = 280;
   if (summary.length <= maxLength) return summary;
   const maxContentLength = maxLength - 1;
@@ -523,11 +578,11 @@ function deriveAgendaItemsWithKind(
   const dates = getAgendaDatesFromBando(source);
   if (dates.length === 0) return [];
 
-  const time = getTime(source.body);
+  const time = kind === 'deadline' ? getDeadlineTime(source.body) : getTime(source.body);
   const title = getAgendaTitle(source);
   if (!title) return [];
   const location = getLocation(source.body);
-  const summary = getSummary(source.body);
+  const summary = getSummary(source.body, kind);
 
   return dates.map(({ startDate, endDate }, occurrence) => ({
     id: `bando:${source.sourceId}:${occurrence + 1}`,

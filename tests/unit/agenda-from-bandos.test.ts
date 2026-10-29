@@ -35,6 +35,26 @@ describe('agenda extraction from municipal notices', () => {
     ]);
   });
 
+  it('keeps dated physiotherapy sessions in the Agenda as public services', () => {
+    expect(
+      deriveAgendaItemsFromBando({
+        title: 'FISIOTERAPIA',
+        category: 'Info General',
+        publishedAt: '2025-02-04T10:28:00.000Z',
+        sourceName: 'Palomares del Campo Informa',
+        sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1275087/0',
+        sourceId: '1275087',
+        body: 'Miércoles, 12 de febrero. Los interesados deben llamar al teléfono indicado para pedir cita.',
+      }),
+    ).toMatchObject([
+      {
+        kind: 'service',
+        startDate: '2025-02-12',
+        category: 'Servicio público',
+      },
+    ]);
+  });
+
   it('classifies a dated municipal talk from its official notice', () => {
     expect(
       deriveAgendaItemsFromBando({
@@ -114,6 +134,48 @@ describe('agenda extraction from municipal notices', () => {
         category: 'Trámite público',
       },
     ]);
+  });
+
+  it('uses an explicit payment deadline instead of musical dates and contact hours', () => {
+    const [item] = deriveAgendaItemsFromBando({
+      title: 'Pago Musicales',
+      category: 'Cultura',
+      publishedAt: '2025-10-04T21:15:00.000Z',
+      sourceName: 'Palomares del Campo Informa',
+      sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1425221/0',
+      sourceId: '1425221',
+      body: 'MUSICAL 7 de noviembre – ANASTASIA: 18 € por entrada. MUSICAL 11 de diciembre – NINO BRAVO: 25 € por entrada. Para pagar, ponte en contacto con Montse para abonarle el dinero en el teléfono 666878692 a partir de las 16:00 horas. También podrá abonarse en el Ayuntamiento en horario de mañana. El pago deberá hacerse antes del miércoles 8 de octubre.',
+    });
+
+    expect(item).toMatchObject({
+      kind: 'deadline',
+      startDate: '2025-10-08',
+      category: 'Trámite público',
+    });
+    expect(item?.deadlineTime).toBeUndefined();
+    expect(item?.summary).toContain('antes del miércoles 8 de octubre');
+    expect(item?.summary).toContain('Montse');
+    expect(item?.summary).toContain('a partir de las 16:00');
+    expect(item?.summary).not.toContain('teléfono');
+    expect(item?.summary).toContain('Ayuntamiento en horario de mañana');
+  });
+
+  it('keeps a stated submission time when it belongs to the deadline', () => {
+    const [item] = deriveAgendaItemsFromBando({
+      title: 'Presentación de ofertas',
+      category: 'Info General',
+      publishedAt: '2025-10-06T09:00:00.000Z',
+      sourceName: 'Palomares del Campo Informa',
+      sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1006/0',
+      sourceId: '1006',
+      body: 'La fecha límite para presentar ofertas es el 26 de octubre a las 14:00 horas.',
+    });
+
+    expect(item).toMatchObject({
+      kind: 'deadline',
+      startDate: '2025-10-26',
+      deadlineTime: '14:00',
+    });
   });
 
   it('resolves yearless January and February dates and ranges into the next year from autumn', () => {
@@ -196,6 +258,22 @@ describe('agenda extraction from municipal notices', () => {
     expect(item?.summary?.length).toBeLessThanOrEqual(280);
   });
 
+  it('keeps Markdown link labels and excludes standalone attachment filenames from Agenda summaries', () => {
+    const [item] = deriveAgendaItemsFromBando({
+      title: 'Libro de fiestas',
+      category: 'Info General',
+      publishedAt: '2026-04-17T08:54:00.000Z',
+      sourceName: 'Palomares del Campo Informa',
+      sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1538742/0',
+      sourceId: '1538742',
+      body: 'Libro de fiestas del 25 al 28 de abril de 2026. [Consulta el programa](https://example.org/programa.pdf)\nLIBROFIESTASPALOMARESDELCAMPOABRIL2026.pdf',
+    });
+
+    expect(item?.summary).toBe(
+      'Libro de fiestas del 25 al 28 de abril de 2026. Consulta el programa',
+    );
+  });
+
   it('omits an automatic start time when the notice lists multiple possible times', () => {
     const [item] = deriveAgendaItemsFromBando({
       title: 'Eclipse',
@@ -204,7 +282,7 @@ describe('agenda extraction from municipal notices', () => {
       sourceName: 'Palomares del Campo Informa',
       sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1618661/0',
       sourceId: '1618661',
-      body: "Atención: mañana sobre las 19'00 y 19'30 estaremos en el Mirador de la Fuente, para observar el eclipse solar.",
+      body: "Atención: mañana sobre las 19'00 y 19'30 estaremos en el Mirador de la Fuente, para observar el eclipse solar. El comunicado está incompleto en esta reproducción. Consulta la publicación original.",
     });
 
     expect(item).toMatchObject({ kind: 'event', startDate: '2026-08-12' });
@@ -679,11 +757,12 @@ Horarios de autobús de lunes a viernes. Salida a las 8:00.
       sourceName: 'Palomares del Campo Informa',
       sourceUrl: 'https://www.bandomovil.com/palomaresdelcampo/1611017/0',
       sourceId: '1611017',
-      body: "Recordaros a todos que hoy día 3 de agosto a las 11'00, hay una representación de Teatro Ambiental, para todos los públicos en el Polideportivo de la Piscina.",
+      body: "Recordaros a todos que hoy día 3 de agosto a las 11'00, hay una representación de Teatro Ambiental, para todos los públicos en el Polideportivo de la Piscina. La sinopsis no aparece completa en esta reproducción; consulta la publicación original.",
     });
 
     expect(announced[0]?.title).toBe('Teatro ambiental');
     expect(reminder[0]?.title).toBe('Teatro ambiental');
+    expect(reminder[0]?.kind).toBe('event');
     const merged = mergeAgendaItems(announced, reminder);
     expect(merged).toHaveLength(1);
     expect(merged[0]?.location).toBeUndefined();
