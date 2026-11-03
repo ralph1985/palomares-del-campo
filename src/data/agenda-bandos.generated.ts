@@ -142,7 +142,7 @@ export const agendaBandosItems: AgendaItem[] = [
     startDate: '2025-07-13',
     category: 'Trámite público',
     summary:
-      'ESCUELA DE VERANO DE PALOMARES DEL CAMPO 2025. Todos los niños que quieran asistir a la Escuela de Verano deberán rellenar el formulario de inscripción hasta el 13 de julio en el siguiente enlace:',
+      'Todos los niños que quieran asistir a la Escuela de Verano deberán rellenar el formulario de inscripción hasta el 13 de julio en el siguiente enlace: Formulario de inscripción. ESCUELA DE VERANO DE PALOMARES DEL CAMPO 2025.',
     source: {
       label: 'Palomares del Campo Informa',
       href: 'https://www.bandomovil.com/palomaresdelcampo/1358089/0',
@@ -294,6 +294,21 @@ export const agendaBandosItems: AgendaItem[] = [
       label: 'Palomares del Campo Informa',
       href: 'https://www.bandomovil.com/palomaresdelcampo/1425590/0',
       publishedAt: '2025-10-06T09:18:00.000Z',
+    },
+  },
+  {
+    id: 'bando:1425221:1',
+    kind: 'deadline',
+    title: 'Pago Musicales',
+    startDate: '2025-10-08',
+    category: 'Trámite público',
+    location: 'Ayuntamiento en horario de mañana',
+    summary:
+      'El pago deberá hacerse antes del miércoles 8 de octubre. Ponerse en contacto con Montse para abonarle el dinero a partir de las 16:00 horas. También podrá abonarse en el Ayuntamiento en horario de mañana. MUSICAL 7 de noviembre – ANASTASIA: el precio es de 18 € por entrada.…',
+    source: {
+      label: 'Palomares del Campo Informa',
+      href: 'https://www.bandomovil.com/palomaresdelcampo/1425221/0',
+      publishedAt: '2025-10-04T21:15:00.000Z',
     },
   },
   {

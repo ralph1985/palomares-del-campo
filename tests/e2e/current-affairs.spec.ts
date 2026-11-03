@@ -230,10 +230,12 @@ test.describe('current affairs sections', () => {
     await expect(articleContent).not.toContainText('Agradecem(...)');
 
     await page.goto('/bandos/1425221-pago-musicales/');
-    await expect(page.locator('.article-content')).toContainText('ponte en contacto con Montse');
-    await expect(page.locator('.article-content')).toContainText(
-      'instrucciones de pago no aparece completo',
+    await expect(articleContent).toContainText('Ponerse en contacto con Montse');
+    await expect(articleContent).toContainText('MUSICAL 11 de diciembre – NINO BRAVO');
+    await expect(articleContent).toContainText(
+      'El pago deberá hacerse antes del miércoles 8 de octubre.',
     );
+    await expect(articleContent).not.toContainText('instrucciones de pago no aparece completo');
 
     await page.goto(
       '/bandos/1398895-videos-teatro-concejalia-de-cultura-palomares-del-campo-17-08-2025/',

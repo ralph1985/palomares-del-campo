@@ -1,6 +1,6 @@
 ---
 title: 'Pago Musicales'
-description: '**MUSICAL 7 de noviembre –**** ANASTASIA**: el precio es de **18 € por entrada.** **MUSICAL 1****1 de diciembre – NINO BRAVO**: el precio es de **25 € por entrada. **El **precio **…'
+description: 'Pago de las entradas para Anastasia y Nino Bravo antes del miércoles 8 de octubre.'
 author: 'Ayuntamiento de Palomares del Campo'
 date: 2025-10-04T21:15:00.000Z
 category: 'Cultura'
@@ -10,9 +10,11 @@ sourceId: '1425221'
 attachments: []
 ---
 
-**MUSICAL 7 de noviembre –**** ANASTASIA**: el precio es de **18 € por entrada.**
-**MUSICAL 1\****1 de diciembre – NINO BRAVO**: el precio es de **25 € por entrada.
+MUSICAL 7 de noviembre – ANASTASIA: el precio es de 18 € por entrada.
+MUSICAL 11 de diciembre – NINO BRAVO: el precio es de 25 € por entrada.
 
-**El **precio **para los que asistan a los** dos musicales** es de **43 ****€.****
+El precio para los que asistan a los dos musicales es de 43 €.
 
-Para pagar, ponte en contacto con Montse. El resto de las instrucciones de pago no aparece completo en esta reproducción; consulta el comunicado original.
+Ponerse en contacto con Montse para abonarle el dinero en el teléfono 666878692 a partir de las 16:00 horas. También podrá abonarse en el Ayuntamiento en horario de mañana.
+
+El pago deberá hacerse antes del miércoles 8 de octubre.
