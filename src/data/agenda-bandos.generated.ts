@@ -707,4 +707,17 @@ export const agendaBandosItems: AgendaItem[] = [
       publishedAt: '2026-10-27T10:17:26.000Z',
     },
   },
+  {
+    id: 'bando:1680560:1',
+    kind: 'event',
+    title: 'Visita a Madrid',
+    startDate: '2026-12-13',
+    category: 'Cultura',
+    summary: '13 de diciembre de 2026',
+    source: {
+      label: 'Palomares del Campo Informa',
+      href: 'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1680560',
+      publishedAt: '2026-11-13T10:27:10.000Z',
+    },
+  },
 ];
