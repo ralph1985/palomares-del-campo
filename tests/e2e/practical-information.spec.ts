@@ -55,17 +55,19 @@ test.describe('practical municipal information', () => {
     await expect(page.getByText(/Revisado el \d{1,2} de \w+ de \d{4}/)).toBeVisible();
   });
 
-  test('keeps practical information within a mobile viewport', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto('/informacion-practica/');
-    await expect(
-      page.getByRole('heading', { level: 1, name: 'Información práctica para el día a día' }),
-    ).toBeVisible();
+  test('keeps practical information within narrow mobile viewports', async ({ page }) => {
+    for (const width of [320, 375]) {
+      await page.setViewportSize({ width, height: 812 });
+      await page.goto('/informacion-practica/');
+      await expect(
+        page.getByRole('heading', { level: 1, name: 'Información práctica para el día a día' }),
+      ).toBeVisible();
 
-    const widths = await page.evaluate(() => ({
-      document: document.documentElement.scrollWidth,
-      viewport: document.documentElement.clientWidth,
-    }));
-    expect(widths.document).toBeLessThanOrEqual(widths.viewport);
+      const widths = await page.evaluate(() => ({
+        document: document.documentElement.scrollWidth,
+        viewport: document.documentElement.clientWidth,
+      }));
+      expect(widths.document, `at ${width}px`).toBeLessThanOrEqual(widths.viewport);
+    }
   });
 });
