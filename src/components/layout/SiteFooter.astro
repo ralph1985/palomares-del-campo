@@ -76,7 +76,12 @@ const visibleExploreLinks = footerExploreLinks.filter(
       </p>
       <p>{municipalContact.judicialDistrict}</p>
       <a href={`tel:${municipalContact.phoneHref}`}>{municipalContact.phone}</a>
+      <p>Correo de oficina (Sede)</p>
       <a href={`mailto:${municipalContact.email}`}>{municipalContact.email}</a>
+      <p>Correo indicado en la ficha de contratación (PLACSP)</p>
+      <a href={`mailto:${municipalContact.contractingEmail}`}>
+        {municipalContact.contractingEmail}
+      </a>
     </address>
   </div>
 
