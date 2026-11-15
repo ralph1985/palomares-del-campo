@@ -12,6 +12,7 @@ const routes = [
   '/noticias/',
   '/agenda/',
   '/informacion-practica/',
+  '/servicios-del-pueblo/',
   '/rutas/',
   '/aviso-legal/',
   '/politica-de-cookies/',
@@ -23,7 +24,7 @@ const routes = [
   '/que-ver-cerca/villa-romana-noheda/',
   '/alojamientos/',
   '/palomarenos-por-el-mundo/',
-  ...(process.env.PUBLIC_BALL_GAME_ENABLED === 'true' ? ['/juego/'] : []),
+  '/juego/',
 ];
 const viewports = [
   { name: 'desktop', width: 1440, height: 900 },
@@ -198,7 +199,11 @@ for (const viewport of viewports) {
   for (const route of routes) {
     const response = await navigateVisualQaRoute(`${baseUrl}${route}`);
     const status = response?.status() ?? 0;
-    if (status !== 200) failures.push(`${viewport.name} ${route}: HTTP ${status}`);
+    const expectedStatus =
+      route === '/juego/' && process.env.PUBLIC_BALL_GAME_ENABLED !== 'true' ? 404 : 200;
+    if (status !== expectedStatus) {
+      failures.push(`${viewport.name} ${route}: HTTP ${status}, expected ${expectedStatus}`);
+    }
 
     await page.keyboard.press('Tab');
     const result = await page.evaluate(inspectViewport);

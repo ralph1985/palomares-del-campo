@@ -1,0 +1,32 @@
+---
+---
+
+<aside class="municipal-review" aria-label="Aviso sobre la revisión de la información">
+  <p>
+    <strong>Información en revisión.</strong> Esta web reúne datos confirmados y otros pendientes;
+    cada ficha o sección indica su estado y la fuente consultada.
+  </p>
+</aside>
+
+<style>
+  .municipal-review {
+    padding: 0.65rem max(1rem, calc((100% - 72rem) / 2));
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-ink);
+    background: var(--color-surface-soft);
+  }
+  .municipal-review p {
+    max-width: 72rem;
+    margin: 0 auto;
+    font-size: var(--font-size-small);
+    line-height: 1.5;
+  }
+  .municipal-review strong {
+    color: var(--color-forest);
+  }
+  @media (max-width: 38rem) {
+    .municipal-review {
+      padding-inline: 1rem;
+    }
+  }
+</style>

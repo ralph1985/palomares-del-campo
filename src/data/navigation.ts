@@ -11,12 +11,16 @@ export interface NavigationGroup {
 export const navigationGroups: NavigationGroup[] = [
   {
     label: 'Vecinos',
-    links: [{ label: 'Servicios municipales', href: '/informacion-practica/' }],
+    links: [
+      { label: 'Servicios del pueblo', href: '/servicios-del-pueblo/' },
+      { label: 'Servicios municipales', href: '/informacion-practica/' },
+    ],
   },
   {
     label: 'Visita',
     links: [
       { label: 'Sobre el pueblo', href: '/sobre-el-pueblo/' },
+      { label: 'Servicios del pueblo', href: '/servicios-del-pueblo/' },
       { label: 'Rutas', href: '/rutas/' },
       { label: 'Qué ver cerca', href: '/que-ver-cerca/' },
       { label: 'Alojamientos rurales', href: '/alojamientos/' },
