@@ -4,6 +4,12 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-11-14
+
+#### Security
+
+- Actualizado Astro a 7.4.7 para corregir GHSA-r3h5-4585-7x3w; actualizadas las herramientas Astro asociadas para mantener la comprobación de tipos y el build.
+
 ### 2026-10-28
 
 #### Changed
