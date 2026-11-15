@@ -6,86 +6,93 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { PUBLIC_PALOMARENOS_ENABLED } from 'astro:env/client';
 
 const palomarenosEnabled = PUBLIC_PALOMARENOS_ENABLED;
+if (!palomarenosEnabled) Astro.response.status = 404;
 const pageDescription = palomarenosEnabled
   ? 'Mapa de historias de personas vinculadas a Palomares del Campo que viven fuera.'
-  : 'Sección en preparación sobre personas vinculadas a Palomares del Campo que viven fuera.';
+  : 'La página solicitada no existe.';
 ---
 
-<BaseLayout title="Palomareños por el mundo · Palomares del Campo" description={pageDescription}>
-  <main>
-    <EditorialHero labelledBy="page-title" variant="sage" titleWidth="narrow">
-      <p slot="eyebrow" class="eyebrow">
-        Palomares del Campo · Comunidad
-      </p>
-      <h1 slot="title" id="page-title">
-        Palomareños por el mundo
-      </h1>
-      <p slot="summary" class="hero-intro">
-        {palomarenosEnabled
-          ? 'Historias de personas vinculadas a Palomares del Campo que viven en otros lugares. Lee sus relatos o comparte el tuyo.'
-          : 'Estamos preparando un espacio para reunir historias de personas vinculadas a Palomares del Campo que viven fuera.'}
-      </p>
-    </EditorialHero>
+<BaseLayout
+  title="Palomareños por el mundo · Palomares del Campo"
+  description={pageDescription}
+  noindex={!palomarenosEnabled}
+>
+  {palomarenosEnabled ? (
+    <main>
+      <EditorialHero labelledBy="page-title" variant="sage" titleWidth="narrow">
+        <p slot="eyebrow" class="eyebrow">
+          Palomares del Campo · Comunidad
+        </p>
+        <h1 slot="title" id="page-title">
+          Palomareños por el mundo
+        </h1>
+        <p slot="summary" class="hero-intro">
+          {palomarenosEnabled
+            ? 'Historias de personas vinculadas a Palomares del Campo que viven en otros lugares. Lee sus relatos o comparte el tuyo.'
+            : 'Estamos preparando un espacio para reunir historias de personas vinculadas a Palomares del Campo que viven fuera.'}
+        </p>
+      </EditorialHero>
 
-    {palomarenosEnabled ? (
-      <>
-        <section class="world-intro" aria-labelledby="intro-title">
-          <div class="world-shell world-intro-grid">
-            <div>
-              <p class="eyebrow">Una red de vínculos</p>
-              <h2 id="intro-title">Personas de Palomares que viven fuera.</h2>
-            </div>
-            <div class="world-copy">
-              <p>
-                Este mapa reúne, poco a poco, a personas vinculadas a Palomares del Campo que viven
-                en otras ciudades y países.
-              </p>
-              <p>
-                Las historias se revisan antes de publicarse. Mostramos solo la ciudad aproximada y
-                los datos que cada persona elige compartir; nunca una dirección personal.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section class="world-map-section" aria-labelledby="map-section-title">
-          <div class="world-shell">
-            <div class="section-heading">
+      {palomarenosEnabled ? (
+        <>
+          <section class="world-intro" aria-labelledby="intro-title">
+            <div class="world-shell world-intro-grid">
               <div>
-                <p class="eyebrow">Historias aprobadas</p>
-                <h2 id="map-section-title">Historias desde otros lugares.</h2>
+                <p class="eyebrow">Una red de vínculos</p>
+                <h2 id="intro-title">Personas de Palomares que viven fuera.</h2>
               </div>
-              <p>Abre cada punto para conocer la historia que hay detrás.</p>
+              <div class="world-copy">
+                <p>
+                  Este mapa reúne, poco a poco, a personas vinculadas a Palomares del Campo que
+                  viven en otras ciudades y países.
+                </p>
+                <p>
+                  Las historias se revisan antes de publicarse. Mostramos solo la ciudad aproximada
+                  y los datos que cada persona elige compartir; nunca una dirección personal.
+                </p>
+              </div>
             </div>
-            <WorldMap />
-          </div>
-        </section>
+          </section>
 
-        <section class="world-form-section" aria-labelledby="form-section-title">
-          <div class="world-shell">
-            <WorldSubmissionForm />
-          </div>
-        </section>
+          <section class="world-map-section" aria-labelledby="map-section-title">
+            <div class="world-shell">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">Historias aprobadas</p>
+                  <h2 id="map-section-title">Historias desde otros lugares.</h2>
+                </div>
+                <p>Abre cada punto para conocer la historia que hay detrás.</p>
+              </div>
+              <WorldMap />
+            </div>
+          </section>
 
-        <section class="world-note-section" aria-label="Privacidad y revisión">
-          <div class="world-shell">
-            <p>
-              Las propuestas se revisan manualmente. El email se utiliza solo para contacto y no se
-              publica en el mapa. Puedes solicitar una corrección o la retirada de tu historia.
-            </p>
-          </div>
-        </section>
-      </>
-    ) : (
-      <section class="world-disabled" aria-labelledby="world-disabled-title">
-        <div class="world-shell world-disabled-content">
-          <p class="eyebrow">Comunidad</p>
-          <h2 id="world-disabled-title">La sección se está preparando</h2>
-          <p>El mapa y el envío de propuestas estarán disponibles más adelante.</p>
-        </div>
+          <section class="world-form-section" aria-labelledby="form-section-title">
+            <div class="world-shell">
+              <WorldSubmissionForm />
+            </div>
+          </section>
+
+          <section class="world-note-section" aria-label="Privacidad y revisión">
+            <div class="world-shell">
+              <p>
+                Las propuestas se revisan manualmente. El email se utiliza solo para contacto y no
+                se publica en el mapa. Puedes solicitar una corrección o la retirada de tu historia.
+              </p>
+            </div>
+          </section>
+        </>
+      ) : null}
+    </main>
+  ) : (
+    <main class="world-disabled">
+      <section aria-labelledby="page-title">
+        <h1 id="page-title">Página no encontrada</h1>
+        <p>La página solicitada no existe.</p>
+        <a href="/">Volver al inicio</a>
       </section>
-    )}
-  </main>
+    </main>
+  )}
 </BaseLayout>
 
 <style>
@@ -128,16 +135,25 @@ const pageDescription = palomarenosEnabled
     background: var(--color-paper);
   }
 
-  .world-disabled-content {
-    max-width: 60rem;
+  .world-disabled {
+    display: grid;
+    min-height: 50vh;
+    place-items: center;
+    padding: var(--spacing-section-y) 1.25rem;
+    background: var(--color-paper);
   }
 
-  .world-disabled-content > p:last-child {
-    max-width: 40rem;
-    margin: 1.25rem 0 0;
+  .world-disabled section {
+    width: min(100%, 48rem);
+  }
+
+  .world-disabled p {
     color: var(--color-muted);
-    font-size: 1.05rem;
-    line-height: 1.7;
+  }
+
+  .world-disabled a {
+    color: var(--color-clay-text);
+    font-weight: var(--font-weight-emphasis);
   }
 
   .world-intro-grid,

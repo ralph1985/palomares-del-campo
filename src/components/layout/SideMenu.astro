@@ -1,12 +1,16 @@
 ---
 import { navigationGroups } from '../../data/navigation';
-import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
+import { PUBLIC_BALL_GAME_ENABLED, PUBLIC_PALOMARENOS_ENABLED } from 'astro:env/client';
 
 const currentPath = Astro.url.pathname;
 const visibleNavigationGroups = navigationGroups
   .map((group) => ({
     ...group,
-    links: group.links.filter((link) => PUBLIC_BALL_GAME_ENABLED || link.href !== '/juego/'),
+    links: group.links.filter(
+      (link) =>
+        (PUBLIC_BALL_GAME_ENABLED || link.href !== '/juego/') &&
+        (PUBLIC_PALOMARENOS_ENABLED || link.href !== '/palomarenos-por-el-mundo/'),
+    ),
   }))
   .filter((group) => group.links.length > 0);
 ---
