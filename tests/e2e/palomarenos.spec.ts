@@ -114,7 +114,10 @@ test.describe('Palomareños por el mundo', () => {
 
     await expect(page.locator('#page-title')).toHaveText('Política de cookies');
     await expect(
-      page.getByRole('heading', { name: 'No usamos analítica publicitaria' }),
+      page.getByRole('heading', { name: 'Inventario pendiente de comprobar' }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(/no se identificó una herramienta propia de analítica o publicidad/i),
     ).toBeVisible();
     await expect(
       page.getByRole('link', { name: 'política de privacidad', exact: true }),
@@ -127,7 +130,11 @@ test.describe('Palomareños por el mundo', () => {
     await expect(page.locator('#page-title')).toHaveText('Aviso legal');
     await expect(page.getByRole('note')).toContainText('Aviso provisional');
     await expect(page.getByRole('heading', { name: 'Objeto del sitio' })).toBeVisible();
-    await expect(page.getByText('Pendiente de confirmación oficial').first()).toBeVisible();
+    await expect(
+      page.getByText(
+        /titularidad y la responsabilidad editorial del dominio siguen pendientes de validación municipal/,
+      ),
+    ).toBeVisible();
     await expect(page.getByText('P0000000X')).toHaveCount(0);
     await expect(page.getByText('L00000000')).toHaveCount(0);
     await expect(page.getByText('dpd-prueba@example.invalid')).toHaveCount(0);
