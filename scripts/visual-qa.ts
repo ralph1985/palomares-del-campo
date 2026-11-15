@@ -181,10 +181,17 @@ const page = await browser.newPage();
 await registerExternalAssetFixtures(page);
 const failures: string[] = [];
 const consoleErrors: string[] = [];
+let currentRoute = '';
 
 page.on('pageerror', (error) => consoleErrors.push(error.message));
 page.on('console', (message) => {
-  if (message.type() === 'error') consoleErrors.push(message.text());
+  const isExpectedDisabledGame404 =
+    currentRoute === '/juego/' &&
+    process.env.PUBLIC_BALL_GAME_ENABLED !== 'true' &&
+    message.text().startsWith('Failed to load resource: the server responded with a status of 404');
+  if (message.type() === 'error' && !isExpectedDisabledGame404) {
+    consoleErrors.push(message.text());
+  }
 });
 
 const navigateVisualQaRoute = (url: string) =>
@@ -197,6 +204,7 @@ for (const viewport of viewports) {
   await page.setViewportSize({ width: viewport.width, height: viewport.height });
 
   for (const route of routes) {
+    currentRoute = route;
     const response = await navigateVisualQaRoute(`${baseUrl}${route}`);
     const status = response?.status() ?? 0;
     const expectedStatus =
