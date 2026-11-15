@@ -1,0 +1,114 @@
+---
+import { serviceStatusLabels, type ServiceRecord } from '../../data/services';
+import ExternalLink from '../ui/ExternalLink.astro';
+
+interface Props {
+  service: ServiceRecord;
+  categoryLabel: string;
+}
+
+const { service, categoryLabel } = Astro.props;
+const sourceDateLabel = service.source.sourceDate
+  ? new Date(`${service.source.sourceDate}T00:00:00`).toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+  : undefined;
+---
+
+<article class="service-card" aria-labelledby={`service-${service.id}`}>
+  <div class="service-card__heading">
+    <p class="service-card__category">{categoryLabel}</p>
+    <h3 id={`service-${service.id}`}>{service.name}</h3>
+  </div>
+  <p class="service-card__summary">{service.summary}</p>
+  <p class="service-card__status">
+    <span>Estado de revisión</span>
+    {serviceStatusLabels[service.status]}
+  </p>
+  {service.address && (
+    <p>
+      <strong>Dirección:</strong> {service.address}
+    </p>
+  )}
+  {service.phone && (
+    <p>
+      <strong>Teléfono:</strong> <a href={`tel:${service.phone}`}>{service.phone}</a>
+    </p>
+  )}
+  {service.hours && (
+    <p>
+      <strong>Horario:</strong> {service.hours}
+    </p>
+  )}
+  <p class="service-card__source" data-avoid-back-to-top-overlap>
+    <span>Fuente{sourceDateLabel ? ` · ${sourceDateLabel}` : ''}:</span>
+    <ExternalLink href={service.source.url}>{service.source.label}</ExternalLink>
+  </p>
+</article>
+
+<style>
+  .service-card {
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+    min-width: 0;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    background: var(--color-surface);
+  }
+  .service-card__heading h3 {
+    margin: 0;
+    font: 500 clamp(1.6rem, 3vw, 2.2rem)/1.05 var(--font-serif);
+    letter-spacing: -0.04em;
+    overflow-wrap: anywhere;
+  }
+  .service-card__category {
+    margin: 0 0 0.55rem;
+    color: var(--color-clay-text);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+  .service-card__summary {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: var(--line-height-body);
+  }
+  .service-card__status {
+    display: grid;
+    gap: 0.3rem;
+    margin: 0;
+    padding: 0.85rem 1rem;
+    border-left: 3px solid var(--color-clay);
+    color: var(--color-ink);
+    background: var(--color-surface-soft);
+    font-size: var(--font-size-small);
+    line-height: 1.5;
+  }
+  .service-card__status span,
+  .service-card__source span {
+    font-weight: var(--font-weight-bold);
+  }
+  .service-card__source {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0;
+    font-size: var(--font-size-small);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+  .service-card a {
+    color: var(--color-forest);
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
+  }
+  .service-card a:focus-visible {
+    border-radius: 0.15rem;
+    outline: 3px solid var(--color-clay);
+    outline-offset: 3px;
+  }
+</style>

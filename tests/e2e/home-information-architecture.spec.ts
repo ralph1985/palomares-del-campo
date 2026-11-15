@@ -37,5 +37,32 @@ test.describe('home information architecture', () => {
       'href',
       '/sobre-el-pueblo/',
     );
+    const residentCard = page
+      .getByRole('article')
+      .filter({ has: page.getByRole('heading', { name: 'Soy vecino' }) });
+    const visitorCard = page
+      .getByRole('article')
+      .filter({ has: page.getByRole('heading', { name: 'Descubre Palomares' }) });
+    await expect(residentCard.getByRole('link', { name: 'Servicios del pueblo' })).toHaveAttribute(
+      'href',
+      '/servicios-del-pueblo/',
+    );
+    await expect(visitorCard.getByRole('link', { name: 'Servicios del pueblo' })).toHaveAttribute(
+      'href',
+      '/servicios-del-pueblo/',
+    );
+
+    for (const width of [320, 375]) {
+      await page.setViewportSize({ width, height: 812 });
+      const dimensions = await page.evaluate(() => ({
+        document: document.documentElement.scrollWidth,
+        viewport: document.documentElement.clientWidth,
+      }));
+      expect(dimensions.document, `homepage at ${width}px`).toBeLessThanOrEqual(
+        dimensions.viewport,
+      );
+      await expect(residentCard.getByRole('link', { name: 'Servicios del pueblo' })).toBeVisible();
+      await expect(visitorCard.getByRole('link', { name: 'Servicios del pueblo' })).toBeVisible();
+    }
   });
 });
