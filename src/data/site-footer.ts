@@ -52,5 +52,6 @@ export const municipalContact = {
   judicialDistrict: 'Partido judicial: Tarancón',
   phone: '969 277 601',
   phoneHref: '969277601',
-  email: 'ayto.palomares@gmail.com',
+  email: 'palomaresdelcampo@dipucuenca.es',
+  contractingEmail: 'ayto.palomares@gmail.com',
 };
