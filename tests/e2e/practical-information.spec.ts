@@ -14,7 +14,12 @@ test.describe('practical municipal information', () => {
       'tel:969277601',
     );
     await expect(
-      page.getByRole('link', { name: 'Escribir por correo electrónico' }),
+      page.getByRole('link', {
+        name: 'Correo de oficina (Sede): palomaresdelcampo@dipucuenca.es',
+      }),
+    ).toHaveAttribute('href', 'mailto:palomaresdelcampo@dipucuenca.es');
+    await expect(
+      page.getByRole('main').getByRole('link', { name: 'ayto.palomares@gmail.com' }),
     ).toHaveAttribute('href', 'mailto:ayto.palomares@gmail.com');
     await expect(
       page.getByRole('link', { name: 'Abrir ubicación en OpenStreetMap' }),
@@ -45,7 +50,7 @@ test.describe('practical municipal information', () => {
     await expect(page.getByText(/Publicado el \d{1,2} de \w+ de \d{4}/)).toBeVisible();
     await expect(page.getByRole('link', { name: /Ver bando original/ })).toHaveAttribute(
       'href',
-      'https://www.bandomovil.com/vercomunicado.php?cod_municipio=palomaresdelcampo&id=1659178',
+      'https://www.bandomovil.com/palomaresdelcampo/1659178/0',
     );
     await expect(page.getByText(/Revisado el \d{1,2} de \w+ de \d{4}/)).toBeVisible();
   });
