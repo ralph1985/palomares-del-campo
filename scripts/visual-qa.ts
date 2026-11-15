@@ -8,6 +8,7 @@ const routes = [
   '/sobre-el-pueblo/',
   '/sobre-el-pueblo/iglesia/',
   '/bandos/',
+  '/bandos/1623353-bando-informativo-y-de-agradecimiento/',
   '/bandos/1646075-visita-virgen-de-lourdes-a-nuestro-pueblo/',
   '/noticias/',
   '/agenda/',
