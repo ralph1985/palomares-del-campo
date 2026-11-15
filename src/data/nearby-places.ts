@@ -133,6 +133,11 @@ export const nearbyPlaces: NearbyPlace[] = [
       'Huete reúne patrimonio histórico y museos; en su entorno se encuentran las Cuevas de Sanabrio, una visita vinculada a la minería romana del lapis specularis.',
     visitNote:
       'Las cuevas son un recurso distinto del casco urbano. Confirma su acceso y condiciones directamente antes de organizar la visita.',
+    routeEstimate: {
+      distanceKm: 36.4,
+      durationMinutes: 38,
+      destinationLabel: 'Casco urbano de Huete',
+    },
     sources: [
       {
         label: 'Qué ver en Huete',
@@ -214,6 +219,11 @@ export const nearbyPlaces: NearbyPlace[] = [
       'Un recorrido señalizado entre formaciones calizas modeladas por la erosión, en plena Serranía de Cuenca.',
     visitNote:
       'El circuito ronda los 3 km y no está adaptado para personas con movilidad reducida ni cochecitos. El cierre varía con la época y la meteorología; revisa la información oficial antes de salir.',
+    routeEstimate: {
+      distanceKm: 78.9,
+      durationMinutes: 73,
+      destinationLabel: 'Acceso a la Ciudad Encantada',
+    },
     sources: [
       {
         label: 'Ficha oficial de visita',

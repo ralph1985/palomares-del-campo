@@ -17,13 +17,19 @@ describe('tourism content provenance', () => {
     expect(sanCristobal?.officialSource?.href).toBe('https://www.casaruralsancristobalcuenca.es/');
   });
 
-  it('omits route estimates when OSM does not identify a precise destination point', () => {
+  it('retains approximate route estimates for Huete and Ciudad Encantada', () => {
     expect(
       nearbyPlaces.find((place) => place.slug === 'huete-lapis-specularis')?.routeEstimate,
-    ).toBeUndefined();
-    expect(
-      nearbyPlaces.find((place) => place.slug === 'ciudad-encantada')?.routeEstimate,
-    ).toBeUndefined();
+    ).toEqual({
+      distanceKm: 36.4,
+      durationMinutes: 38,
+      destinationLabel: 'Casco urbano de Huete',
+    });
+    expect(nearbyPlaces.find((place) => place.slug === 'ciudad-encantada')?.routeEstimate).toEqual({
+      distanceKm: 78.9,
+      durationMinutes: 73,
+      destinationLabel: 'Acceso a la Ciudad Encantada',
+    });
   });
 
   it('keeps only the rounded route estimates verified against OSM', () => {

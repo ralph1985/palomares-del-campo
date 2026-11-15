@@ -53,11 +53,11 @@ test.describe('nearby attractions guide', () => {
     await expect(noheda).toContainText(/reserva previa/i);
 
     const huete = page.getByRole('article', { name: 'Huete y las minas de lapis specularis' });
-    await expect(huete).not.toContainText('Ruta orientativa');
+    await expect(huete.getByText(/Ruta orientativa:.*36,4 km.*38 min/)).toBeVisible();
 
     const enchantedCity = page.getByRole('article', { name: 'Ciudad Encantada' });
     await expect(enchantedCity).toContainText(/movilidad reducida/i);
-    await expect(enchantedCity).not.toContainText('Ruta orientativa');
+    await expect(enchantedCity.getByText(/Ruta orientativa:.*78,9 km.*1 h 13 min/)).toBeVisible();
     await expect(
       enchantedCity.getByRole('link', { name: 'Ficha oficial de visita' }),
     ).toHaveAttribute(
