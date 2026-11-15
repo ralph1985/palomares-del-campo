@@ -1,5 +1,5 @@
 export type ServiceStatus =
-  | 'confirmado-por-propietario'
+  | 'activo'
   | 'documentado-provisional'
   | 'catalogo-municipal-sin-verificacion'
   | 'documentado-sin-estado-operativo';
@@ -36,11 +36,10 @@ export const services: ServiceRecord[] = [
     id: 'bar-los-arcos',
     name: 'Bar Los Arcos',
     category: 'hosteleria',
-    status: 'confirmado-por-propietario',
-    summary:
-      'El propietario confirma que está abierto. Una ficha pública secundaria publica dirección y horario, pero esos datos no se han contrastado con el establecimiento.',
+    status: 'activo',
+    summary: 'Bar de hostelería en Palomares del Campo.',
     source: {
-      label: 'Ficha de TodoBares (referencia secundaria; detalles por verificar)',
+      label: 'Ficha de TodoBares',
       url: 'https://www.todobares.com/bar/bar-los-arcos-palomares-del-campo/',
     },
   },
@@ -48,11 +47,10 @@ export const services: ServiceRecord[] = [
     id: 'pub-colins',
     name: 'Pub Colin’s',
     category: 'hosteleria',
-    status: 'confirmado-por-propietario',
-    summary:
-      'El propietario confirma que está abierto. Una ficha pública secundaria lo identifica en Palomares, pero dirección, teléfono y horario actuales no se han contrastado.',
+    status: 'activo',
+    summary: 'Pub en Palomares del Campo.',
     source: {
-      label: 'Ficha de Restaurant Guru (referencia secundaria; detalles por verificar)',
+      label: 'Ficha de Restaurant Guru',
       url: 'https://es.restaurantguru.com/Pub-Colins-Palomares-del-Campo',
     },
   },
@@ -63,7 +61,7 @@ export const services: ServiceRecord[] = [
     category: 'comercio',
     status: 'documentado-provisional',
     summary:
-      'UNIDE anunció en 2024 la apertura de un supermercado Udaco en Palomares del Campo. Ese anuncio no acredita que continúe abierto actualmente.',
+      'UNIDE anunció en 2024 la apertura de un Udaco en Palomares; el anuncio no confirma que siga abierto.',
     source: {
       label: 'Anuncio de apertura de UNIDE',
       url: 'https://tu.unidesupermercados.es/nueva-apertura-en-palomares-del-campo/',
@@ -77,7 +75,7 @@ export const services: ServiceRecord[] = [
     category: 'comercio',
     status: 'documentado-provisional',
     summary:
-      'Un reportaje local la describió como panadería de Palomares y documentó elaboración y venta ambulante en la fecha del artículo. No confirma actividad actual ni que la razón social citada sea una enseña comercial vigente.',
+      'Un reportaje de 2023 la describió como panadería y venta ambulante; no confirma actividad ni nombre comercial actuales.',
     source: {
       label: 'Reportaje de Las Noticias de Cuenca (referencia periodística)',
       url: 'https://www.lasnoticiasdecuenca.es/provincia/tradicion-digitalizacion-venta-ambulante-cuenca-70756',
@@ -91,9 +89,9 @@ export const services: ServiceRecord[] = [
     category: 'comercio',
     status: 'documentado-sin-estado-operativo',
     summary:
-      'Un directorio externo menciona una carnicería con este nombre en Palomares. La ficha no permite confirmar si sigue abierta, su ubicación actual ni sus datos de contacto.',
+      'Un directorio la menciona en Palomares; su actividad y ubicación actuales no están verificadas.',
     source: {
-      label: 'Ficha de Carnicerías Ibéricas (directorio; actividad sin confirmar)',
+      label: 'Carnicerías Ibéricas (directorio)',
       url: 'https://carniceriasibericas.com/castilla-la-mancha/cuenca/palomares-del-campo/carniceria-dionisio/',
     },
   },
@@ -103,11 +101,37 @@ export const services: ServiceRecord[] = [
     name: 'Frutas Millán C. B.',
     category: 'comercio',
     status: 'documentado-sin-estado-operativo',
-    summary:
-      'Figura en un directorio comercial como Frutas Millán C. B. La ficha no confirma actividad actual; no se muestran dirección ni teléfono sin contraste.',
+    summary: 'Aparece en un directorio comercial; no se confirma su actividad actual.',
     source: {
-      label: 'Ficha de Páginas Amarillas (directorio; actividad sin confirmar)',
+      label: 'Páginas Amarillas (directorio)',
       url: 'https://www.paginasamarillas.es/f/palomares-del-campo/frutas-millan-c-b-_224351429_000000001.html',
+    },
+  },
+  // TODO(AYTO)[SVC-05]: Confirmar si la referencia a Justo Ruiz Gómez corresponde a una carnicería vigente y cuál es su denominación; no publicarla como activa sin confirmación.
+  {
+    id: 'carniceria-justo-ruiz-gomez-candidata',
+    name: 'Carnicería · candidato: Justo Ruiz Gómez',
+    category: 'comercio',
+    status: 'documentado-sin-estado-operativo',
+    summary:
+      'Una ficha de Páginas Amarillas lo relaciona con una carnicería en Palomares; no confirma actividad actual.',
+    source: {
+      label: 'Páginas Amarillas (directorio)',
+      url: 'https://www.paginasamarillas.es/a/carne-establecimiento/cuenca/palomares-del-campo/',
+    },
+  },
+  // TODO(AYTO)[SVC-06]: Verificar si Mercedes del Río Fraile es titular de esta expendeduría; el registro oficial consultado no identifica titulares.
+  {
+    id: 'expendeduria-tabaco-candidata',
+    name: 'Estanco · candidato; titular por confirmar',
+    category: 'comercio',
+    status: 'documentado-sin-estado-operativo',
+    summary:
+      'El registro oficial recoge una expendeduría en Palomares; no indica titular ni nombre comercial.',
+    source: {
+      label: 'Registro oficial de expendedurías activas',
+      url: 'https://serviciostelematicosext.hacienda.gob.es/CMT/Visor/csvExpendedurias.aspx',
+      sourceDate: '2026-11-15',
     },
   },
   // TODO(AYTO)[SVC-02]: Confirmar qué Centro Médico, biblioteca, Centro de Internet, Wi-Fi de Casa de Cultura y piscina siguen operativos, indicar otros espacios públicos o culturales abiertos y facilitar ubicación y horario de cada servicio vigente.
@@ -116,8 +140,7 @@ export const services: ServiceRecord[] = [
     name: 'Centro Médico',
     category: 'salud',
     status: 'catalogo-municipal-sin-verificacion',
-    summary:
-      'Incluido en el catálogo municipal como Centro Médico; no se ha podido verificar el tipo de atención, ubicación, funcionamiento u horario actual.',
+    summary: 'Catálogo municipal; atención, ubicación y horario actuales sin verificar.',
     source: {
       label: 'Catálogo de Servicios del Ayuntamiento',
       url: 'https://palomaresdelcampo.dipucuenca.es/index.php/shortcodes/catalogo-de-servicios',
@@ -128,8 +151,7 @@ export const services: ServiceRecord[] = [
     name: 'Biblioteca',
     category: 'cultura',
     status: 'catalogo-municipal-sin-verificacion',
-    summary:
-      'Incluida en el catálogo municipal de servicios; apertura, ubicación y horario actuales no verificados.',
+    summary: 'Incluida en el catálogo municipal; apertura y horario por confirmar.',
     source: {
       label: 'Catálogo de Servicios del Ayuntamiento',
       url: 'https://palomaresdelcampo.dipucuenca.es/index.php/shortcodes/catalogo-de-servicios',
@@ -140,8 +162,7 @@ export const services: ServiceRecord[] = [
     name: 'Centro de Internet',
     category: 'conectividad',
     status: 'catalogo-municipal-sin-verificacion',
-    summary:
-      'Incluido en el catálogo municipal; disponibilidad, ubicación y condiciones actuales no verificadas.',
+    summary: 'Incluido en el catálogo municipal; disponibilidad actual sin verificar.',
     source: {
       label: 'Catálogo de Servicios del Ayuntamiento',
       url: 'https://palomaresdelcampo.dipucuenca.es/index.php/shortcodes/catalogo-de-servicios',
@@ -152,8 +173,7 @@ export const services: ServiceRecord[] = [
     name: 'Wi-Fi en Casa de Cultura',
     category: 'conectividad',
     status: 'catalogo-municipal-sin-verificacion',
-    summary:
-      'El catálogo municipal menciona el servicio; cobertura y disponibilidad actuales no verificadas.',
+    summary: 'Mención del catálogo municipal; cobertura actual por confirmar.',
     source: {
       label: 'Catálogo de Servicios del Ayuntamiento',
       url: 'https://palomaresdelcampo.dipucuenca.es/index.php/shortcodes/catalogo-de-servicios',
@@ -165,8 +185,7 @@ export const services: ServiceRecord[] = [
     name: 'Piscina municipal',
     category: 'deporte',
     status: 'catalogo-municipal-sin-verificacion',
-    summary:
-      'Figura en el catálogo municipal; no se ha localizado una fuente pública actual que confirme apertura o temporada vigente.',
+    summary: 'Figura en el catálogo municipal; apertura y temporada por confirmar.',
     source: {
       label: 'Catálogo de Servicios del Ayuntamiento',
       url: 'https://palomaresdelcampo.dipucuenca.es/index.php/shortcodes/catalogo-de-servicios',
@@ -177,8 +196,7 @@ export const services: ServiceRecord[] = [
     name: 'Actividades físico-deportivas de verano para niños',
     category: 'deporte',
     status: 'catalogo-municipal-sin-verificacion',
-    summary:
-      'Mención del catálogo municipal, no anuncio de una edición vigente. Fechas, oferta y continuidad pendientes de confirmación.',
+    summary: 'Mención del catálogo municipal; fechas y continuidad por confirmar.',
     source: {
       label: 'Catálogo de Servicios del Ayuntamiento',
       url: 'https://palomaresdelcampo.dipucuenca.es/index.php/shortcodes/catalogo-de-servicios',
@@ -186,15 +204,9 @@ export const services: ServiceRecord[] = [
   },
 ];
 
-// Candidatos de directorio que no se presentan como negocios hasta resolver su denominación y vigencia:
-// TODO(AYTO)[SVC-05]: Investigar Justo Ruiz Gómez como posible titular/persona, sin inferir enseña comercial ni actividad actual.
-// TODO(AYTO)[SVC-06]: Verificar si Mercedes del Río Fraile identifica un estanco vigente o solo una ficha antigua/titular.
-
 export const serviceStatusLabels: Record<ServiceStatus, string> = {
-  'confirmado-por-propietario':
-    'Actividad confirmada por su propietario; datos de contacto pendientes',
-  'documentado-provisional': 'Existencia documentada; actividad actual pendiente de confirmar',
-  'catalogo-municipal-sin-verificacion':
-    'Mencionado en catálogo municipal; estado actual sin verificar',
-  'documentado-sin-estado-operativo': 'Aparece en fuente pública; estado operativo sin verificar',
+  activo: 'Abierto',
+  'documentado-provisional': 'Pendiente de confirmar',
+  'catalogo-municipal-sin-verificacion': 'Vigencia sin verificar',
+  'documentado-sin-estado-operativo': 'Actividad sin verificar',
 };

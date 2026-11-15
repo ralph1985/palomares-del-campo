@@ -42,7 +42,7 @@ const sourceDateLabel = service.source.sourceDate
       <strong>Horario:</strong> {service.hours}
     </p>
   )}
-  <p class="service-card__source">
+  <p class="service-card__source" data-avoid-back-to-top-overlap>
     <span>Fuente{sourceDateLabel ? ` · ${sourceDateLabel}` : ''}:</span>
     <ExternalLink href={service.source.url}>{service.source.label}</ExternalLink>
   </p>

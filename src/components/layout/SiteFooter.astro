@@ -343,7 +343,25 @@ const visibleExploreLinks = footerExploreLinks.filter(
 
   if (backToTop) {
     const updateBackToTopVisibility = () => {
-      backToTop.hidden = window.scrollY < 480;
+      if (window.scrollY < 480) {
+        backToTop.hidden = true;
+        return;
+      }
+
+      backToTop.hidden = false;
+      const controlRect = backToTop.getBoundingClientRect();
+      backToTop.hidden = [
+        ...document.querySelectorAll<HTMLElement>('[data-avoid-back-to-top-overlap] a[href]'),
+      ].some((link) => {
+        if (link.getClientRects().length === 0) return false;
+        const linkRect = link.getBoundingClientRect();
+        return (
+          linkRect.left < controlRect.right &&
+          linkRect.right > controlRect.left &&
+          linkRect.top < controlRect.bottom &&
+          linkRect.bottom > controlRect.top
+        );
+      });
     };
 
     window.addEventListener('scroll', updateBackToTopVisibility, { passive: true });

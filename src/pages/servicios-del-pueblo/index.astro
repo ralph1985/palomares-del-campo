@@ -9,7 +9,7 @@ const categories = [...new Set(services.map(({ category }) => category))];
 
 <BaseLayout
   title="Servicios del pueblo | Palomares del Campo"
-  description="Directorio revisable de comercios, hostelería, servicios e instalaciones de Palomares del Campo, con fuentes y estado de validación."
+  description="Directorio de comercios, hostelería y servicios locales de Palomares del Campo, con fuentes y estado de revisión."
   canonicalPath="/servicios-del-pueblo/"
   schema="website"
   breadcrumbs={[
@@ -26,14 +26,7 @@ const categories = [...new Set(services.map(({ category }) => category))];
         Servicios del pueblo
       </h1>
       <p slot="summary" class="hero-intro">
-        Comercios, hostelería e instalaciones con la fuente y el grado de verificación de cada
-        ficha. Los nombres candidatos no confirman por sí solos que un negocio siga activo. No
-        mostramos direcciones, teléfonos ni horarios sin una fuente actual contrastada.
-      </p>
-      <p slot="notice" class="review-explainer">
-        Esta página es una recopilación editorial en revisión; una mención en un catálogo o
-        directorio no equivale a confirmación municipal ni garantiza disponibilidad actual. Consulta
-        la fuente enlazada antes de desplazarte.
+        Comercios, hostelería e instalaciones locales con su fuente y estado de revisión.
       </p>
     </EditorialHero>
 
@@ -42,7 +35,6 @@ const categories = [...new Set(services.map(({ category }) => category))];
         {categories.map((category) => (
           <section class="service-group" aria-labelledby={`category-${category}`}>
             <header class="service-group__heading">
-              <p class="eyebrow">Directorio revisable</p>
               <h2 id={`category-${category}`}>{serviceCategoryLabels[category]}</h2>
             </header>
             <div class="service-grid">
@@ -54,30 +46,12 @@ const categories = [...new Set(services.map(({ category }) => category))];
             </div>
           </section>
         ))}
-        <p class="source-method">
-          Revisión de fuentes: {servicesReviewedAt}. Se han consultado el catálogo municipal,
-          fuentes institucionales disponibles y referencias públicas identificables. El catálogo
-          enumera la piscina, la biblioteca, el Centro de Internet, el Wi-Fi de la Casa de Cultura y
-          el Centro Médico, pero no permite confirmar su estado operativo ni ofrece en esta ficha un
-          inventario de espacios públicos o un expediente de nuevas instalaciones deportivas. No se
-          ha verificado en persona la apertura de establecimientos ni el funcionamiento actual de
-          instalaciones.
-        </p>
       </div>
     </section>
   </main>
 </BaseLayout>
 
 <style>
-  .review-explainer {
-    max-width: 48rem;
-    margin: 0;
-    padding: 1rem 1.1rem;
-    border-left: 3px solid var(--color-clay);
-    color: var(--color-ink);
-    background: var(--color-surface-soft);
-    line-height: 1.6;
-  }
   .services-directory {
     padding: var(--spacing-section-y) 0;
     background: var(--color-paper);
@@ -96,14 +70,6 @@ const categories = [...new Set(services.map(({ category }) => category))];
     display: grid;
     gap: 0.4rem;
   }
-  .service-group__heading .eyebrow {
-    margin: 0;
-    color: var(--color-clay-text);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-strong);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-  }
   .service-group__heading h2 {
     margin: 0;
     color: var(--color-ink);
@@ -115,15 +81,7 @@ const categories = [...new Set(services.map(({ category }) => category))];
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
     gap: 1rem;
   }
-  .source-method {
-    max-width: 55rem;
-    margin: 0;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-border);
-    color: var(--color-muted);
-    font-size: var(--font-size-small);
-    line-height: 1.6;
-  }
+
   @media (max-width: 38rem) {
     .services-directory__inner {
       width: min(100% - 2rem, 72rem);
