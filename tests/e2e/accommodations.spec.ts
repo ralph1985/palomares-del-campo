@@ -10,7 +10,9 @@ test.describe('rural accommodation directory', () => {
     ).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Palomares del Campo' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Casa Rural San Cristóbal' })).toBeVisible();
-    await expect(page.getByText('Hasta 12 plazas')).toBeVisible();
+    await expect(
+      page.getByText('Capacidad por confirmar; las fichas consultadas discrepan'),
+    ).toBeVisible();
     await expect(page.getByText('Horcajada de la Torre')).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Alrededores' })).toBeVisible();
 
