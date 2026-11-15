@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EditorialHero from '../../components/hero/EditorialHero.astro';
+import ServiceCard from '../../components/services/ServiceCard.astro';
+import { services, servicesReviewedAt, serviceCategoryLabels } from '../../data/services';
+
+const categories = [...new Set(services.map(({ category }) => category))];
+---
+
+<BaseLayout
+  title="Servicios del pueblo | Palomares del Campo"
+  description="Directorio de comercios, hostelería y servicios locales de Palomares del Campo, con fuentes y estado de revisión."
+  canonicalPath="/servicios-del-pueblo/"
+  schema="website"
+  breadcrumbs={[
+    { name: 'Inicio', path: '/' },
+    { name: 'Servicios del pueblo', path: '/servicios-del-pueblo/' },
+  ]}
+>
+  <main>
+    <EditorialHero variant="paper" labelledBy="services-title" titleWidth="wide">
+      <p slot="eyebrow" class="eyebrow">
+        Guía local · Revisión {servicesReviewedAt}
+      </p>
+      <h1 slot="title" id="services-title">
+        Servicios del pueblo
+      </h1>
+      <p slot="summary" class="hero-intro">
+        Comercios, hostelería e instalaciones locales con su fuente y estado de revisión.
+      </p>
+    </EditorialHero>
+
+    <section class="services-directory" aria-label="Fichas de servicios locales">
+      <div class="services-directory__inner">
+        {categories.map((category) => (
+          <section class="service-group" aria-labelledby={`category-${category}`}>
+            <header class="service-group__heading">
+              <h2 id={`category-${category}`}>{serviceCategoryLabels[category]}</h2>
+            </header>
+            <div class="service-grid">
+              {services
+                .filter((service) => service.category === category)
+                .map((service) => (
+                  <ServiceCard service={service} categoryLabel={serviceCategoryLabels[category]} />
+                ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .services-directory {
+    padding: var(--spacing-section-y) 0;
+    background: var(--color-paper);
+  }
+  .services-directory__inner {
+    display: grid;
+    gap: clamp(3rem, 7vw, 5.5rem);
+    width: min(100% - 2.5rem, 72rem);
+    margin-inline: auto;
+  }
+  .service-group {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .service-group__heading {
+    display: grid;
+    gap: 0.4rem;
+  }
+  .service-group__heading h2 {
+    margin: 0;
+    color: var(--color-ink);
+    font: 500 clamp(2.4rem, 5vw, 3.5rem)/1 var(--font-serif);
+    letter-spacing: -0.06em;
+  }
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: 38rem) {
+    .services-directory__inner {
+      width: min(100% - 2rem, 72rem);
+    }
+  }
+</style>

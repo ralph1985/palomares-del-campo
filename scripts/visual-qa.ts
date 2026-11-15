@@ -8,10 +8,12 @@ const routes = [
   '/sobre-el-pueblo/',
   '/sobre-el-pueblo/iglesia/',
   '/bandos/',
+  '/bandos/1623353-bando-informativo-y-de-agradecimiento/',
   '/bandos/1646075-visita-virgen-de-lourdes-a-nuestro-pueblo/',
   '/noticias/',
   '/agenda/',
   '/informacion-practica/',
+  '/servicios-del-pueblo/',
   '/rutas/',
   '/aviso-legal/',
   '/politica-de-cookies/',
@@ -23,7 +25,7 @@ const routes = [
   '/que-ver-cerca/villa-romana-noheda/',
   '/alojamientos/',
   '/palomarenos-por-el-mundo/',
-  ...(process.env.PUBLIC_BALL_GAME_ENABLED === 'true' ? ['/juego/'] : []),
+  '/juego/',
 ];
 const viewports = [
   { name: 'desktop', width: 1440, height: 900 },
@@ -180,10 +182,17 @@ const page = await browser.newPage();
 await registerExternalAssetFixtures(page);
 const failures: string[] = [];
 const consoleErrors: string[] = [];
+let currentRoute = '';
 
 page.on('pageerror', (error) => consoleErrors.push(error.message));
 page.on('console', (message) => {
-  if (message.type() === 'error') consoleErrors.push(message.text());
+  const isExpectedDisabledGame404 =
+    currentRoute === '/juego/' &&
+    process.env.PUBLIC_BALL_GAME_ENABLED !== 'true' &&
+    message.text().startsWith('Failed to load resource: the server responded with a status of 404');
+  if (message.type() === 'error' && !isExpectedDisabledGame404) {
+    consoleErrors.push(message.text());
+  }
 });
 
 const navigateVisualQaRoute = (url: string) =>
@@ -196,9 +205,14 @@ for (const viewport of viewports) {
   await page.setViewportSize({ width: viewport.width, height: viewport.height });
 
   for (const route of routes) {
+    currentRoute = route;
     const response = await navigateVisualQaRoute(`${baseUrl}${route}`);
     const status = response?.status() ?? 0;
-    if (status !== 200) failures.push(`${viewport.name} ${route}: HTTP ${status}`);
+    const expectedStatus =
+      route === '/juego/' && process.env.PUBLIC_BALL_GAME_ENABLED !== 'true' ? 404 : 200;
+    if (status !== expectedStatus) {
+      failures.push(`${viewport.name} ${route}: HTTP ${status}, expected ${expectedStatus}`);
+    }
 
     await page.keyboard.press('Tab');
     const result = await page.evaluate(inspectViewport);

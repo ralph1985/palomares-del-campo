@@ -8,6 +8,7 @@ const pageRoutes = [
   '/aviso-legal/',
   '/politica-de-cookies/',
   '/informacion-practica/',
+  '/servicios-del-pueblo/',
   '/rutas/',
   '/privacidad/',
   '/agenda/',
@@ -113,6 +114,7 @@ test('separates paper editorial heroes from the shared site header', async ({ pa
     '/aviso-legal/',
     '/politica-de-cookies/',
     '/privacidad/',
+    '/servicios-del-pueblo/',
   ];
   const viewports = [
     { name: 'desktop', width: 1440, height: 900 },
@@ -153,7 +155,7 @@ test('separates paper editorial heroes from the shared site header', async ({ pa
   }
 });
 
-test('keeps editorial eyebrow labels at AA contrast on their rendered surfaces', async ({
+test('keeps editorial labels and directory details at AA contrast on their rendered surfaces', async ({
   page,
 }) => {
   const cases = [
@@ -172,6 +174,21 @@ test('keeps editorial eyebrow labels at AA contrast on their rendered surfaces',
       route: '/informacion-practica/',
       surface: '.editorial-hero--sage',
       label: '.editorial-hero--sage .eyebrow',
+    },
+    {
+      route: '/servicios-del-pueblo/',
+      surface: '.editorial-hero',
+      label: '.editorial-hero .eyebrow',
+    },
+    {
+      route: '/servicios-del-pueblo/',
+      surface: '.service-card__status',
+      label: '.service-card__status',
+    },
+    {
+      route: '/servicios-del-pueblo/',
+      surface: '.service-card',
+      label: '.service-card__source a',
     },
     { route: '/rutas/', surface: '.routes-section', label: '.routes-heading .eyebrow' },
     {
@@ -238,7 +255,7 @@ test('keeps editorial eyebrow labels at AA contrast on their rendered surfaces',
 
   for (const item of cases) {
     await page.goto(item.route);
-    const surface = page.locator(item.surface);
+    const surface = page.locator(item.surface).first();
     const label = page.locator(item.label).first();
     await expect(surface).toBeVisible();
     await expect(label).toBeVisible();
@@ -262,6 +279,63 @@ test('keeps editorial eyebrow labels at AA contrast on their rendered surfaces',
       contrastRatio(colors.foreground, colors.background),
       `${item.route} ${item.label} on ${item.surface}`,
     ).toBeGreaterThanOrEqual(4.5);
+  }
+});
+
+test('keeps the homepage service links high-contrast on hover and keyboard focus', async ({
+  page,
+}) => {
+  await page.goto('/');
+
+  const cases = [
+    {
+      surfaceSelector: '.audience-card--resident',
+      linkSelector: '.audience-card--resident .audience-services-link',
+    },
+    {
+      surfaceSelector: '.audience-card--visitor',
+      linkSelector: '.audience-card--visitor .audience-services-link',
+    },
+  ];
+
+  for (const item of cases) {
+    const link = page.locator(item.linkSelector);
+    await expect(link).toBeVisible();
+
+    const checkContrast = async () => {
+      const colors = await page.evaluate(({ surfaceSelector, linkSelector }) => {
+        const surface = document.querySelector<HTMLElement>(surfaceSelector);
+        const target = document.querySelector<HTMLElement>(linkSelector);
+        if (!surface || !target) throw new Error('Missing homepage service-link contrast target');
+        return {
+          foreground: getComputedStyle(target).color,
+          background: getComputedStyle(surface).backgroundColor,
+        };
+      }, item);
+      expect(contrastRatio(colors.foreground, colors.background)).toBeGreaterThanOrEqual(4.5);
+      return colors.background;
+    };
+
+    await checkContrast();
+    await link.hover();
+    await checkContrast();
+
+    await page.evaluate(() => {
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    });
+    let focused = false;
+    for (let attempt = 0; attempt < 30 && !focused; attempt += 1) {
+      await page.mouse.move(0, 0);
+      await page.keyboard.press('Tab');
+      focused = await link.evaluate((element) => document.activeElement === element);
+    }
+    expect(focused, `${item.linkSelector} should be keyboard reachable`).toBe(true);
+    await expect
+      .poll(() => link.evaluate((element) => element.matches(':focus-visible')))
+      .toBe(true);
+    const background = await checkContrast();
+    const outlineColor = await link.evaluate((element) => getComputedStyle(element).outlineColor);
+    expect(contrastRatio(outlineColor, background)).toBeGreaterThanOrEqual(3);
   }
 });
 
