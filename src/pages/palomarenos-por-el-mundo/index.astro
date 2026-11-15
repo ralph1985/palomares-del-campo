@@ -11,7 +11,11 @@ const pageDescription = palomarenosEnabled
   : 'Sección en preparación sobre personas vinculadas a Palomares del Campo que viven fuera.';
 ---
 
-<BaseLayout title="Palomareños por el mundo · Palomares del Campo" description={pageDescription}>
+<BaseLayout
+  title="Palomareños por el mundo · Palomares del Campo"
+  description={pageDescription}
+  noindex={!palomarenosEnabled}
+>
   <main>
     <EditorialHero labelledBy="page-title" variant="sage" titleWidth="narrow">
       <p slot="eyebrow" class="eyebrow">
@@ -79,9 +83,59 @@ const pageDescription = palomarenosEnabled
     ) : (
       <section class="world-disabled" aria-labelledby="world-disabled-title">
         <div class="world-shell world-disabled-content">
-          <p class="eyebrow">Comunidad</p>
-          <h2 id="world-disabled-title">La sección se está preparando</h2>
-          <p>El mapa y el envío de propuestas estarán disponibles más adelante.</p>
+          <p class="eyebrow">Propuesta para decisión municipal · Estado: no activa</p>
+          <h2 id="world-disabled-title">Una red de vínculos con Palomares</h2>
+          <p>
+            «Palomareños por el mundo» podría reunir relatos voluntarios de personas que mantienen
+            un vínculo con el municipio y viven en otros lugares. El objetivo sería acercar esas
+            experiencias a la comunidad, no localizar a nadie ni crear un directorio exhaustivo.
+          </p>
+          <p class="proposal-status">
+            <strong>Presentación estática.</strong> No hay mapa, formulario, envío ni historias
+            publicadas.
+          </p>
+
+          <div class="proposal-grid">
+            <article>
+              <h3>Qué podría proponerse</h3>
+              <p>De forma opcional y sujeta a aprobación, una ficha podría incluir:</p>
+              <ul>
+                <li>nombre mostrado elegido por la persona, o seudónimo;</li>
+                <li>ciudad y país, sin dirección ni ubicación exacta;</li>
+                <li>un relato breve sobre su vínculo con Palomares;</li>
+                <li>una imagen, solo si se decide admitirla y se aclaran sus condiciones.</li>
+              </ul>
+              <p>Estos son campos hipotéticos; esta página no los recoge.</p>
+            </article>
+            <article>
+              <h3>Qué sería público</h3>
+              <p>
+                Solo tras una aprobación expresa podrían mostrarse el nombre elegido, la ciudad y el
+                país, el texto autorizado y, si se aprobara, una ubicación aproximada. El email de
+                contacto y cualquier nota de revisión no serían públicos. No se publicarían
+                domicilios ni coordenadas precisas.
+              </p>
+            </article>
+            <article>
+              <h3>Revisión y solicitudes</h3>
+              <p>
+                La propuesta contempla revisión humana antes de cualquier publicación. Habría que
+                definir quién modera, cómo se autorizan cambios y qué canal verificable atendería
+                solicitudes de corrección o retirada. No existe todavía un canal de envío para esta
+                propuesta.
+              </p>
+            </article>
+            <article>
+              <h3>Decisiones pendientes</h3>
+              <p>
+                El Ayuntamiento tendría que aprobar el alcance, quién se responsabiliza, los motivos
+                legales para tratar la información, los plazos de conservación, los servicios
+                implicados y el procedimiento para atender solicitudes. Esta presentación no
+                constituye una autorización ni un aviso legal definitivo.
+              </p>
+            </article>
+          </div>
+          <!-- TODO(AYTO)[PAL-01]: Aprobar inclusión de la sección, campos, datos públicos, moderación, marco legal y privacidad antes de habilitar mapa o formulario. -->
         </div>
       </section>
     )}
@@ -129,15 +183,54 @@ const pageDescription = palomarenosEnabled
   }
 
   .world-disabled-content {
-    max-width: 60rem;
+    max-width: 66rem;
   }
 
-  .world-disabled-content > p:last-child {
-    max-width: 40rem;
+  .world-disabled-content > p:not(.eyebrow) {
+    max-width: 50rem;
     margin: 1.25rem 0 0;
     color: var(--color-muted);
     font-size: 1.05rem;
     line-height: 1.7;
+  }
+
+  .proposal-status {
+    padding: 0.9rem 1rem;
+    border-left: 3px solid var(--color-clay-text);
+    background: var(--color-surface);
+  }
+
+  .proposal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .proposal-grid article {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    background: var(--color-surface);
+  }
+
+  .proposal-grid h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .proposal-grid p,
+  .proposal-grid li {
+    color: var(--color-muted);
+    line-height: 1.65;
+  }
+
+  .proposal-grid p {
+    margin: 0.8rem 0 0;
+  }
+
+  .proposal-grid ul {
+    padding-left: 1.25rem;
   }
 
   .world-intro-grid,
@@ -196,7 +289,8 @@ const pageDescription = palomarenosEnabled
 
   @media (max-width: 48rem) {
     .world-intro-grid,
-    .section-heading {
+    .section-heading,
+    .proposal-grid {
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }

@@ -46,7 +46,9 @@ export default defineConfig({
     sitemap({
       filter: (page) =>
         !page.endsWith('/avisos/') &&
-        (process.env.PUBLIC_BALL_GAME_ENABLED === 'true' || !page.endsWith('/juego/')),
+        (process.env.PUBLIC_BALL_GAME_ENABLED === 'true' || !page.endsWith('/juego/')) &&
+        (process.env.PUBLIC_PALOMARENOS_ENABLED === 'true' ||
+          !page.endsWith('/palomarenos-por-el-mundo/')),
     }),
   ],
 });

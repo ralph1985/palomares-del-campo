@@ -72,6 +72,13 @@ jobs:
           CI: '1'
           PUBLIC_PALOMARENOS_ENABLED: 'false'
 
+      - name: End-to-end tests with decision pages disabled
+        run: pnpm exec playwright test tests/e2e/decision-presentations-disabled.spec.ts --retries=0
+        env:
+          CI: '1'
+          PUBLIC_PALOMARENOS_ENABLED: 'false'
+          PUBLIC_BALL_GAME_ENABLED: 'false'
+
       - name: Build static site
         run: pnpm build
 

@@ -11,10 +11,10 @@ test('keeps the Palomareños map and submission form hidden when the feature fla
   await page.goto('/palomarenos-por-el-mundo/');
 
   await expect(page.locator('#page-title')).toHaveText('Palomareños por el mundo');
-  await expect(page.getByRole('heading', { name: 'La sección se está preparando' })).toBeVisible();
   await expect(
-    page.getByText('El mapa y el envío de propuestas estarán disponibles más adelante.'),
+    page.getByRole('heading', { name: 'Una red de vínculos con Palomares' }),
   ).toBeVisible();
+  await expect(page.getByText('Presentación estática.')).toBeVisible();
   await expect(page.locator('[data-palomarenos-map]')).toHaveCount(0);
   await expect(page.locator('[data-palomarenos-form]')).toHaveCount(0);
 });

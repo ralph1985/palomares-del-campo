@@ -20,6 +20,9 @@ PUBLIC_PAGE_TRANSITIONS_ENABLED=false CI=1 pnpm exec playwright test tests/e2e/p
 echo '→ Verificando Palomareños con la feature flag desactivada...'
 PUBLIC_PALOMARENOS_ENABLED=false CI=1 pnpm exec playwright test tests/e2e/palomarenos-feature-flag.spec.ts --retries=0
 
+echo '→ Verificando las presentaciones de decisión con las funciones desactivadas...'
+PUBLIC_PALOMARENOS_ENABLED=false PUBLIC_BALL_GAME_ENABLED=false CI=1 pnpm exec playwright test tests/e2e/decision-presentations-disabled.spec.ts --retries=0
+
 echo '→ Construyendo la aplicación...'
 pnpm run build
 
