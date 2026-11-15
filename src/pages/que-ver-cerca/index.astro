@@ -2,6 +2,7 @@
 import NearbyPlaceCard from '../../components/nearby/NearbyPlaceCard.astro';
 import EditorialHero from '../../components/hero/EditorialHero.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ExternalLink from '../../components/ui/ExternalLink.astro';
 import { nearbyPlaceGroups, nearbyPlaces, nearbyPlacesReviewedAt } from '../../data/nearby-places';
 
 const formatDate = (date: string) =>
@@ -72,9 +73,10 @@ const formatDate = (date: string) =>
     <section class="nearby-sources" aria-label="Criterio y fecha de revisión">
       <div class="nearby-shell">
         <p>
-          Las rutas en coche que aparecen son estimaciones orientativas basadas en OpenStreetMap y
-          llegan al lugar nombrado en cada ficha; no reflejan tráfico, aparcamiento ni cambios en el
-          acceso. Los horarios, tarifas, reservas y condiciones estacionales pueden cambiar:
+          Las rutas en coche que aparecen son estimaciones orientativas basadas en datos de{' '}
+          <ExternalLink href="https://www.openstreetmap.org/copyright">OpenStreetMap</ExternalLink>{' '}
+          y llegan al lugar nombrado en cada ficha; no reflejan tráfico, aparcamiento ni cambios en
+          el acceso. Los horarios, tarifas, reservas y condiciones estacionales pueden cambiar:
           consúltalos en la fuente oficial.
         </p>
         <p>Fuentes y accesos revisados el {formatDate(nearbyPlacesReviewedAt)}.</p>

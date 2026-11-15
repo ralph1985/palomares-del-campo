@@ -97,32 +97,6 @@ const formatDate = (date: string) =>
                 </span>
               </div>
 
-              <div class="route-trace-status">
-                <strong>{route.traceStatusLabel}</strong>
-                <span>{route.traceStatusNote}</span>
-              </div>
-
-              <div class="route-map-panel">
-                <div class="route-map-heading">
-                  <strong>Mapa interactivo del trazado</strong>
-                  <span>Consulta el recorrido y sus puntos de interés.</span>
-                </div>
-                <div
-                  class="route-map"
-                  data-route-map
-                  data-gpx-url={route.traceUrl}
-                  data-map-status="loading"
-                  aria-label={`Mapa del trazado ${route.title}`}
-                  aria-busy="true"
-                ></div>
-                <p class="route-map-status" data-route-map-status aria-live="polite">
-                  Cargando mapa…
-                </p>
-                <p class="route-map-note">
-                  Mapa basado en el GPX aportado. La cartografía procede de OpenStreetMap.
-                </p>
-              </div>
-
               <div class="route-links">
                 <ExternalLink class="route-primary-link" href={route.routeSource.href}>
                   {route.routeSource.label} <span aria-hidden="true">↗</span>
@@ -130,9 +104,6 @@ const formatDate = (date: string) =>
                 <ExternalLink class="route-context-link" href={route.contextSource.href}>
                   Contexto: {route.contextSource.label} <span aria-hidden="true">↗</span>
                 </ExternalLink>
-                <ActionLink class="route-gpx-link" variant="solid" href={route.traceUrl} download>
-                  Descargar GPX <span aria-hidden="true">↓</span>
-                </ActionLink>
                 {PUBLIC_BALL_GAME_ENABLED && (
                   <ActionLink class="route-game-link" variant="underline" href="/juego/">
                     Probar La bola <span aria-hidden="true">→</span>
@@ -159,10 +130,6 @@ const formatDate = (date: string) =>
     </section>
   </main>
 </BaseLayout>
-
-<script>
-  import '../../scripts/route-map';
-</script>
 
 <style>
   .routes-shell {
@@ -309,63 +276,6 @@ const formatDate = (date: string) =>
     line-height: 1.5;
   }
 
-  .route-trace-status {
-    display: grid;
-    grid-column: 1 / -1;
-    gap: 0.4rem;
-    padding: 1rem 1.2rem;
-    border: 1px solid rgb(25 52 45 / 22%);
-    color: var(--color-ink);
-    background: var(--color-surface-soft);
-  }
-
-  .route-trace-status span {
-    color: var(--color-muted);
-    line-height: 1.5;
-  }
-
-  .route-map-panel {
-    display: grid;
-    grid-column: 1 / -1;
-    gap: 0.75rem;
-    padding: 1rem;
-    border: 1px solid rgb(25 52 45 / 22%);
-    background: var(--color-surface-soft);
-  }
-
-  .route-map-heading {
-    display: grid;
-    gap: 0.25rem;
-  }
-
-  .route-map-heading span,
-  .route-map-note,
-  .route-map-status {
-    color: var(--color-muted);
-    font-size: 0.88rem;
-    line-height: 1.5;
-  }
-
-  .route-map {
-    min-height: 26rem;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    background: var(--color-sage);
-  }
-
-  .route-map-status,
-  .route-map-note {
-    margin: 0;
-  }
-
-  .route-map-status[data-state='error'] {
-    color: var(--color-clay);
-  }
-
-  :global(.route-map .leaflet-control-attribution) {
-    font-size: var(--font-size-label);
-  }
-
   .route-links {
     display: flex;
     grid-column: 1 / -1;
@@ -424,10 +334,6 @@ const formatDate = (date: string) =>
 
     .route-facts {
       grid-template-columns: 1fr 1fr;
-    }
-
-    .route-map {
-      min-height: 20rem;
     }
   }
 </style>

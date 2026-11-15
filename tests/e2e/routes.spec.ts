@@ -15,21 +15,8 @@ test.describe('local routes', () => {
       'href',
       '/juego/',
     );
-    await expect(page.getByRole('link', { name: /Descargar GPX/ })).toHaveAttribute(
-      'href',
-      '/routes/campos-palomares-del-campo.gpx',
-    );
-    await expect(page.getByText('Descarga el archivo GPX.')).toBeVisible();
-    await expect(
-      page.getByText(/Puedes abrir el archivo en una aplicación compatible con rutas GPX/),
-    ).toBeVisible();
-    const routeMap = page.locator('[data-route-map]');
-    await expect(routeMap).toHaveAttribute('data-map-status', 'ready');
-    await expect(routeMap.locator('.leaflet-tile')).not.toHaveCount(0);
-    await expect(routeMap.locator('.route-track-line')).not.toHaveCount(0);
-    await expect(routeMap.locator('.route-waypoint-marker')).not.toHaveCount(0);
-    await expect(page.getByText('Mapa interactivo del trazado')).toBeVisible();
-    await expect(page.getByText(/Mapa basado en el GPX aportado/)).toBeVisible();
+    await expect(page.getByRole('link', { name: /Descargar GPX/ })).toHaveCount(0);
+    await expect(page.locator('[data-route-map]')).toHaveCount(0);
     await expect(page.locator('.route-review')).toContainText(
       /Fuente actualizada el \d{1,2} de \w+ de \d{4}/,
     );
@@ -46,13 +33,12 @@ test.describe('local routes', () => {
     );
   });
 
-  test('keeps the route map usable on a narrow viewport', async ({ page }) => {
+  test('keeps the external route recommendation usable on a narrow viewport', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/rutas/');
 
-    const routeMap = page.locator('[data-route-map]');
-    await expect(routeMap).toHaveAttribute('data-map-status', 'ready');
-    await expect(routeMap).toBeVisible();
+    await expect(page.getByRole('link', { name: /Ver ruta en Komoot/ })).toBeVisible();
+    await expect(page.locator('[data-route-map]')).toHaveCount(0);
     const hasHorizontalOverflow = await page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
     );
