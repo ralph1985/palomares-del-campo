@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+Astro.response.status = 404;
+---
+
+<BaseLayout
+  title="Página no encontrada · Palomares del Campo"
+  description="La página solicitada no existe."
+  noindex
+>
+  <main class="not-found">
+    <section aria-labelledby="page-title">
+      <h1 id="page-title">Página no encontrada</h1>
+      <p>La página solicitada no existe.</p>
+      <a href="/">Volver al inicio</a>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    min-height: 50vh;
+    place-items: center;
+    padding: var(--spacing-section-y) 1.25rem;
+    background: var(--color-paper);
+  }
+
+  .not-found section {
+    width: min(100%, 48rem);
+  }
+
+  .not-found p {
+    color: var(--color-muted);
+  }
+
+  .not-found a {
+    color: var(--color-clay-text);
+    font-weight: var(--font-weight-emphasis);
+  }
+</style>

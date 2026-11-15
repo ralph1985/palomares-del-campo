@@ -20,7 +20,13 @@ PUBLIC_PAGE_TRANSITIONS_ENABLED=false CI=1 pnpm exec playwright test tests/e2e/p
 echo '→ Verificando Palomareños con la feature flag desactivada...'
 PUBLIC_PALOMARENOS_ENABLED=false CI=1 pnpm exec playwright test tests/e2e/palomarenos-feature-flag.spec.ts --retries=0
 
+echo '→ Construyendo con las funciones de decisión desactivadas...'
+PUBLIC_PALOMARENOS_ENABLED=false PUBLIC_BALL_GAME_ENABLED=false pnpm build
+
+echo '→ Verificando los 404 reales de las rutas desactivadas...'
+PUBLIC_PALOMARENOS_ENABLED=false PUBLIC_BALL_GAME_ENABLED=false PLAYWRIGHT_USE_PREVIEW=true CI=1 pnpm exec playwright test tests/e2e/decision-presentations-disabled.spec.ts --retries=0
+
 echo '→ Construyendo la aplicación...'
-pnpm run build
+PUBLIC_PALOMARENOS_ENABLED=true PUBLIC_BALL_GAME_ENABLED=true pnpm run build
 
 echo '✓ Validación pre-push completada.'

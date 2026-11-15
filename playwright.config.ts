@@ -13,6 +13,7 @@ if (!suppliedBaseURL) {
   process.env.PLAYWRIGHT_LOCAL_TEST_PORT = String(selectedPort);
 }
 const baseURL = suppliedBaseURL ?? `http://127.0.0.1:${localPort}`;
+const usePreviewServer = process.env.PLAYWRIGHT_USE_PREVIEW === 'true';
 const pageTransitionsEnabled = process.env.PUBLIC_PAGE_TRANSITIONS_ENABLED ?? 'true';
 process.env.PUBLIC_PAGE_TRANSITIONS_ENABLED = pageTransitionsEnabled;
 const palomarenosEnabled = process.env.PUBLIC_PALOMARENOS_ENABLED ?? 'true';
@@ -43,7 +44,7 @@ export default defineConfig({
     ? {}
     : {
         webServer: {
-          command: `pnpm exec astro dev --host 127.0.0.1 --port ${localPort} --strictPort`,
+          command: `pnpm exec astro ${usePreviewServer ? 'preview' : 'dev'} --host 127.0.0.1 --port ${localPort} --strictPort`,
           url: baseURL,
           reuseExistingServer: false,
           timeout: 120_000,

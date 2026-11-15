@@ -72,8 +72,33 @@ jobs:
           CI: '1'
           PUBLIC_PALOMARENOS_ENABLED: 'false'
 
+      - name: Build static site with decision features disabled
+        run: pnpm build
+        env:
+          PUBLIC_PALOMARENOS_ENABLED: 'false'
+          PUBLIC_BALL_GAME_ENABLED: 'false'
+
+      - name: Verify disabled routes return real HTTP 404 responses
+        run: pnpm exec playwright test tests/e2e/decision-presentations-disabled.spec.ts --retries=0
+        env:
+          CI: '1'
+          PUBLIC_PALOMARENOS_ENABLED: 'false'
+          PUBLIC_BALL_GAME_ENABLED: 'false'
+          PLAYWRIGHT_USE_PREVIEW: 'true'
+
       - name: Build static site
         run: pnpm build
+        env:
+          PUBLIC_PALOMARENOS_ENABLED: 'true'
+          PUBLIC_BALL_GAME_ENABLED: 'true'
+
+      - name: Verify enabled routes preserve their HTTP behavior
+        run: pnpm exec playwright test tests/e2e/feature-flags-enabled.spec.ts --retries=0
+        env:
+          CI: '1'
+          PUBLIC_PALOMARENOS_ENABLED: 'true'
+          PUBLIC_BALL_GAME_ENABLED: 'true'
+          PLAYWRIGHT_USE_PREVIEW: 'true'
 
       - name: Verify SEO output
         run: pnpm check:seo
