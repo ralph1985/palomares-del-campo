@@ -224,29 +224,29 @@ La página incluye fichas informativas de alojamientos del entorno, con enlaces 
 
 ### RUT-01 · Ruta local y condiciones sobre el terreno
 
-La propuesta conserva una ruta publicada por [Komoot](https://www.komoot.com/smarttour/e1154591619/hiking-through-the-fields-of-palomares-del-campo), claramente identificada como recomendación externa y no como ruta municipal señalizada. No se muestra mapa ni archivo de descarga en la propuesta actual.
+La web muestra un trazado cartográfico provisional planificado desde OpenStreetMap. No es oficial ni está homologado; no se presenta como transitable y el acceso de los caminos sigue sin confirmar. Incluye mapa Leaflet y GPX planificado, no una grabación de campo.
 
-**Confirmar:** trazado, firme, cruces, seguridad, accesibilidad y vigencia mediante una revisión local. Indicar si la ruta debe recomendarse a visitantes.
+**Confirmar:** trazado, titularidad y acceso de cada camino, firme, cruces, seguridad y si puede recomendarse. La continuidad nodal de los datos no acredita paso físico ni derecho de acceso; antes de cualquier recomendación hace falta confirmación municipal e inspección presencial.
 
-- **Decisión:** [ ] Mantener solo el enlace externo · [ ] Recomendarla con estas condiciones · [ ] Retirar la recomendación
+- **Decisión:** [ ] Confirmar trazado y acceso · [ ] Corregir el recorrido · [ ] Retirar el trazado
 - **Dato corregido, fuente o comentario:** ______________________________________________
 
 ### RUT-02 · Nombre, recorrido y métricas de la ruta
 
-La ficha de Komoot muestra 5,13 km, 1 h 21 min y 50 m de desnivel, y señala última actualización el 26 de julio de 2024.
+La web no publica distancia, duración, dificultad, desnivel ni accesibilidad. La longitud geométrica de la línea (aprox. 1,4748 km) se conserva únicamente como cálculo interno, no como distancia caminable.
 
-**Confirmar:** origen, destino, nombre local y si esas cifras siguen siendo adecuadas para describir la recomendación. Las distancias a otros destinos se muestran como orientativas solo cuando se ha podido identificar un punto de visita concreto.
+**Confirmar:** origen, destino, denominación local y cualquier dato de recorrido únicamente tras inspección y validación municipal.
 
-- **Decisión:** [ ] Mantener las cifras como orientativas · [ ] Corregir · [ ] Retirar las métricas
+- **Decisión:** [ ] Validar datos en campo · [ ] Corregir el trazado · [ ] No publicar métricas
 - **Dato corregido, fuente o comentario:** ______________________________________________
 
-### RUT-03 · Permiso para alojar una copia del GPX
+### RUT-03 · Procedencia y licencia del GPX provisional
 
-La descarga local y el mapa basado en el archivo se han retirado de esta propuesta; se conserva el enlace a Komoot. No se ha confirmado permiso para redistribuir una copia del archivo GPX.
+El GPX actual es una ruta planificada desde la extracción OpenStreetMap, publicada bajo ODbL 1.0 con atribución visible. Describe los ways 660170707, 660170712, 178879058, 660170709, 660170708 y 660170704; los seis tienen `highway=track`. El way 178879058 tiene `surface=compacted` y `tracktype=grade2`; 660170708 y 660170709 tienen `surface=compacted`. En los seis faltan las etiquetas `access`, `foot`, `vehicle` y `motor_vehicle`. Esa ausencia no demuestra acceso público. La geometría cerrada y las adyacencias se comprobaron por IDs de ways y nodos en la extracción; no hubo validación presencial.
 
-**Confirmar:** si el Ayuntamiento dispone de un trazado propio o de autorización escrita para alojar y ofrecer ese archivo. Si no, se mantendrá únicamente el enlace a la fuente original.
+**Confirmar:** que el municipio autoriza el trazado, el acceso y su eventual recomendación; comprobar presencialmente cada tramo y las conexiones. Cerca se cartografían un área `tourism=picnic_site` y un `leisure=bandstand`, no incluidos en el circuito y sin conexión ni condiciones verificadas.
 
-- **Decisión:** [ ] Mantener solo el enlace externo · [ ] Facilitar autorización y archivo municipal · [ ] Retirar la ruta
+- **Decisión:** [ ] Confirmar oficialmente · [ ] Facilitar trazado municipal verificado · [ ] Retirar la ruta
 - **Dato corregido, fuente o comentario:** ______________________________________________
 
 ### IMG-01 · Fotografía de la iglesia

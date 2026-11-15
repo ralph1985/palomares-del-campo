@@ -12,9 +12,12 @@ type ParsedRoute = {
   waypoints: RouteWaypoint[];
 };
 
-const parseCoordinate = (value: string | null): number => {
+const parseCoordinate = (value: string | null, minimum: number, maximum: number): number => {
+  if (value === null || value.trim() === '') throw new Error('Coordenada GPX ausente.');
   const coordinate = Number(value);
-  if (!Number.isFinite(coordinate)) throw new Error('Coordenada GPX no válida.');
+  if (!Number.isFinite(coordinate) || coordinate < minimum || coordinate > maximum) {
+    throw new Error('Coordenada GPX no válida.');
+  }
   return coordinate;
 };
 
@@ -22,19 +25,24 @@ const parseGpx = (xml: string): ParsedRoute => {
   const document = new DOMParser().parseFromString(xml, 'application/xml');
   if (document.querySelector('parsererror')) throw new Error('El GPX no tiene un XML válido.');
 
-  const track = Array.from(document.querySelectorAll('trkpt')).map(
+  const routePoints = Array.from(document.getElementsByTagNameNS('*', 'rtept'));
+  const trackPoints = Array.from(document.getElementsByTagNameNS('*', 'trkpt'));
+  const points = routePoints.length > 0 ? routePoints : trackPoints;
+  const track = points.map(
     (point) =>
       [
-        parseCoordinate(point.getAttribute('lat')),
-        parseCoordinate(point.getAttribute('lon')),
+        parseCoordinate(point.getAttribute('lat'), -90, 90),
+        parseCoordinate(point.getAttribute('lon'), -180, 180),
       ] as RoutePoint,
   );
 
-  const waypoints = Array.from(document.querySelectorAll('wpt')).map((waypoint) => ({
-    name: waypoint.querySelector('name')?.textContent?.trim() || 'Punto de interés',
+  const waypoints = Array.from(document.getElementsByTagNameNS('*', 'wpt')).map((waypoint) => ({
+    name:
+      waypoint.getElementsByTagNameNS('*', 'name').item(0)?.textContent?.trim() ||
+      'Punto de interés',
     position: [
-      parseCoordinate(waypoint.getAttribute('lat')),
-      parseCoordinate(waypoint.getAttribute('lon')),
+      parseCoordinate(waypoint.getAttribute('lat'), -90, 90),
+      parseCoordinate(waypoint.getAttribute('lon'), -180, 180),
     ] as RoutePoint,
   }));
 
@@ -50,7 +58,7 @@ const setMapState = (element: HTMLElement, status: 'loading' | 'ready' | 'error'
   if (!statusElement) return;
   statusElement.textContent =
     status === 'ready'
-      ? 'Mapa cargado. Puedes ampliar, desplazarlo y consultar los puntos de interés.'
+      ? 'Mapa cargado. Puedes ampliar y desplazar el trazado provisional.'
       : status === 'error'
         ? 'No se ha podido cargar el mapa. Puedes descargar el GPX para consultar el trazado.'
         : 'Cargando mapa…';
@@ -67,9 +75,10 @@ const initialiseMap = async (element: HTMLElement): Promise<void> => {
       attributionControl: true,
     });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors',
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
     }).addTo(map);
 
     const url = element.dataset.gpxUrl;
@@ -78,6 +87,13 @@ const initialiseMap = async (element: HTMLElement): Promise<void> => {
     if (!response.ok) throw new Error(`No se pudo descargar el GPX (${response.status}).`);
 
     const route = parseGpx(await response.text());
+    element.dataset.routePointCount = String(route.track.length);
+    const firstPoint = route.track[0];
+    const lastPoint = route.track.at(-1);
+    if (firstPoint && lastPoint) {
+      element.dataset.routeFirstPoint = firstPoint.join(',');
+      element.dataset.routeLastPoint = lastPoint.join(',');
+    }
     const routeLine = L.polyline(route.track, {
       className: 'route-track-line',
       color: '#a05c32',

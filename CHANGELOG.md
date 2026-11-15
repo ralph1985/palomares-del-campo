@@ -4,6 +4,14 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-11-15
+
+#### Changed
+
+- Sustituido el enlace de ruta externo por un trazado cartográfico provisional basado en OpenStreetMap, con GPX 1.1 planificado, mapa Leaflet y descarga desde el mismo archivo. Se muestran atribución y licencia ODbL 1.0; el recorrido no es oficial/homologado, no se recomienda seguirlo y el acceso permanece sin confirmar.
+- Retiradas las métricas públicas de distancia, duración, dificultad y accesibilidad. La longitud geométrica aproximada de 1,4748 km queda documentada solo como cálculo interno.
+- Actualizada la documentación municipal y técnica con la procedencia OSM, los seis ways (660170707, 660170712, 178879058, 660170709, 660170708 y 660170704), continuidad nodal, etiquetas de acceso ausentes, elementos cercanos no integrados y necesidad de confirmación municipal e inspección presencial.
+
 ### 2026-11-14
 
 #### Security

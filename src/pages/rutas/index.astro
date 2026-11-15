@@ -1,35 +1,15 @@
 ---
 import 'leaflet/dist/leaflet.css';
 import ActionLink from '../../components/ui/ActionLink.astro';
-import ExternalLink from '../../components/ui/ExternalLink.astro';
 import EditorialHero from '../../components/hero/EditorialHero.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
 import { localRoutes } from '../../data/routes';
-
-const formatDistance = (distanceKm: number) =>
-  distanceKm.toLocaleString('es-ES', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-
-const formatDuration = (minutes: number) => {
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-  return `${hours} h ${remainingMinutes.toString().padStart(2, '0')} min`;
-};
-
-const formatDate = (date: string) =>
-  new Date(`${date}T00:00:00`).toLocaleDateString('es-ES', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
 ---
 
 <BaseLayout
   title="Rutas del pueblo · Palomares del Campo"
-  description="Rutas y paseos relacionados con Palomares del Campo, con fuentes visibles y estado de verificación."
+  description="Trazado cartográfico provisional basado en OpenStreetMap, pendiente de confirmación municipal e inspección presencial."
 >
   <main>
     <EditorialHero labelledBy="page-title" variant="paper">
@@ -40,8 +20,8 @@ const formatDate = (date: string) =>
         Rutas del pueblo
       </h1>
       <p slot="summary" class="hero-intro">
-        Una primera selección de recorridos encontrados en fuentes externas. La etiqueta de cada
-        ficha indica qué está verificado y qué todavía requiere revisión local.
+        Un trazado cartográfico provisional pendiente de confirmación municipal y revisión
+        presencial.
       </p>
     </EditorialHero>
 
@@ -49,61 +29,57 @@ const formatDate = (date: string) =>
       <div class="routes-shell">
         <div class="routes-heading">
           <div>
-            <p class="eyebrow">Primer recorrido</p>
+            <p class="eyebrow">Primer trazado</p>
             <h2 id="routes-title">Pasear también necesita contexto.</h2>
           </div>
           <p>
-            El entorno de Palomares ofrece caminos rurales para senderismo ligero según Turismo de
-            Castilla-La Mancha. El trazado de esta ficha procede de una plataforma externa.
+            Esta línea se ha planificado a partir de OpenStreetMap. La cartografía no acredita que
+            sus caminos sean de acceso público.
           </p>
         </div>
 
         <div class="route-list">
           {localRoutes.map((route) => (
             <article class="route-card">
-              <div class="route-card-header">
+              <header class="route-card-header">
                 <p class="route-status">{route.statusLabel}</p>
                 <h3>{route.title}</h3>
                 <p class="route-summary">{route.summary}</p>
-              </div>
+              </header>
 
-              <dl class="route-facts">
-                <div>
-                  <dt>Distancia</dt>
-                  <dd>{formatDistance(route.distanceKm)} km</dd>
-                </div>
-                <div>
-                  <dt>Duración</dt>
-                  <dd>{formatDuration(route.durationMinutes)}</dd>
-                </div>
-                <div>
-                  <dt>Dificultad</dt>
-                  <dd>{route.difficulty}</dd>
-                </div>
-                <div>
-                  <dt>Desnivel positivo</dt>
-                  <dd>{route.elevationGainMetres} m</dd>
-                </div>
-              </dl>
-
-              <p class="route-accessibility">
-                <strong>Accesibilidad:</strong> {route.accessibilityNote}
-              </p>
-
-              <div class="route-disclaimer">
-                <strong>No es una ruta municipal señalizada.</strong>
+              <div class="route-disclaimer" role="note">
+                <strong>
+                  No es oficial ni está homologado. El acceso de los caminos es desconocido y no
+                  está confirmado.
+                </strong>
                 <span>
-                  Consulta el trazado, el estado del camino y las condiciones antes de salir.
+                  No sigas este trazado antes de la confirmación municipal y de un recorrido
+                  presencial.
                 </span>
               </div>
 
+              <div class="route-map-shell">
+                <div
+                  class="route-map"
+                  data-route-map
+                  data-gpx-url={route.gpxUrl}
+                  aria-label="Mapa interactivo del trazado cartográfico provisional"
+                  role="region"
+                ></div>
+                <p data-route-map-status role="status" aria-live="polite">
+                  Cargando mapa…
+                </p>
+                <p class="route-attribution">
+                  Teselas y datos:{' '}
+                  <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>{' '}
+                  (ODbL).
+                </p>
+              </div>
+
               <div class="route-links">
-                <ExternalLink class="route-primary-link" href={route.routeSource.href}>
-                  {route.routeSource.label} <span aria-hidden="true">↗</span>
-                </ExternalLink>
-                <ExternalLink class="route-context-link" href={route.contextSource.href}>
-                  Contexto: {route.contextSource.label} <span aria-hidden="true">↗</span>
-                </ExternalLink>
+                <ActionLink class="route-primary-link" variant="solid" href={route.gpxUrl} download>
+                  Descargar GPX <span aria-hidden="true">↓</span>
+                </ActionLink>
                 {PUBLIC_BALL_GAME_ENABLED && (
                   <ActionLink class="route-game-link" variant="underline" href="/juego/">
                     Probar La bola <span aria-hidden="true">→</span>
@@ -111,8 +87,15 @@ const formatDate = (date: string) =>
                 )}
               </div>
               <p class="route-review">
-                Fuente actualizada el {formatDate(route.sourceUpdatedAt)} · ficha revisada el
-                {` ${formatDate(route.reviewedAt)}`}
+                Planificado desde OpenStreetMap (ODbL 1.0), ways 660170707, 660170712, 178879058,
+                660170709, 660170708 y 660170704. Continuidad nodal comprobada en los datos; sin
+                validación presencial. No se publican métricas de distancia, duración, dificultad o
+                accesibilidad.
+              </p>
+              <p class="route-review">
+                Cerca aparecen un área cartografiada como picnic y un quiosco de música; son
+                elementos próximos no verificados y no forman parte del circuito ni acreditan
+                conexión o acceso.
               </p>
             </article>
           ))}
@@ -123,20 +106,23 @@ const formatDate = (date: string) =>
     <section class="routes-note" aria-label="Criterio editorial de las rutas">
       <div class="routes-shell">
         <p>
-          Las próximas rutas solo pasarán a presentarse como recorridos propios cuando podamos
-          comprobar sus puntos, distancias, accesibilidad y condiciones sobre el terreno.
+          El municipio debe confirmar el trazado y el acceso; después será necesaria una inspección
+          presencial antes de describir o recomendar cualquier recorrido.
         </p>
       </div>
     </section>
   </main>
 </BaseLayout>
 
+<script>
+  import '../../scripts/route-map';
+</script>
+
 <style>
   .routes-shell {
     width: min(100% - 2.5rem, 72rem);
     margin: 0 auto;
   }
-
   .eyebrow {
     margin: 0 0 1.2rem;
     color: var(--color-clay-text);
@@ -145,7 +131,6 @@ const formatDate = (date: string) =>
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
-
   h1,
   h2,
   h3 {
@@ -155,12 +140,10 @@ const formatDate = (date: string) =>
     letter-spacing: -0.06em;
     line-height: 0.95;
   }
-
   .routes-section {
     padding: var(--spacing-section-y) 0;
     background: var(--color-sage);
   }
-
   .routes-heading {
     display: grid;
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
@@ -168,41 +151,31 @@ const formatDate = (date: string) =>
     align-items: end;
     margin-bottom: 3rem;
   }
-
-  .routes-heading .eyebrow {
-    color: var(--color-clay-text);
-  }
-
   h2 {
     max-width: 12ch;
     font-size: var(--font-size-section-heading);
   }
-
   .routes-heading > p {
     max-width: 35rem;
     margin: 0;
     color: var(--color-muted);
     line-height: 1.7;
   }
-
   .route-list {
     display: grid;
     gap: 1rem;
   }
-
   .route-card {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
     padding: clamp(1.5rem, 5vw, 3rem);
     border-radius: 1.5rem;
     background: var(--color-paper);
   }
-
   .route-card-header {
     grid-column: 1 / -1;
   }
-
   .route-status {
     width: fit-content;
     margin: 0 0 1rem;
@@ -215,125 +188,84 @@ const formatDate = (date: string) =>
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
-
   h3 {
-    max-width: 18ch;
+    max-width: 26ch;
     font-size: var(--font-size-section-heading);
   }
-
   .route-summary {
-    max-width: 37rem;
-    margin: 1.5rem 0 0;
+    max-width: 45rem;
+    margin: 1.2rem 0 0;
     color: var(--color-muted);
     line-height: 1.7;
   }
-
-  .route-facts {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-    margin: 0;
-  }
-
-  .route-facts div {
-    padding-top: 0.8rem;
-    border-top: 1px solid rgb(25 52 45 / 22%);
-  }
-
-  .route-facts dt {
-    color: var(--color-clay);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-strong);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .route-facts dd {
-    margin: 0.45rem 0 0;
-    color: var(--color-ink);
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
-  }
-
-  .route-accessibility {
-    margin: 0;
-    color: var(--color-muted);
-    line-height: 1.7;
-  }
-
   .route-disclaimer {
     display: grid;
     gap: 0.4rem;
-    grid-column: 1 / -1;
     padding: 1rem 1.2rem;
     border-left: 0.25rem solid var(--color-clay);
     color: var(--color-ink);
     background: var(--color-paper);
   }
-
   .route-disclaimer span {
     color: var(--color-muted);
     line-height: 1.5;
   }
-
+  .route-map {
+    min-height: 22rem;
+    border-radius: 1rem;
+    background: var(--color-sage);
+  }
+  .route-map-shell p {
+    margin: 0.6rem 0 0;
+  }
+  .route-attribution {
+    font-size: 0.8rem;
+  }
+  .route-attribution a {
+    color: var(--color-ink);
+  }
   .route-links {
     display: flex;
-    grid-column: 1 / -1;
     flex-wrap: wrap;
     gap: 1rem 1.5rem;
     align-items: center;
   }
-
   .route-links a {
     font-weight: var(--font-weight-strong);
     text-underline-offset: 0.25em;
   }
-
   .route-primary-link {
     color: var(--color-ink);
   }
-
-  .route-context-link {
-    color: var(--color-clay);
-    font-size: 0.9rem;
-  }
-
   .route-review {
-    grid-column: 1 / -1;
     margin: 0;
     color: var(--color-muted);
-    font-size: 0.78rem;
-    line-height: 1.5;
+    font-size: 0.82rem;
+    line-height: 1.6;
   }
-
   .routes-note {
     padding: 1.5rem 0;
     color: var(--color-muted);
     background: var(--color-paper);
   }
-
   .routes-note p {
     max-width: 48rem;
     margin: 0;
     font-size: 0.9rem;
     line-height: 1.6;
   }
-
   @media (max-width: 50rem) {
-    .routes-heading,
-    .route-card {
+    .routes-heading {
       grid-template-columns: 1fr;
       gap: 2rem;
     }
   }
-
   @media (max-width: 38rem) {
     .routes-shell {
       width: min(100% - 2rem, 72rem);
     }
-
-    .route-facts {
-      grid-template-columns: 1fr 1fr;
+    .route-map {
+      min-height: 18rem;
     }
   }
 </style>

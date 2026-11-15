@@ -67,7 +67,7 @@ La ejecución verificada el 18 de octubre de 2026 de `pnpm test:coverage` pasó 
 Los escenarios E2E prueban la aplicación Astro real en Chromium y cubren:
 
 - navegación global, menú lateral, `Escape`, `inert`, nombres accesibles y pie;
-- portada, páginas informativas, alojamientos y rutas con mapa GPX;
+- portada, páginas informativas, alojamientos y la ruta cartográfica provisional: el test de `/rutas/` comprueba la vista Leaflet, teselas OSM de fixture, atribución, advertencias de acceso, GPX 1.1 descargado, continuidad/cierre y que mapa y descarga usan los mismos bytes;
 - archivo y detalle de noticias;
 - bandos, filtros por texto/categoría/año, adjuntos, fuente y redirección `/avisos/`;
 - estado vacío de agenda;

@@ -13,7 +13,7 @@ export const registerExternalAssetFixtures = async (page: Page): Promise<void> =
       body: astroImageFixture,
     }),
   );
-  await page.route(/^https:\/\/[a-z]\.tile\.openstreetmap\.org\//, (route) =>
+  await page.route(/^https:\/\/(?:[a-z]\.)?tile\.openstreetmap\.org\//, (route) =>
     route.fulfill({
       status: 200,
       contentType: 'image/svg+xml',
