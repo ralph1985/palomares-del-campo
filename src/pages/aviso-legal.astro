@@ -19,8 +19,9 @@ const pageDescription =
         {pageTitle}
       </h1>
       <p slot="summary" class="draft-warning" role="note">
-        Aviso provisional: el Ayuntamiento aún no ha confirmado la titularidad ni los datos de
-        identificación que aparecen en esta página.
+        Aviso provisional: la titularidad, los datos de identificación y las condiciones de uso aquí
+        descritas no han sido aprobados por el Ayuntamiento. Las cuestiones pendientes se señalan
+        junto al apartado correspondiente.
       </p>
     </EditorialHero>
 
@@ -31,9 +32,21 @@ const pageDescription =
           <h2 id="identification-title">Identificación del titular</h2>
         </div>
         <div class="legal-copy">
+          <!-- TODO(AYTO)[LEG-01]: Confirmar quién es titular y responsable editorial del dominio y autorizar la publicación de este aviso. -->
           <p>
-            El Ayuntamiento de Palomares del Campo figura como titular, pendiente de confirmación
-            oficial. Los datos que siguen también están pendientes de verificación.
+            La identidad del titular se plantea aquí como borrador, no como confirmación oficial. La
+            titularidad y la responsabilidad editorial del dominio siguen pendientes de validación
+            municipal.
+          </p>
+          <!-- TODO(AYTO)[LEG-02]: Confirmar que el NIF P1615700J del Perfil del contratante corresponde al titular y puede utilizarse en el aviso legal de esta web. -->
+          <p>
+            El NIF/CIF y la denominación que deban figurar en este aviso están pendientes de
+            confirmación municipal.
+          </p>
+          <!-- TODO(AYTO)[LEG-03]: Validar si procede incluir DIR3 L01161489, si hay otro dato registral y cuáles son los datos de contacto adecuados para este aviso. -->
+          <p>
+            La inclusión de datos DIR3 o registrales y la selección del domicilio, teléfono y correo
+            para comunicaciones directas requieren validación municipal.
           </p>
           <dl class="legal-data">
             <div>
@@ -57,15 +70,21 @@ const pageDescription =
             <div>
               <dt>NIF/CIF</dt>
               <dd>
-                <strong class="test-data">Pendiente de confirmación oficial</strong>
+                P1615700J · publicado en el Perfil del contratante; confirmar que corresponde al
+                titular de esta web.
+                <ExternalLink href="https://contrataciondelestado.es/wps/poc?uri=deeplink%3AperfilContratante&idBp=3mNkoZjkBQwSugstABGr5A%3D%3D">
+                  Ver perfil oficial
+                </ExternalLink>
               </dd>
             </div>
             <div>
               <dt>DIR3 / registro</dt>
               <dd>
-                <strong class="test-data">
-                  Pendiente de verificar si procede y cuál corresponde
-                </strong>
+                L01161489 · publicado en la Sede electrónica; confirmar si procede incluirlo en este
+                aviso.
+                <ExternalLink href="https://palomaresdelcampo.sedelectronica.es/ownership">
+                  Ver directorio oficial
+                </ExternalLink>
               </dd>
             </div>
             <div>
@@ -110,6 +129,17 @@ const pageDescription =
             con finalidad divulgativa y de orientación; los trámites formales deben realizarse a
             través de los canales oficiales que correspondan.
           </p>
+          <!-- TODO(AYTO)[LEG-18]: Determinar con asesoría municipal qué obligaciones de información de la LSSI son aplicables a la titularidad y actividades reales de este sitio. -->
+          <p>
+            La aplicación de las obligaciones de información de la LSSI a este sitio y a sus
+            actividades debe determinarse con asesoría municipal; esta página no formula una
+            conclusión jurídica sobre su alcance.
+          </p>
+          <p>
+            <ExternalLink href="https://www.boe.es/buscar/act.php?id=BOE-A-2002-13758">
+              Ley 34/2002 de servicios de la sociedad de la información · BOE
+            </ExternalLink>
+          </p>
           <p>
             La persona usuaria se compromete a utilizar el sitio de forma lícita, respetuosa y
             compatible con su finalidad. No está permitido introducir contenido malicioso, suplantar
@@ -119,12 +149,11 @@ const pageDescription =
 
         <section aria-labelledby="property-title">
           <h2 id="property-title">Propiedad intelectual</h2>
+          <!-- TODO(AYTO)[LEG-17]: Identificar titularidad/licencias de textos, fotografías, logotipos y demás activos propios, y aprobar el canal para comunicar contenidos presuntamente ilícitos. -->
           <p>
-            Los textos, diseños, logotipos y elementos gráficos pueden estar protegidos por derechos
-            de propiedad intelectual o industrial. Su titularidad y las condiciones de reutilización
-            se indicarán cuando se hayan confirmado; los contenidos de terceros conservan la autoría
-            y las licencias o condiciones que les correspondan. Esta cláusula no limita los usos
-            permitidos por la normativa aplicable.
+            La autoría y las condiciones de reutilización de algunos contenidos de este sitio
+            requieren confirmación. Se conserva la atribución de las fuentes indicadas junto a cada
+            material y no se presumen derechos no verificados.
           </p>
         </section>
 
@@ -152,8 +181,8 @@ const pageDescription =
         <section aria-labelledby="contact-title">
           <h2 id="contact-title">Contacto y reclamaciones</h2>
           <p>
-            Para incidencias sobre el sitio puedes utilizar los datos de contacto del Ayuntamiento.
-            Para trámites administrativos, utiliza la
+            Para incidencias sobre el sitio, el contacto que figura en el pie es una referencia
+            provisional, no un canal municipal confirmado. Para trámites administrativos, utiliza la
             <ExternalLink href="https://palomaresdelcampo.sedelectronica.es/info.0">
               sede electrónica oficial
             </ExternalLink>

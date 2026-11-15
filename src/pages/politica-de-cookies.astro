@@ -19,27 +19,35 @@ const pageDescription =
         {pageTitle}
       </h1>
       <p slot="summary" class="hero-intro">
-        Explicamos qué tecnologías utiliza actualmente esta web y cómo puedes gestionarlas desde tu
-        navegador.
+        Borrador provisional: el inventario de cookies, almacenamiento local y servicios externos
+        está pendiente de verificación técnica y municipal. No es una certificación de ausencia de
+        tecnologías de seguimiento.
       </p>
+      <!-- TODO(AYTO)[LEG-16]: Aprobar, con revisión técnica y jurídica, la información y el mecanismo de elección/retirada que correspondan antes de habilitar tecnologías no esenciales. -->
     </EditorialHero>
 
     <section class="cookies-section" aria-labelledby="current-title">
       <div class="cookies-shell cookies-grid">
         <div class="section-intro">
           <p class="eyebrow">Estado actual</p>
-          <h2 id="current-title">No usamos analítica publicitaria</h2>
+          <h2 id="current-title">Inventario pendiente de comprobar</h2>
         </div>
         <div class="cookies-copy">
+          <!-- TODO(AYTO)[LEG-12]: Inventariar cookies y tecnologías similares en el sitio publicado; aprobar finalidad, duración, titular y mecanismo de elección y retirada. -->
           <p>
-            Actualmente esta web no instala cookies propias de analítica, publicidad ni perfiles de
-            seguimiento. Si incorporamos una herramienta de medición no esencial, actualizaremos
-            esta página y solicitaremos el consentimiento correspondiente antes de activarla.
+            En una revisión inicial del código no se identificó una herramienta propia de analítica
+            o publicidad. Esto no confirma por sí solo qué se ejecuta en producción ni descarta
+            cookies o almacenamiento usados por servicios externos. El inventario de cada
+            tecnología, su finalidad, duración, titular y mecanismo de elección requiere
+            comprobación técnica y validación jurídica antes de afirmar que el sitio cumple
+            determinados requisitos.
           </p>
+          <!-- TODO(AYTO)[LEG-13]: Confirmar claves, duración y comportamiento del almacenamiento local en cada función habilitada, además de cualquier otro almacenamiento utilizado. -->
           <p>
-            El navegador puede conservar datos locales necesarios para algunas funciones, como el
-            nombre elegido en el juego. Esos datos permanecen en el dispositivo y no se usan para el
-            formulario de Palomareños por el mundo.
+            El código consultado usa `sessionStorage` para la transición entre páginas y prevé
+            `localStorage` para la identidad del juego si esa función está habilitada. La
+            configuración real de cada entorno y el contenido/duración exactos aún deben
+            verificarse; no se afirma que estos datos se transmitan a terceros.
           </p>
         </div>
       </div>
@@ -52,10 +60,11 @@ const pageDescription =
         <div class="cookies-details">
           <section aria-labelledby="turnstile-title">
             <h3 id="turnstile-title">Cloudflare Turnstile</h3>
+            <!-- TODO(AYTO)[LEG-14]: Verificar funcionamiento, documentación contractual y política de privacidad vigentes de Turnstile antes de describir sus datos o tecnologías. -->
             <p>
-              El formulario usa Turnstile para detectar envíos automatizados. La protección puede
-              procesar señales técnicas del navegador y genera un token que se verifica en el
-              servidor. No recibe el texto editorial ni el email como parte de esa verificación.
+              Si se habilita el formulario, el código integra Turnstile y carga un script de
+              Cloudflare. No se ha comprobado qué cookies, almacenamiento u otros datos técnicos
+              emplea el proveedor en cada configuración.
             </p>
             <p>
               <ExternalLink href="https://www.cloudflare.com/privacypolicy/">
@@ -67,11 +76,13 @@ const pageDescription =
 
           <section aria-labelledby="maps-title">
             <h3 id="maps-title">Leaflet y OpenStreetMap</h3>
+            <!-- TODO(AYTO)[LEG-15]: Verificar las llamadas reales de los mapas y las condiciones vigentes de OpenStreetMap; decidir si se requiere una configuración de carga aprobada. -->
             <p>
-              El mapa carga teselas de OpenStreetMap cuando visitas la sección correspondiente. Esa
-              petición técnica puede incluir la información habitual de una conexión web, como la
-              dirección IP y el navegador. El mapa no envía a OpenStreetMap el email ni las notas
-              internas de moderación.
+              Las secciones con mapas cargan teselas de OpenStreetMap desde el navegador. La
+              solicitud comunica datos técnicos de conexión al servicio; el detalle de datos,
+              duración y posibles almacenamientos no se ha verificado aquí. El alcance y las
+              condiciones vigentes del servicio requieren revisión; esta página no determina por sí
+              sola qué mecanismo de elección corresponde.
             </p>
             <p>
               <ExternalLink href="https://wiki.osmfoundation.org/wiki/Privacy_Policy">
@@ -92,11 +103,32 @@ const pageDescription =
         </div>
         <div class="cookies-copy">
           <ul>
-            <li>Puedes bloquear o borrar cookies desde la configuración del navegador.</li>
+            <li>
+              Puedes bloquear o borrar cookies desde la configuración del navegador; esta opción no
+              sustituye la revisión de las tecnologías que carga el sitio.
+            </li>
+            <li>
+              <ExternalLink href="https://www.aepd.es/guias/guia-cookies.pdf">
+                Guía sobre el uso de las cookies · AEPD (mayo de 2024)
+              </ExternalLink>
+            </li>
+            <li>
+              <ExternalLink href="https://www.boe.es/buscar/act.php?id=BOE-A-2002-13758">
+                Ley 34/2002 de servicios de la sociedad de la información · BOE
+              </ExternalLink>
+            </li>
             <li>
               Puedes borrar el almacenamiento local del sitio desde las herramientas del navegador.
             </li>
-            <li>Puedes dejar de usar el mapa o el formulario sin crear una cuenta.</li>
+            <li>
+              Los datos de sesión o de juego pueden borrarse desde el navegador; hacerlo puede
+              afectar a la navegación o a la identidad local del juego.
+            </li>
+            <li>
+              La disponibilidad del mapa y del formulario no implica que exista una opción de
+              consentimiento para sus recursos externos; su configuración está pendiente de
+              revisión.
+            </li>
             <li>
               Puedes pedir información o ejercer tus derechos mediante los canales de privacidad.
             </li>
@@ -116,6 +148,7 @@ const pageDescription =
           <h2 id="contact-title">¿Tienes dudas?</h2>
         </div>
         <address class="cookies-copy">
+          <!-- TODO(AYTO)[LEG-11]: Confirmar qué canal municipal debe atender consultas sobre cookies y privacidad antes de presentar estos contactos como canal oficial para ese fin. -->
           Ayuntamiento de Palomares del Campo
           <br />
           {municipalContact.address}
@@ -123,6 +156,8 @@ const pageDescription =
           {municipalContact.locality}
           <br />
           <a href={`mailto:${municipalContact.email}`}>{municipalContact.email}</a>
+          <br />
+          El canal específico para consultas de cookies está pendiente de validación municipal.
         </address>
       </div>
     </section>

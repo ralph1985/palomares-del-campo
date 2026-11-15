@@ -183,6 +183,20 @@ test.describe('current affairs sections', () => {
     expect(widths.article).toBeLessThanOrEqual(widths.articleClient);
   });
 
+  test('keeps long bando titles within a narrow mobile viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/bandos/1623353-bando-informativo-y-de-agradecimiento/');
+
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'BANDO INFORMATIVO Y DE AGRADECIMIENTO',
+    );
+    const widths = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      document: document.documentElement.scrollWidth,
+    }));
+    expect(widths.document).toBeLessThanOrEqual(widths.viewport + 1);
+  });
+
   test('renders images and documents attached to a bando', async ({ page }) => {
     const attachmentResponse = page.waitForResponse((response) =>
       response.url().includes('/_image'),
