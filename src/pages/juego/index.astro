@@ -21,7 +21,7 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
   description={
     PUBLIC_BALL_GAME_ENABLED
       ? 'Prototipo del juego de geoposicionamiento de Palomares del Campo.'
-      : 'Propuesta municipal en revisión: idea y cuestiones pendientes del juego La bola.'
+      : 'La página solicitada no existe.'
   }
   {...(PUBLIC_BALL_GAME_ENABLED ? { bodyClass: 'game-page' } : {})}
   noindex={!PUBLIC_BALL_GAME_ENABLED}
@@ -76,42 +76,9 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
   ) : (
     <main class="game-disabled">
       <section aria-labelledby="page-title">
-        <p class="game-proposal-label">Propuesta para decisión municipal · Estado: pendiente</p>
-        <h1 id="page-title">La bola</h1>
-        <p class="game-proposal-lead">
-          Idea de juego presencial: encontrar una ubicación municipal propuesta, llegar dentro de un
-          radio acordado y, si se valida la captura, pasar el objetivo a otro punto.
-        </p>
-        <p class="game-proposal-status">
-          <strong>Solo presentación estática.</strong> No hay partida, mapa, GPS, participantes ni
-          clasificación activos en esta página.
-        </p>
-        <div class="game-proposal-grid">
-          <article>
-            <h2>Qué habría que decidir</h2>
-            <p>
-              Si la actividad se incluye, para quién, con qué supervisión y en qué lugares. Las
-              posiciones y los radios son una idea por validar presencialmente, no ubicaciones
-              aprobadas.
-            </p>
-          </article>
-          <article>
-            <h2>Acceso y seguridad</h2>
-            <p>
-              Antes de cualquier prueba habría que revisar accesibilidad, seguridad peatonal,
-              tráfico, precisión GPS esperable y alternativas para quien no pueda o no quiera
-              compartir ubicación.
-            </p>
-          </article>
-          <article>
-            <h2>Estado actual</h2>
-            <p>
-              No hay una partida ni se recoge la ubicación de nadie. Cualquier prueba requeriría una
-              decisión expresa y una revisión previa de seguridad, accesibilidad y privacidad.
-            </p>
-          </article>
-        </div>
-        <!-- TODO(AYTO)[BOLA-01]: Decidir la inclusión y validar presencialmente posiciones y radios, acceso, seguridad, tráfico y precisión antes de habilitar el juego. -->
+        <h1 id="page-title">Página no encontrada</h1>
+        <p>La página solicitada no existe.</p>
+        <a href="/">Volver al inicio</a>
       </section>
     </main>
   )}
@@ -133,65 +100,7 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
   }
 
   .game-disabled section {
-    width: min(100%, 64rem);
-  }
-
-  .game-disabled h1 {
-    color: var(--color-ink);
-  }
-
-  .game-proposal-label {
-    margin: 0 0 1rem;
-    color: var(--color-clay-text);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-emphasis);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .game-proposal-lead,
-  .game-proposal-status,
-  .game-proposal-grid p {
-    color: var(--color-muted);
-    line-height: 1.7;
-  }
-
-  .game-proposal-lead {
-    max-width: 48rem;
-    font-size: 1.1rem;
-  }
-
-  .game-proposal-status {
-    max-width: 48rem;
-    padding: 0.9rem 1rem;
-    border-left: 3px solid var(--color-clay-text);
-    background: var(--color-surface);
-  }
-
-  .game-proposal-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  .game-proposal-grid article {
-    padding: 1.25rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.75rem;
-    background: var(--color-surface);
-  }
-
-  .game-proposal-grid h2 {
-    margin: 0;
-    font-family: var(--font-serif);
-    font-size: 1.25rem;
-    font-weight: 500;
-    letter-spacing: -0.03em;
-  }
-
-  .game-proposal-grid p {
-    margin: 0.8rem 0 0;
+    width: min(100%, 48rem);
   }
 
   .game-disabled a {
@@ -340,12 +249,6 @@ const hasRemoteGame = Boolean(import.meta.env.CONVEX_URL);
   .match-card-stats b {
     color: var(--color-surface-soft);
     font-size: var(--font-size-label);
-  }
-
-  @media (max-width: 48rem) {
-    .game-proposal-grid {
-      grid-template-columns: 1fr;
-    }
   }
 
   @media (max-width: 38rem) {

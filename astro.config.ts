@@ -1,5 +1,23 @@
 import sitemap from '@astrojs/sitemap';
+import { rm } from 'node:fs/promises';
+import type { AstroIntegration } from 'astro';
 import { defineConfig, envField } from 'astro/config';
+
+const removeDisabledFeaturePages: AstroIntegration = {
+  name: 'remove-disabled-feature-pages',
+  hooks: {
+    'astro:build:done': async ({ dir }) => {
+      const disabledRoutes = [
+        ...(process.env.PUBLIC_BALL_GAME_ENABLED === 'true' ? [] : ['juego/']),
+        ...(process.env.PUBLIC_PALOMARENOS_ENABLED === 'true' ? [] : ['palomarenos-por-el-mundo/']),
+      ];
+
+      await Promise.all(
+        disabledRoutes.map((route) => rm(new URL(route, dir), { recursive: true, force: true })),
+      );
+    },
+  },
+};
 
 export default defineConfig({
   image: {
@@ -50,5 +68,6 @@ export default defineConfig({
         (process.env.PUBLIC_PALOMARENOS_ENABLED === 'true' ||
           !page.endsWith('/palomarenos-por-el-mundo/')),
     }),
+    removeDisabledFeaturePages,
   ],
 });

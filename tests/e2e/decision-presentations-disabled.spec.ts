@@ -1,52 +1,32 @@
 import { expect, test } from './fixtures';
 
-test('presents Palomareños as a static proposal while the feature is disabled', async ({
-  page,
-}) => {
+test('serves only the generic 404 for disabled feature routes', async ({ page }) => {
   test.skip(
-    process.env.PUBLIC_PALOMARENOS_ENABLED !== 'false',
-    'Run with PUBLIC_PALOMARENOS_ENABLED=false to verify the decision presentation.',
+    process.env.PUBLIC_PALOMARENOS_ENABLED !== 'false' ||
+      process.env.PUBLIC_BALL_GAME_ENABLED !== 'false',
+    'Build and preview with both feature flags disabled.',
   );
 
-  await page.goto('/palomarenos-por-el-mundo/');
+  const requestedScripts: string[] = [];
+  page.on('request', (request) => {
+    if (request.resourceType() === 'script') requestedScripts.push(request.url());
+  });
 
-  await expect(page.getByRole('heading', { name: 'Palomareños por el mundo' })).toBeVisible();
-  await expect(page.getByText('Presentación estática.')).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Qué podría proponerse' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Qué sería público' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Revisión y solicitudes' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Decisiones pendientes' })).toBeVisible();
-  await expect(page.locator('[data-palomarenos-map]')).toHaveCount(0);
-  await expect(page.locator('[data-palomarenos-form]')).toHaveCount(0);
-  await expect(page.locator('form')).toHaveCount(0);
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+  for (const route of ['/palomarenos-por-el-mundo/', '/juego/']) {
+    const response = await page.goto(route);
 
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole('button', { name: 'Explorar' }).click();
-  await expect(
-    page.locator('#site-menu').getByRole('link', { name: 'Palomareños por el mundo' }),
-  ).toHaveCount(0);
-});
+    expect(response?.status(), `${route} should return an HTTP 404`).toBe(404);
+    await expect(page.getByRole('heading', { name: 'Página no encontrada' })).toBeVisible();
+    await expect(page.getByText('La página solicitada no existe.')).toBeVisible();
+    await expect(page.getByText(/propuesta|presentación/i)).toHaveCount(0);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+    await expect(
+      page.locator('[data-palomarenos-map], [data-palomarenos-form], #game-map'),
+    ).toHaveCount(0);
+    await expect(page.locator('form')).toHaveCount(0);
+  }
 
-test('presents La bola as a static proposal while its feature is disabled', async ({ page }) => {
-  test.skip(
-    process.env.PUBLIC_BALL_GAME_ENABLED !== 'false',
-    'Run with PUBLIC_BALL_GAME_ENABLED=false to verify the decision presentation.',
-  );
-
-  const response = await page.goto('/juego/');
-
-  expect(response?.status()).toBe(404);
-  await expect(page.getByRole('heading', { name: 'La bola', exact: true })).toBeVisible();
-  await expect(page.getByText('Solo presentación estática.')).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Qué habría que decidir' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Acceso y seguridad' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Estado actual' })).toBeVisible();
-  await expect(page.locator('#game-map')).toHaveCount(0);
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
-
-  const gameScripts = await page
-    .locator('script[src]')
-    .evaluateAll((scripts) => scripts.map((script) => script.getAttribute('src') ?? ''));
-  expect(gameScripts.some((src) => /game-map|convex-game|leaflet/i.test(src))).toBe(false);
+  expect(
+    requestedScripts.some((url) => /palomarenos-(map|form)|game-map|convex-game/i.test(url)),
+  ).toBe(false);
 });
