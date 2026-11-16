@@ -222,31 +222,31 @@ La página incluye fichas informativas de alojamientos del entorno, con enlaces 
 - **Decisión:** [ ] Mantener la selección provisional · [ ] Añadir o corregir · [ ] Retirar fichas
 - **Dato corregido, fuente o comentario:** ______________________________________________
 
-### RUT-01 · Ruta local y condiciones sobre el terreno
+### RUT-01 · Ruta externa y condiciones sobre el terreno
 
-La propuesta conserva una ruta publicada por [Komoot](https://www.komoot.com/smarttour/e1154591619/hiking-through-the-fields-of-palomares-del-campo), claramente identificada como recomendación externa y no como ruta municipal señalizada. No se muestra mapa ni archivo de descarga en la propuesta actual.
+La web muestra el iframe oficial de una ruta publicada por un usuario en Wikiloc. No se presenta como ruta municipal oficial ni como verificada sobre el terreno por el Ayuntamiento. El mapa solo se solicita al proveedor cuando la persona pulsa el botón de carga; la ficha original permanece enlazada.
 
-**Confirmar:** trazado, firme, cruces, seguridad, accesibilidad y vigencia mediante una revisión local. Indicar si la ruta debe recomendarse a visitantes.
+**Confirmar:** si el Ayuntamiento quiere destacar esta publicación externa, y revisar titularidad/acceso de los caminos, firme, cruces y seguridad antes de describirla o recomendarla como itinerario municipal. La ficha de Wikiloc no sustituye la confirmación municipal ni una inspección presencial.
 
-- **Decisión:** [ ] Mantener solo el enlace externo · [ ] Recomendarla con estas condiciones · [ ] Retirar la recomendación
+- **Decisión:** [ ] Mantener enlace externo con estas cautelas · [ ] Facilitar un recorrido municipal verificado · [ ] Retirar la ruta
 - **Dato corregido, fuente o comentario:** ______________________________________________
 
-### RUT-02 · Nombre, recorrido y métricas de la ruta
+### RUT-02 · Título, autoría y datos del recorrido
 
-La ficha de Komoot muestra 5,13 km, 1 h 21 min y 50 m de desnivel, y señala última actualización el 26 de julio de 2024.
+La [ficha original de Wikiloc](https://es.wikiloc.com/rutas-senderismo/palomares-del-campo-a-la-cantera-54551889) titula la ruta «Palomares del Campo a La Cantera» y atribuye su publicación a Joaquin Alcarria. La página municipal enlaza la ficha y muestra esa autoría, pero no reproduce métricas propias ni presenta esos datos como verificados por el Ayuntamiento.
 
-**Confirmar:** origen, destino, nombre local y si esas cifras siguen siendo adecuadas para describir la recomendación. Las distancias a otros destinos se muestran como orientativas solo cuando se ha podido identificar un punto de visita concreto.
+**Confirmar:** que el título y la atribución son correctos y si se autoriza destacar este contenido externo. Cualquier distancia, duración, dificultad, desnivel, accesibilidad o condición de paso requiere una fuente y verificación adecuadas antes de publicarse como información municipal.
 
-- **Decisión:** [ ] Mantener las cifras como orientativas · [ ] Corregir · [ ] Retirar las métricas
+- **Decisión:** [ ] Mantener título y autoría enlazados · [ ] Corregir la atribución · [ ] No destacar la ruta
 - **Dato corregido, fuente o comentario:** ______________________________________________
 
-### RUT-03 · Permiso para alojar una copia del GPX
+### RUT-03 · Inserción externa y privacidad
 
-La descarga local y el mapa basado en el archivo se han retirado de esta propuesta; se conserva el enlace a Komoot. No se ha confirmado permiso para redistribuir una copia del archivo GPX.
+La página usa el código de inserción oficial de Wikiloc para la ruta, conforme a la [función de incrustación documentada por Wikiloc](https://help.wikiloc.com/article/259-share-embed-iframe-insert-embed-trail-route-wikiloc-web-blog-digital-online-html), y atribuye el contenido a Joaquin Alcarria. No aloja ni redistribuye el GPX o las coordenadas. El endpoint de Wikiloc solo se solicita tras una acción explícita del visitante; la alternativa es abrir directamente la ficha original. Este control no constituye por sí solo un gestor general de consentimiento.
 
-**Confirmar:** si el Ayuntamiento dispone de un trazado propio o de autorización escrita para alojar y ofrecer ese archivo. Si no, se mantendrá únicamente el enlace a la fuente original.
+**Confirmar:** la pertinencia de destacar la publicación, la atribución, el tratamiento de datos que puede producir el iframe, y si el mecanismo de carga requiere una solución de consentimiento adicional tras la revisión municipal y jurídica.
 
-- **Decisión:** [ ] Mantener solo el enlace externo · [ ] Facilitar autorización y archivo municipal · [ ] Retirar la ruta
+- **Decisión:** [ ] Mantener la inserción con revisión de privacidad · [ ] Mantener solo el enlace · [ ] Retirar la ruta
 - **Dato corregido, fuente o comentario:** ______________________________________________
 
 ### IMG-01 · Fotografía de la iglesia

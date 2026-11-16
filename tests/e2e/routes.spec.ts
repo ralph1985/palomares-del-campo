@@ -1,61 +1,111 @@
 import { expect, test } from './fixtures';
 
-test.describe('local routes', () => {
-  test('shows a sourced external route without presenting it as municipal', async ({ page }) => {
+const routeUrl =
+  'https://es.wikiloc.com/rutas-senderismo/palomares-del-campo-a-la-cantera-54551889';
+const embedUrl =
+  'https://es.wikiloc.com/wikiloc/embedv2.do?id=54551889&elevation=on&images=on&maptype=H';
+const embedRequestPattern =
+  /^https:\/\/es\.wikiloc\.com\/wikiloc\/embedv2\.do\?id=54551889&elevation=on&images=on&maptype=H$/;
+
+test.describe('Wikiloc route embed', () => {
+  test('loads the official embed only after the visitor asks for it', async ({ page }) => {
+    let wikilocRequests = 0;
+    let tileRequests = 0;
+    page.on('request', (request) => {
+      if (request.url().startsWith('https://es.wikiloc.com/')) wikilocRequests += 1;
+      if (request.url().includes('tile.openstreetmap.org')) tileRequests += 1;
+    });
+    await page.route(embedRequestPattern, (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: '<!doctype html><title>Wikiloc embed fixture</title>',
+      }),
+    );
+
     await page.goto('/rutas/');
 
     await expect(page).toHaveTitle(/Rutas/);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      'content',
+      /Wikiloc.*sin verificación municipal/i,
+    );
     await expect(page.getByRole('heading', { level: 1, name: 'Rutas del pueblo' })).toBeVisible();
     await expect(
-      page.getByRole('heading', { name: 'Paseo por los campos de Palomares del Campo' }),
+      page.getByRole('heading', { level: 2, name: 'Palomares del Campo a La Cantera' }),
     ).toBeVisible();
-    await expect(page.getByText('Recomendación externa')).toBeVisible();
-    await expect(page.getByText('No es una ruta municipal señalizada.')).toBeVisible();
-    await expect(page.getByRole('link', { name: /Probar La bola/ })).toHaveAttribute(
-      'href',
-      '/juego/',
-    );
-    await expect(page.getByRole('link', { name: /Descargar GPX/ })).toHaveAttribute(
-      'href',
-      '/routes/campos-palomares-del-campo.gpx',
-    );
-    await expect(page.getByText('Descarga el archivo GPX.')).toBeVisible();
+    await expect(page.getByText('Joaquin Alcarria', { exact: true })).toBeVisible();
+    await expect(page.getByText(/no es una ruta oficial del Ayuntamiento/i)).toBeVisible();
+    await expect(page.getByText(/no la ha verificado sobre el terreno/i)).toBeVisible();
+    await expect(page.getByText(/solo se conecta con Wikiloc cuando pulses/i)).toBeVisible();
     await expect(
-      page.getByText(/Puedes abrir el archivo en una aplicación compatible con rutas GPX/),
-    ).toBeVisible();
-    const routeMap = page.locator('[data-route-map]');
-    await expect(routeMap).toHaveAttribute('data-map-status', 'ready');
-    await expect(routeMap.locator('.leaflet-tile')).not.toHaveCount(0);
-    await expect(routeMap.locator('.route-track-line')).not.toHaveCount(0);
-    await expect(routeMap.locator('.route-waypoint-marker')).not.toHaveCount(0);
-    await expect(page.getByText('Mapa interactivo del trazado')).toBeVisible();
-    await expect(page.getByText(/Mapa basado en el GPX aportado/)).toBeVisible();
-    await expect(page.locator('.route-review')).toContainText(
-      /Fuente actualizada el \d{1,2} de \w+ de \d{4}/,
-    );
-    await expect(page.locator('.route-review')).toContainText(
-      /ficha revisada el \d{1,2} de \w+ de \d{4}/,
-    );
-    await expect(page.getByRole('link', { name: /Ver ruta en Komoot/ })).toHaveAttribute(
+      page.getByRole('link', { name: /Abrir la ruta original en Wikiloc/ }),
+    ).toHaveAttribute('href', routeUrl);
+    await expect(page.getByRole('heading', { level: 3, name: 'Mapa en Wikiloc' })).toBeVisible();
+    await expect(page.locator('.wikiloc-attribution a')).toHaveAttribute(
       'href',
-      'https://www.komoot.com/smarttour/e1154591619/hiking-through-the-fields-of-palomares-del-campo',
+      'https://es.wikiloc.com',
     );
-    await expect(page.getByRole('link', { name: /Turismo de Castilla-La Mancha/ })).toHaveAttribute(
-      'href',
-      'https://www.turismocastillalamancha.es/es/destinos/encanto-rural/cuenca/palomares-del-campo',
+    await expect(page.locator('iframe')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: /Descargar GPX/ })).toHaveCount(0);
+    expect(wikilocRequests).toBe(0);
+    expect(tileRequests).toBe(0);
+
+    await page.getByRole('button', { name: 'Cargar mapa de Wikiloc' }).click();
+
+    const iframe = page.locator('iframe[data-wikiloc-frame]');
+    await expect(iframe).toBeVisible();
+    await expect(iframe).toHaveAttribute('src', embedUrl);
+    await expect(iframe).toHaveAttribute(
+      'title',
+      'Mapa de la ruta Palomares del Campo a La Cantera en Wikiloc',
     );
+    await expect(iframe).toHaveAttribute('width', '600');
+    await expect(iframe).toHaveAttribute('height', '500');
+    await expect(iframe).toHaveAttribute('loading', 'lazy');
+    await expect(page.getByRole('button', { name: 'Solicitud a Wikiloc enviada' })).toBeDisabled();
+    await expect(page.locator('[data-wikiloc-load]')).toHaveAttribute('aria-expanded', 'true');
+    expect(wikilocRequests).toBe(1);
+    expect(tileRequests).toBe(0);
   });
 
-  test('keeps the route map usable on a narrow viewport', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+  test('keeps an accessible direct-route fallback when the iframe is blocked', async ({ page }) => {
+    await page.route(embedRequestPattern, (route) => route.abort());
     await page.goto('/rutas/');
 
-    const routeMap = page.locator('[data-route-map]');
-    await expect(routeMap).toHaveAttribute('data-map-status', 'ready');
-    await expect(routeMap).toBeVisible();
-    const hasHorizontalOverflow = await page.evaluate(
+    await page.getByRole('button', { name: 'Cargar mapa de Wikiloc' }).click();
+
+    await expect(page.getByText(/si el mapa no aparece o está bloqueado/i)).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: /Abrir la ruta original en Wikiloc/ }),
+    ).toHaveAttribute('href', routeUrl);
+  });
+
+  test('keeps the embed prompt and responsive frame within a narrow viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.route(embedRequestPattern, (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: '<!doctype html><title>Wikiloc embed fixture</title>',
+      }),
+    );
+    await page.goto('/rutas/');
+
+    await expect(page.getByRole('button', { name: 'Cargar mapa de Wikiloc' })).toBeVisible();
+    const initialOverflow = await page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
     );
-    expect(hasHorizontalOverflow).toBe(false);
+    expect(initialOverflow).toBe(false);
+
+    await page.getByRole('button', { name: 'Cargar mapa de Wikiloc' }).click();
+    const iframe = page.locator('iframe[data-wikiloc-frame]');
+    await expect(iframe).toBeVisible();
+    const frameWidth = await iframe.evaluate((element) => element.getBoundingClientRect().width);
+    expect(frameWidth).toBeLessThanOrEqual(390);
+    const loadedOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    );
+    expect(loadedOverflow).toBe(false);
   });
 });

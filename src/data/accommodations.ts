@@ -16,18 +16,21 @@ export interface RuralAccommodation {
   officialSource?: AccommodationSource;
 }
 
-export const accommodationReviewedAt = '2026-10-12';
+export const accommodationReviewedAt = '2026-11-15';
+// TODO(AYTO)[ALO-01]: Confirmar capacidad directamente con el alojamiento: este registro conservaba 12 plazas, pero la ficha enlazada de TusCasasRurales consultada ahora anuncia hasta 14 y la web propia no muestra una cifra verificable en su texto accesible; no publicar un número hasta resolverlo.
 
+// TODO(AYTO)[ALO-02]: Facilitar o confirmar qué alojamientos rurales del municipio conviene incluir y sus datos públicos vigentes; la autorización para reproducir la ficha debe obtenerse de cada titular y no se presume por aparecer en un directorio.
 export const ruralAccommodations: RuralAccommodation[] = [
   {
     name: 'Casa Rural San Cristóbal',
     location: 'Palomares del Campo',
     area: 'Palomares del Campo',
     category: 'Casa rural completa',
-    capacity: 'Hasta 12 plazas',
+    capacity: 'Capacidad por confirmar; las fichas consultadas discrepan',
     rooms: '5 dormitorios',
     bathrooms: '5 baños',
-    summary: 'Casa rural completa en Palomares del Campo, con cinco dormitorios y cinco baños.',
+    summary:
+      'Casa rural completa en Palomares del Campo, con cinco dormitorios y cinco baños. Las fuentes consultadas discrepan en la capacidad; confírmala directamente antes de reservar.',
     source: {
       label: 'Ficha consultada en TusCasasRurales.com',
       href: 'https://www.tuscasasrurales.com/casa-rural-san-cristobal-f20825.htm',

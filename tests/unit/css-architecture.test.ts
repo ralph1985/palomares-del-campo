@@ -21,8 +21,8 @@ describe('CSS architecture guard', () => {
 
   it('allows documented Leaflet color exceptions and token declarations', () => {
     const diff = [
-      'diff --git a/src/scripts/route-map.ts b/src/scripts/route-map.ts',
-      '+++ b/src/scripts/route-map.ts',
+      'diff --git a/src/scripts/game-map.ts b/src/scripts/game-map.ts',
+      '+++ b/src/scripts/game-map.ts',
       '@@ -1,0 +2 @@',
       "+      color: '#a05c32',",
       'diff --git a/src/styles/tokens.css b/src/styles/tokens.css',

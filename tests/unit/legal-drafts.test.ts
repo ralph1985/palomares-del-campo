@@ -35,6 +35,7 @@ describe('borradores de información legal', () => {
       'LEG-16',
       'LEG-17',
       'LEG-18',
+      'LEG-19',
     ]);
   });
 
