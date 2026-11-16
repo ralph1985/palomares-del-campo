@@ -1,0 +1,148 @@
+---
+import EditorialHero from '../../components/hero/EditorialHero.astro';
+import ParkCard from '../../components/parks/ParkCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { publicGreenSpaces } from '../../data/parks';
+---
+
+<BaseLayout
+  title="Parques y zonas verdes de Palomares del Campo"
+  description="Estamos preparando un catálogo de parques y zonas verdes de Palomares del Campo con información confirmada."
+>
+  <main>
+    <EditorialHero labelledBy="parks-page-title" variant="paper" summaryWidth="wide">
+      <p slot="eyebrow" class="eyebrow">
+        Palomares del Campo · Vecinos y visita
+      </p>
+      <h1 slot="title" id="parks-page-title">
+        Parques y zonas verdes
+      </h1>
+      <p slot="summary" class="hero-intro">
+        Aquí reuniremos información sencilla sobre los espacios verdes de Palomares del Campo, para
+        que vecinos y visitantes puedan conocerlos mejor.
+      </p>
+    </EditorialHero>
+
+    <section class="parks-catalogue" aria-label="Catálogo de parques y zonas verdes">
+      <div class="parks-shell">
+        {publicGreenSpaces.length > 0 ? (
+          <div class="parks-grid">
+            {publicGreenSpaces.map((park) => (
+              <ParkCard park={park} />
+            ))}
+          </div>
+        ) : (
+          <div class="parks-empty">
+            <p class="parks-empty__eyebrow">Catálogo en preparación</p>
+            <h2 id="parks-catalogue-title">
+              Estamos preparando el catálogo de parques y zonas verdes de Palomares del Campo
+            </h2>
+            <p>
+              Cuando la información esté confirmada, reuniremos aquí la ubicación y una breve
+              descripción de cada espacio. Las fotografías se incorporarán cuando las facilite el
+              Ayuntamiento con los permisos y créditos correspondientes.
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .parks-shell {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: var(--color-clay-text);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .parks-catalogue {
+    padding: var(--spacing-section-y) 0;
+    background: var(--color-sage);
+  }
+
+  .parks-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+    max-width: 48rem;
+  }
+
+  .parks-empty {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    max-width: 64rem;
+    overflow: hidden;
+    padding: clamp(1.5rem, 5vw, 4rem);
+    border: 1px solid var(--color-accommodation-border);
+    border-left: 5px solid var(--color-forest);
+    border-radius: 1.5rem;
+    background: var(--color-surface);
+  }
+
+  .parks-empty::after {
+    position: absolute;
+    top: -5rem;
+    right: -4rem;
+    width: 15rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--color-sage-light);
+    content: '';
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .parks-empty > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .parks-empty__eyebrow {
+    margin: 0;
+    color: var(--color-clay-text);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .parks-empty h2 {
+    max-width: 25ch;
+    margin: 0;
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-heading);
+    line-height: var(--line-height-heading);
+    overflow-wrap: anywhere;
+  }
+
+  .parks-empty > p:last-child {
+    max-width: 52ch;
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 38rem) {
+    .parks-shell {
+      width: min(100% - 2rem, 72rem);
+    }
+
+    .parks-empty {
+      border-left-width: 4px;
+      border-radius: 1.1rem;
+    }
+  }
+</style>

@@ -67,7 +67,7 @@ La ejecución verificada el 18 de octubre de 2026 de `pnpm test:coverage` pasó 
 Los escenarios E2E prueban la aplicación Astro real en Chromium y cubren:
 
 - navegación global, menú lateral, `Escape`, `inert`, nombres accesibles y pie;
-- portada, páginas informativas, alojamientos y `/rutas/`: la suite comprueba atribución al autor, aviso de que la ruta no es oficial ni está verificada sobre el terreno, ausencia de solicitudes a Wikiloc antes de pulsar, inserción del endpoint autorizado, enlace directo y alternativa accesible si el iframe se bloquea; también comprueba el ancho adaptable en móvil. La respuesta del proveedor se simula, por lo que no valida disponibilidad del mapa real;
+- portada, páginas informativas, alojamientos, `/parques-y-zonas-verdes/` y `/rutas/`: parques comprueba el mensaje de catálogo en preparación, la ausencia de fichas no confirmadas/fotos y el acceso desde Vecinos/Visita. En `/rutas/` comprueba atribución al autor, aviso de que la ruta no es oficial ni está verificada sobre el terreno, ausencia de solicitudes a Wikiloc antes de pulsar, inserción del endpoint autorizado, enlace directo y alternativa accesible si el iframe se bloquea. La respuesta del proveedor se simula, por lo que no valida disponibilidad del mapa real;
 - archivo y detalle de noticias;
 - bandos, filtros por texto/categoría/año, adjuntos, fuente y redirección `/avisos/`;
 - estado vacío de agenda;
@@ -86,7 +86,7 @@ Para reutilizar un servidor ya activo (por ejemplo, uno accesible por Tailnet), 
 
 ### QA visual
 
-`scripts/visual-qa.ts`, ejecutado mediante `pnpm qa:visual`, recorre las rutas públicas en `1440×900` y `375×812`, incluidos alojamientos, «Palomareños por el mundo» y un detalle de bando. Solo incluye `/juego/` cuando se ejecuta con `PUBLIC_BALL_GAME_ENABLED=true`, porque de otro modo la respuesta 404 es el comportamiento esperado y se comprueba en Playwright. Comprueba HTTP 200, overflow horizontal, foco visible, contraste aproximado y errores de consola. Los tiles de OpenStreetMap y adjuntos de Bandomovil se sustituyen por fixtures SVG compartidos con E2E. No genera snapshots ni realiza comparación de píxeles pese a su nombre. Reintenta una sola vez solo si Astro dev aborta la navegación con `net::ERR_ABORTED`; otros errores siguen fallando. Este comando no forma parte de `.husky/pre-push`; hasta integrarlo en ese gate, se mantienen en Playwright las regresiones responsive de las rutas críticas.
+`scripts/visual-qa.ts`, ejecutado mediante `pnpm qa:visual`, recorre las rutas públicas en `1440×900` y `375×812`, incluida `/parques-y-zonas-verdes/`, alojamientos, «Palomareños por el mundo» y un detalle de bando. Solo incluye `/juego/` cuando se ejecuta con `PUBLIC_BALL_GAME_ENABLED=true`, porque de otro modo la respuesta 404 es el comportamiento esperado y se comprueba en Playwright. Comprueba HTTP 200, overflow horizontal, foco visible, contraste aproximado y errores de consola. Los tiles de OpenStreetMap y adjuntos de Bandomovil se sustituyen por fixtures SVG compartidos con E2E. No genera snapshots ni realiza comparación de píxeles pese a su nombre. Reintenta una sola vez solo si Astro dev aborta la navegación con `net::ERR_ABORTED`; otros errores siguen fallando. Este comando no forma parte de `.husky/pre-push`; hasta integrarlo en ese gate, se mantienen en Playwright las regresiones responsive de las rutas críticas.
 
 ### CSS
 

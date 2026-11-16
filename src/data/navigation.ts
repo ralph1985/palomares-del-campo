@@ -14,6 +14,7 @@ export const navigationGroups: NavigationGroup[] = [
     links: [
       { label: 'Servicios del pueblo', href: '/servicios-del-pueblo/' },
       { label: 'Servicios municipales', href: '/informacion-practica/' },
+      { label: 'Parques y zonas verdes', href: '/parques-y-zonas-verdes/' },
     ],
   },
   {
@@ -21,6 +22,7 @@ export const navigationGroups: NavigationGroup[] = [
     links: [
       { label: 'Sobre el pueblo', href: '/sobre-el-pueblo/' },
       { label: 'Servicios del pueblo', href: '/servicios-del-pueblo/' },
+      { label: 'Parques y zonas verdes', href: '/parques-y-zonas-verdes/' },
       { label: 'Rutas', href: '/rutas/' },
       { label: 'Qué ver cerca', href: '/que-ver-cerca/' },
       { label: 'Alojamientos rurales', href: '/alojamientos/' },

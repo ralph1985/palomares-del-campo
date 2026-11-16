@@ -14,6 +14,7 @@ const routes = [
   '/agenda/',
   '/informacion-practica/',
   '/servicios-del-pueblo/',
+  '/parques-y-zonas-verdes/',
   '/rutas/',
   '/aviso-legal/',
   '/politica-de-cookies/',
