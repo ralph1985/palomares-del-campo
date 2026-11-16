@@ -1,0 +1,187 @@
+---
+import { Image } from 'astro:assets';
+import ExternalLink from '../ui/ExternalLink.astro';
+import type { PublicGreenSpace } from '../../data/parks';
+
+interface Props {
+  park: PublicGreenSpace;
+}
+
+const { park } = Astro.props;
+const coordinatesLabel = `${park.coordinates.latitude.toFixed(6)}, ${park.coordinates.longitude.toFixed(6)}`;
+---
+
+<article class="park-card" aria-labelledby={`park-title-${park.slug}`}>
+  {park.photo && (
+    <figure class="park-card__figure">
+      <Image class="park-card__image" src={park.photo.image} alt={park.photo.alt} loading="lazy" />
+      <figcaption>Fotografía: {park.photo.credit}</figcaption>
+    </figure>
+  )}
+
+  <div class="park-card__body">
+    <p class="park-card__eyebrow">Parque o zona verde</p>
+    <h3 id={`park-title-${park.slug}`}>{park.name}</h3>
+    <p class="park-card__description">{park.description}</p>
+    {park.verificationNote && (
+      <p class="park-card__verification">
+        <strong>Por confirmar:</strong> {park.verificationNote}
+      </p>
+    )}
+    <p class="park-card__location">
+      <strong>Ubicación:</strong> {park.location}
+    </p>
+    <p class="park-card__coordinates">
+      <strong>Coordenadas del punto:</strong> <span>{coordinatesLabel}</span>
+    </p>
+    <ExternalLink class="park-card__map" href={park.mapUrl}>
+      Abrir ubicación en el mapa <span aria-hidden="true">↗</span>
+    </ExternalLink>
+
+    {park.equipment.length > 0 && (
+      <section
+        class="park-card__equipment"
+        aria-label={`Equipamientos confirmados de ${park.name}`}
+      >
+        <h4>Equipamientos confirmados</h4>
+        <ul>
+          {park.equipment.map((item) => (
+            <li>
+              {item.name} · <ExternalLink href={item.source.href}>{item.source.label}</ExternalLink>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <nav class="park-card__sources" aria-label={`Fuentes de ${park.name}`}>
+      <h4>Fuentes consultadas</h4>
+      <ul>
+        {park.sources.map((source) => (
+          <li>
+            <ExternalLink href={source.href}>{source.label}</ExternalLink>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</article>
+
+<style>
+  .park-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-accommodation-border);
+    border-radius: 1.25rem;
+    background: var(--color-surface);
+  }
+
+  .park-card__figure {
+    margin: 0;
+    background: var(--color-sage-light);
+  }
+
+  .park-card__image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .park-card__figure figcaption {
+    padding: 0.65rem 1.25rem;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+  }
+
+  .park-card__body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding: clamp(1.35rem, 3vw, 2rem);
+  }
+
+  .park-card__eyebrow {
+    margin: 0 0 0.9rem;
+    color: var(--color-clay-text);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .park-card h3 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.75rem, 3vw, 2.3rem);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -0.05em;
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+  }
+
+  .park-card__description,
+  .park-card__location,
+  .park-card__coordinates {
+    margin: 1rem 0 0;
+    color: var(--color-muted);
+    line-height: 1.65;
+  }
+
+  .park-card__verification {
+    margin: 1rem 0 0;
+    padding: 0.85rem 1rem;
+    border-left: 3px solid var(--color-ochre);
+    color: var(--color-muted);
+    background: var(--color-surface-soft);
+    line-height: 1.6;
+  }
+
+  .park-card__verification strong,
+  .park-card__location strong,
+  .park-card__coordinates strong {
+    color: var(--color-ink);
+  }
+
+  .park-card__coordinates span {
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .park-card__map {
+    align-self: flex-start;
+    margin-top: 1rem;
+    color: var(--color-forest);
+    font-weight: var(--font-weight-strong);
+  }
+
+  .park-card__equipment,
+  .park-card__sources {
+    margin-top: 1.5rem;
+  }
+
+  .park-card h4 {
+    margin: 0 0 0.55rem;
+    font-size: 0.9rem;
+  }
+
+  .park-card ul {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+    padding-left: 1.2rem;
+    color: var(--color-muted);
+    line-height: 1.55;
+  }
+
+  .park-card__sources {
+    margin-top: auto;
+    padding-top: 1.5rem;
+  }
+
+  @media (max-width: 38rem) {
+    .park-card__body {
+      padding: 1.3rem;
+    }
+  }
+</style>

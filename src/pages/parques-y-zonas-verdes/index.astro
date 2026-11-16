@@ -1,0 +1,327 @@
+---
+import EditorialHero from '../../components/hero/EditorialHero.astro';
+import ExternalLink from '../../components/ui/ExternalLink.astro';
+import ParkCard from '../../components/parks/ParkCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { parksReviewedAt, publicGreenSpaces } from '../../data/parks';
+
+const reviewedAt = new Date(`${parksReviewedAt}T00:00:00`).toLocaleDateString('es-ES', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout
+  title="Parques y zonas verdes de Palomares del Campo"
+  description="Consulta el punto georreferenciado como Parque y Jardín en Palomares del Campo y distingue los datos publicados de la información municipal pendiente de confirmar."
+>
+  <main>
+    <EditorialHero labelledBy="parks-page-title" variant="paper" summaryWidth="wide">
+      <p slot="eyebrow" class="eyebrow">
+        Palomares del Campo · Vecinos y visita
+      </p>
+      <h1 slot="title" id="parks-page-title">
+        Parques y zonas verdes
+      </h1>
+      <p slot="summary" class="hero-intro">
+        Un inventario breve y documentado de los espacios verdes del municipio. Publicamos solo
+        aquello que las fuentes permiten ubicar, y dejamos claros los datos que aún debe confirmar
+        el Ayuntamiento.
+      </p>
+    </EditorialHero>
+
+    <section class="parks-evidence" aria-labelledby="parks-evidence-title">
+      <div class="parks-shell parks-evidence__inner">
+        <div class="parks-evidence__heading">
+          <p class="eyebrow">Qué hemos podido verificar</p>
+          <h2 id="parks-evidence-title">Un punto oficial, sin nombre propio ni perímetro</h2>
+        </div>
+        <div class="parks-evidence__copy">
+          <p>
+            La fase 2024 del visor público GeoEIEL registra un punto en la capa «Parque y Jardín»
+            para Palomares del Campo. La fuente facilita una coordenada, pero no publica nombre
+            propio, perímetro del recinto ni equipamientos.
+          </p>
+          <p>
+            OpenStreetMap contiene otros objetos etiquetados como parque, jardín o área infantil; no
+            todos tienen nombre o información de acceso. No los vinculamos al punto oficial sin una
+            confirmación municipal.
+          </p>
+          <nav class="parks-sources" aria-label="Fuentes de la revisión">
+            <ExternalLink href="https://eiel.redsara.es/visor/layer-json/fase:2024-codine:16148/capa:PJ">
+              GeoEIEL · Parque y Jardín · fase 2024
+            </ExternalLink>
+            <ExternalLink href="https://eiel.redsara.es/visor/">Visor público GeoEIEL</ExternalLink>
+            <ExternalLink href="https://www.openstreetmap.org/copyright">
+              Datos y colaboradores de OpenStreetMap
+            </ExternalLink>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <section class="parks-list" aria-labelledby="parks-list-title">
+      <div class="parks-shell">
+        <div class="parks-section-heading">
+          <p class="eyebrow">Inventario municipal</p>
+          <h2 id="parks-list-title">Espacios documentados</h2>
+          <p>
+            La ficha de abajo reproduce el alcance de la fuente: un punto de referencia, no un
+            perímetro ni una descripción completa del espacio.
+          </p>
+        </div>
+
+        {publicGreenSpaces.length > 0 ? (
+          <div class="parks-grid">
+            {publicGreenSpaces.map((park) => (
+              <ParkCard park={park} />
+            ))}
+          </div>
+        ) : (
+          <div class="parks-empty" aria-labelledby="parks-empty-title">
+            <p class="parks-empty__eyebrow">Inventario en preparación</p>
+            <h3 id="parks-empty-title">Todavía no hay fichas listas para publicar</h3>
+            <p>
+              Esto no significa que no existan parques o zonas verdes: faltan fuentes suficientes
+              para identificar y ubicar un espacio sin atribuirle datos dudosos.
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <section class="parks-pending" aria-labelledby="parks-pending-title">
+      <div class="parks-shell parks-pending__inner">
+        <div>
+          <p class="eyebrow">Siguiente paso</p>
+          <h2 id="parks-pending-title">Datos que debe confirmar el Ayuntamiento</h2>
+        </div>
+        <div class="parks-pending__content">
+          <ul>
+            <li>Nombre de uso y ubicación reconocible, además del punto georreferenciado.</li>
+            <li>Perímetro y acceso público actual, si corresponde.</li>
+            <li>Equipamientos, solo cuando estén comprobados.</li>
+            <li>Fotografías municipales con crédito y permiso de publicación documentados.</li>
+          </ul>
+          <details class="parks-method">
+            <summary>Por qué no asignamos el nombre «El Jardinillo» a esta ficha</summary>
+            <p>
+              El programa municipal de fiestas de 2025 cita una actividad en el «Jardinillo de las
+              Pastoras» y OpenStreetMap etiqueta un objeto como «El Jardinillo». Las fuentes no
+              permiten confirmar que esos nombres correspondan al punto de GeoEIEL ni que describan
+              el mismo recinto.
+            </p>
+            <nav class="parks-sources" aria-label="Fuentes sobre el nombre pendiente de confirmar">
+              <ExternalLink href="https://www.bandomovil.com/userFiles/f1/f19FWFIESTAS2025-09PALOMARESDELCAMPO.pdf">
+                Programa municipal de fiestas 2025
+              </ExternalLink>
+              <ExternalLink href="https://www.openstreetmap.org/way/736748627">
+                Objeto «El Jardinillo» en OpenStreetMap
+              </ExternalLink>
+            </nav>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="parks-review" aria-label="Fecha de revisión de las fuentes">
+      <div class="parks-shell">
+        <p>
+          Fuentes consultadas el {reviewedAt}. No se han añadido fotografías genéricas ni imágenes
+          generadas.
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .parks-shell {
+    width: min(100% - 2.5rem, 72rem);
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: var(--color-clay-text);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  h2,
+  h3 {
+    margin: 0;
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-heading);
+    line-height: var(--line-height-heading);
+    overflow-wrap: anywhere;
+  }
+
+  h2 {
+    max-width: 18ch;
+    font-size: var(--font-size-section-heading);
+  }
+
+  .parks-evidence {
+    padding: var(--spacing-section-y) 0;
+    background: var(--color-sage);
+  }
+
+  .parks-evidence__inner,
+  .parks-pending__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(2rem, 7vw, 7rem);
+    align-items: start;
+  }
+
+  .parks-evidence__copy,
+  .parks-pending__content {
+    max-width: 45rem;
+    color: var(--color-ink);
+    line-height: 1.7;
+  }
+
+  .parks-evidence__copy > p:first-child,
+  .parks-pending__content > ul:first-child {
+    margin-top: 0;
+  }
+
+  .parks-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 1.25rem;
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-strong);
+  }
+
+  .parks-sources a {
+    color: var(--color-forest);
+  }
+
+  .parks-list {
+    padding: var(--spacing-section-y) 0;
+    background: var(--color-surface);
+  }
+
+  .parks-section-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.65fr);
+    gap: 1rem 3rem;
+    align-items: end;
+    margin-bottom: 2rem;
+  }
+
+  .parks-section-heading .eyebrow {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+
+  .parks-section-heading > p:last-child {
+    max-width: 38rem;
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.65;
+  }
+
+  .parks-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+    max-width: 48rem;
+  }
+
+  .parks-empty {
+    max-width: 48rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid var(--color-accommodation-border);
+    border-radius: 1.25rem;
+    background: var(--color-surface-soft);
+  }
+
+  .parks-empty__eyebrow {
+    margin: 0 0 0.9rem;
+    color: var(--color-clay-text);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .parks-empty h3 {
+    max-width: 20ch;
+    font-size: clamp(1.7rem, 3vw, 2.25rem);
+  }
+
+  .parks-empty > p:last-child {
+    max-width: 36rem;
+    margin: 1rem 0 0;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  .parks-pending {
+    padding: var(--spacing-section-y) 0;
+    background: var(--color-surface-soft);
+  }
+
+  .parks-pending__content > ul {
+    display: grid;
+    gap: 0.75rem;
+    padding-left: 1.25rem;
+  }
+
+  .parks-method {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .parks-method summary {
+    color: var(--color-forest);
+    cursor: pointer;
+    font-weight: var(--font-weight-strong);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .parks-method p {
+    margin: 0.9rem 0 0;
+  }
+
+  .parks-review {
+    padding: 1.5rem 0 2.5rem;
+    color: var(--color-muted);
+    background: var(--color-surface-soft);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .parks-review p {
+    margin: 0;
+  }
+
+  @media (max-width: 48rem) {
+    .parks-evidence__inner,
+    .parks-pending__inner,
+    .parks-section-heading {
+      grid-template-columns: 1fr;
+    }
+
+    .parks-section-heading .eyebrow {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-width: 38rem) {
+    .parks-shell {
+      width: min(100% - 2rem, 72rem);
+    }
+  }
+</style>

@@ -15,6 +15,10 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 - Eliminados el GPX provisional de OpenStreetMap, el script Leaflet específico de `/rutas/` y sus referencias y pruebas obsoletas. No se descarga ni se redistribuye el GPX o las coordenadas de Wikiloc.
 
+#### Added
+
+- Añadida `/parques-y-zonas-verdes/` a la navegación de «Vecinos» y «Visita» (antes de «Rutas»). La página muestra el punto GeoEIEL 2024 como «Parque y jardín (registro EIEL)», con coordenadas y mapa, sin inventar nombre, perímetro, equipamientos ni fotografías; el inventario y los datos por confirmar quedan documentados.
+
 ### 2026-11-14
 
 #### Security

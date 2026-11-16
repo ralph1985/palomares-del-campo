@@ -17,18 +17,19 @@ Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refac
 
 ## Páginas
 
-| Archivo                                | Clasificación                 | Decisión de Fase 1                                                                                             |
-| -------------------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `src/pages/index.astro`                | Composición de portada        | Mantener local mientras la composición sea exclusiva; revisar sus secciones antes de extraer CSS.              |
-| `src/pages/agenda/index.astro`         | Composición editorial         | Mantener local; extraer solo patrones que aparezcan en otras rutas.                                            |
-| `src/pages/bandos/index.astro`         | Composición de archivo        | Mantener local; compartir comportamiento mediante componentes existentes.                                      |
-| `src/pages/bandos/[slug].astro`        | Detalle editorial             | Mantener local; no mezclarlo con la ficha de noticias.                                                         |
-| `src/pages/noticias/index.astro`       | Composición de archivo        | Mantener local; compartir solo patrones reales con bandos.                                                     |
-| `src/pages/noticias/[slug].astro`      | Detalle editorial             | Mantener local; conservar la diferencia entre noticia y bando.                                                 |
-| `src/pages/informacion-practica.astro` | Página informativa grande     | Revisar responsabilidades y posibles secciones; no mover CSS por obligación.                                   |
-| `src/pages/rutas/index.astro`          | Página de rutas grande        | Revisar composición de metadatos, mapa y limitaciones; mantener el mapa aislado.                               |
-| `src/pages/alojamientos/index.astro`   | Directorio informativo grande | Compone la página y la rejilla; las tarjetas viven en `src/components/accommodations/AccommodationCard.astro`. |
-| `src/pages/juego/index.astro`          | Tema independiente del juego  | Mantener local y oscuro; no migrar a la paleta clara.                                                          |
+| Archivo                                        | Clasificación                 | Decisión de Fase 1                                                                                             |
+| ---------------------------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `src/pages/index.astro`                        | Composición de portada        | Mantener local mientras la composición sea exclusiva; revisar sus secciones antes de extraer CSS.              |
+| `src/pages/agenda/index.astro`                 | Composición editorial         | Mantener local; extraer solo patrones que aparezcan en otras rutas.                                            |
+| `src/pages/bandos/index.astro`                 | Composición de archivo        | Mantener local; compartir comportamiento mediante componentes existentes.                                      |
+| `src/pages/bandos/[slug].astro`                | Detalle editorial             | Mantener local; no mezclarlo con la ficha de noticias.                                                         |
+| `src/pages/noticias/index.astro`               | Composición de archivo        | Mantener local; compartir solo patrones reales con bandos.                                                     |
+| `src/pages/noticias/[slug].astro`              | Detalle editorial             | Mantener local; conservar la diferencia entre noticia y bando.                                                 |
+| `src/pages/informacion-practica.astro`         | Página informativa grande     | Revisar responsabilidades y posibles secciones; no mover CSS por obligación.                                   |
+| `src/pages/parques-y-zonas-verdes/index.astro` | Página informativa            | Mantener scoped; compone el inventario EIEL y sus límites editoriales con tokens existentes.                   |
+| `src/pages/rutas/index.astro`                  | Página de rutas grande        | Revisar composición de metadatos, mapa y limitaciones; mantener el mapa aislado.                               |
+| `src/pages/alojamientos/index.astro`           | Directorio informativo grande | Compone la página y la rejilla; las tarjetas viven en `src/components/accommodations/AccommodationCard.astro`. |
+| `src/pages/juego/index.astro`                  | Tema independiente del juego  | Mantener local y oscuro; no migrar a la paleta clara.                                                          |
 
 `src/pages/sobre-el-pueblo.astro` no tiene un bloque `<style>` propio: importa la hoja específica `src/styles/pages/sobre-el-pueblo.css`.
 
@@ -56,12 +57,13 @@ Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refac
 
 ## Componentes específicos de página
 
-| Archivo                                                 | Clasificación                | Decisión de Fase 1                                                               |
-| ------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------- |
-| `src/components/home/HomeAudienceCards.astro`           | Sección exclusiva de portada | Mantener junto a la sección; extraer patrones solo con reutilización real.       |
-| `src/components/home/HomeEditorialGuide.astro`          | Sección exclusiva de portada | Mantener junto a la sección y conservar su jerarquía editorial.                  |
-| `src/components/about/HeritageCard.astro`               | Tarjeta de patrimonio        | Mantener scoped; no crear una tarjeta genérica sin segundo consumidor.           |
-| `src/components/accommodations/AccommodationCard.astro` | Tarjeta de alojamiento       | Mantener scoped; expone la variante oscura de alrededores sin duplicar la ficha. |
+| Archivo                                                 | Clasificación                | Decisión de Fase 1                                                                   |
+| ------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------ |
+| `src/components/home/HomeAudienceCards.astro`           | Sección exclusiva de portada | Mantener junto a la sección; extraer patrones solo con reutilización real.           |
+| `src/components/home/HomeEditorialGuide.astro`          | Sección exclusiva de portada | Mantener junto a la sección y conservar su jerarquía editorial.                      |
+| `src/components/about/HeritageCard.astro`               | Tarjeta de patrimonio        | Mantener scoped; no crear una tarjeta genérica sin segundo consumidor.               |
+| `src/components/accommodations/AccommodationCard.astro` | Tarjeta de alojamiento       | Mantener scoped; expone la variante oscura de alrededores sin duplicar la ficha.     |
+| `src/components/parks/ParkCard.astro`                   | Tarjeta de espacio verde     | Mantener scoped; mostrar fuentes, ubicación y solo equipamientos/fotos documentados. |
 
 ## Tema independiente del juego
 
@@ -113,7 +115,7 @@ La Fase 2 materializó tres responsabilidades independientes: `GameMapCanvas` ag
 
 La Fase 3 extrajo solo `CollectionCardMeta`: el patrón tiene dos consumidores, la misma semántica visual y estados compatibles. No se creó una tarjeta editorial genérica porque bandos y noticias conservan datos, enlaces, búsquedas y contratos públicos distintos.
 
-La refactorización de Hero extrae el esqueleto repetido de doce secciones con clase `*-hero`, la portada y el estado vacío de agenda. `EditorialHero` cubre la composición de una columna con variantes paper/sage/compact; `SplitHero` cubre la composición multimedia/estado. La portada conserva su display oscuro fotográfico, patrimonio usa salvia clara y el juego mantiene sus tokens nocturnos. Visual QA cubre 19 rutas en dos viewports, incluidas las tres páginas legales.
+La refactorización de Hero extrae el esqueleto repetido de doce secciones con clase `*-hero`, la portada y el estado vacío de agenda. `EditorialHero` cubre la composición de una columna con variantes paper/sage/compact; `SplitHero` cubre la composición multimedia/estado. La portada conserva su display oscuro fotográfico, patrimonio usa salvia clara y el juego mantiene sus tokens nocturnos. Visual QA cubre 23 rutas en dos viewports, incluida `/parques-y-zonas-verdes/` y las tres páginas legales.
 
 La repetición de una declaración no basta para crear una abstracción. En la Fase 3 solo se extraerán patrones que tengan más de un consumidor con la misma semántica y estados compatibles.
 
