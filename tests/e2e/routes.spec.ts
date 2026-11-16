@@ -1,5 +1,14 @@
 import { expect, test } from './fixtures';
 
+const openStreetMapTileHosts = new Set([
+  'tile.openstreetmap.org',
+  'a.tile.openstreetmap.org',
+  'b.tile.openstreetmap.org',
+  'c.tile.openstreetmap.org',
+]);
+const isOpenStreetMapTileRequest = (requestUrl: string) =>
+  openStreetMapTileHosts.has(new URL(requestUrl).hostname);
+
 const routeUrl =
   'https://es.wikiloc.com/rutas-senderismo/palomares-del-campo-a-la-cantera-54551889';
 const embedUrl =
@@ -7,13 +16,26 @@ const embedUrl =
 const embedRequestPattern =
   /^https:\/\/es\.wikiloc\.com\/wikiloc\/embedv2\.do\?id=54551889&elevation=on&images=on&maptype=H$/;
 
+test('matches OpenStreetMap tiles by parsed hostname only', () => {
+  for (const host of openStreetMapTileHosts) {
+    expect(isOpenStreetMapTileRequest(`https://${host}/12/1/1.png`)).toBe(true);
+  }
+
+  expect(
+    isOpenStreetMapTileRequest('https://tile.openstreetmap.org.attacker.example/12/1/1.png'),
+  ).toBe(false);
+  expect(
+    isOpenStreetMapTileRequest('https://attacker.example/tile.openstreetmap.org/12/1/1.png'),
+  ).toBe(false);
+});
+
 test.describe('Wikiloc route embed', () => {
   test('loads the official embed only after the visitor asks for it', async ({ page }) => {
     let wikilocRequests = 0;
     let tileRequests = 0;
     page.on('request', (request) => {
       if (request.url().startsWith('https://es.wikiloc.com/')) wikilocRequests += 1;
-      if (request.url().includes('tile.openstreetmap.org')) tileRequests += 1;
+      if (isOpenStreetMapTileRequest(request.url())) tileRequests += 1;
     });
     await page.route(embedRequestPattern, (route) =>
       route.fulfill({
