@@ -10,7 +10,6 @@ const SEMANTIC_VALUE_PATTERN =
   /^var\(--font-(?:sans|serif|weight-[\w-]+)\)|^(?:inherit|initial|unset|revert|revert-layer)$/i;
 
 const allowedHexByPath = new Map([
-  ['src/scripts/route-map.ts', new Set(['#a05c32', '#19342d', '#e5b77e'])],
   ['src/scripts/game-map.ts', new Set(['#a05c32', '#527066', '#e5b77e', '#b7d0bc'])],
   ['src/styles/pages/sobre-el-pueblo.css', new Set(['#315f4e', '#efe6d6'])],
 ]);

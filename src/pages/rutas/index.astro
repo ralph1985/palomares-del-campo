@@ -1,7 +1,7 @@
 ---
-import 'leaflet/dist/leaflet.css';
 import ActionLink from '../../components/ui/ActionLink.astro';
 import EditorialHero from '../../components/hero/EditorialHero.astro';
+import WikilocEmbed from '../../components/routes/WikilocEmbed.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
 import { localRoutes } from '../../data/routes';
@@ -9,7 +9,7 @@ import { localRoutes } from '../../data/routes';
 
 <BaseLayout
   title="Rutas del pueblo · Palomares del Campo"
-  description="Trazado cartográfico provisional basado en OpenStreetMap, pendiente de confirmación municipal e inspección presencial."
+  description="Ruta publicada en Wikiloc por Joaquin Alcarria. Fuente externa, sin verificación municipal sobre el terreno; el mapa solo se carga cuando lo solicita el visitante."
 >
   <main>
     <EditorialHero labelledBy="page-title" variant="paper">
@@ -20,8 +20,8 @@ import { localRoutes } from '../../data/routes';
         Rutas del pueblo
       </h1>
       <p slot="summary" class="hero-intro">
-        Un trazado cartográfico provisional pendiente de confirmación municipal y revisión
-        presencial.
+        Consulta una ruta publicada en Wikiloc por su autor original. El mapa solo se carga si lo
+        solicitas; la ficha de Wikiloc es la fuente para sus detalles y cambios.
       </p>
     </EditorialHero>
 
@@ -29,12 +29,13 @@ import { localRoutes } from '../../data/routes';
       <div class="routes-shell">
         <div class="routes-heading">
           <div>
-            <p class="eyebrow">Primer trazado</p>
-            <h2 id="routes-title">Pasear también necesita contexto.</h2>
+            <p class="eyebrow">Fuente externa · Wikiloc</p>
+            <h2 id="routes-title">Consulta la ficha original antes de salir.</h2>
           </div>
           <p>
-            Esta línea se ha planificado a partir de OpenStreetMap. La cartografía no acredita que
-            sus caminos sean de acceso público.
+            El Ayuntamiento no presenta este recorrido como ruta municipal ni lo ha verificado sobre
+            el terreno. Comprueba la información y las condiciones locales en la publicación
+            original.
           </p>
         </div>
 
@@ -43,43 +44,19 @@ import { localRoutes } from '../../data/routes';
             <article class="route-card">
               <header class="route-card-header">
                 <p class="route-status">{route.statusLabel}</p>
-                <h3>{route.title}</h3>
+                <h2>{route.title}</h2>
                 <p class="route-summary">{route.summary}</p>
               </header>
 
-              <div class="route-disclaimer" role="note">
-                <strong>
-                  No es oficial ni está homologado. El acceso de los caminos es desconocido y no
-                  está confirmado.
-                </strong>
-                <span>
-                  No sigas este trazado antes de la confirmación municipal y de un recorrido
-                  presencial.
-                </span>
-              </div>
-
-              <div class="route-map-shell">
-                <div
-                  class="route-map"
-                  data-route-map
-                  data-gpx-url={route.gpxUrl}
-                  aria-label="Mapa interactivo del trazado cartográfico provisional"
-                  role="region"
-                ></div>
-                <p data-route-map-status role="status" aria-live="polite">
-                  Cargando mapa…
-                </p>
-                <p class="route-attribution">
-                  Teselas y datos:{' '}
-                  <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>{' '}
-                  (ODbL).
-                </p>
-              </div>
+              <WikilocEmbed
+                slug={route.slug}
+                title={route.title}
+                author={route.author}
+                sourceUrl={route.sourceUrl}
+                embedUrl={route.embedUrl}
+              />
 
               <div class="route-links">
-                <ActionLink class="route-primary-link" variant="solid" href={route.gpxUrl} download>
-                  Descargar GPX <span aria-hidden="true">↓</span>
-                </ActionLink>
                 {PUBLIC_BALL_GAME_ENABLED && (
                   <ActionLink class="route-game-link" variant="underline" href="/juego/">
                     Probar La bola <span aria-hidden="true">→</span>
@@ -87,15 +64,8 @@ import { localRoutes } from '../../data/routes';
                 )}
               </div>
               <p class="route-review">
-                Planificado desde OpenStreetMap (ODbL 1.0), ways 660170707, 660170712, 178879058,
-                660170709, 660170708 y 660170704. Continuidad nodal comprobada en los datos; sin
-                validación presencial. No se publican métricas de distancia, duración, dificultad o
-                accesibilidad.
-              </p>
-              <p class="route-review">
-                Cerca aparecen un área cartografiada como picnic y un quiosco de música; son
-                elementos próximos no verificados y no forman parte del circuito ni acreditan
-                conexión o acceso.
+                La web municipal no ha comprobado el acceso, la seguridad ni el estado actual del
+                recorrido. La atribución y el mapa proceden de la ficha enlazada de Wikiloc.
               </p>
             </article>
           ))}
@@ -103,26 +73,23 @@ import { localRoutes } from '../../data/routes';
       </div>
     </section>
 
-    <section class="routes-note" aria-label="Criterio editorial de las rutas">
+    <section class="routes-note" aria-label="Información sobre la fuente de la ruta">
       <div class="routes-shell">
         <p>
-          El municipio debe confirmar el trazado y el acceso; después será necesaria una inspección
-          presencial antes de describir o recomendar cualquier recorrido.
+          El mapa es contenido de un proveedor externo y no se solicita al abrir esta página. Puedes
+          consultar la ficha original directamente en Wikiloc sin cargar el mapa incrustado.
         </p>
       </div>
     </section>
   </main>
 </BaseLayout>
 
-<script>
-  import '../../scripts/route-map';
-</script>
-
 <style>
   .routes-shell {
     width: min(100% - 2.5rem, 72rem);
     margin: 0 auto;
   }
+
   .eyebrow {
     margin: 0 0 1.2rem;
     color: var(--color-clay-text);
@@ -131,19 +98,21 @@ import { localRoutes } from '../../data/routes';
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
+
   h1,
-  h2,
-  h3 {
+  h2 {
     margin: 0;
     font-family: var(--font-serif);
     font-weight: 500;
     letter-spacing: -0.06em;
     line-height: 0.95;
   }
+
   .routes-section {
     padding: var(--spacing-section-y) 0;
     background: var(--color-sage);
   }
+
   .routes-heading {
     display: grid;
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
@@ -151,34 +120,42 @@ import { localRoutes } from '../../data/routes';
     align-items: end;
     margin-bottom: 3rem;
   }
-  h2 {
-    max-width: 12ch;
+
+  .routes-heading h2 {
+    max-width: 14ch;
     font-size: var(--font-size-section-heading);
   }
+
   .routes-heading > p {
     max-width: 35rem;
     margin: 0;
     color: var(--color-muted);
     line-height: 1.7;
   }
+
   .route-list {
     display: grid;
     gap: 1rem;
   }
+
   .route-card {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
+    min-width: 0;
     padding: clamp(1.5rem, 5vw, 3rem);
     border-radius: 1.5rem;
     background: var(--color-paper);
   }
+
   .route-card-header {
-    grid-column: 1 / -1;
+    display: grid;
+    gap: 1rem;
   }
+
   .route-status {
     width: fit-content;
-    margin: 0 0 1rem;
+    margin: 0;
     padding: 0.45rem 0.65rem;
     border-radius: 999px;
     color: var(--color-ink);
@@ -188,84 +165,56 @@ import { localRoutes } from '../../data/routes';
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
-  h3 {
+
+  .route-card-header h2 {
     max-width: 26ch;
     font-size: var(--font-size-section-heading);
   }
+
   .route-summary {
     max-width: 45rem;
-    margin: 1.2rem 0 0;
+    margin: 0;
     color: var(--color-muted);
     line-height: 1.7;
   }
-  .route-disclaimer {
-    display: grid;
-    gap: 0.4rem;
-    padding: 1rem 1.2rem;
-    border-left: 0.25rem solid var(--color-clay);
-    color: var(--color-ink);
-    background: var(--color-paper);
-  }
-  .route-disclaimer span {
-    color: var(--color-muted);
-    line-height: 1.5;
-  }
-  .route-map {
-    min-height: 22rem;
-    border-radius: 1rem;
-    background: var(--color-sage);
-  }
-  .route-map-shell p {
-    margin: 0.6rem 0 0;
-  }
-  .route-attribution {
-    font-size: 0.8rem;
-  }
-  .route-attribution a {
-    color: var(--color-ink);
-  }
+
   .route-links {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem 1.5rem;
     align-items: center;
   }
-  .route-links a {
-    font-weight: var(--font-weight-strong);
-    text-underline-offset: 0.25em;
-  }
-  .route-primary-link {
-    color: var(--color-ink);
-  }
+
   .route-review {
     margin: 0;
     color: var(--color-muted);
-    font-size: 0.82rem;
+    font-size: 0.9rem;
     line-height: 1.6;
   }
+
   .routes-note {
     padding: 1.5rem 0;
     color: var(--color-muted);
     background: var(--color-paper);
   }
+
   .routes-note p {
     max-width: 48rem;
     margin: 0;
     font-size: 0.9rem;
     line-height: 1.6;
   }
+
   @media (max-width: 50rem) {
     .routes-heading {
       grid-template-columns: 1fr;
       gap: 2rem;
     }
   }
+
   @media (max-width: 38rem) {
     .routes-shell {
       width: min(100% - 2rem, 72rem);
-    }
-    .route-map {
-      min-height: 18rem;
     }
   }
 </style>

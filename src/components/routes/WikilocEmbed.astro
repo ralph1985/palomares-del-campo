@@ -1,0 +1,182 @@
+---
+import ExternalLink from '../ui/ExternalLink.astro';
+import SiteButton from '../ui/SiteButton.astro';
+
+interface Props {
+  slug: string;
+  title: string;
+  author: string;
+  sourceUrl: string;
+  embedUrl: string;
+}
+
+const { slug, title, author, sourceUrl, embedUrl } = Astro.props;
+const frameHostId = `wikiloc-frame-${slug}`;
+---
+
+<section
+  class="wikiloc-embed"
+  data-wikiloc-embed
+  data-embed-url={embedUrl}
+  data-route-title={title}
+  aria-labelledby={`${frameHostId}-heading`}
+>
+  <div class="wikiloc-heading">
+    <div>
+      <p class="eyebrow">Ruta externa · Wikiloc</p>
+      <h3 id={`${frameHostId}-heading`}>Mapa en Wikiloc</h3>
+      <p class="wikiloc-author">
+        «{title}», publicada por <strong>{author}</strong>.
+      </p>
+    </div>
+    <ExternalLink class="wikiloc-route-link" href={sourceUrl} newTab>
+      Abrir la ruta original en Wikiloc <span aria-hidden="true">↗</span>
+    </ExternalLink>
+  </div>
+
+  <p class="wikiloc-disclaimer" role="note">
+    No es una ruta oficial del Ayuntamiento y el Ayuntamiento no la ha verificado sobre el terreno.
+    Consulta la ficha original y las condiciones locales antes de decidirte a seguirla.
+  </p>
+
+  <div class="wikiloc-load-panel">
+    <p id={`${frameHostId}-privacy`}>
+      El mapa externo solo se conecta con Wikiloc cuando pulses el botón. Al cargarlo, el proveedor
+      puede recibir datos técnicos de conexión y aplicar sus propias cookies. Consulta su
+      <ExternalLink href="https://es.wikiloc.com/wikiloc/privacy_es.html?v=4.3">
+        política de privacidad y cookies
+      </ExternalLink>
+      .
+    </p>
+    <SiteButton
+      type="button"
+      variant="primary"
+      data-wikiloc-load
+      aria-controls={frameHostId}
+      aria-expanded="false"
+    >
+      Cargar mapa de Wikiloc
+    </SiteButton>
+  </div>
+
+  <p class="wikiloc-status" data-wikiloc-status role="status" aria-live="polite">
+    El mapa aún no se ha cargado; puedes abrir la ficha original directamente.
+  </p>
+  <div class="wikiloc-frame-shell" id={frameHostId} data-wikiloc-frame-host></div>
+  <p class="wikiloc-fallback">
+    Si el mapa no aparece o está bloqueado, usa el enlace para
+    <ExternalLink href={sourceUrl} newTab>
+      abrir la ruta original en Wikiloc
+    </ExternalLink>
+    .
+  </p>
+  <p class="wikiloc-attribution">
+    Powered by{' '}
+    <ExternalLink href="https://es.wikiloc.com" newTab>
+      Wikiloc
+    </ExternalLink>
+  </p>
+</section>
+
+<script>
+  import '../../scripts/wikiloc-embed';
+</script>
+
+<style>
+  .wikiloc-embed {
+    display: grid;
+    gap: 1.25rem;
+    min-width: 0;
+  }
+
+  .wikiloc-heading {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    align-items: end;
+    justify-content: space-between;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.75rem;
+    color: var(--color-clay-text);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-strong);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin: 0;
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    font-size: var(--font-size-section-heading);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+
+  .wikiloc-author,
+  .wikiloc-load-panel p,
+  .wikiloc-status,
+  .wikiloc-fallback,
+  .wikiloc-attribution {
+    margin: 0;
+    color: var(--color-muted);
+    line-height: 1.6;
+  }
+
+  .wikiloc-route-link {
+    font-weight: var(--font-weight-strong);
+  }
+
+  .wikiloc-disclaimer {
+    margin: 0;
+    padding: 1rem 1.2rem;
+    border-left: 0.25rem solid var(--color-clay);
+    color: var(--color-ink);
+    background: var(--color-surface-soft);
+    line-height: 1.6;
+  }
+
+  .wikiloc-load-panel {
+    display: grid;
+    justify-items: start;
+    gap: 1rem;
+  }
+
+  .wikiloc-load-panel a,
+  .wikiloc-fallback a {
+    color: var(--color-ink);
+  }
+
+  .wikiloc-frame-shell:empty {
+    display: none;
+  }
+
+  .wikiloc-frame-shell {
+    width: min(100%, 600px);
+    aspect-ratio: 6 / 5;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: var(--color-sage);
+  }
+
+  .wikiloc-frame-shell :global(iframe.wikiloc-frame) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .wikiloc-attribution {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 38rem) {
+    .wikiloc-heading {
+      align-items: start;
+      flex-direction: column;
+    }
+  }
+</style>

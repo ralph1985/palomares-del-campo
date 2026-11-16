@@ -78,15 +78,35 @@ const pageDescription =
             <h3 id="maps-title">Leaflet y OpenStreetMap</h3>
             <!-- TODO(AYTO)[LEG-15]: Verificar las llamadas reales de los mapas y las condiciones vigentes de OpenStreetMap; decidir si se requiere una configuración de carga aprobada. -->
             <p>
-              Las secciones con mapas cargan teselas de OpenStreetMap desde el navegador. La
-              solicitud comunica datos técnicos de conexión al servicio; el detalle de datos,
-              duración y posibles almacenamientos no se ha verificado aquí. El alcance y las
-              condiciones vigentes del servicio requieren revisión; esta página no determina por sí
-              sola qué mecanismo de elección corresponde.
+              Los mapas Leaflet del juego y de «Palomareños por el mundo» cargan teselas de
+              OpenStreetMap desde el navegador. La solicitud comunica datos técnicos de conexión al
+              servicio; el detalle de datos, duración y posibles almacenamientos no se ha verificado
+              aquí. El alcance y las condiciones vigentes requieren revisión; esta página no
+              determina por sí sola qué mecanismo de elección corresponde.
             </p>
             <p>
               <ExternalLink href="https://wiki.osmfoundation.org/wiki/Privacy_Policy">
                 Consulta la política de privacidad de OpenStreetMap
+              </ExternalLink>
+              .
+            </p>
+          </section>
+
+          <section aria-labelledby="wikiloc-title">
+            <h3 id="wikiloc-title">Mapa de Wikiloc en /rutas/</h3>
+            <!-- TODO(AYTO)[LEG-19]: Revisar el comportamiento real del iframe y validar jurídicamente la información y el mecanismo de elección para contenido de Wikiloc. -->
+            <p>
+              La página no inserta el iframe ni solicita recursos a Wikiloc al abrirse. El visitante
+              inicia la carga con el botón «Cargar mapa de Wikiloc»; esa acción conecta con el
+              proveedor. La política de Wikiloc contempla datos técnicos como IP y navegación, así
+              como cookies del servicio. No se ha comprobado desde este sitio el comportamiento
+              completo de cookies y almacenamiento del iframe. El botón evita la carga automática,
+              pero no es un gestor general de consentimiento ni acredita por sí solo cumplimiento
+              jurídico.
+            </p>
+            <p>
+              <ExternalLink href="https://es.wikiloc.com/wikiloc/privacy_es.html?v=4.3">
+                Consulta la política de privacidad y cookies de Wikiloc
               </ExternalLink>
               .
             </p>
@@ -125,9 +145,10 @@ const pageDescription =
               afectar a la navegación o a la identidad local del juego.
             </li>
             <li>
-              La disponibilidad del mapa y del formulario no implica que exista una opción de
-              consentimiento para sus recursos externos; su configuración está pendiente de
-              revisión.
+              El iframe de Wikiloc en `/rutas/` solo se solicita tras pulsar el botón de carga. Esta
+              acción evita una solicitud automática, pero no sustituye un mecanismo general para
+              consentir y retirar el consentimiento; su adecuación requiere revisión municipal y
+              jurídica.
             </li>
             <li>
               Puedes pedir información o ejercer tus derechos mediante los canales de privacidad.

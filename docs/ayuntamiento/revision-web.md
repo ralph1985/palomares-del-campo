@@ -222,31 +222,31 @@ La página incluye fichas informativas de alojamientos del entorno, con enlaces 
 - **Decisión:** [ ] Mantener la selección provisional · [ ] Añadir o corregir · [ ] Retirar fichas
 - **Dato corregido, fuente o comentario:** ______________________________________________
 
-### RUT-01 · Ruta local y condiciones sobre el terreno
+### RUT-01 · Ruta externa y condiciones sobre el terreno
 
-La web muestra un trazado cartográfico provisional planificado desde OpenStreetMap. No es oficial ni está homologado; no se presenta como transitable y el acceso de los caminos sigue sin confirmar. Incluye mapa Leaflet y GPX planificado, no una grabación de campo.
+La web muestra el iframe oficial de una ruta publicada por un usuario en Wikiloc. No se presenta como ruta municipal oficial ni como verificada sobre el terreno por el Ayuntamiento. El mapa solo se solicita al proveedor cuando la persona pulsa el botón de carga; la ficha original permanece enlazada.
 
-**Confirmar:** trazado, titularidad y acceso de cada camino, firme, cruces, seguridad y si puede recomendarse. La continuidad nodal de los datos no acredita paso físico ni derecho de acceso; antes de cualquier recomendación hace falta confirmación municipal e inspección presencial.
+**Confirmar:** si el Ayuntamiento quiere destacar esta publicación externa, y revisar titularidad/acceso de los caminos, firme, cruces y seguridad antes de describirla o recomendarla como itinerario municipal. La ficha de Wikiloc no sustituye la confirmación municipal ni una inspección presencial.
 
-- **Decisión:** [ ] Confirmar trazado y acceso · [ ] Corregir el recorrido · [ ] Retirar el trazado
+- **Decisión:** [ ] Mantener enlace externo con estas cautelas · [ ] Facilitar un recorrido municipal verificado · [ ] Retirar la ruta
 - **Dato corregido, fuente o comentario:** ______________________________________________
 
-### RUT-02 · Nombre, recorrido y métricas de la ruta
+### RUT-02 · Título, autoría y datos del recorrido
 
-La web no publica distancia, duración, dificultad, desnivel ni accesibilidad. La longitud geométrica de la línea (aprox. 1,4748 km) se conserva únicamente como cálculo interno, no como distancia caminable.
+La [ficha original de Wikiloc](https://es.wikiloc.com/rutas-senderismo/palomares-del-campo-a-la-cantera-54551889) titula la ruta «Palomares del Campo a La Cantera» y atribuye su publicación a Joaquin Alcarria. La página municipal enlaza la ficha y muestra esa autoría, pero no reproduce métricas propias ni presenta esos datos como verificados por el Ayuntamiento.
 
-**Confirmar:** origen, destino, denominación local y cualquier dato de recorrido únicamente tras inspección y validación municipal.
+**Confirmar:** que el título y la atribución son correctos y si se autoriza destacar este contenido externo. Cualquier distancia, duración, dificultad, desnivel, accesibilidad o condición de paso requiere una fuente y verificación adecuadas antes de publicarse como información municipal.
 
-- **Decisión:** [ ] Validar datos en campo · [ ] Corregir el trazado · [ ] No publicar métricas
+- **Decisión:** [ ] Mantener título y autoría enlazados · [ ] Corregir la atribución · [ ] No destacar la ruta
 - **Dato corregido, fuente o comentario:** ______________________________________________
 
-### RUT-03 · Procedencia y licencia del GPX provisional
+### RUT-03 · Inserción externa y privacidad
 
-El GPX actual es una ruta planificada desde la extracción OpenStreetMap, publicada bajo ODbL 1.0 con atribución visible. Describe los ways 660170707, 660170712, 178879058, 660170709, 660170708 y 660170704; los seis tienen `highway=track`. El way 178879058 tiene `surface=compacted` y `tracktype=grade2`; 660170708 y 660170709 tienen `surface=compacted`. En los seis faltan las etiquetas `access`, `foot`, `vehicle` y `motor_vehicle`. Esa ausencia no demuestra acceso público. La geometría cerrada y las adyacencias se comprobaron por IDs de ways y nodos en la extracción; no hubo validación presencial.
+La página usa el código de inserción oficial de Wikiloc para la ruta, conforme a la [función de incrustación documentada por Wikiloc](https://help.wikiloc.com/article/259-share-embed-iframe-insert-embed-trail-route-wikiloc-web-blog-digital-online-html), y atribuye el contenido a Joaquin Alcarria. No aloja ni redistribuye el GPX o las coordenadas. El endpoint de Wikiloc solo se solicita tras una acción explícita del visitante; la alternativa es abrir directamente la ficha original. Este control no constituye por sí solo un gestor general de consentimiento.
 
-**Confirmar:** que el municipio autoriza el trazado, el acceso y su eventual recomendación; comprobar presencialmente cada tramo y las conexiones. Cerca se cartografían un área `tourism=picnic_site` y un `leisure=bandstand`, no incluidos en el circuito y sin conexión ni condiciones verificadas.
+**Confirmar:** la pertinencia de destacar la publicación, la atribución, el tratamiento de datos que puede producir el iframe, y si el mecanismo de carga requiere una solución de consentimiento adicional tras la revisión municipal y jurídica.
 
-- **Decisión:** [ ] Confirmar oficialmente · [ ] Facilitar trazado municipal verificado · [ ] Retirar la ruta
+- **Decisión:** [ ] Mantener la inserción con revisión de privacidad · [ ] Mantener solo el enlace · [ ] Retirar la ruta
 - **Dato corregido, fuente o comentario:** ______________________________________________
 
 ### IMG-01 · Fotografía de la iglesia

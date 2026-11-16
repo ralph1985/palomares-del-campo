@@ -2,17 +2,22 @@ export interface LocalRoute {
   slug: string;
   title: string;
   summary: string;
-  gpxUrl: string;
+  author: string;
+  sourceUrl: string;
+  embedUrl: string;
   statusLabel: string;
 }
 
 export const localRoutes: LocalRoute[] = [
   {
-    slug: 'campos-palomares-osm-provisional',
-    title: 'Trazado cartográfico provisional por los campos',
+    slug: 'palomares-del-campo-a-la-cantera',
+    title: 'Palomares del Campo a La Cantera',
     summary:
-      'Línea planificada a partir de datos de OpenStreetMap. El acceso y las condiciones de los caminos no se han confirmado.',
-    gpxUrl: '/routes/campos-palomares-osm-provisional.gpx',
-    statusLabel: 'Trazado cartográfico provisional',
+      'Ruta publicada en Wikiloc por su autor original. El Ayuntamiento no la presenta como ruta oficial ni la ha verificado sobre el terreno.',
+    author: 'Joaquin Alcarria',
+    sourceUrl: 'https://es.wikiloc.com/rutas-senderismo/palomares-del-campo-a-la-cantera-54551889',
+    embedUrl:
+      'https://es.wikiloc.com/wikiloc/embedv2.do?id=54551889&elevation=on&images=on&maptype=H',
+    statusLabel: 'Fuente externa · Wikiloc',
   },
 ];

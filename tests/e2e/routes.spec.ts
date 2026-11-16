@@ -1,176 +1,111 @@
-import { readFile } from 'node:fs/promises';
 import { expect, test } from './fixtures';
 
-test.describe('local routes', () => {
-  test('shows the provisional OSM route, planned GPX and Leaflet map', async ({ page }) => {
-    const gpxUrl = '/routes/campos-palomares-osm-provisional.gpx';
-    const tileResponsePromise = page.waitForResponse((response) =>
-      response.url().startsWith('https://tile.openstreetmap.org/'),
+const routeUrl =
+  'https://es.wikiloc.com/rutas-senderismo/palomares-del-campo-a-la-cantera-54551889';
+const embedUrl =
+  'https://es.wikiloc.com/wikiloc/embedv2.do?id=54551889&elevation=on&images=on&maptype=H';
+const embedRequestPattern =
+  /^https:\/\/es\.wikiloc\.com\/wikiloc\/embedv2\.do\?id=54551889&elevation=on&images=on&maptype=H$/;
+
+test.describe('Wikiloc route embed', () => {
+  test('loads the official embed only after the visitor asks for it', async ({ page }) => {
+    let wikilocRequests = 0;
+    let tileRequests = 0;
+    page.on('request', (request) => {
+      if (request.url().startsWith('https://es.wikiloc.com/')) wikilocRequests += 1;
+      if (request.url().includes('tile.openstreetmap.org')) tileRequests += 1;
+    });
+    await page.route(embedRequestPattern, (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: '<!doctype html><title>Wikiloc embed fixture</title>',
+      }),
     );
-    const mapGpxResponsePromise = page.waitForResponse((response) =>
-      response.url().endsWith(gpxUrl),
-    );
+
     await page.goto('/rutas/');
 
     await expect(page).toHaveTitle(/Rutas/);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      'content',
+      /Wikiloc.*sin verificación municipal/i,
+    );
     await expect(page.getByRole('heading', { level: 1, name: 'Rutas del pueblo' })).toBeVisible();
     await expect(
-      page.getByRole('heading', { name: 'Trazado cartográfico provisional por los campos' }),
+      page.getByRole('heading', { level: 2, name: 'Palomares del Campo a La Cantera' }),
     ).toBeVisible();
-    await expect(page.getByText(/No es oficial ni está homologado/)).toBeVisible();
-    await expect(page.getByText(/acceso.*desconocido|desconocido.*acceso/i)).toBeVisible();
+    await expect(page.getByText('Joaquin Alcarria', { exact: true })).toBeVisible();
+    await expect(page.getByText(/no es una ruta oficial del Ayuntamiento/i)).toBeVisible();
+    await expect(page.getByText(/no la ha verificado sobre el terreno/i)).toBeVisible();
+    await expect(page.getByText(/solo se conecta con Wikiloc cuando pulses/i)).toBeVisible();
     await expect(
-      page.getByText(/no sigas.*confirmación municipal.*recorrido presencial/i),
-    ).toBeVisible();
-    await expect(
-      page.getByText(/no forman parte del circuito ni acreditan conexión o acceso/i),
-    ).toBeVisible();
-    await expect(page.locator('.route-facts, .route-accessibility')).toHaveCount(0);
-    await expect(page.getByText(/\b\d+(?:[.,]\d+)?\s*(?:km|m|min|h)\b/i)).toHaveCount(0);
-
-    const routeMap = page.locator('[data-route-map]');
-    await expect(routeMap).toHaveAttribute('role', 'region');
-    await expect(routeMap).toHaveAttribute('data-gpx-url', gpxUrl);
-    await expect(routeMap).toHaveAttribute('data-map-status', 'ready');
-    await expect(routeMap.locator('.route-track-line')).toBeVisible();
-    await expect(
-      routeMap.locator(
-        '.leaflet-control-attribution a[href="https://www.openstreetmap.org/copyright"]',
-      ),
-    ).toBeVisible();
-    const zoomInControl = routeMap.locator('.leaflet-control-zoom-in');
-    await expect(zoomInControl).toBeVisible();
-    await zoomInControl.click();
-    await expect(routeMap).toHaveAttribute('data-map-status', 'ready');
-    await expect(page.locator('.route-attribution a')).toHaveAttribute(
+      page.getByRole('link', { name: /Abrir la ruta original en Wikiloc/ }),
+    ).toHaveAttribute('href', routeUrl);
+    await expect(page.getByRole('heading', { level: 3, name: 'Mapa en Wikiloc' })).toBeVisible();
+    await expect(page.locator('.wikiloc-attribution a')).toHaveAttribute(
       'href',
-      'https://www.openstreetmap.org/copyright',
+      'https://es.wikiloc.com',
     );
-    await expect(page.getByRole('link', { name: /Descargar GPX/ })).toHaveAttribute('href', gpxUrl);
+    await expect(page.locator('iframe')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: /Descargar GPX/ })).toHaveCount(0);
+    expect(wikilocRequests).toBe(0);
+    expect(tileRequests).toBe(0);
 
-    const tileResponse = await tileResponsePromise;
-    expect(tileResponse.headers()['x-e2e-map-tile']).toBe('fixture');
-    const mapGpxResponse = await mapGpxResponsePromise;
-    expect(mapGpxResponse.headers()['content-type']).toContain('application/gpx+xml');
-    const mapGpxXml = await mapGpxResponse.text();
+    await page.getByRole('button', { name: 'Cargar mapa de Wikiloc' }).click();
 
-    const [download] = await Promise.all([
-      page.waitForEvent('download'),
-      page.getByRole('link', { name: /Descargar GPX/ }).click(),
-    ]);
-    expect(download.suggestedFilename()).toBe('campos-palomares-osm-provisional.gpx');
-    const downloadPath = await download.path();
-    expect(downloadPath).not.toBeNull();
-    if (!downloadPath) throw new Error('Playwright no devolvió el archivo descargado.');
-    const downloadedXml = await readFile(downloadPath, 'utf8');
-    expect(downloadedXml).toBe(mapGpxXml);
-
-    const gpx = await page.evaluate((xmlText) => {
-      const xml = new DOMParser().parseFromString(xmlText, 'application/xml');
-      const elements = (localName: string): Element[] =>
-        Array.from(xml.getElementsByTagNameNS('*', localName));
-      const points = elements('rtept').map((point) => {
-        const latitude = point.getAttribute('lat');
-        const longitude = point.getAttribute('lon');
-        const lat = Number(latitude);
-        const lon = Number(longitude);
-        return {
-          lat,
-          lon,
-          name: point.getElementsByTagNameNS('*', 'name').item(0)?.textContent ?? null,
-          valid:
-            latitude !== null &&
-            longitude !== null &&
-            Number.isFinite(lat) &&
-            Number.isFinite(lon) &&
-            lat >= -90 &&
-            lat <= 90 &&
-            lon >= -180 &&
-            lon <= 180,
-        };
-      });
-      const haversineMetres = (
-        first: { lat: number; lon: number },
-        second: { lat: number; lon: number },
-      ): number => {
-        const radians = (degrees: number): number => (degrees * Math.PI) / 180;
-        const latitudeDelta = radians(second.lat - first.lat);
-        const longitudeDelta = radians(second.lon - first.lon);
-        const firstLatitude = radians(first.lat);
-        const secondLatitude = radians(second.lat);
-        const a =
-          Math.sin(latitudeDelta / 2) ** 2 +
-          Math.cos(firstLatitude) * Math.cos(secondLatitude) * Math.sin(longitudeDelta / 2) ** 2;
-        return 2 * 6_371_008.8 * Math.asin(Math.sqrt(a));
-      };
-      // This catches missing geometry vertices only; it does not imply physical passability.
-      let maximumSegmentMetres = 0;
-      for (let index = 1; index < points.length; index += 1) {
-        const previous = points[index - 1];
-        const current = points[index];
-        if (previous && current) {
-          maximumSegmentMetres = Math.max(maximumSegmentMetres, haversineMetres(previous, current));
-        }
-      }
-      const map = document.querySelector<HTMLElement>('[data-route-map]');
-      const downloadLink = document.querySelector<HTMLAnchorElement>('a[download]');
-      return {
-        rootName: xml.documentElement.localName,
-        namespace: xml.documentElement.namespaceURI,
-        version: xml.documentElement.getAttribute('version'),
-        hasParserError: xml.querySelector('parsererror') !== null,
-        routeCount: elements('rte').length,
-        routePointCount: points.length,
-        trackPointCount: elements('trkpt').length,
-        routeUrl: map?.dataset.gpxUrl,
-        downloadUrl: downloadLink?.getAttribute('href'),
-        mapPointCount: map?.dataset.routePointCount,
-        mapFirstPoint: map?.dataset.routeFirstPoint,
-        mapLastPoint: map?.dataset.routeLastPoint,
-        mapLineExists: document.querySelector('.route-track-line') !== null,
-        points,
-        maximumSegmentMetres,
-        metadata: elements('metadata')[0]?.textContent ?? '',
-      };
-    }, downloadedXml);
-
-    expect(gpx.rootName).toBe('gpx');
-    expect(gpx.namespace).toBe('http://www.topografix.com/GPX/1/1');
-    expect(gpx.version).toBe('1.1');
-    expect(gpx.hasParserError).toBe(false);
-    expect(gpx.routeCount).toBe(1);
-    expect(gpx.routePointCount).toBe(42);
-    expect(gpx.trackPointCount).toBe(0);
-    expect(gpx.routeUrl).toBe(gpx.downloadUrl);
-    expect(gpx.routeUrl).toBe(gpxUrl);
-    expect(gpx.mapPointCount).toBe(String(gpx.routePointCount));
-    expect(gpx.mapFirstPoint).toBe('39.9497494,-2.5945212');
-    expect(gpx.mapLastPoint).toBe(gpx.mapFirstPoint);
-    expect(gpx.mapLineExists).toBe(true);
-    expect(gpx.points.every((point) => point.valid)).toBe(true);
-    expect(gpx.points.every((point) => point.name === null)).toBe(true);
-    expect(gpx.points.at(-1)).toEqual(gpx.points[0]);
-    expect(gpx.maximumSegmentMetres).toBeLessThanOrEqual(200);
-    expect(gpx.metadata).toContain('ODbL');
-    expect(gpx.metadata).toContain('660170707');
-    expect(gpx.metadata).toContain('660170712');
-    expect(gpx.metadata).toContain('178879058');
-    expect(gpx.metadata).toContain('660170709');
-    expect(gpx.metadata).toContain('660170708');
-    expect(gpx.metadata).toContain('660170704');
+    const iframe = page.locator('iframe[data-wikiloc-frame]');
+    await expect(iframe).toBeVisible();
+    await expect(iframe).toHaveAttribute('src', embedUrl);
+    await expect(iframe).toHaveAttribute(
+      'title',
+      'Mapa de la ruta Palomares del Campo a La Cantera en Wikiloc',
+    );
+    await expect(iframe).toHaveAttribute('width', '600');
+    await expect(iframe).toHaveAttribute('height', '500');
+    await expect(iframe).toHaveAttribute('loading', 'lazy');
+    await expect(page.getByRole('button', { name: 'Solicitud a Wikiloc enviada' })).toBeDisabled();
+    await expect(page.locator('[data-wikiloc-load]')).toHaveAttribute('aria-expanded', 'true');
+    expect(wikilocRequests).toBe(1);
+    expect(tileRequests).toBe(0);
   });
 
-  test('keeps provisional access warning usable on a narrow viewport', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+  test('keeps an accessible direct-route fallback when the iframe is blocked', async ({ page }) => {
+    await page.route(embedRequestPattern, (route) => route.abort());
     await page.goto('/rutas/');
 
-    await expect(page.getByRole('link', { name: /Descargar GPX/ })).toBeVisible();
+    await page.getByRole('button', { name: 'Cargar mapa de Wikiloc' }).click();
+
+    await expect(page.getByText(/si el mapa no aparece o está bloqueado/i)).toBeVisible();
     await expect(
-      page.getByText(/no sigas.*confirmación municipal.*recorrido presencial/i),
-    ).toBeVisible();
-    const hasHorizontalOverflow = await page.evaluate(
+      page.getByRole('link', { name: /Abrir la ruta original en Wikiloc/ }),
+    ).toHaveAttribute('href', routeUrl);
+  });
+
+  test('keeps the embed prompt and responsive frame within a narrow viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.route(embedRequestPattern, (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: '<!doctype html><title>Wikiloc embed fixture</title>',
+      }),
+    );
+    await page.goto('/rutas/');
+
+    await expect(page.getByRole('button', { name: 'Cargar mapa de Wikiloc' })).toBeVisible();
+    const initialOverflow = await page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
     );
-    expect(hasHorizontalOverflow).toBe(false);
+    expect(initialOverflow).toBe(false);
+
+    await page.getByRole('button', { name: 'Cargar mapa de Wikiloc' }).click();
+    const iframe = page.locator('iframe[data-wikiloc-frame]');
+    await expect(iframe).toBeVisible();
+    const frameWidth = await iframe.evaluate((element) => element.getBoundingClientRect().width);
+    expect(frameWidth).toBeLessThanOrEqual(390);
+    const loadedOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    );
+    expect(loadedOverflow).toBe(false);
   });
 });
