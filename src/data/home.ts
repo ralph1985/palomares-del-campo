@@ -33,6 +33,14 @@ export const homeEditorialEntries: HomeEditorialEntry[] = [
     accent: 'traditions',
   },
   {
+    title: 'Consultar',
+    eyebrow: 'Servicios locales',
+    description: 'Comercios, hostelería e instalaciones con sus fuentes y estado de revisión.',
+    href: '/servicios-del-pueblo/',
+    linkLabel: 'Ver servicios del pueblo',
+    accent: 'landscape',
+  },
+  {
     title: 'Jugar',
     eyebrow: 'Juego geolocalizado',
     description: 'Encuentra lugares del pueblo y juega desde el mapa.',

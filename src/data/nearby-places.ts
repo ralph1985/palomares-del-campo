@@ -22,7 +22,8 @@ export interface NearbyPlace {
   sources: NearbyPlaceSource[];
 }
 
-export const nearbyPlacesReviewedAt = '2026-10-19';
+export const nearbyPlacesReviewedAt = '2026-11-15';
+// TODO(AYTO)[PAT-01]: Validar con el órgano gestor los accesos, estado de conservación, seguridad y condiciones de visita de Fuente el Pez/Castillo de San Miguel antes de recomendar una visita.
 
 export const nearbyPlaceGroups = [
   {
@@ -38,6 +39,7 @@ export const nearbyPlaceGroups = [
   },
 ] as const;
 
+// TODO(AYTO)[PAT-03]: Completar la revisión de las fichas oficiales de mina, Segóbriga, Noheda y laguna en cada temporada; confirmar accesibilidad/accesos y no conservar como permanentes horarios o reservas cambiantes.
 export const nearbyPlaces: NearbyPlace[] = [
   {
     slug: 'castillo-torrebuceit',

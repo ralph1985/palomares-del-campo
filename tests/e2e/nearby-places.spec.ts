@@ -16,6 +16,10 @@ test.describe('nearby attractions guide', () => {
     await expect(
       page.getByRole('heading', { name: 'Escapadas para dedicarles más tiempo' }),
     ).toBeVisible();
+    await expect(page.getByRole('link', { name: 'OpenStreetMap' })).toHaveAttribute(
+      'href',
+      'https://www.openstreetmap.org/copyright',
+    );
 
     const segobriga = page.getByRole('article', { name: 'Segóbriga y Saelices' });
     await expect(segobriga).toContainText('ciudad romana');
@@ -48,8 +52,12 @@ test.describe('nearby attractions guide', () => {
     await expect(noheda).toContainText(/guía/i);
     await expect(noheda).toContainText(/reserva previa/i);
 
+    const huete = page.getByRole('article', { name: 'Huete y las minas de lapis specularis' });
+    await expect(huete.getByText(/Ruta orientativa:.*36,4 km.*38 min/)).toBeVisible();
+
     const enchantedCity = page.getByRole('article', { name: 'Ciudad Encantada' });
     await expect(enchantedCity).toContainText(/movilidad reducida/i);
+    await expect(enchantedCity.getByText(/Ruta orientativa:.*78,9 km.*1 h 13 min/)).toBeVisible();
     await expect(
       enchantedCity.getByRole('link', { name: 'Ficha oficial de visita' }),
     ).toHaveAttribute(
@@ -132,7 +140,10 @@ test.describe('nearby attractions guide', () => {
       await expect(
         page.locator('main figure a[href*="commons.wikimedia.org/wiki/File:"]'),
       ).toHaveCount(guide.images);
-      for (const image of await page.locator('main figure img').all()) {
+      for (const figure of await page.locator('main figure').all()) {
+        const image = figure.getByRole('img');
+        await expect(image).toHaveAttribute('alt', /.+/);
+        await image.scrollIntoViewIfNeeded();
         await expect
           .poll(() =>
             image.evaluate((element) =>
@@ -140,6 +151,14 @@ test.describe('nearby attractions guide', () => {
             ),
           )
           .toBeGreaterThan(0);
+        await expect(figure.getByRole('link').nth(0)).toHaveAttribute(
+          'href',
+          /^https:\/\/commons\.wikimedia\.org\/wiki\/File:/,
+        );
+        await expect(figure.getByRole('link').nth(1)).toHaveAttribute(
+          'href',
+          /^https:\/\/creativecommons\.org\/licenses\//,
+        );
       }
       const breadcrumbs = page.getByRole('navigation', { name: 'Migas de pan' });
       await expect(

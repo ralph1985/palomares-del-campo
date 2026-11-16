@@ -22,7 +22,7 @@ El proyecto publica información sobre Palomares del Campo y ofrece una experien
 - validar y renderizar noticias y bandos desde Markdown;
 - exponer información mantenida en módulos TypeScript para historia, patrimonio, rutas, alojamientos, contacto municipal y agenda;
 - proporcionar navegación, búsqueda y filtros en el navegador sin introducir un framework de UI;
-- mostrar mapas de Leaflet con cartografía de OpenStreetMap y atribución visible;
+- mostrar mapas Leaflet con cartografía de OpenStreetMap en el juego y Palomareños, y un iframe oficial de Wikiloc en `/rutas/` cargado solo tras una acción del visitante;
 - ofrecer el juego en modo local y conectarlo a una temporada remota de Convex cuando existe un deployment configurado;
 - recibir propuestas de historias, someterlas a moderación y publicar en el mapa únicamente las aprobadas;
 - cargar mejoras visuales Three.js de forma diferida, siempre con un fallback HTML, imagen o CSS.
@@ -100,6 +100,7 @@ src/pages/
 ├── informacion-practica.astro          /informacion-practica/
 ├── agenda/index.astro                  /agenda/
 ├── alojamientos/index.astro            /alojamientos/
+├── parques-y-zonas-verdes/index.astro  /parques-y-zonas-verdes/
 ├── rutas/index.astro                   /rutas/
 ├── que-ver-cerca/index.astro           /que-ver-cerca/
 ├── que-ver-cerca/[slug].astro           /que-ver-cerca/<guía>/
@@ -115,7 +116,7 @@ src/pages/
 └── aviso-legal.astro                   /aviso-legal/
 ```
 
-También existen `/avisos/` (redirección 301 a `/bandos/`), `/rutas/`, `/agenda/`, `/alojamientos/` e `/informacion-practica/`.
+También existen `/avisos/` (redirección 301 a `/bandos/`), `/parques-y-zonas-verdes/`, `/rutas/`, `/agenda/`, `/alojamientos/` e `/informacion-practica/`.
 
 No existen actualmente rutas para `/lugares/`, `/lugares/[slug]/` ni `/patrimonio/` como páginas independientes. La información de patrimonio está integrada en `/sobre-el-pueblo/`.
 
@@ -146,6 +147,10 @@ src/components/
 ├── nearby/
 │   ├── NearbyPlaceCard.astro
 │   └── NearbyPlaceGuide.astro
+├── parks/
+│   └── ParkCard.astro
+├── routes/
+│   └── WikilocEmbed.astro
 ├── current-affairs/
 │   ├── AgendaFilters.astro
 │   ├── AgendaItemCard.astro
@@ -202,7 +207,7 @@ src/scripts/
 ├── palomarenos-map.ts    # Consulta y renderizado del mapa público.
 ├── palomarenos-form.ts   # Envío de propuestas y estados de Turnstile.
 ├── palomarenos-map-data.ts # Proyección pública validada del mapa.
-└── route-map.ts          # Descarga, parseo y renderizado Leaflet de GPX.
+└── wikiloc-embed.ts      # Inserta el iframe oficial tras la acción de carga del visitante.
 ```
 
 ### `src/styles/`
@@ -258,6 +263,7 @@ src/data/
 ├── home.ts
 ├── municipal-info.ts
 ├── navigation.ts
+├── parks.ts
 ├── routes.ts
 └── site-footer.ts
 ```
@@ -326,8 +332,9 @@ Todas las páginas de contenido importan `BaseLayout.astro` y componen su conten
 - `/bandos/` y `/bandos/[slug]/` hacen lo mismo con la colección `bandos`, usando `BandoCard` y recursos adjuntos.
 - `/` usa datos de portada y muestra las tres noticias más recientes mediante `NewsSection`.
 - `/sobre-el-pueblo/` usa `aboutPalomares`, `AboutEmblem`, `HeritageCard` y contenido de paisaje, tradiciones y fuentes.
-- `/rutas/` usa `localRoutes`, carga un GPX público y crea el mapa interactivo en el navegador.
+- `/rutas/` usa `localRoutes` y `WikilocEmbed`; el iframe oficial se crea solo tras pulsar el botón, con atribución, enlace directo y fallback.
 - `/alojamientos/` usa `ruralAccommodations` y separa opciones del municipio y alrededores.
+- `/parques-y-zonas-verdes/` usa `publicGreenSpaces` y `ParkCard`; como no hay espacios identificados y confirmados para publicación, la lista está vacía y la página muestra un estado de catálogo en preparación. El registro georreferenciado GeoEIEL 2024 y los diez candidatos OSM quedan documentados, no publicados como fichas; las fotos futuras requieren crédito y permiso documentado.
 - `/informacion-practica/` usa `municipalInfo` para contacto, servicios oficiales y horarios de transporte.
 - `/agenda/` combina eventos, servicios públicos y plazos con procedencia visible; separa las fechas vigentes, las pasadas en un `<details>` cerrado por defecto y las canceladas. Recalcula el corte con la fecha de `Europe/Madrid` en cada visita, también después de un build estático.
 - `/juego/` solo muestra el juego cuando `PUBLIC_BALL_GAME_ENABLED` está activada en el build; apagada, devuelve una página 404 no indexable sin montar la experiencia. La flag también controla sus enlaces en menú, portada, pie y rutas, y excluye la ruta del sitemap. Activarla en el sitio estático requiere un nuevo build. Cuando está activa, calcula `hasRemoteGame` a partir de `import.meta.env.CONVEX_URL` y compone la experiencia local o remota.
@@ -400,7 +407,7 @@ El mapa del juego:
 - representa la bola activa, la posición propia y los jugadores remotos con marcadores distintos;
 - interpola visualmente la posición remota durante 7 segundos, sin convertir esa interpolación en estado autoritativo.
 
-El mapa de `/rutas/` se implementa en `route-map.ts`. Descarga el GPX desde `public/routes/`, lo parsea con `DOMParser`, dibuja una polilínea y sus waypoints y muestra un estado de error si la descarga o el XML fallan. También conserva la descarga del GPX como fallback.
+`/rutas/` usa `WikilocEmbed.astro` y `wikiloc-embed.ts`. El endpoint autorizado en `src/data/routes.ts` es `https://es.wikiloc.com/wikiloc/embedv2.do?id=54551889&elevation=on&images=on&maptype=H`; la página no crea un iframe ni solicita recursos a Wikiloc hasta la acción de carga. El iframe mantiene los atributos de fuente `600 × 500`, un título accesible y un contenedor responsive; `Powered by Wikiloc`, el crédito a Joaquin Alcarria y el enlace a la ficha original permanecen visibles. Un enlace directo sirve de alternativa si el contenido incrustado no se muestra o se bloquea. No se descarga ni aloja el GPX o las coordenadas de Wikiloc. La carga bajo demanda evita la solicitud automática, pero no equivale a una conclusión jurídica sobre consentimiento; la política de cookies mantiene pendiente la revisión municipal/jurídica del servicio externo.
 
 ### Modo local
 
@@ -545,7 +552,7 @@ La proyección de Agenda aplica primero reglas deterministas. Para comunicados o
 - Cada escena mantiene una imagen o dibujo CSS de fallback y oculta el canvas si WebGL o la carga de recursos falla.
 - Las imágenes raster de páginas y metadatos sociales se transforman con `astro:assets` y Sharp durante el build estático; las variantes responsive se publican como archivos versionados en `/_astro/`, con dimensiones inferidas para evitar CLS. Las imágenes locales viven en `src/assets/`; las fuentes remotas de Dipucuenca y Bandomovil están limitadas por `image.remotePatterns` y se convierten a WebP. Si falla el sondeo remoto o la preparación inicial de Astro, se conserva la URL original con una advertencia. Astro genera las transformaciones estáticas después de renderizar las páginas: si esa descarga o conversión diferida falla, el build falla y no se aplica el fallback. Las imágenes fuera de las páginas (por ejemplo, teselas de Leaflet) no pasan por este pipeline.
 - Las imágenes secundarias usan `loading="lazy"`; las imágenes principales mantienen prioridad alta. La imagen fallback del crédito 3D y sus texturas también usan assets generados/versionados.
-- El juego y los mapas cargan Leaflet solo en las rutas que los incluyen.
+- El juego y el mapa de Palomareños cargan Leaflet solo en las rutas que los incluyen. `/rutas/` no carga Leaflet; solo solicita el iframe de Wikiloc cuando el visitante lo pide.
 - `prefers-reduced-motion` desactiva o reduce las animaciones de CSS y Three.js donde está contemplado.
 
 No hay una integración del servicio de optimización de imágenes de Vercel ni una regla CDN explícita. Astro genera y versiona las transformaciones estáticas; la política HTTP final la aplica el hosting. El fallback a la URL de origen cubre fallos detectados durante el sondeo remoto o la preparación de la transformación. La descarga y codificación final ocurren después, durante la generación de assets: si esa fase falla, el build también falla. El sitio depende de que los orígenes remotos autorizados respondan durante el build o exista una entrada válida en la caché de Astro.
@@ -554,11 +561,11 @@ El build observado emite una advertencia de Vite por chunks superiores a 500 kB.
 
 ### JavaScript enviado al navegador
 
-El shell global incluye el controlador pequeño de transición, el menú y el comportamiento de cabecera/pie; el módulo Three.js del cubo solo se descarga tras un clic interno elegible. La transición representa SSR en caras DOM inertes y no sustituye la navegación de documento completo. Las páginas de colecciones incluyen filtros en cliente. `/juego/` añade Leaflet, geolocalización, la lógica de sesión y, si procede, Convex. `/rutas/` añade Leaflet y el parser GPX. Las demás escenas Three.js también se cargan bajo demanda.
+- El shell global incluye el controlador pequeño de transición, el menú y el comportamiento de cabecera/pie; el módulo Three.js del cubo solo se descarga tras un clic interno elegible. La transición representa SSR en caras DOM inertes y no sustituye la navegación de documento completo. Las páginas de colecciones incluyen filtros en cliente. `/juego/` añade Leaflet, geolocalización, la lógica de sesión y, si procede, Convex. `/rutas/` añade el controlador de carga bajo demanda de Wikiloc, no Leaflet ni un parser GPX. Las demás escenas Three.js también se cargan bajo demanda.
 
 ### Leaflet y fuentes cartográficas
 
-Los mapas de juego, rutas y Palomareños usan teselas públicas de OpenStreetMap con atribución. El código no implementa caché propia, proxy de teselas ni control de disponibilidad del proveedor. Las páginas de rutas y Palomareños pueden mostrar un estado de error; el juego conserva su estructura, pero depende de la carga de las teselas para la cartografía.
+Los mapas de juego y Palomareños usan teselas públicas de OpenStreetMap con atribución. El código no implementa caché propia, proxy de teselas ni control de disponibilidad del proveedor. `/rutas/` usa el iframe de Wikiloc bajo demanda y conserva un enlace directo si el proveedor bloquea o no muestra el contenido; la prueba E2E simula el endpoint y no verifica la disponibilidad real.
 
 ## Testing y validación
 
@@ -583,9 +590,9 @@ Las pruebas Vitest cubren:
 
 La ejecución local verificada el 18 de octubre de 2026 con `pnpm test:coverage` contiene 34 archivos y 189 pruebas Vitest, todas correctas: 93,50 % de statements, 91,16 % de branches, 96,55 % de functions y 96,85 % de lines. El umbral global configurado es del 90 % en esas cuatro métricas y CI ejecuta `pnpm test:coverage` como gate.
 
-Playwright cubre navegación, menú accesible, portada, noticias, bandos, la separación de Agenda entre fechas vigentes y archivo cerrado, información práctica, alojamientos, rutas, formulario de Palomareños con respuesta simulada, juego local, modo inmersivo, simulador, presencia visual de Three.js y responsive. `tests/e2e/page-transitions.spec.ts` comprueba las caras antes de navegar, la conservación del menú, el fallback, un viewport estrecho y `prefers-reduced-motion`; el test de la flag se ejecuta también con la transición apagada. La cobertura SEO estática corresponde a `check:seo`. Las pruebas del juego usan el servidor Astro de desarrollo y el simulador local; no constituyen una prueba E2E contra un deployment remoto de Convex ni un flujo de dos jugadores reales.
+Playwright cubre navegación, menú accesible, portada, noticias, bandos, la separación de Agenda entre fechas vigentes y archivo cerrado, información práctica, alojamientos, `/parques-y-zonas-verdes/` con un estado de catálogo en preparación y sin fichas no confirmadas, la carga y fallback del embed de Wikiloc en `/rutas/`, formulario de Palomareños con respuesta simulada, juego local, modo inmersivo, simulador, presencia visual de Three.js y responsive. El test de parques verifica el mensaje público sencillo, la ausencia de registros no confirmados/fotos y la navegación desde Vecinos y Visita. `tests/e2e/page-transitions.spec.ts` comprueba las caras antes de navegar, la conservación del menú, el fallback, un viewport estrecho y `prefers-reduced-motion`; el test de la flag se ejecuta también con la transición apagada. La cobertura SEO estática corresponde a `check:seo`. Las pruebas del juego usan el servidor Astro de desarrollo y el simulador local; no constituyen una prueba E2E contra un deployment remoto de Convex ni un flujo de dos jugadores reales.
 
-`scripts/visual-qa.ts` recorre once rutas en dos viewports y comprueba HTTP 200, overflow horizontal, foco, contraste aproximado y errores de consola. Incluye alojamientos, el mapa mundial de Palomareños y un detalle de bando; sus assets externos se interceptan con fixtures compartidos con Playwright E2E. Es una comprobación reproducible de calidad visual, no un sistema de snapshots de imagen.
+`scripts/visual-qa.ts` recorre 23 rutas en dos viewports y comprueba HTTP 200, overflow horizontal, foco, contraste aproximado y errores de consola. Incluye `/parques-y-zonas-verdes/`, alojamientos, el mapa mundial de Palomareños y un detalle de bando; sus assets externos se interceptan con fixtures compartidos con Playwright E2E. Es una comprobación reproducible de calidad visual, no un sistema de snapshots de imagen.
 
 `scripts/check-css-architecture.ts` inspecciona cambios en `src/` y aplica las excepciones de arquitectura CSS. `scripts/verify-seo.ts` inspecciona el contenido generado de `dist/` y el sitemap.
 
@@ -669,7 +676,7 @@ La clasificación se basa en la comparación entre el `architecture.md` anterior
 | Incorrecto     | Se enumeraban `/lugares/`, `/patrimonio/` y otras rutas “previstas” como si fueran la superficie existente.                      | Se sustituye por el inventario real de `src/pages/`; patrimonio queda situado en `/sobre-el-pueblo/`.                                         |
 | Histórico      | La auditoría previa señalaba que la Agenda estaba vacía y no tenía Content Collection.                                           | La Agenda ya está implementada como proyección TypeScript (`agenda-manual.ts` + `agenda-bandos.generated.ts`), sin crear una colección nueva. |
 | Incompleto     | La estructura de componentes omitía `about`, `game`, `home`, `accommodations`, `current-affairs`, componentes de colección y UI. | Se incorpora el árbol real y la separación de responsabilidades observada.                                                                    |
-| Incompleto     | La lista de scripts solo cubría menú y Three.js.                                                                                 | Se añaden mapas, Convex, Palomareños, sesión, geolocalización, GPX, cabecera y sincronización visual.                                         |
+| Incompleto     | La lista de scripts solo cubría menú y Three.js.                                                                                 | Se añaden mapas, Convex, Palomareños, sesión, geolocalización, carga bajo demanda de Wikiloc, cabecera y sincronización visual.               |
 | Incompleto     | No se documentaba el backend de propuestas de Palomareños ni el alcance de su proyección pública.                                | Se documentan el flujo Turnstile → mutación interna, moderación privada y datos públicos redactados.                                          |
 | Incorrecto     | La guía de Convex era el README genérico del scaffolding y el código se describía como futuro en `AGENTS.md`.                    | Se reemplaza por una guía del backend actual y se corrigen las instrucciones operativas.                                                      |
 | Incorrecto     | El README afirmaba que la cobertura no estaba configurada y omitía rutas y comandos actuales.                                    | Se actualiza contra `package.json`, CI, `src/pages/` y las pruebas ejecutadas.                                                                |
@@ -706,7 +713,7 @@ La clasificación se basa en la comparación entre el `architecture.md` anterior
 - El adaptador remoto sigue resolviendo el nombre, radio y descripción contra `src/data/game-locations.ts`; una temporada Convex con ubicaciones distintas puede mostrar feedback local incorrecto.
 - Las queries de estado y ranking son públicas, no hay rate limiting ni cuotas de jugador, y el índice de idempotencia no declara una restricción de unicidad en el esquema.
 - `captureBall` valida la regla de distancia y precisión sobre los valores recibidos, pero no implementa una prueba de autenticidad del GPS ni una validación explícita de rangos de coordenadas equivalente a la de `updatePresence`.
-- `src/pages/rutas/index.astro` e `src/pages/informacion-practica.astro` superan el umbral operativo de 400 líneas y requieren revisión estructural independiente; no se han refactorizado en esta tarea.
+- `src/pages/informacion-practica.astro` supera el umbral operativo de 400 líneas y requiere revisión estructural independiente; no se ha refactorizado en esta tarea.
 
 ### Evolución prevista
 

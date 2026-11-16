@@ -39,18 +39,20 @@ export const aboutPalomares = {
   landingIntro:
     'Palomares del Campo conserva restos de época romana, edificios religiosos y tradiciones ligadas a la vida del municipio.',
   heroImage: {
+    // TODO(AYTO)[IMG-01]: Confirmar permiso de reutilización y crédito exigido para la fotografía de la iglesia alojada en el portal municipal y reutilizada en Sobre el pueblo y la ficha de iglesia; la disponibilidad pública no acredita licencia.
     src: 'https://palomaresdelcampo.dipucuenca.es/images/PALOMARES_DEL_CAMPO/NUESTRA_SE%C3%91ORA_DE_LA_ASUNCION_2.jpg',
     alt: 'Fachada de la iglesia de Nuestra Señora de la Asunción de Palomares del Campo',
     sourceLabel: 'Fotografía: portal municipal',
     sourceHref: 'https://palomaresdelcampo.dipucuenca.es/index.php/layout/layout-three',
   } satisfies AboutImage,
   history: {
+    // TODO(AYTO)[HIS-01]: Confirmar con archivo local la atribución de la fecha 1179 y el contexto documental de la repoblación; se conserva como atribución del portal municipal, no como fecha demostrada.
     eyebrow: 'Historia y territorio',
     title: 'Una historia ligada al territorio',
     paragraphs: [
       'El término municipal conserva huellas de ocupación humana desde la Prehistoria, con hallazgos vinculados a La Laguna y la Moheda, además de presencia calcolítica y asentamientos de la Edad del Bronce.',
       'Durante la época romana, estas tierras quedaron vinculadas al territorio de Segóbriga. El entorno también conserva la memoria de la explotación del lapis specularis, el llamado cristal de Hispania.',
-      'La población medieval se desarrolló como aldea vinculada a Huete. La tradición historiográfica local sitúa su creación en el contexto de la repoblación posterior a la Reconquista y, en 1553, Palomares del Campo se constituyó en villa de realengo.',
+      'La población medieval se desarrolló como aldea vinculada a Huete. El portal municipal atribuye a José Andrés Prieto la fecha orientativa de 1179 para su creación, en el contexto de la repoblación; en 1553, Palomares del Campo se constituyó en villa de realengo.',
       'Ese siglo dejó parte de la identidad monumental que todavía reconocemos: la iglesia parroquial, la ermita de la Virgen de la Cabeza y la huella de la familia de Hernando de Alarcón, natural de la villa y virrey de Nápoles.',
     ],
     source: {
@@ -83,6 +85,7 @@ export const aboutPalomares = {
     {
       eyebrow: 'Arqueología y paisaje',
       title: 'Fuente del Pez y Castillo de San Miguel',
+      // TODO(AYTO)[PAT-02]: Contrastar la cronología y denominación de Fuente el Pez/Castillo de San Miguel con un inventario patrimonial o informe arqueológico oficial antes de publicar una ficha histórica detallada.
       description:
         'Un enclave donde se cruzan la frontera medieval, el agua y la memoria del despoblado.',
       body: 'La zona conserva restos de una torre, de la antigua ermita y de la aldea de Fuente el Pez. El conjunto se completa con la Fuente Chica, la Fuente Grande y el paisaje de su entorno.',
@@ -93,6 +96,7 @@ export const aboutPalomares = {
     },
   ] satisfies HeritageFeature[],
   traditions: {
+    // TODO(AYTO)[FIE-01]: Confirmar con cofradías/Ayuntamiento si siguen vigentes los actos tradicionales descritos; los programas de 2026 son ejemplos de una edición, no calendario permanente.
     eyebrow: 'La vida del pueblo',
     title: 'Dos fiestas patronales, una misma memoria',
     description:
@@ -160,11 +164,13 @@ export const aboutPalomares = {
       },
     ],
   },
+  // TODO(AYTO)[HIS-02]: Identificar platos, productos y vocabulario gastronómico propio con fuentes locales verificables antes de publicar una sección de gastronomía; evitar atribuciones genéricas a La Alcarria.
   landscape: {
     eyebrow: 'Paisaje y situación',
-    title: 'La Alcarria conquense, a escala de paseo',
-    text: 'Palomares del Campo se sitúa en el norte de la provincia de Cuenca, entre lomas suaves, campos de cultivo y caminos rurales. La ficha turística regional destaca su paisaje agrícola y su cercanía a la capital conquense.',
+    title: 'Entre la Alcarria conquense y la Mancha Alta',
+    text: 'Palomares del Campo se sitúa en una zona de transición entre la Alcarria conquense y la Mancha Alta, con lomas suaves, campos de cultivo y caminos rurales. Turismo de Castilla-La Mancha destaca el paisaje agrícola y la cercanía a la capital conquense.',
     image: {
+      // TODO(AYTO)[IMG-02]: Confirmar derechos y crédito de esta fotografía municipal de Fuente del Pez antes de mantenerla como imagen destacada.
       src: 'https://palomaresdelcampo.dipucuenca.es/images/PALOMARES_DEL_CAMPO/FUENTE_DEL_PEZ_Y_CASTILLO_DE_SAN_MIGUEL.jpg',
       alt: 'Fuente del Pez y restos del Castillo de San Miguel en el entorno de Palomares del Campo',
       sourceLabel: 'Fotografía: portal municipal',

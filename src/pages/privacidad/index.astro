@@ -19,7 +19,8 @@ const pageDescription =
         {pageTitle}
       </h1>
       <p slot="summary" class="hero-intro">
-        Explicamos qué datos tratamos, para qué los usamos y qué puedes hacer con ellos.
+        Borrador informativo sujeto a validación municipal. No acredita por sí solo que los datos,
+        tratamientos o canales descritos estén aprobados por el Ayuntamiento.
       </p>
     </EditorialHero>
 
@@ -30,9 +31,11 @@ const pageDescription =
           <h2 id="general-title">Quién trata tus datos</h2>
         </div>
         <div class="privacy-copy">
+          <!-- TODO(AYTO)[LEG-04]: Confirmar por escrito la identidad del responsable, datos de contacto y domicilio; verificar si existe DPD y el canal de contacto aplicable. -->
           <p>
-            El responsable del tratamiento es el{' '}
-            <strong>Ayuntamiento de Palomares del Campo</strong>.
+            El Ayuntamiento de Palomares del Campo se identifica aquí provisionalmente como posible
+            responsable; la identidad para este tratamiento, el domicilio de contacto y el canal de
+            protección de datos siguen pendientes de confirmación municipal.
           </p>
           <address>
             {municipalContact.address}
@@ -41,6 +44,12 @@ const pageDescription =
             <br />
             <a href={`mailto:${municipalContact.email}`}>{municipalContact.email}</a>
           </address>
+          <!-- TODO(AYTO)[LEG-05]: Identificar y aprobar los tratamientos de esta web distintos de la propuesta Palomareños, y confirmar si las finalidades aquí descritas reflejan el uso real de los datos. -->
+          <p>
+            Esta página no constituye un inventario de todos los tratamientos municipales. Las
+            actividades ajenas a la propuesta Palomareños también requieren revisión antes de
+            presentar esta política como completa.
+          </p>
           <p>
             Esta página describe especialmente el tratamiento asociado al formulario
             <a href="#palomarenos-por-el-mundo">Palomareños por el mundo</a>.
@@ -60,60 +69,72 @@ const pageDescription =
         <div class="privacy-details">
           <section aria-labelledby="purpose-title">
             <h3 id="purpose-title">Finalidad y base jurídica</h3>
+            <!-- TODO(AYTO)[LEG-06]: Aprobar finalidad, moderación y base jurídica de cada operación antes de recibir o publicar datos reales. -->
             <p>
-              Usamos los datos para recibir la propuesta, contactar contigo si es necesario,
-              revisarla manualmente y, si se aprueba, publicar la historia en el mapa y en la página
-              de la sección.
+              El borrador prevé recibir la propuesta, contactar contigo si es necesario, revisarla
+              manualmente y, si se aprueba, publicar la historia en el mapa y en la página de la
+              sección. Son finalidades propuestas, no un tratamiento aprobado ni una autorización
+              para enviar información.
             </p>
             <p>
-              La base jurídica es el consentimiento que prestas al enviar el formulario. Puedes
-              retirarlo y pedir que dejemos de publicar la historia; la retirada no afecta a los
-              tratamientos realizados lícitamente antes de solicitarla.
+              La referencia actual al consentimiento no está validada. Si se confirma como base
+              aplicable, podrás retirarlo; la retirada no afectará a los tratamientos realizados
+              lícitamente antes de solicitarla.
             </p>
           </section>
 
           <section aria-labelledby="data-title">
-            <h3 id="data-title">Qué datos tratamos</h3>
+            <h3 id="data-title">Datos previstos si se aprueba</h3>
+            <!-- TODO(AYTO)[LEG-07]: Contrastar este inventario con los campos realmente recibidos y almacenados, registros técnicos incluidos; confirmar qué sería obligatorio u opcional. -->
             <ul>
               <li>Nombre que quieres mostrar.</li>
               <li>Ciudad y país de residencia.</li>
               <li>Texto de la historia.</li>
               <li>Email de contacto, que se mantiene privado.</li>
-              <li>Datos técnicos necesarios para proteger el formulario frente a abusos.</li>
+              <li>
+                Posibles datos técnicos asociados al formulario y a su protección frente a abusos.
+              </li>
             </ul>
             <p>
-              No solicitamos una dirección exacta ni publicamos coordenadas de una vivienda. El mapa
-              usa una posición aproximada de la ciudad asignada durante la moderación.
+              Este inventario describe una propuesta y debe contrastarse con los campos y registros
+              que realmente se autorizasen antes de publicarla.
+            </p>
+            <p>
+              La propuesta no prevé solicitar una dirección exacta ni publicar coordenadas de una
+              vivienda. Si el Ayuntamiento la aprueba, una posición aproximada de la ciudad podría
+              asignarse durante la moderación.
             </p>
           </section>
 
           <section aria-labelledby="publication-title">
-            <h3 id="publication-title">Qué se publica</h3>
+            <h3 id="publication-title">Qué podría hacerse público</h3>
             <p>
-              Solo se publican las propuestas aprobadas. El mapa muestra el nombre, la ciudad, el
-              país y el texto de la historia. No muestra el email, las notas internas de moderación
-              ni los datos técnicos de seguridad.
+              En el diseño propuesto, una ficha aprobada podría mostrar el nombre elegido, la
+              ciudad, el país y el texto autorizado. El correo y las notas internas no se plantean
+              como datos públicos. Esta descripción no confirma que haya historias publicadas
+              actualmente.
             </p>
             <p>
-              La publicación no es automática: cada propuesta queda pendiente de revisión manual.
+              La propuesta contempla revisión humana previa; el proceso y la autorización de
+              publicación están pendientes de aprobación.
             </p>
           </section>
 
           <section aria-labelledby="retention-title">
             <h3 id="retention-title">Conservación</h3>
+            <!-- TODO(AYTO)[LEG-08]: Aprobar plazos para propuestas pendientes, rechazadas y publicadas, copias de seguridad, registros técnicos y evidencias de autorización. -->
             <p>
-              Conservamos la propuesta mientras sea necesario para gestionarla y, si se aprueba,
-              mientras la historia permanezca publicada. Tras un rechazo, una retirada o el fin de
-              la finalidad, eliminaremos o anonimizaremos los datos cuando ya no sean necesarios
-              para gestionar la solicitud, atender derechos o cumplir responsabilidades legales.
+              Los plazos concretos de conservación y el destino de los datos al concluir cada
+              periodo están pendientes de aprobación municipal.
             </p>
           </section>
 
           <section aria-labelledby="recipients-title">
             <h3 id="recipients-title">Proveedores y destinatarios</h3>
+            <!-- TODO(AYTO)[LEG-09]: Confirmar destinatarios, proveedores contratados, funciones, ubicaciones, subencargados, transferencias y garantías aplicables. -->
             <p>
-              Para prestar el servicio usamos proveedores técnicos que actúan según la configuración
-              y los acuerdos aplicables:
+              El código consultado integra los servicios siguientes; su papel y configuración
+              contractual deben confirmarse antes de describirlos como encargados:
             </p>
             <ul>
               <li>
@@ -127,32 +148,33 @@ const pageDescription =
               </li>
             </ul>
             <p>
-              Algunos proveedores pueden prestar servicios desde fuera del Espacio Económico
-              Europeo. Cuando exista una transferencia internacional, se aplicarán las garantías
-              exigidas por la normativa de protección de datos.
+              Las entidades, funciones, ubicaciones, acuerdos y posibles transferencias requieren
+              confirmación; no se afirma aquí que exista una transferencia internacional.
             </p>
           </section>
 
           <section aria-labelledby="automated-title">
             <h3 id="automated-title">Decisiones automatizadas</h3>
             <p>
-              Turnstile solo ayuda a comprobar que el envío no procede de un bot. No decide si una
-              historia se publica. La aprobación o el rechazo corresponden a una revisión manual.
+              Si se habilitase el formulario, Turnstile ayudaría a comprobar que el envío no procede
+              de un bot; no decidiría si una historia se publica. El diseño propone revisión humana,
+              pero este proceso aún no está aprobado.
             </p>
           </section>
 
           <section aria-labelledby="rights-title">
             <h3 id="rights-title">Tus derechos</h3>
+            <!-- TODO(AYTO)[LEG-10]: Validar la lista de derechos aplicables, los requisitos de identificación, los plazos y el procedimiento de respuesta antes de publicar esta información como definitiva. -->
             <p>
-              Puedes solicitar acceso, rectificación, supresión, oposición, limitación del
-              tratamiento y, cuando proceda, portabilidad. También puedes retirar el consentimiento
-              y pedir la retirada de una historia publicada.
+              Puedes ejercer los derechos que correspondan conforme a la normativa aplicable,
+              incluidos acceso, rectificación, supresión, oposición, limitación y, cuando proceda,
+              portabilidad; la retirada del consentimiento solo procede si esa es la base aplicable.
             </p>
             <p>
-              Para ejercer tus derechos, escribe a
-              <a href={`mailto:${municipalContact.email}`}>{municipalContact.email}</a> o utiliza la
-              dirección postal indicada arriba. Si consideras que el tratamiento no cumple la
-              normativa, puedes reclamar ante la Agencia Española de Protección de Datos.
+              El canal para solicitar el ejercicio de derechos en relación con esta propuesta no
+              está confirmado. El contacto general que aparece en el directorio municipal no debe
+              interpretarse como canal de privacidad aprobado. Para reclamaciones, puedes consultar
+              la información de la Agencia Española de Protección de Datos.
             </p>
           </section>
         </div>
@@ -167,6 +189,16 @@ const pageDescription =
         </div>
         <div class="privacy-copy privacy-links">
           <ul>
+            <li>
+              <ExternalLink href="https://www.boe.es/buscar/doc.php?id=DOUE-L-2016-80807">
+                Reglamento General de Protección de Datos · BOE
+              </ExternalLink>
+            </li>
+            <li>
+              <ExternalLink href="https://www.boe.es/buscar/act.php?id=BOE-A-2018-16673">
+                Ley Orgánica 3/2018 de protección de datos · BOE
+              </ExternalLink>
+            </li>
             <li>
               <ExternalLink href="https://www.aepd.es/derechos-y-deberes/conoce-tus-derechos/derecho-de-informacion">
                 Derecho de información · AEPD

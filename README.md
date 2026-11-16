@@ -7,7 +7,7 @@ El sitio genera estáticamente sus páginas editoriales. Convex proporciona esta
 ## Estado del proyecto
 
 - Noticias y bandos municipales gestionados en colecciones Markdown separadas.
-- Mapa Leaflet con teselas de OpenStreetMap y atribución visible; rutas con mapa GPX.
+- Mapas Leaflet con teselas de OpenStreetMap y atribución visible en el juego y «Palomareños por el mundo»; `/rutas/` muestra una ruta externa de Wikiloc y solicita su iframe oficial solo cuando el visitante pulsa el botón de carga.
 - Escenas Three.js opcionales, cargadas bajo demanda y con fallback.
 - Juego con modo local y remoto: Convex es la autoridad para capturas, puntuación, ranking y presencia en el modo remoto.
 - «Palomareños por el mundo»: mapa público de historias aprobadas y formulario de propuestas moderadas. El flujo remoto usa Convex, Turnstile server-side y notificaciones mediante Resend cuando el deployment está configurado.
@@ -161,6 +161,7 @@ Para cambios de UI, usar también `pnpm qa:visual` cuando haya un servidor dispo
 ## Documentación relacionada
 
 - [`AGENTS.md`](AGENTS.md): reglas operativas para cambios.
+- [`docs/ruta-wikiloc.md`](docs/ruta-wikiloc.md): fuente, atribución, carga bajo demanda y límites de privacidad de la ruta externa de Wikiloc.
 - [`docs/architecture.md`](docs/architecture.md): arquitectura implementada, límites y evolución prevista.
 - [`docs/testing.md`](docs/testing.md): estrategia, alcance y límites de las pruebas.
 - [`docs/development-workflow.md`](docs/development-workflow.md): ramas, Preview y releases.

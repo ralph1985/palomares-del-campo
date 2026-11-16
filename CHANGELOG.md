@@ -4,6 +4,21 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-11-16
+
+#### Changed
+
+- Sustituido el mapa provisional de `/rutas/` por el iframe oficial de Wikiloc para la publicación de Joaquin Alcarria, con atribución visible, enlace directo y aviso de que el Ayuntamiento no la presenta como ruta oficial ni la ha verificado sobre el terreno. El iframe solo se solicita tras la acción explícita del visitante y conserva un enlace alternativo si el contenido no se muestra.
+- Actualizadas la documentación de privacidad, arquitectura, pruebas y revisión municipal; se deja pendiente la validación jurídica de un mecanismo general de consentimiento para recursos externos.
+
+#### Removed
+
+- Eliminados el GPX provisional de OpenStreetMap, el script Leaflet específico de `/rutas/` y sus referencias y pruebas obsoletas. No se descarga ni se redistribuye el GPX o las coordenadas de Wikiloc.
+
+#### Added
+
+- Añadida `/parques-y-zonas-verdes/` a la navegación de «Vecinos» y «Visita» (antes de «Rutas»). La página muestra un estado de catálogo en preparación y no publica fichas sin identificación y confirmación municipal; la investigación GeoEIEL/OSM se conserva en la documentación y el modelo `publicGreenSpaces`/`ParkCard` queda listo para futuras fichas y fotografías municipales autorizadas.
+
 ### 2026-11-14
 
 #### Security

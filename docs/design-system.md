@@ -88,7 +88,7 @@ La comprobación reproducible se ejecuta con `pnpm qa:visual` mientras el servid
 Se conservan dos familias de excepciones documentadas:
 
 - Los estilos scoped de `/sobre-el-pueblo/` conservan una superficie verde oscuro ajustada a sus fotografías (`#315f4e`); no es un color de interfaz compartido.
-- `src/scripts/route-map.ts` y `src/scripts/game-map.ts` mantienen valores hexadecimales para las opciones de color de Leaflet creadas en JavaScript. Son valores de una API de visualización y reflejan tokens ya definidos; no son declaraciones CSS independientes.
+- `src/scripts/game-map.ts` mantiene valores hexadecimales para las opciones de color de Leaflet creadas en JavaScript. Son valores de una API de visualización y reflejan tokens ya definidos; no son declaraciones CSS independientes.
 
 ## Reglas de evolución
 

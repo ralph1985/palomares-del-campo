@@ -1,35 +1,15 @@
 ---
-import 'leaflet/dist/leaflet.css';
 import ActionLink from '../../components/ui/ActionLink.astro';
-import ExternalLink from '../../components/ui/ExternalLink.astro';
 import EditorialHero from '../../components/hero/EditorialHero.astro';
+import WikilocEmbed from '../../components/routes/WikilocEmbed.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { PUBLIC_BALL_GAME_ENABLED } from 'astro:env/client';
 import { localRoutes } from '../../data/routes';
-
-const formatDistance = (distanceKm: number) =>
-  distanceKm.toLocaleString('es-ES', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-
-const formatDuration = (minutes: number) => {
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-  return `${hours} h ${remainingMinutes.toString().padStart(2, '0')} min`;
-};
-
-const formatDate = (date: string) =>
-  new Date(`${date}T00:00:00`).toLocaleDateString('es-ES', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
 ---
 
 <BaseLayout
   title="Rutas del pueblo · Palomares del Campo"
-  description="Rutas y paseos relacionados con Palomares del Campo, con fuentes visibles y estado de verificación."
+  description="Ruta publicada en Wikiloc por Joaquin Alcarria. Fuente externa, sin verificación municipal sobre el terreno; el mapa solo se carga cuando lo solicita el visitante."
 >
   <main>
     <EditorialHero labelledBy="page-title" variant="paper">
@@ -40,8 +20,8 @@ const formatDate = (date: string) =>
         Rutas del pueblo
       </h1>
       <p slot="summary" class="hero-intro">
-        Una primera selección de recorridos encontrados en fuentes externas. La etiqueta de cada
-        ficha indica qué está verificado y qué todavía requiere revisión local.
+        Consulta una ruta publicada en Wikiloc por su autor original. El mapa solo se carga si lo
+        solicitas; la ficha de Wikiloc es la fuente para sus detalles y cambios.
       </p>
     </EditorialHero>
 
@@ -49,90 +29,34 @@ const formatDate = (date: string) =>
       <div class="routes-shell">
         <div class="routes-heading">
           <div>
-            <p class="eyebrow">Primer recorrido</p>
-            <h2 id="routes-title">Pasear también necesita contexto.</h2>
+            <p class="eyebrow">Fuente externa · Wikiloc</p>
+            <h2 id="routes-title">Consulta la ficha original antes de salir.</h2>
           </div>
           <p>
-            El entorno de Palomares ofrece caminos rurales para senderismo ligero según Turismo de
-            Castilla-La Mancha. El trazado de esta ficha procede de una plataforma externa.
+            El Ayuntamiento no presenta este recorrido como ruta municipal ni lo ha verificado sobre
+            el terreno. Comprueba la información y las condiciones locales en la publicación
+            original.
           </p>
         </div>
 
         <div class="route-list">
           {localRoutes.map((route) => (
             <article class="route-card">
-              <div class="route-card-header">
+              <header class="route-card-header">
                 <p class="route-status">{route.statusLabel}</p>
-                <h3>{route.title}</h3>
+                <h2>{route.title}</h2>
                 <p class="route-summary">{route.summary}</p>
-              </div>
+              </header>
 
-              <dl class="route-facts">
-                <div>
-                  <dt>Distancia</dt>
-                  <dd>{formatDistance(route.distanceKm)} km</dd>
-                </div>
-                <div>
-                  <dt>Duración</dt>
-                  <dd>{formatDuration(route.durationMinutes)}</dd>
-                </div>
-                <div>
-                  <dt>Dificultad</dt>
-                  <dd>{route.difficulty}</dd>
-                </div>
-                <div>
-                  <dt>Desnivel positivo</dt>
-                  <dd>{route.elevationGainMetres} m</dd>
-                </div>
-              </dl>
-
-              <p class="route-accessibility">
-                <strong>Accesibilidad:</strong> {route.accessibilityNote}
-              </p>
-
-              <div class="route-disclaimer">
-                <strong>No es una ruta municipal señalizada.</strong>
-                <span>
-                  Consulta el trazado, el estado del camino y las condiciones antes de salir.
-                </span>
-              </div>
-
-              <div class="route-trace-status">
-                <strong>{route.traceStatusLabel}</strong>
-                <span>{route.traceStatusNote}</span>
-              </div>
-
-              <div class="route-map-panel">
-                <div class="route-map-heading">
-                  <strong>Mapa interactivo del trazado</strong>
-                  <span>Consulta el recorrido y sus puntos de interés.</span>
-                </div>
-                <div
-                  class="route-map"
-                  data-route-map
-                  data-gpx-url={route.traceUrl}
-                  data-map-status="loading"
-                  aria-label={`Mapa del trazado ${route.title}`}
-                  aria-busy="true"
-                ></div>
-                <p class="route-map-status" data-route-map-status aria-live="polite">
-                  Cargando mapa…
-                </p>
-                <p class="route-map-note">
-                  Mapa basado en el GPX aportado. La cartografía procede de OpenStreetMap.
-                </p>
-              </div>
+              <WikilocEmbed
+                slug={route.slug}
+                title={route.title}
+                author={route.author}
+                sourceUrl={route.sourceUrl}
+                embedUrl={route.embedUrl}
+              />
 
               <div class="route-links">
-                <ExternalLink class="route-primary-link" href={route.routeSource.href}>
-                  {route.routeSource.label} <span aria-hidden="true">↗</span>
-                </ExternalLink>
-                <ExternalLink class="route-context-link" href={route.contextSource.href}>
-                  Contexto: {route.contextSource.label} <span aria-hidden="true">↗</span>
-                </ExternalLink>
-                <ActionLink class="route-gpx-link" variant="solid" href={route.traceUrl} download>
-                  Descargar GPX <span aria-hidden="true">↓</span>
-                </ActionLink>
                 {PUBLIC_BALL_GAME_ENABLED && (
                   <ActionLink class="route-game-link" variant="underline" href="/juego/">
                     Probar La bola <span aria-hidden="true">→</span>
@@ -140,8 +64,8 @@ const formatDate = (date: string) =>
                 )}
               </div>
               <p class="route-review">
-                Fuente actualizada el {formatDate(route.sourceUpdatedAt)} · ficha revisada el
-                {` ${formatDate(route.reviewedAt)}`}
+                La web municipal no ha comprobado el acceso, la seguridad ni el estado actual del
+                recorrido. La atribución y el mapa proceden de la ficha enlazada de Wikiloc.
               </p>
             </article>
           ))}
@@ -149,20 +73,16 @@ const formatDate = (date: string) =>
       </div>
     </section>
 
-    <section class="routes-note" aria-label="Criterio editorial de las rutas">
+    <section class="routes-note" aria-label="Información sobre la fuente de la ruta">
       <div class="routes-shell">
         <p>
-          Las próximas rutas solo pasarán a presentarse como recorridos propios cuando podamos
-          comprobar sus puntos, distancias, accesibilidad y condiciones sobre el terreno.
+          El mapa es contenido de un proveedor externo y no se solicita al abrir esta página. Puedes
+          consultar la ficha original directamente en Wikiloc sin cargar el mapa incrustado.
         </p>
       </div>
     </section>
   </main>
 </BaseLayout>
-
-<script>
-  import '../../scripts/route-map';
-</script>
 
 <style>
   .routes-shell {
@@ -180,8 +100,7 @@ const formatDate = (date: string) =>
   }
 
   h1,
-  h2,
-  h3 {
+  h2 {
     margin: 0;
     font-family: var(--font-serif);
     font-weight: 500;
@@ -202,12 +121,8 @@ const formatDate = (date: string) =>
     margin-bottom: 3rem;
   }
 
-  .routes-heading .eyebrow {
-    color: var(--color-clay-text);
-  }
-
-  h2 {
-    max-width: 12ch;
+  .routes-heading h2 {
+    max-width: 14ch;
     font-size: var(--font-size-section-heading);
   }
 
@@ -225,20 +140,22 @@ const formatDate = (date: string) =>
 
   .route-card {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    min-width: 0;
     padding: clamp(1.5rem, 5vw, 3rem);
     border-radius: 1.5rem;
     background: var(--color-paper);
   }
 
   .route-card-header {
-    grid-column: 1 / -1;
+    display: grid;
+    gap: 1rem;
   }
 
   .route-status {
     width: fit-content;
-    margin: 0 0 1rem;
+    margin: 0;
     padding: 0.45rem 0.65rem;
     border-radius: 999px;
     color: var(--color-ink);
@@ -249,151 +166,30 @@ const formatDate = (date: string) =>
     text-transform: uppercase;
   }
 
-  h3 {
-    max-width: 18ch;
+  .route-card-header h2 {
+    max-width: 26ch;
     font-size: var(--font-size-section-heading);
   }
 
   .route-summary {
-    max-width: 37rem;
-    margin: 1.5rem 0 0;
-    color: var(--color-muted);
-    line-height: 1.7;
-  }
-
-  .route-facts {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-    margin: 0;
-  }
-
-  .route-facts div {
-    padding-top: 0.8rem;
-    border-top: 1px solid rgb(25 52 45 / 22%);
-  }
-
-  .route-facts dt {
-    color: var(--color-clay);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-strong);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .route-facts dd {
-    margin: 0.45rem 0 0;
-    color: var(--color-ink);
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
-  }
-
-  .route-accessibility {
+    max-width: 45rem;
     margin: 0;
     color: var(--color-muted);
     line-height: 1.7;
-  }
-
-  .route-disclaimer {
-    display: grid;
-    gap: 0.4rem;
-    grid-column: 1 / -1;
-    padding: 1rem 1.2rem;
-    border-left: 0.25rem solid var(--color-clay);
-    color: var(--color-ink);
-    background: var(--color-paper);
-  }
-
-  .route-disclaimer span {
-    color: var(--color-muted);
-    line-height: 1.5;
-  }
-
-  .route-trace-status {
-    display: grid;
-    grid-column: 1 / -1;
-    gap: 0.4rem;
-    padding: 1rem 1.2rem;
-    border: 1px solid rgb(25 52 45 / 22%);
-    color: var(--color-ink);
-    background: var(--color-surface-soft);
-  }
-
-  .route-trace-status span {
-    color: var(--color-muted);
-    line-height: 1.5;
-  }
-
-  .route-map-panel {
-    display: grid;
-    grid-column: 1 / -1;
-    gap: 0.75rem;
-    padding: 1rem;
-    border: 1px solid rgb(25 52 45 / 22%);
-    background: var(--color-surface-soft);
-  }
-
-  .route-map-heading {
-    display: grid;
-    gap: 0.25rem;
-  }
-
-  .route-map-heading span,
-  .route-map-note,
-  .route-map-status {
-    color: var(--color-muted);
-    font-size: 0.88rem;
-    line-height: 1.5;
-  }
-
-  .route-map {
-    min-height: 26rem;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    background: var(--color-sage);
-  }
-
-  .route-map-status,
-  .route-map-note {
-    margin: 0;
-  }
-
-  .route-map-status[data-state='error'] {
-    color: var(--color-clay);
-  }
-
-  :global(.route-map .leaflet-control-attribution) {
-    font-size: var(--font-size-label);
   }
 
   .route-links {
     display: flex;
-    grid-column: 1 / -1;
     flex-wrap: wrap;
     gap: 1rem 1.5rem;
     align-items: center;
   }
 
-  .route-links a {
-    font-weight: var(--font-weight-strong);
-    text-underline-offset: 0.25em;
-  }
-
-  .route-primary-link {
-    color: var(--color-ink);
-  }
-
-  .route-context-link {
-    color: var(--color-clay);
-    font-size: 0.9rem;
-  }
-
   .route-review {
-    grid-column: 1 / -1;
     margin: 0;
     color: var(--color-muted);
-    font-size: 0.78rem;
-    line-height: 1.5;
+    font-size: 0.9rem;
+    line-height: 1.6;
   }
 
   .routes-note {
@@ -410,8 +206,7 @@ const formatDate = (date: string) =>
   }
 
   @media (max-width: 50rem) {
-    .routes-heading,
-    .route-card {
+    .routes-heading {
       grid-template-columns: 1fr;
       gap: 2rem;
     }
@@ -420,14 +215,6 @@ const formatDate = (date: string) =>
   @media (max-width: 38rem) {
     .routes-shell {
       width: min(100% - 2rem, 72rem);
-    }
-
-    .route-facts {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .route-map {
-      min-height: 20rem;
     }
   }
 </style>

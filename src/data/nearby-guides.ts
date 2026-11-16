@@ -38,7 +38,8 @@ export interface NearbyPlaceGuide {
   sources: { label: string; href: string }[];
 }
 
-export const nearbyPlaceGuidesReviewedAt = '2026-10-24';
+export const nearbyPlaceGuidesReviewedAt = '2026-11-15';
+// TODO(AYTO)[IMG-03]: Confirmar autorización de publicación/embeber del vídeo aéreo y crédito a Rafa; la atribución actual no acredita por sí sola permiso ni derechos de terceros captados.
 
 export const nearbyPlaceGuides: NearbyPlaceGuide[] = [
   {

@@ -45,7 +45,11 @@ test('hides every ball-game entry point when its feature flag is disabled', asyn
   const response = await page.goto('/juego/');
   expect(response?.status()).toBe(404);
   await expect(page.getByRole('heading', { name: 'Página no encontrada' })).toBeVisible();
+  await expect(page.getByText('La página solicitada no existe.')).toBeVisible();
+  await expect(page.getByText(/propuesta|presentación/i)).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'La bola está en juego.' })).toHaveCount(0);
   await expect(page.locator('#game-map')).toHaveCount(0);
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+  await expect(page.locator('a[href="/juego/"]')).toHaveCount(0);
+  await expect(page.locator('script[src*="game-map"], script[src*="convex-game"]')).toHaveCount(0);
 });
