@@ -26,7 +26,7 @@ Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refac
 | `src/pages/noticias/index.astro`               | Composición de archivo        | Mantener local; compartir solo patrones reales con bandos.                                                     |
 | `src/pages/noticias/[slug].astro`              | Detalle editorial             | Mantener local; conservar la diferencia entre noticia y bando.                                                 |
 | `src/pages/informacion-practica.astro`         | Página informativa grande     | Revisar responsabilidades y posibles secciones; no mover CSS por obligación.                                   |
-| `src/pages/parques-y-zonas-verdes/index.astro` | Página informativa            | Mantener scoped; compone el inventario EIEL y sus límites editoriales con tokens existentes.                   |
+| `src/pages/parques-y-zonas-verdes/index.astro` | Página informativa            | Mantener scoped; compone el estado de catálogo en preparación y las futuras tarjetas con tokens existentes.    |
 | `src/pages/rutas/index.astro`                  | Página de rutas grande        | Revisar composición de metadatos, mapa y limitaciones; mantener el mapa aislado.                               |
 | `src/pages/alojamientos/index.astro`           | Directorio informativo grande | Compone la página y la rejilla; las tarjetas viven en `src/components/accommodations/AccommodationCard.astro`. |
 | `src/pages/juego/index.astro`                  | Tema independiente del juego  | Mantener local y oscuro; no migrar a la paleta clara.                                                          |
@@ -57,13 +57,13 @@ Este inventario comenzó en la Fase 1 y se actualiza con las decisiones de refac
 
 ## Componentes específicos de página
 
-| Archivo                                                 | Clasificación                | Decisión de Fase 1                                                                   |
-| ------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------ |
-| `src/components/home/HomeAudienceCards.astro`           | Sección exclusiva de portada | Mantener junto a la sección; extraer patrones solo con reutilización real.           |
-| `src/components/home/HomeEditorialGuide.astro`          | Sección exclusiva de portada | Mantener junto a la sección y conservar su jerarquía editorial.                      |
-| `src/components/about/HeritageCard.astro`               | Tarjeta de patrimonio        | Mantener scoped; no crear una tarjeta genérica sin segundo consumidor.               |
-| `src/components/accommodations/AccommodationCard.astro` | Tarjeta de alojamiento       | Mantener scoped; expone la variante oscura de alrededores sin duplicar la ficha.     |
-| `src/components/parks/ParkCard.astro`                   | Tarjeta de espacio verde     | Mantener scoped; mostrar fuentes, ubicación y solo equipamientos/fotos documentados. |
+| Archivo                                                 | Clasificación                | Decisión de Fase 1                                                                                               |
+| ------------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `src/components/home/HomeAudienceCards.astro`           | Sección exclusiva de portada | Mantener junto a la sección; extraer patrones solo con reutilización real.                                       |
+| `src/components/home/HomeEditorialGuide.astro`          | Sección exclusiva de portada | Mantener junto a la sección y conservar su jerarquía editorial.                                                  |
+| `src/components/about/HeritageCard.astro`               | Tarjeta de patrimonio        | Mantener scoped; no crear una tarjeta genérica sin segundo consumidor.                                           |
+| `src/components/accommodations/AccommodationCard.astro` | Tarjeta de alojamiento       | Mantener scoped; expone la variante oscura de alrededores sin duplicar la ficha.                                 |
+| `src/components/parks/ParkCard.astro`                   | Tarjeta de espacio verde     | Mantener scoped; se mostrará para espacios confirmados y solo incluirá fotos con permisos/créditos documentados. |
 
 ## Tema independiente del juego
 

@@ -1,12 +1,9 @@
 import { expect, test } from './fixtures';
 
 const parksUrl = '/parques-y-zonas-verdes/';
-const eielFeatureUrl = 'https://eiel.redsara.es/visor/layer-json/fase:2024-codine:16148/capa:PJ';
-const mapUrl =
-  'https://www.openstreetmap.org/?mlat=39.9457706937704&mlon=-2.60033216669301#map=18/39.9457706937704/-2.60033216669301';
 
 test.describe('parques y zonas verdes', () => {
-  test('shows the georeferenced EIEL record without inventing a proper name, amenities or photo', async ({
+  test('shows a welcoming catalogue-in-preparation state without unconfirmed park records', async ({
     page,
   }) => {
     await page.goto(parksUrl);
@@ -19,35 +16,19 @@ test.describe('parques y zonas verdes', () => {
       }),
     ).toBeVisible();
 
-    const evidence = page.getByRole('region', {
-      name: 'Un punto oficial, sin nombre propio ni perímetro',
-    });
-    await expect(evidence).toContainText(/GeoEIEL.*2024/i);
-    await expect(evidence).toContainText(/punto.*Parque y Jardín/i);
-    await expect(evidence).toContainText(/nombre propio.*perímetro.*equipamientos/i);
-
-    const spaces = page.getByRole('region', { name: 'Espacios documentados' });
-    const record = spaces.getByRole('article', {
-      name: 'Parque y jardín (registro EIEL 2024)',
-    });
-    await expect(record).toBeVisible();
-    await expect(record).toContainText(/no especifica un nombre propio/i);
-    await expect(record).toContainText(/equipamientos.*no.*confirmados/i);
-    await expect(record).toContainText('39.945771, -2.600332');
-    await expect(record.getByRole('link', { name: 'Abrir ubicación en el mapa' })).toHaveAttribute(
-      'href',
-      mapUrl,
+    const main = page.getByRole('main');
+    await expect(main).toContainText(
+      'Aquí reuniremos información sencilla sobre los espacios verdes de Palomares del Campo, para que vecinos y visitantes puedan conocerlos mejor.',
     );
     await expect(
-      record.getByRole('navigation', { name: /Fuentes de Parque y jardín/i }).getByRole('link', {
-        name: /GeoEIEL.*2024/i,
+      main.getByRole('heading', {
+        level: 2,
+        name: 'Estamos preparando el catálogo de parques y zonas verdes de Palomares del Campo',
       }),
-    ).toHaveAttribute('href', eielFeatureUrl);
-    await expect(record.getByRole('region', { name: /Equipamientos confirmados/ })).toHaveCount(0);
-    await expect(page.locator('main img')).toHaveCount(0);
-    await expect(
-      spaces.getByRole('heading', { name: 'Todavía no hay fichas listas para publicar' }),
-    ).toHaveCount(0);
+    ).toBeVisible();
+    await expect(main.getByRole('article')).toHaveCount(0);
+    await expect(main.locator('img')).toHaveCount(0);
+    await expect(main).not.toContainText(/GeoEIEL|OpenStreetMap|coordenadas|registro EIEL/i);
   });
 
   test('links the page from Vecinos and Visita, immediately before Rutas in Visita', async ({

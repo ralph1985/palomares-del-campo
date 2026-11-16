@@ -67,7 +67,7 @@ La ejecución verificada el 18 de octubre de 2026 de `pnpm test:coverage` pasó 
 Los escenarios E2E prueban la aplicación Astro real en Chromium y cubren:
 
 - navegación global, menú lateral, `Escape`, `inert`, nombres accesibles y pie;
-- portada, páginas informativas, alojamientos, `/parques-y-zonas-verdes/` y `/rutas/`: la suite comprueba la ficha GeoEIEL 2024, sus límites de verificación, fuentes, mapa y acceso desde Vecinos/Visita; también verifica que no se añaden fotografías sin autorización. En `/rutas/` comprueba atribución al autor, aviso de que la ruta no es oficial ni está verificada sobre el terreno, ausencia de solicitudes a Wikiloc antes de pulsar, inserción del endpoint autorizado, enlace directo y alternativa accesible si el iframe se bloquea. La respuesta del proveedor se simula, por lo que no valida disponibilidad del mapa real;
+- portada, páginas informativas, alojamientos, `/parques-y-zonas-verdes/` y `/rutas/`: parques comprueba el mensaje de catálogo en preparación, la ausencia de fichas no confirmadas/fotos y el acceso desde Vecinos/Visita. En `/rutas/` comprueba atribución al autor, aviso de que la ruta no es oficial ni está verificada sobre el terreno, ausencia de solicitudes a Wikiloc antes de pulsar, inserción del endpoint autorizado, enlace directo y alternativa accesible si el iframe se bloquea. La respuesta del proveedor se simula, por lo que no valida disponibilidad del mapa real;
 - archivo y detalle de noticias;
 - bandos, filtros por texto/categoría/año, adjuntos, fuente y redirección `/avisos/`;
 - estado vacío de agenda;

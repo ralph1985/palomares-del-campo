@@ -17,7 +17,7 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 #### Added
 
-- Añadida `/parques-y-zonas-verdes/` a la navegación de «Vecinos» y «Visita» (antes de «Rutas»). La página muestra el punto GeoEIEL 2024 como «Parque y jardín (registro EIEL)», con coordenadas y mapa, sin inventar nombre, perímetro, equipamientos ni fotografías; el inventario y los datos por confirmar quedan documentados.
+- Añadida `/parques-y-zonas-verdes/` a la navegación de «Vecinos» y «Visita» (antes de «Rutas»). La página muestra un estado de catálogo en preparación y no publica fichas sin identificación y confirmación municipal; la investigación GeoEIEL/OSM se conserva en la documentación y el modelo `publicGreenSpaces`/`ParkCard` queda listo para futuras fichas y fotografías municipales autorizadas.
 
 ### 2026-11-14
 

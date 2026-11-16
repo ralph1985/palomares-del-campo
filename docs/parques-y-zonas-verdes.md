@@ -2,13 +2,13 @@
 
 Revisión documental realizada el **16 de noviembre de 2026**. Es una búsqueda acotada a espacios del núcleo urbano; no equivale a una visita sobre el terreno.
 
-## Resultado publicable
+## Registro institucional localizado
 
 La capa pública de GeoEIEL «Parque y Jardín» ofrece para Palomares del Campo un punto en la fase 2024. La respuesta geográfica lo clasifica en esa capa y devuelve `geom_id=2409718`, `geom_key=2024-PJ-16-148-0001-01-001` y el punto `[longitud -2.60033216669301, latitud 39.9457706937704]`. La fuente no proporciona nombre propio, perímetro, equipamientos ni condiciones de acceso; el dato tampoco confirma por sí solo el estado actual del espacio.[1][2][17]
 
 La misma coordenada aparece en las fases 2022 y 2023 del visor. La fase 2024 es la más reciente disponible en el selector consultado.[18][19]
 
-Por eso la página muestra una única ficha titulada **«Parque y jardín (registro EIEL 2024)»**: es la categoría publicada, no un nombre local inventado. La tarjeta incluye el punto y el mapa, y deja expresamente sin confirmar el nombre de uso, el perímetro, el acceso y los equipamientos. No se le ha asignado la denominación «El Jardinillo» ni «Jardinillo de las Pastoras».
+El registro se conserva en esta investigación, pero no se muestra como ficha pública mientras no se identifique el espacio ni se confirme su correspondencia con la información municipal.[1][2][17]
 
 ## Candidatos de OpenStreetMap
 
@@ -39,7 +39,7 @@ El catálogo de servicios municipales consultado no aporta una ficha identificab
 
 ## Decisión editorial y límites
 
-- La página publica solo el punto de la capa EIEL 2024, con la categoría tal como aparece en la fuente. El mapa muestra un **punto de referencia**; no se dibuja ni se sugiere un perímetro.
+- La página pública muestra un estado de catálogo en preparación y no publica fichas de espacios aún no identificados y confirmados. El punto EIEL 2024 y los diez candidatos OSM se conservan en esta documentación como evidencia de investigación.
 - No se atribuyen al punto los nombres, polígonos o patios infantiles de OSM sin una correspondencia confirmada.
 - No se anuncian horario, acceso público, accesibilidad, seguridad, estado de conservación ni equipamientos: las fuentes consultadas no los verifican.
 - No se ha hecho inspección presencial ni se han usado fotografías genéricas, de otros parques o generadas por IA.
@@ -47,13 +47,14 @@ El catálogo de servicios municipales consultado no aporta una ficha identificab
 
 ## Confirmación pendiente del Ayuntamiento
 
-Para convertir la ficha en una descripción útil para vecinos y visitantes, el Ayuntamiento debe confirmar:
+Para publicar las primeras fichas con información útil y verificable, el Ayuntamiento debe confirmar:
 
 1. Si el punto EIEL de 2024 sigue correspondiendo a un espacio existente y cuál es su nombre de uso.
 2. La ubicación reconocible y, si se puede, el perímetro real del recinto; confirmar también si el acceso es público y si hay restricciones.
-3. Los equipamientos existentes hoy; accesibilidad, horarios o condiciones solo si se pueden verificar.
-4. Si hay otros parques, jardines o áreas recreativas dentro del núcleo y su ubicación oficial.
-5. Fotografías municipales originales, con crédito/autores y autorización o licencia de publicación documentada para cada una.
+3. Si el objeto OSM «El Jardinillo» (way/736748627) corresponde a un espacio verde actual y cuál es su ubicación. Confirmar por separado si guarda alguna relación con el punto EIEL o con «Jardinillo de las Pastoras»; no se presupone ninguna coincidencia.[4][5]
+4. Los equipamientos existentes hoy; accesibilidad, horarios o condiciones solo si se pueden verificar.
+5. Si hay otros parques, jardines o áreas recreativas dentro del núcleo y su ubicación oficial.
+6. Fotografías municipales originales, con crédito/autores y autorización o licencia de publicación documentada para cada una.
 
 ## Sources
 
