@@ -140,6 +140,13 @@ test.describe('Palomareños por el mundo', () => {
     await expect(page.getByText('dpd-prueba@example.invalid')).toHaveCount(0);
   });
 
+  test('keeps internal legal TODO markers out of visitor-facing copy', async ({ page }) => {
+    for (const route of ['/aviso-legal/', '/privacidad/', '/politica-de-cookies/']) {
+      await page.goto(route);
+      await expect(page.locator('body')).not.toContainText('TODO(AYTO)');
+    }
+  });
+
   test('does not load real Turnstile on an unauthorized development hostname', async ({ page }) => {
     await page.goto('/palomarenos-por-el-mundo/');
 

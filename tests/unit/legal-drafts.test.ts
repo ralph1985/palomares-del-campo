@@ -39,13 +39,6 @@ describe('borradores de información legal', () => {
     ]);
   });
 
-  it('does not expose technical TODO markers in visitor-facing copy', () => {
-    const visitorFacingSource = drafts
-      .map((page) => page.replace(/<!--[\s\S]*?-->/g, ''))
-      .join(' ');
-    expect(visitorFacingSource).not.toContain('TODO(AYTO)');
-  });
-
   it('identifica almacenamiento web y no afirma la ausencia total de tecnologías', () => {
     expect(cookies).toContain('sessionStorage');
     expect(cookies).toContain('localStorage');
