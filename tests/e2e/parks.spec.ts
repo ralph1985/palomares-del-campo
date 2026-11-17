@@ -31,9 +31,7 @@ test.describe('parques y zonas verdes', () => {
     await expect(main).not.toContainText(/GeoEIEL|OpenStreetMap|coordenadas|registro EIEL/i);
   });
 
-  test('links the page from Vecinos and Visita, immediately before Rutas in Visita', async ({
-    page,
-  }) => {
+  test('links the page once under Visita, immediately before Rutas', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto(parksUrl);
     await page.getByRole('button', { name: 'Explorar' }).click();
@@ -43,7 +41,10 @@ test.describe('parques y zonas verdes', () => {
     const visit = menu.getByRole('region', { name: 'Visita' });
     await expect(
       neighbors.getByRole('link', { name: 'Parques y zonas verdes', exact: true }),
-    ).toHaveAttribute('href', parksUrl);
+    ).toHaveCount(0);
+    await expect(
+      visit.getByRole('link', { name: 'Parques y zonas verdes', exact: true }),
+    ).toHaveCount(1);
     await expect(
       visit.getByRole('link', { name: 'Parques y zonas verdes', exact: true }),
     ).toHaveAttribute('href', parksUrl);
