@@ -4,6 +4,12 @@ Este archivo adopta las convenciones principales de [Keep a Changelog 2.0](https
 
 ## [Unreleased]
 
+### 2026-11-17
+
+#### Fixed
+
+- Eliminadas las entradas duplicadas del menú lateral: cada destino aparece una sola vez; «Servicios del pueblo» queda en «Vecinos» y «Parques y zonas verdes» en «Visita».
+
 ### 2026-11-16
 
 #### Changed
