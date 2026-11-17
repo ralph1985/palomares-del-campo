@@ -24,6 +24,21 @@ test.describe('accessible site menu', () => {
       .toBeLessThan(22);
   });
 
+  test('lists each destination only once across the navigation groups', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    const navigation = page
+      .locator('#site-menu')
+      .getByRole('navigation', { name: 'Secciones del sitio' });
+    const hrefs = await navigation
+      .locator('a')
+      .evaluateAll((links) => links.map((link) => link.getAttribute('href')));
+
+    expect(hrefs).not.toContain(null);
+    expect(new Set(hrefs).size).toBe(hrefs.length);
+  });
+
   test('offers a home link off-home and marks the current section', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/sobre-el-pueblo/iglesia/');

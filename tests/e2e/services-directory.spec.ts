@@ -113,8 +113,8 @@ test.describe('directorio Servicios del pueblo', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.getByRole('button', { name: 'Explorar' }).click();
     const menu = page.locator('#site-menu');
-    await expect(menu.getByRole('link', { name: 'Servicios del pueblo' })).toHaveCount(2);
-    await expect(menu.getByRole('link', { name: 'Servicios del pueblo' }).first()).toHaveAttribute(
+    await expect(menu.getByRole('link', { name: 'Servicios del pueblo' })).toHaveCount(1);
+    await expect(menu.getByRole('link', { name: 'Servicios del pueblo' })).toHaveAttribute(
       'href',
       '/servicios-del-pueblo/',
     );
