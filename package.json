@@ -44,7 +44,7 @@
     "@astrojs/sitemap": "3.7.4",
     "@edge-runtime/vm": "5.0.0",
     "@eslint/js": "10.0.1",
-    "@playwright/test": "1.64.0",
+    "@playwright/test": "1.65.1",
     "@types/node": "24.19.2",
     "@types/sanitize-html": "2.16.2",
     "@types/three": "0.186.0",
